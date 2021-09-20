@@ -1,6 +1,8 @@
-# The Graduation Project - BUILDING E-SIGNATURE SYSTEM
+# The Graduation Project - VTSign
 
-- VTSign - FrontEnd Repositories
+# Building e-signature system
+
+- FrontEnd Repositories
 
 ## Link Demo
 
@@ -14,3 +16,5 @@
 
 - https://reactjs.org/
 - https://mui.com/
+- https://unsplash.com/photos/OQMZwNd3ThU
+- https://unsplash.com/photos/n95VMLxqM2I
