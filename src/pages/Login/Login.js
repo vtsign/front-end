@@ -11,13 +11,22 @@ import {
 	Paper,
 	TextField,
 	Typography,
+	Stack,
 } from '@mui/material';
 import './login.scss';
-import { Visibility, VisibilityOff, AccountCircle, Lock } from '@mui/icons-material';
+import {
+	Visibility,
+	VisibilityOff,
+	AccountCircle,
+	Lock,
+	Google,
+	Facebook,
+} from '@mui/icons-material';
 // import Visibility from '@mui/icons-material/Visibility';
 // import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import Background from '../../assets/images/background1-large.jpg';
 
 const Login = () => {
 	const [hiddenPassword, setHiddenPassword] = useState(true);
@@ -25,19 +34,28 @@ const Login = () => {
 	const hookForm = useForm();
 
 	return (
-		<>
+		<div
+			style={{
+				height: '95vh',
+				backgroundImage: `url(${Background})`,
+				backgroundPosition: 'center',
+				backgroundSize: 'cover',
+				backgroundRepeat: 'no-repeat',
+				display: 'flex',
+				justifyContent: 'flex-end',
+			}}
+		>
 			<Paper variant="outlined" className="loginForm">
 				<Typography variant="h5" textAlign="center" fontWeight="bold" my="1rem">
 					Đăng nhập
 				</Typography>
 				<form>
-					<Grid container spacing={3} mb="1.5rem">
+					<Grid container spacing={3} mb="2rem">
 						<Grid item xs={12}>
 							<InputLabel>
 								Địa chỉ Email <span style={{ color: 'red' }}>*</span>
 							</InputLabel>
 							<TextField
-								name="email"
 								fullWidth
 								placeholder="Vui lòng nhập địa chỉ email"
 								InputProps={{
@@ -47,13 +65,9 @@ const Login = () => {
 										</InputAdornment>
 									),
 								}}
-								// inputRef={hookForm.register({
-								// 	required: 'Vui lòng nhập tên đăng nhập',
-								// 	// validate: (value) =>
-								// 	// 	(REG_USERNAME.test(value?.trim()) &&
-								// 	// 		value?.trim().length >= 6) ||
-								// 	// 	'Tên đăng nhập 6-50 ký tự, chỉ bao gồm chữ, số và các ký tự đặc biệt @ . _ - (bắt đầu là chữ hoăc số)',
-								// })}
+								inputRef={hookForm.register('email', {
+									required: 'Vui lòng nhập tên đăng nhập',
+								})}
 							/>
 						</Grid>
 						<Grid item xs={12}>
@@ -112,16 +126,45 @@ const Login = () => {
 						</Button>
 					</Box>
 					<Typography textAlign="center" my="1rem">
-						<Link href="#">Bạn đã quên mật khẩu?</Link>
+						<Link href="#" style={{ textDecoration: 'none' }}>
+							Bạn đã quên mật khẩu?
+						</Link>
 					</Typography>
 					<Divider style={{ marginTop: '2rem', marginBottom: '2rem' }} />
 					<p style={{ textAlign: 'center', marginBottom: '2rem' }}>
 						Bạn chưa có tài khoản? <Link href="#">Đăng ký?</Link>
 					</p>
-					<Divider style={{ paddingInline: '2rem' }}>Hoặc đăng nhập với</Divider>
+					<Divider style={{ paddingInline: '2rem', marginBottom: '2rem' }}>
+						Hoặc đăng nhập với
+					</Divider>
+					<Box mb="1.5rem">
+						<Stack
+							direction="row"
+							spacing={2}
+							display="flex"
+							justifyContent="space-between"
+						>
+							<Button
+								variant="outlined"
+								fullWidth
+								size="large"
+								startIcon={<Google />}
+							>
+								Google
+							</Button>
+							<Button
+								variant="contained"
+								fullWidth
+								size="large"
+								startIcon={<Facebook />}
+							>
+								Facebook
+							</Button>
+						</Stack>
+					</Box>
 				</form>
 			</Paper>
-		</>
+		</div>
 	);
 };
 
