@@ -9,7 +9,7 @@ import Register from './pages/Register/Register';
 const App = () => {
 	return (
 		<BrowserRouter>
-			<Header />
+			{/* <Header /> */}
 			<main>
 				<Route path="/login" component={Login} />
 				<Route path="/register" component={Register} />
