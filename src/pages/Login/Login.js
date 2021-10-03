@@ -22,16 +22,23 @@ import {
 	Google,
 	Facebook,
 } from '@mui/icons-material';
-// import Visibility from '@mui/icons-material/Visibility';
-// import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import Background from '../../assets/images/background1-large.jpg';
+import { REG_EMAIL, REG_PASSWORD } from "../../components/global.js"
 
 const Login = () => {
 	const [hiddenPassword, setHiddenPassword] = useState(true);
 
-	const hookForm = useForm();
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm();
+
+	const doLogin = (formData) => {
+		console.log(formData);
+	};
 
 	return (
 		<div
@@ -45,7 +52,11 @@ const Login = () => {
 				justifyContent: 'flex-end',
 			}}
 		>
-			<Paper variant="outlined" className="loginForm">
+			<Paper
+				variant="outlined"
+				className="loginForm"
+				style={{ maxHeight: '95vh', overflow: 'auto' }}
+			>
 				<Typography variant="h5" textAlign="center" fontWeight="bold" my="1rem">
 					Đăng nhập
 				</Typography>
@@ -58,6 +69,15 @@ const Login = () => {
 							<TextField
 								fullWidth
 								placeholder="Vui lòng nhập địa chỉ email"
+								{...register('email', {
+									required: 'Vui lòng nhập email',
+									pattern: {
+										value: REG_EMAIL,
+										message: 'Email sai định dạng',
+									},
+								})}
+								error={!!errors.email}
+								helperText={errors?.email?.message}
 								InputProps={{
 									startAdornment: (
 										<InputAdornment position="start">
@@ -65,9 +85,6 @@ const Login = () => {
 										</InputAdornment>
 									),
 								}}
-								inputRef={hookForm.register('email', {
-									required: 'Vui lòng nhập tên đăng nhập',
-								})}
 							/>
 						</Grid>
 						<Grid item xs={12}>
@@ -78,6 +95,16 @@ const Login = () => {
 								fullWidth
 								type={hiddenPassword ? 'password' : 'text'}
 								placeholder="Vui lòng nhập mật khẩu"
+								{...register('password', {
+									required: 'Nhập mật khẩu',
+									pattern: {
+										value: REG_PASSWORD,
+										message:
+											'Mật khẩu phải tối thiểu 8 ký tự bao gồm chữ hoa, chữ thường, số',
+									},
+								})}
+								error={!!errors.password}
+								helperText={errors?.password?.message}
 								InputProps={{
 									endAdornment: (
 										<InputAdornment position="end">
@@ -114,7 +141,7 @@ const Login = () => {
 							color="primary"
 							fullWidth
 							size="large"
-							// onClick={handleSubmit(doLogin)}
+							onClick={handleSubmit(doLogin)}
 						>
 							{/* {buttonLoading && (
 								<CircularProgress
