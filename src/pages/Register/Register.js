@@ -18,12 +18,21 @@ import { Link } from 'react-router-dom';
 import { Visibility, VisibilityOff, Google, Facebook } from '@mui/icons-material'
 import { useForm } from 'react-hook-form';
 import Background from '../../assets/images/background2-large.jpg'
+import { REG_EMAIL, REG_PHONE, REG_PASSWORD } from "../../components/global.js"
 
 const Register = () => {
 	const [hiddenPassword, setHiddenPassword] = useState(true);
 	const [hiddenVerifyPassword, setHiddenVerifyPassword] = useState(true);
 
-	const hookForm = useForm();
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm();
+
+	const doLogin = formData => {
+		console.log(formData)
+	}
 
 	return (
 		<div
@@ -37,7 +46,11 @@ const Register = () => {
 				justifyContent: 'flex-end',
 			}}
 		>
-			<Paper variant="outlined" className="registerForm">
+			<Paper
+				variant="outlined"
+				className="registerForm"
+				style={{ maxHeight: '95vh', overflow: 'auto' }}
+			>
 				<Typography variant="h5" textAlign="center" fontWeight="bold" my="1rem">
 					Đăng ký
 				</Typography>
@@ -47,28 +60,70 @@ const Register = () => {
 							<InputLabel>
 								Họ và tên đệm <span style={{ color: 'red' }}>*</span>
 							</InputLabel>
-							<TextField fullWidth placeholder="Vui lòng nhập họ và tên đệm" />
+							<TextField
+								id="lastName"
+								fullWidth
+								placeholder="Nhập họ và tên đệm"
+								{...register('lastName', {
+									required: 'Vui lòng nhập họ và tên đệm',
+								})}
+								error={!!errors.lastName}
+								helperText={errors?.lastName?.message}
+							/>
 						</Grid>
 						<Grid item xs={6}>
 							<InputLabel>
 								Tên <span style={{ color: 'red' }}>*</span>
 							</InputLabel>
-							<TextField fullWidth placeholder="Vui lòng nhập tên" />
+							<TextField
+								name="firstName"
+								fullWidth
+								placeholder="Nhập tên"
+								{...register('firstName', {
+									required: 'Vui lòng nhập tên',
+								})}
+								error={!!errors.firstName}
+								helperText={errors?.firstName?.message}
+							/>
 						</Grid>
 						<Grid item xs={12}>
 							<InputLabel>
 								Địa chỉ Email <span style={{ color: 'red' }}>*</span>
 							</InputLabel>
-							<TextField fullWidth placeholder="Vui lòng nhập địa chỉ email" />
+							<TextField
+								name="email"
+								fullWidth
+								placeholder="Nhập địa chỉ email"
+								{...register('email', {
+									required: 'Vui lòng nhập email',
+									pattern: {
+										value: REG_EMAIL,
+										message: 'Email sai định dạng',
+									},
+								})}
+								error={!!errors.email}
+								helperText={errors?.email?.message}
+							/>
 						</Grid>
 						<Grid item xs={12}>
 							<InputLabel>
 								Mật khẩu <span style={{ color: 'red' }}>*</span>
 							</InputLabel>
 							<TextField
+								name="password"
 								fullWidth
 								type={hiddenPassword ? 'password' : 'text'}
-								placeholder="Vui lòng nhập mật khẩu"
+								placeholder="Nhập mật khẩu"
+								{...register('password', {
+									required: 'Nhập mật khẩu',
+									pattern: {
+										value: REG_PASSWORD,
+										message:
+											'Mật khẩu phải tối thiểu 8 ký tự bao gồm chữ hoa, chữ thường, số',
+									},
+								})}
+								error={!!errors.password}
+								helperText={errors?.password?.message}
 								InputProps={{
 									endAdornment: (
 										<InputAdornment position="end">
@@ -98,9 +153,20 @@ const Register = () => {
 								Xác thực mật khẩu <span style={{ color: 'red' }}>*</span>
 							</InputLabel>
 							<TextField
+								name="verifyPassword"
 								fullWidth
 								type={hiddenVerifyPassword ? 'password' : 'text'}
-								placeholder="Vui lòng nhập xác thực mật khẩu"
+								placeholder="Nhập xác thực mật khẩu"
+								{...register('verifyPassword', {
+									required: 'Vui lòng xác nhận mật khẩu',
+									pattern: {
+										value: REG_PASSWORD,
+										message:
+											'Mật khẩu phải tối thiểu 8 ký tự bao gồm chữ hoa, chữ thường, số',
+									},
+								})}
+								error={!!errors.verifyPassword}
+								helperText={errors?.verifyPassword?.message}
 								InputProps={{
 									endAdornment: (
 										<InputAdornment position="end">
@@ -129,19 +195,41 @@ const Register = () => {
 							<InputLabel>
 								Số điện thoại <span style={{ color: 'red' }}>*</span>
 							</InputLabel>
-							<TextField fullWidth placeholder="Vui lòng nhập số điện thoại" />
+							<TextField
+								name="phone"
+								fullWidth
+								placeholder="Nhập số điện thoại"
+								{...register('phone', {
+									required: 'Vui lòng nhập số điện thoại',
+									pattern: {
+										value: REG_PHONE,
+										message: 'Số điện thoại phải là số và bắt đầu là 0 hoặc +',
+									},
+								})}
+								error={!!errors.phone}
+								helperText={errors?.phone?.message}
+							/>
 						</Grid>
 						<Grid item xs={6}>
 							<InputLabel>
 								Chức vụ <span style={{ color: 'red' }}>*</span>
 							</InputLabel>
-							<TextField fullWidth placeholder="Vui lòng nhập chức vụ" />
+							<TextField
+								name="role"
+								fullWidth
+								placeholder="Nhập chức vụ"
+								{...register('role', {
+									required: 'Vui lòng nhập chức vụ',
+								})}
+								error={!!errors.role}
+								helperText={errors?.role?.message}
+							/>
 						</Grid>
 						<Grid item xs={12}>
 							<InputLabel>
 								Ngành nghề <span style={{ color: 'red' }}>*</span>
 							</InputLabel>
-							<TextField fullWidth placeholder="Vui lòng nhập ngành nghề" />
+							<TextField fullWidth placeholder="Nhập ngành nghề" />
 						</Grid>
 					</Grid>
 					<Box mb="1.5rem">
@@ -150,7 +238,7 @@ const Register = () => {
 							color="primary"
 							fullWidth
 							size="large"
-							// onClick={handleSubmit(doLogin)}
+							onClick={handleSubmit(doLogin)}
 						>
 							{/* {buttonLoading && (
 								<CircularProgress
