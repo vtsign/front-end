@@ -246,12 +246,12 @@ const Register = () => {
 									style={{ color: 'white', marginRight: 7 }}
 								/>
 							)} */}
-							Đăng nhập
+							Đăng ký
 						</Button>
 					</Box>
 					<Divider style={{ marginTop: '2rem', marginBottom: '2rem' }} />
 					<p style={{ textAlign: 'center', marginBottom: '2rem' }}>
-						Bạn đã có tài khoản? <Link href="#">Đăng nhập?</Link>
+						Bạn đã có tài khoản? <Link to="/login">Đăng nhập?</Link>
 					</p>
 					<Divider style={{ paddingInline: '2rem', marginBottom: '2rem' }}>
 						Hoặc đăng nhập với

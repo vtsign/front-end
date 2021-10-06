@@ -159,7 +159,7 @@ const Login = () => {
 					</Typography>
 					<Divider style={{ marginTop: '2rem', marginBottom: '2rem' }} />
 					<p style={{ textAlign: 'center', marginBottom: '2rem' }}>
-						Bạn chưa có tài khoản? <Link href="#">Đăng ký?</Link>
+						Bạn chưa có tài khoản? <Link to="/register">Đăng ký?</Link>
 					</p>
 					<Divider style={{ paddingInline: '2rem', marginBottom: '2rem' }}>
 						Hoặc đăng nhập với
