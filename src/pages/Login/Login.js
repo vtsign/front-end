@@ -25,6 +25,7 @@ import {
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import Background from '../../assets/images/background1-large.jpg';
+import Logo from '../../assets/images/logo-white.png'
 import { REG_EMAIL, REG_PASSWORD } from "../../components/global.js"
 
 const Login = () => {
@@ -45,13 +46,22 @@ const Login = () => {
 			style={{
 				height: '95vh',
 				backgroundImage: `url(${Background})`,
-				backgroundPosition: 'center',
+				backgroundPosition: '-30vh 50%',
 				backgroundSize: 'cover',
 				backgroundRepeat: 'no-repeat',
 				display: 'flex',
-				justifyContent: 'flex-end',
+				justifyContent: 'space-between',
 			}}
 		>
+			<div
+				style={{
+					display: 'flex',
+					flexDirection: 'column',
+					justifySelf: 'flex-start',
+				}}
+			>
+				<img src={Logo} alt="logo" style={{ width: '10vw', margin: '3rem' }} />
+			</div>
 			<Paper
 				variant="outlined"
 				className="loginForm"
