@@ -18,6 +18,7 @@ import { Link } from 'react-router-dom';
 import { Visibility, VisibilityOff, Google, Facebook } from '@mui/icons-material'
 import { useForm } from 'react-hook-form';
 import Background from '../../assets/images/background2-large.jpg'
+import Logo from '../../assets/images/logo-white.png'
 import { REG_EMAIL, REG_PHONE, REG_PASSWORD } from "../../components/global.js"
 
 const Register = () => {
@@ -39,17 +40,24 @@ const Register = () => {
 			style={{
 				height: '95vh',
 				backgroundImage: `url(${Background})`,
-				backgroundPosition: 'center',
+				backgroundPosition: '-50vh 50%',
 				backgroundSize: 'cover',
 				backgroundRepeat: 'no-repeat',
 				display: 'flex',
-				justifyContent: 'flex-end',
+				justifyContent: 'space-between',
 			}}
 		>
+			<div style={{
+				display: 'flex',
+				flexDirection: 'column',
+				justifySelf: 'flex-start'
+			}}>
+				<img src={Logo} alt='logo' style={{ width: '10vw', margin: '3rem' }} />
+			</div>
 			<Paper
 				variant="outlined"
 				className="registerForm"
-				style={{ maxHeight: '95vh', overflow: 'auto' }}
+				// style={{ overflow: 'auto' }}
 			>
 				<Typography variant="h5" textAlign="center" fontWeight="bold" my="1rem">
 					Đăng ký

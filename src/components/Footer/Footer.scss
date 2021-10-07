@@ -1,5 +1,7 @@
 footer {
-	display: flex;
-	justify-content: center;
-	align-items: center;
+	position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color:#fff;
+    text-align:center;
 }
