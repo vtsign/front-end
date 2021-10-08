@@ -24,9 +24,9 @@ import {
 } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import Background from '../../assets/images/background1-large.jpg';
-import Logo from '../../assets/images/logo-white.png'
-import { REG_EMAIL, REG_PASSWORD } from "../../components/global.js"
+import Background from '../../assets/images/background1-medium.jpg';
+import Logo from '../../assets/images/logo-white.png';
+import { REG_EMAIL, REG_PASSWORD } from '../../components/constants/global.js';
 
 const Login = () => {
 	const [hiddenPassword, setHiddenPassword] = useState(true);
@@ -46,7 +46,7 @@ const Login = () => {
 			style={{
 				height: '95vh',
 				backgroundImage: `url(${Background})`,
-				backgroundPosition: '-30vh 50%',
+				backgroundPosition: '-30vh 10%',
 				backgroundSize: 'cover',
 				backgroundRepeat: 'no-repeat',
 				display: 'flex',
@@ -60,7 +60,7 @@ const Login = () => {
 					justifySelf: 'flex-start',
 				}}
 			>
-				<img src={Logo} alt="logo" style={{ width: '10vw', margin: '3rem' }} />
+				<img src={Logo} alt="logo" style={{ width: '15vw', margin: '3rem' }} />
 			</div>
 			<Paper
 				variant="outlined"
@@ -153,17 +153,13 @@ const Login = () => {
 							size="large"
 							onClick={handleSubmit(doLogin)}
 						>
-							{/* {buttonLoading && (
-								<CircularProgress
-									size={22}
-									style={{ color: 'white', marginRight: 7 }}
-								/>
-							)} */}
-							Đăng nhập
+							<Link to="/signing" style={{ textDecoration: 'none' }}>
+								Đăng nhập
+							</Link>
 						</Button>
 					</Box>
 					<Typography textAlign="center" my="1rem">
-						<Link href="#" style={{ textDecoration: 'none' }}>
+						<Link to="/#" style={{ textDecoration: 'none' }}>
 							Bạn đã quên mật khẩu?
 						</Link>
 					</Typography>

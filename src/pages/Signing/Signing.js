@@ -17,7 +17,7 @@ import {
 	Card,
 	CardContent,
 	InputLabel,
-	TextField
+	TextField,
 } from '@mui/material';
 import { CloudUpload, InsertDriveFile } from '@mui/icons-material';
 import Header from '../../components/Header/Header';
@@ -161,9 +161,7 @@ export function SecondStep() {
 									alignItems="center"
 									my="1rem"
 								>
-									<InputLabel>
-										Tên người nhận
-									</InputLabel>
+									<InputLabel>Tên người nhận</InputLabel>
 									<TextField
 										id="lastName"
 										placeholder="Nguyễn Văn A"
@@ -182,9 +180,7 @@ export function SecondStep() {
 									alignItems="center"
 									my="1rem"
 								>
-									<InputLabel>
-										Địa chỉ Email
-									</InputLabel>
+									<InputLabel>Địa chỉ Email</InputLabel>
 									<TextField
 										id="lastName"
 										placeholder="Nguyễn Văn A"
@@ -203,9 +199,7 @@ export function SecondStep() {
 									alignItems="center"
 									my="1rem"
 								>
-									<InputLabel>
-										Quyền hạn
-									</InputLabel>
+									<InputLabel>Quyền hạn</InputLabel>
 									<TextField
 										id="lastName"
 										placeholder="Nguyễn Văn A"
@@ -224,9 +218,7 @@ export function SecondStep() {
 									alignItems="center"
 									my="1rem"
 								>
-									<InputLabel>
-										Sử dụng khóa
-									</InputLabel>
+									<InputLabel>Sử dụng khóa</InputLabel>
 									<TextField
 										id="lastName"
 										placeholder="Nguyễn Văn A"
@@ -245,9 +237,7 @@ export function SecondStep() {
 									alignItems="center"
 									my="1rem"
 								>
-									<Button variant='contained'>
-										Tạo mới
-									</Button>
+									<Button variant="contained">Tạo mới</Button>
 								</Grid>
 							</Box>
 						</CardContent>
@@ -547,8 +537,8 @@ const Signing = () => {
 				</Box>
 			</Grid> */}
 			<Container maxWidth={false}>
-				<Grid container spacing={3}>
-					<Grid item lg={3} sm={6} xl={3} xs={12} display='flex' alignItems='center'>
+				<Grid container spacing={0}>
+					<Grid item lg={3} sm={6} xl={3} xs={12} display="flex" alignItems="center">
 						<Stepper activeStep={activeStep} orientation="vertical">
 							{steps.map((label, index) => {
 								const stepProps = {};
@@ -562,12 +552,12 @@ const Signing = () => {
 							})}
 						</Stepper>
 					</Grid>
-					<Grid item lg={9} sm={6} xl={9} xs={12}>
+					<Grid item lg={8} sm={6} xl={9} xs={12}>
 						{activeStep === 0 && <FirstStep />}
 						{activeStep === 1 && <SecondStep />}
 						{activeStep === 2 && <ThirdStep />}
 						{activeStep === 3 && <LastStep />}
-						<Grid display='flex' justifyContent='flex-end'>
+						<Grid display="flex" justifyContent="flex-end">
 							<FormControlLabel control={<Checkbox />} label="Chỉ mình tôi ký" />
 							<Button variant="contained" onClick={handleNext}>
 								{activeStep === steps.length - 1 ? 'Hoàn tất' : 'Tiếp tục'}

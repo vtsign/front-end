@@ -11,15 +11,15 @@ import {
 	Divider,
 	Box,
 	Button,
-	Stack
+	Stack,
 } from '@mui/material';
 import './register.scss';
 import { Link } from 'react-router-dom';
-import { Visibility, VisibilityOff, Google, Facebook } from '@mui/icons-material'
+import { Visibility, VisibilityOff, Google, Facebook } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
-import Background from '../../assets/images/background2-large.jpg'
-import Logo from '../../assets/images/logo-white.png'
-import { REG_EMAIL, REG_PHONE, REG_PASSWORD } from "../../components/global.js"
+import Background from '../../assets/images/background2-medium.jpg';
+import Logo from '../../assets/images/logo-white.png';
+import { REG_EMAIL, REG_PHONE, REG_PASSWORD } from '../../components/constants/global.js';
 
 const Register = () => {
 	const [hiddenPassword, setHiddenPassword] = useState(true);
@@ -31,28 +31,30 @@ const Register = () => {
 		formState: { errors },
 	} = useForm();
 
-	const doLogin = formData => {
-		console.log(formData)
-	}
+	const doLogin = (formData) => {
+		console.log(formData);
+	};
 
 	return (
 		<div
 			style={{
 				height: '95vh',
 				backgroundImage: `url(${Background})`,
-				backgroundPosition: '-50vh 50%',
-				backgroundSize: 'cover',
+				backgroundPosition: '-40vh 50%',
+				backgroundSize: '90% 100%',
 				backgroundRepeat: 'no-repeat',
 				display: 'flex',
 				justifyContent: 'space-between',
 			}}
 		>
-			<div style={{
-				display: 'flex',
-				flexDirection: 'column',
-				justifySelf: 'flex-start'
-			}}>
-				<img src={Logo} alt='logo' style={{ width: '10vw', margin: '3rem' }} />
+			<div
+				style={{
+					display: 'flex',
+					flexDirection: 'column',
+					justifySelf: 'flex-start',
+				}}
+			>
+				<img src={Logo} alt="logo" style={{ width: '15vw', margin: '3rem' }} />
 			</div>
 			<Paper
 				variant="outlined"
@@ -259,7 +261,10 @@ const Register = () => {
 					</Box>
 					<Divider style={{ marginTop: '2rem', marginBottom: '2rem' }} />
 					<p style={{ textAlign: 'center', marginBottom: '2rem' }}>
-						Bạn đã có tài khoản? <Link to="/login">Đăng nhập?</Link>
+						Bạn đã có tài khoản?{' '}
+						<Link exact to="/">
+							Đăng nhập?
+						</Link>
 					</p>
 					<Divider style={{ paddingInline: '2rem', marginBottom: '2rem' }}>
 						Hoặc đăng nhập với
@@ -293,6 +298,6 @@ const Register = () => {
 			</Paper>
 		</div>
 	);
-}
+};
 
-export default Register
+export default Register;
