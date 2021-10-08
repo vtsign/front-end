@@ -1,7 +1,17 @@
 import React, { useState } from 'react';
-import { Box, AppBar, Toolbar, IconButton, Typography, Button, Menu, Tabs, Tab } from '@mui/material'
+import {
+	Box,
+	AppBar,
+	Toolbar,
+	IconButton,
+	Typography,
+	Button,
+	Menu,
+	Tabs,
+	Tab,
+} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Home, Create, Description, Language, Settings, AccountCircle } from '@mui/icons-material'
+import { Home, Create, Description, Language, Settings, AccountCircle } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 
 const Header = () => {
@@ -28,6 +38,7 @@ const Header = () => {
 								</div>
 							}
 							to="/"
+							exact
 						/>
 						<Tab
 							component={Link}
@@ -73,6 +84,6 @@ const Header = () => {
 			</AppBar>
 		</Box>
 	);
-}
+};
 
-export default Header
+export default Header;
