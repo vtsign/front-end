@@ -1,35 +1,36 @@
 import React, { useState } from 'react';
-import {
-	Box,
-	AppBar,
-	Toolbar,
-	IconButton,
-	Typography,
-	Button,
-	Menu,
-	Tabs,
-	Tab,
-} from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
+import { Box, AppBar, Toolbar, IconButton, Tabs, Tab } from '@mui/material';
 import { Home, Create, Description, Language, Settings, AccountCircle } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
-
+import Logo from '../../assets/images/logo-white.png';
+import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 const Header = () => {
 	const [value, setValue] = useState(0);
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	};
+
 	return (
 		<Box sx={{ flexGrow: 1 }}>
 			<AppBar position="static">
 				<Toolbar>
-					<Tabs
-						value={value}
-						onChange={handleChange}
-						textColor="white"
-						indicatorColor="secondary"
-					>
+					<Tabs value={value} onChange={handleChange} textColor="inherit">
+						<Tab
+							label={
+								<div>
+									<img
+										src={Logo}
+										alt="logo"
+										style={{
+											width: '130px',
+											height: '50px',
+											verticalAlign: 'middle',
+										}}
+									/>
+								</div>
+							}
+						/>
 						<Tab
 							component={Link}
 							label={
@@ -38,7 +39,6 @@ const Header = () => {
 								</div>
 							}
 							to="/"
-							exact
 						/>
 						<Tab
 							component={Link}
@@ -53,10 +53,10 @@ const Header = () => {
 							component={Link}
 							label={
 								<div>
-									<Description style={{ verticalAlign: 'middle' }} /> Quản lý
+									<ManageSearchIcon style={{ verticalAlign: 'middle' }} /> Quản lý
 								</div>
 							}
-							to="/manage"
+							to="/signing"
 						/>
 						<Tab
 							component={Link}
@@ -65,7 +65,7 @@ const Header = () => {
 									<Description style={{ verticalAlign: 'middle' }} /> Bản mẫu
 								</div>
 							}
-							to="/sample"
+							to="/signing"
 						/>
 					</Tabs>
 					<Box sx={{ flexGrow: 1 }} />

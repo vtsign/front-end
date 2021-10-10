@@ -153,9 +153,7 @@ const Login = () => {
 							size="large"
 							onClick={handleSubmit(doLogin)}
 						>
-							<Link to="/signing" style={{ textDecoration: 'none' }}>
-								Đăng nhập
-							</Link>
+							Đăng nhập
 						</Button>
 					</Box>
 					<Typography textAlign="center" my="1rem">
