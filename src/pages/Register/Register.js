@@ -19,7 +19,7 @@ import { Visibility, VisibilityOff, Google, Facebook } from '@mui/icons-material
 import { useForm } from 'react-hook-form';
 import Background from '../../assets/images/background2-large.jpg';
 import Logo from '../../assets/images/logo-white.png';
-import { REG_EMAIL, REG_PHONE, REG_PASSWORD } from '../../components/global.js';
+import { REG_EMAIL, REG_PHONE, REG_PASSWORD } from '../../components/constants/global.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { registerAction } from '../../redux/actions/userActions.js';
 import { useHistory } from 'react-router-dom';
@@ -68,8 +68,8 @@ const Register = () => {
 			style={{
 				height: '95vh',
 				backgroundImage: `url(${Background})`,
-				backgroundPosition: '-50vh 50%',
-				backgroundSize: 'cover',
+				backgroundPosition: '-40vh 50%',
+				backgroundSize: '100%',
 				backgroundRepeat: 'no-repeat',
 				display: 'flex',
 				justifyContent: 'space-between',
@@ -82,7 +82,7 @@ const Register = () => {
 					justifySelf: 'flex-start',
 				}}
 			>
-				<img src={Logo} alt="logo" style={{ width: '10vw', margin: '3rem' }} />
+				<img src={Logo} alt="logo" style={{ width: '15vw', margin: '3rem' }} />
 			</div>
 			<Paper
 				variant="outlined"
@@ -298,7 +298,10 @@ const Register = () => {
 					</Box>
 					<Divider style={{ marginTop: '2rem', marginBottom: '2rem' }} />
 					<p style={{ textAlign: 'center', marginBottom: '2rem' }}>
-						Bạn đã có tài khoản? <Link to="/login">Đăng nhập?</Link>
+						Bạn đã có tài khoản?{' '}
+						<Link exact to="/">
+							Đăng nhập?
+						</Link>
 					</p>
 					<Divider style={{ paddingInline: '2rem', marginBottom: '2rem' }}>
 						Hoặc đăng nhập với

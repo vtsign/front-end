@@ -25,9 +25,10 @@ import {
 import { Link, useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import Background from '../../assets/images/background1-large.jpg';
-import { REG_EMAIL, REG_PASSWORD } from '../../components/global.js';
+import { REG_EMAIL, REG_PASSWORD } from '../../components/constants/global.js';
 import { useDispatch, useSelector } from 'react-redux'
 import { loginAction } from '../../redux/actions/userActions.js'
+import Logo from '../../assets/images/logo-white.png';
 
 const Login = () => {
 	const [hiddenPassword, setHiddenPassword] = useState(true);
@@ -60,13 +61,22 @@ const Login = () => {
 			style={{
 				height: '95vh',
 				backgroundImage: `url(${Background})`,
-				backgroundPosition: 'center',
+				backgroundPosition: '-30vh 10%',
 				backgroundSize: 'cover',
 				backgroundRepeat: 'no-repeat',
 				display: 'flex',
-				justifyContent: 'flex-end',
+				justifyContent: 'space-between',
 			}}
 		>
+			<div
+				style={{
+					display: 'flex',
+					flexDirection: 'column',
+					justifySelf: 'flex-start',
+				}}
+			>
+				<img src={Logo} alt="logo" style={{ width: '15vw', margin: '3rem' }} />
+			</div>
 			<Paper
 				variant="outlined"
 				className="loginForm"
@@ -158,17 +168,11 @@ const Login = () => {
 							size="large"
 							onClick={handleSubmit(doLogin)}
 						>
-							{/* {buttonLoading && (
-								<CircularProgress
-									size={22}
-									style={{ color: 'white', marginRight: 7 }}
-								/>
-							)} */}
 							Đăng nhập
 						</Button>
 					</Box>
 					<Typography textAlign="center" my="1rem">
-						<Link href="#" style={{ textDecoration: 'none' }}>
+						<Link to="/#" style={{ textDecoration: 'none' }}>
 							Bạn đã quên mật khẩu?
 						</Link>
 					</Typography>

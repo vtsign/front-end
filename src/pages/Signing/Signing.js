@@ -4,12 +4,8 @@ import {
 	Stepper,
 	Step,
 	StepLabel,
-	StepContent,
 	Button,
-	Paper,
 	Typography,
-	IconButton,
-	Divider,
 	Checkbox,
 	FormControlLabel,
 	Grid,
@@ -17,11 +13,10 @@ import {
 	Card,
 	CardContent,
 	InputLabel,
-	TextField
+	TextField,
 } from '@mui/material';
 import { CloudUpload, InsertDriveFile } from '@mui/icons-material';
 import Header from '../../components/Header/Header';
-
 const steps = [
 	'Thêm tài liệu (PDF, Word, PNG,...)',
 	'Chọn người nhận và cài đặt',
@@ -32,11 +27,11 @@ const steps = [
 export function FirstStep() {
 	return (
 		<>
-			<Grid>
+			<Grid my="1rem">
 				<Typography variant="h6">Thêm tài liệu</Typography>
 			</Grid>
 			<Grid display="flex" my="1rem">
-				<Grid item lg={8} md={12} xl={9} xs={12} mr="2rem">
+				<Grid item lg={8} md={8} xl={9} xs={12} mr="2rem">
 					<Card>
 						<CardContent>
 							<Box
@@ -51,13 +46,13 @@ export function FirstStep() {
 									cursor: 'pointer',
 								}}
 							>
-								<CloudUpload style={{ fontSize: '4rem' }} />
+								<CloudUpload style={{ fontSize: '6rem' }} />
 								<Typography variant="h6">Tải tài liệu</Typography>
 							</Box>
 						</CardContent>
 					</Card>
 				</Grid>
-				<Grid item lg={4} md={6} xl={3} xs={12}>
+				<Grid item lg={4} md={4} xl={3} xs={12}>
 					<Card>
 						<CardContent>
 							<Box
@@ -69,7 +64,7 @@ export function FirstStep() {
 									minHeight: '60vh',
 								}}
 							>
-								<InsertDriveFile style={{ fontSize: '4rem' }} />
+								<InsertDriveFile style={{ fontSize: '6rem' }} />
 								<Typography variant="h6">Chưa có tài liệu</Typography>
 							</Box>
 						</CardContent>
@@ -84,7 +79,9 @@ export function SecondStep() {
 	return (
 		<>
 			<Grid>
-				<Typography variant="h6">Thông tin người nhận</Typography>
+				<Typography variant="h6" my="1rem">
+					Thông tin người nhận
+				</Typography>
 			</Grid>
 			<Grid display="flex" my="1rem">
 				<Grid item lg={8} md={12} xl={7} xs={12} mr="2rem">
@@ -161,9 +158,7 @@ export function SecondStep() {
 									alignItems="center"
 									my="1rem"
 								>
-									<InputLabel>
-										Tên người nhận
-									</InputLabel>
+									<InputLabel>Tên người nhận</InputLabel>
 									<TextField
 										id="lastName"
 										placeholder="Nguyễn Văn A"
@@ -182,9 +177,7 @@ export function SecondStep() {
 									alignItems="center"
 									my="1rem"
 								>
-									<InputLabel>
-										Địa chỉ Email
-									</InputLabel>
+									<InputLabel>Địa chỉ Email</InputLabel>
 									<TextField
 										id="lastName"
 										placeholder="Nguyễn Văn A"
@@ -203,9 +196,7 @@ export function SecondStep() {
 									alignItems="center"
 									my="1rem"
 								>
-									<InputLabel>
-										Quyền hạn
-									</InputLabel>
+									<InputLabel>Quyền hạn</InputLabel>
 									<TextField
 										id="lastName"
 										placeholder="Nguyễn Văn A"
@@ -224,9 +215,7 @@ export function SecondStep() {
 									alignItems="center"
 									my="1rem"
 								>
-									<InputLabel>
-										Sử dụng khóa
-									</InputLabel>
+									<InputLabel>Sử dụng khóa</InputLabel>
 									<TextField
 										id="lastName"
 										placeholder="Nguyễn Văn A"
@@ -245,9 +234,7 @@ export function SecondStep() {
 									alignItems="center"
 									my="1rem"
 								>
-									<Button variant='contained'>
-										Tạo mới
-									</Button>
+									<Button variant="contained">Tạo mới</Button>
 								</Grid>
 							</Box>
 						</CardContent>
@@ -275,7 +262,9 @@ export function ThirdStep() {
 	return (
 		<>
 			<Grid>
-				<Typography variant="h6">Ký tên và các thông tin khác</Typography>
+				<Typography variant="h6" my="1rem">
+					Ký tên và các thông tin khác
+				</Typography>
 			</Grid>
 			<Grid display="flex" my="1rem">
 				<Grid item lg={8} md={12} xl={9} xs={12} mr="2rem">
@@ -326,7 +315,9 @@ export function LastStep() {
 	return (
 		<>
 			<Grid>
-				<Typography variant="h6">Kiểm tra và gửi file</Typography>
+				<Typography variant="h6" my="1rem">
+					Kiểm tra và gửi file
+				</Typography>
 			</Grid>
 			<Grid display="flex" my="1rem">
 				<Grid item lg={8} md={12} xl={9} xs={12} mr="2rem">
@@ -547,8 +538,8 @@ const Signing = () => {
 				</Box>
 			</Grid> */}
 			<Container maxWidth={false}>
-				<Grid container spacing={3}>
-					<Grid item lg={3} sm={6} xl={3} xs={12} display='flex' alignItems='center'>
+				<Grid container spacing={0}>
+					<Grid item lg={3} sm={6} xl={2} xs={12} display="flex" alignItems="center">
 						<Stepper activeStep={activeStep} orientation="vertical">
 							{steps.map((label, index) => {
 								const stepProps = {};
@@ -562,12 +553,12 @@ const Signing = () => {
 							})}
 						</Stepper>
 					</Grid>
-					<Grid item lg={9} sm={6} xl={9} xs={12}>
+					<Grid item lg={9} sm={6} xl={10} xs={12}>
 						{activeStep === 0 && <FirstStep />}
 						{activeStep === 1 && <SecondStep />}
 						{activeStep === 2 && <ThirdStep />}
 						{activeStep === 3 && <LastStep />}
-						<Grid display='flex' justifyContent='flex-end'>
+						<Grid display="flex" justifyContent="flex-end">
 							<FormControlLabel control={<Checkbox />} label="Chỉ mình tôi ký" />
 							<Button variant="contained" onClick={handleNext}>
 								{activeStep === steps.length - 1 ? 'Hoàn tất' : 'Tiếp tục'}
