@@ -22,14 +22,28 @@ import {
 	Google,
 	Facebook,
 } from '@mui/icons-material';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import Background from '../../assets/images/background1-medium.jpg';
-import Logo from '../../assets/images/logo-white.png';
+import Background from '../../assets/images/background1-large.jpg';
 import { REG_EMAIL, REG_PASSWORD } from '../../components/constants/global.js';
+import { useDispatch, useSelector } from 'react-redux'
+import { loginAction } from '../../redux/actions/userActions.js'
+import Logo from '../../assets/images/logo-white.png';
 
 const Login = () => {
 	const [hiddenPassword, setHiddenPassword] = useState(true);
+
+	const dispatch = useDispatch();
+
+	const history = useHistory();
+
+	const userLogin = useSelector(state => state.userLogin);
+	const { userInfo } = userLogin;
+
+	useEffect(() => {
+		if(userInfo)
+			history.push('/')
+	}, [userInfo, history])
 
 	const {
 		register,
@@ -38,7 +52,8 @@ const Login = () => {
 	} = useForm();
 
 	const doLogin = (formData) => {
-		console.log(formData);
+		// console.log(formData);
+		dispatch(loginAction(formData.email, formData.password));
 	};
 
 	return (
