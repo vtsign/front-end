@@ -9,7 +9,6 @@ import {
 
 const initialState = {
 	loading: false,
-	userInfo: {},
 };
 
 export const userLoginReducer = (state = initialState, action) => {

@@ -7,6 +7,7 @@ import Home from './pages/Home/Home';
 import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
 import Signing from './pages/Signing/Signing';
+import Activation from './pages/Activation/Activation';
 
 const App = () => {
 	return (
@@ -17,6 +18,7 @@ const App = () => {
 				<Route path="/login" component={Login} />
 				<Route path="/register" component={Register} />
 				<Route path="/signing" component={Signing} />
+				<Route path="/activation/:id" component={Activation} />
 			</main>
 			<Footer />
 		</BrowserRouter>
