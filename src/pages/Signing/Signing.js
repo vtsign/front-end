@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useRef, useEffect} from 'react';
 import {
+	Avatar,
 	Box,
 	Stepper,
 	Step,
@@ -20,7 +21,10 @@ import {
 	TextField
 } from '@mui/material';
 import { CloudUpload, InsertDriveFile } from '@mui/icons-material';
+import { useForm } from 'react-hook-form';
 import Header from '../../components/Header/Header';
+import WebViewer from '@pdftron/webviewer'
+import '@pdftron/webviewer/public/core/CoreControls'
 
 const steps = [
 	'Thêm tài liệu (PDF, Word, PNG,...)',
@@ -28,8 +32,61 @@ const steps = [
 	'Ký tên và các thông tin khác',
 	'Kiểm tra và gửi file',
 ];
+let docs = []
 
-export function FirstStep() {
+export function FirstStep({ filePicker, fileData, setFileData }) {
+	// useEffect(() => {
+	// 	WebViewer(
+	// 		{
+	// 			path: 'webviewer',
+	// 		},
+	// 		viewer.current
+	// 	).then((instance) => {
+
+	// 	});
+	// }, []);
+
+	const setThumbnail = async (dataFile, object) => {
+		const Object = object;
+		const coreControls = window.CoreControls;
+		coreControls.setWorkerPath('/webviewer/core');
+		const doc = await coreControls.createDocument(dataFile, {
+			extension: 'pdf',
+		});
+
+		Object.pageCount = doc.getPageCount();
+		doc.loadCanvasAsync({
+			pageNumber: 1,
+			drawComplete: (canvas) => {
+				Object.thumbnailData = canvas.toDataURL();
+				setFileData(Object)
+				docs = [...docs, Object];
+				console.log(Object)
+				console.log(docs)
+				// cb(docList);
+			},
+		});
+	};
+
+	const handleSelectFile = (e) => {
+		const { files } = e.target;
+
+		const element = files[0];
+		const reader = new FileReader();
+		const selectedFile = {
+			name: element.name,
+		};
+		reader.readAsDataURL(element);
+		reader.onload = (event) => {
+			selectedFile.data = event.target.result;
+			setThumbnail(event.target.result, selectedFile);
+		};
+		// console.log(element)
+		// console.log(reader)
+		// console.log(docs);
+		// console.log(fileData);
+	};
+	console.log(fileData)
 	return (
 		<>
 			<Grid>
@@ -39,7 +96,7 @@ export function FirstStep() {
 				<Grid item lg={8} md={12} xl={9} xs={12} mr="2rem">
 					<Card>
 						<CardContent>
-							<Box
+							<div
 								sx={{
 									display: 'flex',
 									alignItems: 'center',
@@ -50,15 +107,31 @@ export function FirstStep() {
 									color: '#2F80ED',
 									cursor: 'pointer',
 								}}
+								// ref={viewer}
 							>
 								<CloudUpload style={{ fontSize: '4rem' }} />
-								<Typography variant="h6">Tải tài liệu</Typography>
-							</Box>
+								<Button
+									variant="h6"
+									onClick={() => {
+										if (filePicker) {
+											filePicker.current.click();
+										}
+									}}
+								>
+									Tải tài liệu
+								</Button>
+							</div>
 						</CardContent>
+						<input
+							type="file"
+							ref={filePicker}
+							onChange={handleSelectFile}
+							style={{ display: 'none' }}
+						/>
 					</Card>
 				</Grid>
 				<Grid item lg={4} md={6} xl={3} xs={12}>
-					<Card>
+					{/* <Card>
 						<CardContent>
 							<Box
 								sx={{
@@ -73,14 +146,53 @@ export function FirstStep() {
 								<Typography variant="h6">Chưa có tài liệu</Typography>
 							</Box>
 						</CardContent>
-					</Card>
+					</Card> */}
+					{fileData && (
+						<div className="preview-file">
+							<div
+								// data-id={index}
+								className="preview-file__item"
+								style={{ marginBottom: '1rem' }}
+							>
+								<div className="preview-file__thumbnail">
+									<img
+										alt=""
+										src={fileData.thumbnailData}
+										style={{
+											height: '100%',
+											width: '100%',
+											objectFit: 'contain',
+										}}
+									/>
+								</div>
+								<div className="info">
+									<span style={{ fontWeight: 'bold', wordWrap: 'break-word' }}>
+										{fileData.name}
+									</span>
+								</div>
+							</div>
+						</div>
+					)}
 				</Grid>
 			</Grid>
 		</>
 	);
 }
 
-export function SecondStep() {
+export function SecondStep({ receivers, setReceivers}) {
+
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm();
+
+	const addReceivers = formData => {
+		console.log(formData);
+		setReceivers([...receivers, formData]);
+		console.log(receivers)
+	}
+
 	return (
 		<>
 			<Grid>
@@ -161,19 +273,16 @@ export function SecondStep() {
 									alignItems="center"
 									my="1rem"
 								>
-									<InputLabel>
-										Tên người nhận
-									</InputLabel>
+									<InputLabel>Tên người nhận</InputLabel>
 									<TextField
-										id="lastName"
+										id="receiver"
 										placeholder="Nguyễn Văn A"
 										sx={{ minWidth: '25vw' }}
-										// fullWidth
-										// {...register('lastName', {
-										// 	required: 'Vui lòng nhập họ và tên đệm',
-										// })}
-										// error={!!errors.lastName}
-										// helperText={errors?.lastName?.message}
+										{...register('receiver', {
+											required: 'Vui lòng nhập họ và tên người nhận',
+										})}
+										error={!!errors.receiver}
+										helperText={errors?.receiver?.message}
 									/>
 								</Grid>
 								<Grid
@@ -182,19 +291,16 @@ export function SecondStep() {
 									alignItems="center"
 									my="1rem"
 								>
-									<InputLabel>
-										Địa chỉ Email
-									</InputLabel>
+									<InputLabel>Địa chỉ Email</InputLabel>
 									<TextField
-										id="lastName"
+										id="email"
 										placeholder="Nguyễn Văn A"
 										sx={{ minWidth: '25vw' }}
-										// fullWidth
-										// {...register('lastName', {
-										// 	required: 'Vui lòng nhập họ và tên đệm',
-										// })}
-										// error={!!errors.lastName}
-										// helperText={errors?.lastName?.message}
+										{...register('email', {
+											required: 'Vui lòng nhập địa chỉ Email',
+										})}
+										error={!!errors.email}
+										helperText={errors?.email?.message}
 									/>
 								</Grid>
 								<Grid
@@ -203,19 +309,16 @@ export function SecondStep() {
 									alignItems="center"
 									my="1rem"
 								>
-									<InputLabel>
-										Quyền hạn
-									</InputLabel>
+									<InputLabel>Quyền hạn</InputLabel>
 									<TextField
-										id="lastName"
+										id="privilege"
 										placeholder="Nguyễn Văn A"
 										sx={{ minWidth: '25vw' }}
-										// fullWidth
-										// {...register('lastName', {
-										// 	required: 'Vui lòng nhập họ và tên đệm',
-										// })}
-										// error={!!errors.lastName}
-										// helperText={errors?.lastName?.message}
+										{...register('privilege', {
+											required: 'Lựa chọn quyền hạn',
+										})}
+										error={!!errors.privilege}
+										helperText={errors?.privilege?.message}
 									/>
 								</Grid>
 								<Grid
@@ -224,19 +327,14 @@ export function SecondStep() {
 									alignItems="center"
 									my="1rem"
 								>
-									<InputLabel>
-										Sử dụng khóa
-									</InputLabel>
+									<InputLabel>Sử dụng khóa</InputLabel>
 									<TextField
-										id="lastName"
+										id="key"
 										placeholder="Nguyễn Văn A"
 										sx={{ minWidth: '25vw' }}
-										// fullWidth
-										// {...register('lastName', {
-										// 	required: 'Vui lòng nhập họ và tên đệm',
-										// })}
-										// error={!!errors.lastName}
-										// helperText={errors?.lastName?.message}
+										{...register('key')}
+										// error={!!errors.key}
+										// helperText={errors?.key?.message}
 									/>
 								</Grid>
 								<Grid
@@ -245,7 +343,10 @@ export function SecondStep() {
 									alignItems="center"
 									my="1rem"
 								>
-									<Button variant='contained'>
+									<Button
+										variant="contained"
+										onClick={handleSubmit(addReceivers)}
+									>
 										Tạo mới
 									</Button>
 								</Grid>
@@ -256,13 +357,49 @@ export function SecondStep() {
 				<Grid item lg={4} md={6} xl={5} xs={12}>
 					<Card>
 						<CardContent>
-							<Box
-								sx={{
-									minHeight: '60vh',
-								}}
-							>
-								<Typography variant="h6">Người nhận</Typography>
-							</Box>
+							{receivers.length > 0 ? (
+								receivers.map((partner, index) => (
+									<div className="partner">
+										<div className="partner__avatar">
+											<Avatar
+												style={{
+													backgroundColor: '#EB5757',
+													verticalAlign: 'middle',
+													cursor: 'pointer',
+												}}
+												size={48}
+												gap={1}
+											>
+												B
+											</Avatar>
+										</div>
+										<div className="partner__info">
+											<p className="partner__name">{partner.name}</p>
+											<h5 className="partner__email">{partner.email}</h5>
+										</div>
+										<div
+											role="button"
+											tabIndex="0"
+											data-id={index}
+											className="partner__delete-btn"
+											// onClick={handleDeletePartner}
+										>
+											Xóa
+										</div>
+									</div>
+								))
+							) : (
+								<div
+									style={{
+										height: '400px',
+										display: 'flex',
+										justifyContent: 'center',
+										alignItems: 'center',
+									}}
+								>
+									<span>Chưa chọn có người nhận</span>
+								</div>
+							)}
 						</CardContent>
 					</Card>
 				</Grid>
@@ -377,6 +514,13 @@ const Signing = () => {
 	const [activeStep, setActiveStep] = React.useState(0);
 	const [skipped, setSkipped] = React.useState(new Set());
 
+	const [fileData, setFileData] = useState(null);
+	const [receivers, setReceivers] = useState([]);
+
+
+	const viewer = useRef(null);
+	const filePicker = useRef(null);
+
 	const isStepOptional = (step) => {
 		return step === 1;
 	};
@@ -396,7 +540,7 @@ const Signing = () => {
 		setSkipped(newSkipped);
 	};
 
-	const handleBack = () => {
+	const handlePrev = () => {
 		setActiveStep((prevActiveStep) => prevActiveStep - 1);
 	};
 
@@ -563,12 +707,17 @@ const Signing = () => {
 						</Stepper>
 					</Grid>
 					<Grid item lg={9} sm={6} xl={9} xs={12}>
-						{activeStep === 0 && <FirstStep />}
-						{activeStep === 1 && <SecondStep />}
+						{activeStep === 0 && <FirstStep filePicker={filePicker} fileData={fileData} setFileData={setFileData} />}
+						{activeStep === 1 && <SecondStep receivers={receivers} setReceivers={setReceivers} />}
 						{activeStep === 2 && <ThirdStep />}
 						{activeStep === 3 && <LastStep />}
 						<Grid display='flex' justifyContent='flex-end'>
 							<FormControlLabel control={<Checkbox />} label="Chỉ mình tôi ký" />
+							{activeStep > 0 && (
+								<Button variant="contained" onClick={handlePrev}>
+									Quay lại
+								</Button>
+							)}
 							<Button variant="contained" onClick={handleNext}>
 								{activeStep === steps.length - 1 ? 'Hoàn tất' : 'Tiếp tục'}
 							</Button>
