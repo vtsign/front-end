@@ -1,0 +1,14 @@
+.receiver {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	&__info {
+		flex-grow: 2;
+	}
+
+	&__delete-btn {
+		text-decoration: underline;
+		cursor: pointer;
+	}
+}

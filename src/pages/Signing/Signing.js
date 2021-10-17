@@ -25,6 +25,7 @@ import { useForm } from 'react-hook-form';
 import Header from '../../components/Header/Header';
 import WebViewer from '@pdftron/webviewer'
 import '@pdftron/webviewer/public/core/CoreControls'
+import ReceiverAvatar from '../../components/ReceiverAvatar/ReceiverAvatar';
 
 const steps = [
 	'Thêm tài liệu (PDF, Word, PNG,...)',
@@ -32,19 +33,8 @@ const steps = [
 	'Ký tên và các thông tin khác',
 	'Kiểm tra và gửi file',
 ];
-let docs = []
 
 export function FirstStep({ filePicker, fileData, setFileData }) {
-	// useEffect(() => {
-	// 	WebViewer(
-	// 		{
-	// 			path: 'webviewer',
-	// 		},
-	// 		viewer.current
-	// 	).then((instance) => {
-
-	// 	});
-	// }, []);
 
 	const setThumbnail = async (dataFile, object) => {
 		const Object = object;
@@ -60,10 +50,6 @@ export function FirstStep({ filePicker, fileData, setFileData }) {
 			drawComplete: (canvas) => {
 				Object.thumbnailData = canvas.toDataURL();
 				setFileData(Object)
-				docs = [...docs, Object];
-				console.log(Object)
-				console.log(docs)
-				// cb(docList);
 			},
 		});
 	};
@@ -81,12 +67,8 @@ export function FirstStep({ filePicker, fileData, setFileData }) {
 			selectedFile.data = event.target.result;
 			setThumbnail(event.target.result, selectedFile);
 		};
-		// console.log(element)
-		// console.log(reader)
-		// console.log(docs);
-		// console.log(fileData);
 	};
-	console.log(fileData)
+
 	return (
 		<>
 			<Grid>
@@ -94,7 +76,38 @@ export function FirstStep({ filePicker, fileData, setFileData }) {
 			</Grid>
 			<Grid display="flex" my="1rem">
 				<Grid item lg={8} md={12} xl={9} xs={12} mr="2rem">
-					<Card>
+					<Card
+						onClick={() => {
+							if (filePicker) {
+								filePicker.current.click();
+							}
+						}}
+					>
+						<CardContent>
+							<Box
+								sx={{
+									display: 'flex',
+									alignItems: 'center',
+									justifyContent: 'center',
+									flexDirection: 'column',
+									minHeight: '60vh',
+									backgroundColor: '#FAFAFA',
+									color: '#2F80ED',
+									cursor: 'pointer',
+								}}
+							>
+								<CloudUpload style={{ fontSize: '6rem' }} />
+								<Typography variant="h6">Tải tài liệu</Typography>
+							</Box>
+						</CardContent>
+					</Card>
+					<input
+						type="file"
+						ref={filePicker}
+						onChange={handleSelectFile}
+						style={{ display: 'none' }}
+					/>
+					{/* <Card>
 						<CardContent>
 							<div
 								sx={{
@@ -107,7 +120,6 @@ export function FirstStep({ filePicker, fileData, setFileData }) {
 									color: '#2F80ED',
 									cursor: 'pointer',
 								}}
-								// ref={viewer}
 							>
 								<CloudUpload style={{ fontSize: '4rem' }} />
 								<Button
@@ -128,7 +140,7 @@ export function FirstStep({ filePicker, fileData, setFileData }) {
 							onChange={handleSelectFile}
 							style={{ display: 'none' }}
 						/>
-					</Card>
+					</Card> */}
 				</Grid>
 				<Grid item lg={4} md={6} xl={3} xs={12}>
 					{/* <Card>
@@ -359,34 +371,7 @@ export function SecondStep({ receivers, setReceivers}) {
 						<CardContent>
 							{receivers.length > 0 ? (
 								receivers.map((partner, index) => (
-									<div className="partner">
-										<div className="partner__avatar">
-											<Avatar
-												style={{
-													backgroundColor: '#EB5757',
-													verticalAlign: 'middle',
-													cursor: 'pointer',
-												}}
-												size={48}
-												gap={1}
-											>
-												B
-											</Avatar>
-										</div>
-										<div className="partner__info">
-											<p className="partner__name">{partner.name}</p>
-											<h5 className="partner__email">{partner.email}</h5>
-										</div>
-										<div
-											role="button"
-											tabIndex="0"
-											data-id={index}
-											className="partner__delete-btn"
-											// onClick={handleDeletePartner}
-										>
-											Xóa
-										</div>
-									</div>
+									<ReceiverAvatar receiver={partner} />
 								))
 							) : (
 								<div
@@ -454,7 +439,7 @@ export function ThirdStep({ viewer, fileData, receivers }) {
 				<Typography variant="h6">Ký tên và các thông tin khác</Typography>
 			</Grid>
 			<Grid display="flex" my="1rem">
-				<div className="edit-doc-form__preview-doc webviewer" ref={viewer} />
+				<div style={{ width: "1000px", height: "500px" }} ref={viewer} />
 				{/* <Grid item lg={8} md={12} xl={9} xs={12} mr="2rem">
 					<Card>
 						<CardContent>
@@ -765,7 +750,7 @@ const Signing = () => {
 						<Grid display='flex' justifyContent='flex-end'>
 							<FormControlLabel control={<Checkbox />} label="Chỉ mình tôi ký" />
 							{activeStep > 0 && (
-								<Button variant="contained" onClick={handlePrev}>
+								<Button variant="outlined" onClick={handlePrev}>
 									Quay lại
 								</Button>
 							)}
