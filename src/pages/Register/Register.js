@@ -11,18 +11,35 @@ import {
 	Divider,
 	Box,
 	Button,
-	Stack
+	Stack,
 } from '@mui/material';
 import './register.scss';
 import { Link } from 'react-router-dom';
-import { Visibility, VisibilityOff, Google, Facebook } from '@mui/icons-material'
+import { Visibility, VisibilityOff, Google, Facebook } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
-import Background from '../../assets/images/background2-large.jpg'
-import { REG_EMAIL, REG_PHONE, REG_PASSWORD } from "../../components/global.js"
+import Background from '../../assets/images/background2-large.jpg';
+import Logo from '../../assets/images/logo-white.png';
+import { REG_EMAIL, REG_PHONE, REG_PASSWORD } from '../../components/constants/global.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { registerAction } from '../../redux/actions/userActions.js';
+import { useHistory } from 'react-router-dom';
 
 const Register = () => {
 	const [hiddenPassword, setHiddenPassword] = useState(true);
 	const [hiddenVerifyPassword, setHiddenVerifyPassword] = useState(true);
+
+	const dispatch = useDispatch();
+
+	const userRegister = useSelector(state => state.userRegister);
+	const { userInfo } = userRegister;
+
+	const history = useHistory();
+
+	useEffect(() => {
+		if(userInfo) {
+			history.push('/login');
+		}
+	}, [userInfo, history])
 
 	const {
 		register,
@@ -30,26 +47,47 @@ const Register = () => {
 		formState: { errors },
 	} = useForm();
 
-	const doLogin = formData => {
-		console.log(formData)
-	}
+	const doLogin = (formData) => {
+		// console.log(formData);
+		dispatch(
+			registerAction(
+				formData.email,
+				formData.password,
+				formData.phone,
+				formData.organization,
+				formData.address,
+				formData.firstName,
+				formData.lastName
+			)
+		);
+		// history.push('/login')
+	};
 
 	return (
 		<div
 			style={{
 				height: '95vh',
 				backgroundImage: `url(${Background})`,
-				backgroundPosition: 'center',
-				backgroundSize: 'cover',
+				backgroundPosition: '-40vh 50%',
+				backgroundSize: '100%',
 				backgroundRepeat: 'no-repeat',
 				display: 'flex',
-				justifyContent: 'flex-end',
+				justifyContent: 'space-between',
 			}}
 		>
+			<div
+				style={{
+					display: 'flex',
+					flexDirection: 'column',
+					justifySelf: 'flex-start',
+				}}
+			>
+				<img src={Logo} alt="logo" style={{ width: '15vw', margin: '3rem' }} />
+			</div>
 			<Paper
 				variant="outlined"
 				className="registerForm"
-				style={{ maxHeight: '95vh', overflow: 'auto' }}
+				// style={{ overflow: 'auto' }}
 			>
 				<Typography variant="h5" textAlign="center" fontWeight="bold" my="1rem">
 					Đăng ký
@@ -212,24 +250,33 @@ const Register = () => {
 						</Grid>
 						<Grid item xs={6}>
 							<InputLabel>
-								Chức vụ <span style={{ color: 'red' }}>*</span>
+								Cơ quan <span style={{ color: 'red' }}>*</span>
 							</InputLabel>
 							<TextField
-								name="role"
+								name="organization"
 								fullWidth
-								placeholder="Nhập chức vụ"
-								{...register('role', {
-									required: 'Vui lòng nhập chức vụ',
+								placeholder="Nhập cơ quan"
+								{...register('organization', {
+									required: 'Vui lòng nhập cơ quan',
 								})}
-								error={!!errors.role}
-								helperText={errors?.role?.message}
+								error={!!errors.organization}
+								helperText={errors?.organization?.message}
 							/>
 						</Grid>
 						<Grid item xs={12}>
 							<InputLabel>
-								Ngành nghề <span style={{ color: 'red' }}>*</span>
+								Địa chỉ <span style={{ color: 'red' }}>*</span>
 							</InputLabel>
-							<TextField fullWidth placeholder="Nhập ngành nghề" />
+							<TextField
+								name="address"
+								fullWidth
+								placeholder="Nhập địa chỉ"
+								{...register('address', {
+									required: 'Vui lòng nhập địa chỉ',
+								})}
+								error={!!errors.address}
+								helperText={errors?.address?.message}
+							/>
 						</Grid>
 					</Grid>
 					<Box mb="1.5rem">
@@ -251,7 +298,10 @@ const Register = () => {
 					</Box>
 					<Divider style={{ marginTop: '2rem', marginBottom: '2rem' }} />
 					<p style={{ textAlign: 'center', marginBottom: '2rem' }}>
-						Bạn đã có tài khoản? <Link to="/login">Đăng nhập?</Link>
+						Bạn đã có tài khoản?{' '}
+						<Link exact to="/">
+							Đăng nhập?
+						</Link>
 					</p>
 					<Divider style={{ paddingInline: '2rem', marginBottom: '2rem' }}>
 						Hoặc đăng nhập với
@@ -285,6 +335,6 @@ const Register = () => {
 			</Paper>
 		</div>
 	);
-}
+};
 
-export default Register
+export default Register;

@@ -15,7 +15,9 @@
 
 ## References
 
-- https://reactjs.org/
 - https://mui.com/
+- https://reactjs.org/
+- https://reactrouter.com/
+- https://react-hook-form.com/
 - https://unsplash.com/photos/OQMZwNd3ThU
 - https://unsplash.com/photos/n95VMLxqM2I

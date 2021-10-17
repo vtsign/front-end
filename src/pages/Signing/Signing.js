@@ -1,16 +1,12 @@
-import React, { useState, useRef, useEffect} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
 	Avatar,
 	Box,
 	Stepper,
 	Step,
 	StepLabel,
-	StepContent,
 	Button,
-	Paper,
 	Typography,
-	IconButton,
-	Divider,
 	Checkbox,
 	FormControlLabel,
 	Grid,
@@ -18,13 +14,13 @@ import {
 	Card,
 	CardContent,
 	InputLabel,
-	TextField
+	TextField,
 } from '@mui/material';
 import { CloudUpload, InsertDriveFile } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
 import Header from '../../components/Header/Header';
-import WebViewer from '@pdftron/webviewer'
-import '@pdftron/webviewer/public/core/CoreControls'
+import WebViewer from '@pdftron/webviewer';
+import '@pdftron/webviewer/public/core/CoreControls';
 import ReceiverAvatar from '../../components/ReceiverAvatar/ReceiverAvatar';
 
 const steps = [
@@ -35,7 +31,6 @@ const steps = [
 ];
 
 export function FirstStep({ filePicker, fileData, setFileData }) {
-
 	const setThumbnail = async (dataFile, object) => {
 		const Object = object;
 		const coreControls = window.CoreControls;
@@ -49,7 +44,7 @@ export function FirstStep({ filePicker, fileData, setFileData }) {
 			pageNumber: 1,
 			drawComplete: (canvas) => {
 				Object.thumbnailData = canvas.toDataURL();
-				setFileData(Object)
+				setFileData(Object);
 			},
 		});
 	};
@@ -71,7 +66,7 @@ export function FirstStep({ filePicker, fileData, setFileData }) {
 
 	return (
 		<>
-			<Grid>
+			<Grid my="1rem">
 				<Typography variant="h6">Thêm tài liệu</Typography>
 			</Grid>
 			<Grid display="flex" my="1rem">
@@ -154,7 +149,7 @@ export function FirstStep({ filePicker, fileData, setFileData }) {
 									minHeight: '60vh',
 								}}
 							>
-								<InsertDriveFile style={{ fontSize: '4rem' }} />
+								<InsertDriveFile style={{ fontSize: '6rem' }} />
 								<Typography variant="h6">Chưa có tài liệu</Typography>
 							</Box>
 						</CardContent>
@@ -191,24 +186,25 @@ export function FirstStep({ filePicker, fileData, setFileData }) {
 	);
 }
 
-export function SecondStep({ receivers, setReceivers}) {
-
+export function SecondStep({ receivers, setReceivers }) {
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
 	} = useForm();
 
-	const addReceivers = formData => {
+	const addReceivers = (formData) => {
 		console.log(formData);
 		setReceivers([...receivers, formData]);
-		console.log(receivers)
-	}
+		console.log(receivers);
+	};
 
 	return (
 		<>
 			<Grid>
-				<Typography variant="h6">Thông tin người nhận</Typography>
+				<Typography variant="h6" my="1rem">
+					Thông tin người nhận
+				</Typography>
 			</Grid>
 			<Grid display="flex" my="1rem">
 				<Grid item lg={8} md={12} xl={7} xs={12} mr="2rem">
@@ -430,16 +426,17 @@ export function ThirdStep({ viewer, fileData, receivers }) {
 			iframeDoc.addEventListener('drop', (e) => {
 				drop(e, instance);
 			});
-
 		});
-	}, [])
+	}, []);
 	return (
 		<>
 			<Grid>
-				<Typography variant="h6">Ký tên và các thông tin khác</Typography>
+				<Typography variant="h6" my="1rem">
+					Ký tên và các thông tin khác
+				</Typography>
 			</Grid>
 			<Grid display="flex" my="1rem">
-				<div style={{ width: "1000px", height: "500px" }} ref={viewer} />
+				<div style={{ width: '1000px', height: '500px' }} ref={viewer} />
 				{/* <Grid item lg={8} md={12} xl={9} xs={12} mr="2rem">
 					<Card>
 						<CardContent>
@@ -499,7 +496,9 @@ export function LastStep() {
 	return (
 		<>
 			<Grid>
-				<Typography variant="h6">Kiểm tra và gửi file</Typography>
+				<Typography variant="h6" my="1rem">
+					Kiểm tra và gửi file
+				</Typography>
 			</Grid>
 			<Grid display="flex" my="1rem">
 				<Grid item lg={8} md={12} xl={9} xs={12} mr="2rem">
@@ -552,7 +551,6 @@ const Signing = () => {
 
 	const [fileData, setFileData] = useState(null);
 	const [receivers, setReceivers] = useState([]);
-
 
 	const viewer = useRef(null);
 	const filePicker = useRef(null);
@@ -727,8 +725,8 @@ const Signing = () => {
 				</Box>
 			</Grid> */}
 			<Container maxWidth={false}>
-				<Grid container spacing={3}>
-					<Grid item lg={3} sm={6} xl={3} xs={12} display='flex' alignItems='center'>
+				<Grid container spacing={0}>
+					<Grid item lg={3} sm={6} xl={2} xs={12} display="flex" alignItems="center">
 						<Stepper activeStep={activeStep} orientation="vertical">
 							{steps.map((label, index) => {
 								const stepProps = {};
@@ -743,11 +741,21 @@ const Signing = () => {
 						</Stepper>
 					</Grid>
 					<Grid item lg={9} sm={6} xl={9} xs={12}>
-						{activeStep === 0 && <FirstStep filePicker={filePicker} fileData={fileData} setFileData={setFileData} />}
-						{activeStep === 1 && <SecondStep receivers={receivers} setReceivers={setReceivers} />}
-						{activeStep === 2 && <ThirdStep viewer={viewer} fileData={fileData} receivers={receivers} />}
+						{activeStep === 0 && (
+							<FirstStep
+								filePicker={filePicker}
+								fileData={fileData}
+								setFileData={setFileData}
+							/>
+						)}
+						{activeStep === 1 && (
+							<SecondStep receivers={receivers} setReceivers={setReceivers} />
+						)}
+						{activeStep === 2 && (
+							<ThirdStep viewer={viewer} fileData={fileData} receivers={receivers} />
+						)}
 						{activeStep === 3 && <LastStep />}
-						<Grid display='flex' justifyContent='flex-end'>
+						<Grid display="flex" justifyContent="flex-end">
 							<FormControlLabel control={<Checkbox />} label="Chỉ mình tôi ký" />
 							{activeStep > 0 && (
 								<Button variant="outlined" onClick={handlePrev}>
