@@ -12,6 +12,7 @@ import {
 	TextField,
 	Typography,
 	Stack,
+	CircularProgress,
 } from '@mui/material';
 import './login.scss';
 import {
@@ -26,8 +27,8 @@ import { Link, useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import Background from '../../assets/images/background1-large.jpg';
 import { REG_EMAIL, REG_PASSWORD } from '../../components/constants/global.js';
-import { useDispatch, useSelector } from 'react-redux'
-import { loginAction } from '../../redux/actions/userActions.js'
+import { useDispatch, useSelector } from 'react-redux';
+import { loginAction } from '../../redux/actions/userActions.js';
 import Logo from '../../assets/images/logo-white.png';
 
 const Login = () => {
@@ -37,13 +38,12 @@ const Login = () => {
 
 	const history = useHistory();
 
-	const userLogin = useSelector(state => state.userLogin);
-	const { userInfo } = userLogin;
+	const userLogin = useSelector((state) => state.userLogin);
+	const { userInfo, loading, error: errorRegister } = userLogin;
 
 	useEffect(() => {
-		if(userInfo)
-			history.push('/')
-	}, [userInfo, history])
+		if (userInfo) history.push('/');
+	}, [userInfo, history]);
 
 	const {
 		register,
@@ -160,16 +160,23 @@ const Login = () => {
 							/>
 						</Grid>
 					</Grid>
-					<Box mb="1.5rem">
-						<Button
-							variant="contained"
-							color="primary"
-							fullWidth
-							size="large"
-							onClick={handleSubmit(doLogin)}
-						>
-							Đăng nhập
-						</Button>
+					{errorRegister && (
+						<p style={{ textAlign: 'center', color: 'red' }}>{errorRegister.message}</p>
+					)}
+					<Box mb="1.5rem" style={{ textAlign: 'center' }}>
+						{loading ? (
+							<CircularProgress />
+						) : (
+							<Button
+								variant="contained"
+								color="primary"
+								fullWidth
+								size="large"
+								onClick={handleSubmit(doLogin)}
+							>
+								Đăng nhập
+							</Button>
+						)}
 					</Box>
 					<Typography textAlign="center" my="1rem">
 						<Link to="/#" style={{ textDecoration: 'none' }}>
