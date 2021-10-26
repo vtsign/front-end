@@ -1,0 +1,5 @@
+export const SELECT_DOCUMENTS = "SELECT_DOCUMENTS";
+export const REMOVE_DOCUMENT = "REMOVE_DOCUMENT";
+export const LOAD_DOCUMENT = "LOAD_DOCUMENT";
+export const DRAG_FIELD = "DRAG_FIELD";
+export const ADD_FIELD = "ADD_FIELD";

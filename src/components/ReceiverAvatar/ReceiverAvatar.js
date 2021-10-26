@@ -5,13 +5,9 @@ import './ReceiverAvatar.scss'
 const ReceiverAvatar = ({ receiver }) => {
 	return (
 		<div className="receiver">
-			<div className="avatar">
+			<div>
 				<Avatar
-					style={{
-						backgroundColor: '#EB5757',
-						verticalAlign: 'middle',
-						cursor: 'pointer',
-					}}
+					className="receiver__avatar"
 					size={48}
 					gap={1}
 				>
@@ -19,8 +15,8 @@ const ReceiverAvatar = ({ receiver }) => {
 				</Avatar>
 			</div>
 			<div className="receiver__info">
-				<h5 className="receiver__name">{receiver.receiver}</h5>
-				<p className="receiver__email">{receiver.email}</p>
+				<span className="receiver__name">{receiver.receiver}</span>
+				<span className="receiver__email">{receiver.email}</span>
 			</div>
 			<div
 				role="button"
