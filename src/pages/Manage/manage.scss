@@ -1,0 +1,10 @@
+.content {
+	display: flex;
+	.content__left {
+		width: 25%;
+		border-right: 1px solid rgb(0, 0, 0);
+	}
+	.content__right {
+		width: 75%;
+	}
+}

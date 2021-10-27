@@ -1,0 +1,17 @@
+@import '/src/sass/variables';
+.menu-mobile {
+	padding: 0;
+	.active {
+		font-size: 15px !important; 
+		color: rgb(255, 255, 255);
+		opacity: 1;
+
+		& > div {
+			background-color: $main-color;
+		}
+
+		svg {
+			color: white;
+		}
+	}
+}

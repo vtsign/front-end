@@ -9,12 +9,14 @@ import Register from './pages/Register/Register';
 const App = () => {
 	return (
 		<BrowserRouter>
-			<Switch>
-				<Route path="/login" component={Login} />
-				<Route path="/register" component={Register} />
-				<Route path="/" component={MainRouter} />
-			</Switch>
-			<Footer />
+			{/* <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}> */}
+				<Switch>
+					<Route path="/login" component={Login} />
+					<Route path="/register" component={Register} />
+					<Route path="/" component={MainRouter} />
+				</Switch>
+				<Footer />
+			{/* </div> */}
 		</BrowserRouter>
 	);
 };

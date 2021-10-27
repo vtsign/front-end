@@ -57,31 +57,22 @@ const Login = () => {
 	};
 
 	return (
-		<div
-			style={{
-				height: '95vh',
-				backgroundImage: `url(${Background})`,
-				backgroundPosition: '-30vh 10%',
-				backgroundSize: 'cover',
-				backgroundRepeat: 'no-repeat',
-				display: 'flex',
-				justifyContent: 'space-between',
-			}}
-		>
-			<div
-				style={{
-					display: 'flex',
-					flexDirection: 'column',
-					justifySelf: 'flex-start',
-				}}
+		<div className="login">
+			<div className="login-logo"
 			>
+				{/* <p className="login-logo">
+					VTSIGN
+				</p> */}
 				<img src={Logo} alt="logo" style={{ width: '15vw', margin: '3rem' }} />
 			</div>
 			<Paper
 				variant="outlined"
-				className="loginForm"
+				className="login-form"
 				style={{ maxHeight: '95vh', overflow: 'auto' }}
 			>
+			<p className="login-logo-temp">
+					VTSIGN
+				</p>
 				<Typography variant="h5" textAlign="center" fontWeight="bold" my="1rem">
 					Đăng nhập
 				</Typography>
@@ -161,7 +152,9 @@ const Login = () => {
 						</Grid>
 					</Grid>
 					{errorRegister && (
-						<p style={{ textAlign: 'center', color: 'red' }}>{errorRegister.message}</p>
+						<p style={{ textAlign: 'center', color: 'red', marginBottom: '2rem' }}>
+							{errorRegister.message}
+						</p>
 					)}
 					<Box mb="1.5rem" style={{ textAlign: 'center' }}>
 						{loading ? (

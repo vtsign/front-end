@@ -69,31 +69,18 @@ const Register = () => {
 	};
 
 	return (
-		<div
-			style={{
-				height: '95vh',
-				backgroundImage: `url(${Background})`,
-				backgroundPosition: '-40vh 50%',
-				backgroundSize: '100%',
-				backgroundRepeat: 'no-repeat',
-				display: 'flex',
-				justifyContent: 'space-between',
-			}}
-		>
-			<div
-				style={{
-					display: 'flex',
-					flexDirection: 'column',
-					justifySelf: 'flex-start',
-				}}
+		<div className="register">
+			<div className="register-logo"
 			>
 				<img src={Logo} alt="logo" style={{ width: '15vw', margin: '3rem' }} />
 			</div>
 			<Paper
 				variant="outlined"
-				className="registerForm"
-				// style={{ overflow: 'auto' }}
+				className="register-form"
 			>
+					<p className="register-logo-temp">
+					VTSIGN
+				</p>
 				<Typography variant="h5" textAlign="center" fontWeight="bold" my="1rem">
 					Đăng ký
 				</Typography>
@@ -285,7 +272,7 @@ const Register = () => {
 						</Grid>
 					</Grid>
 					{errorRegister && (
-						<p style={{ textAlign: 'center', color: 'red' }}>{errorRegister.message}</p>
+						<p style={{ textAlign: 'center', color: 'red', marginBottom: "2rem" }}>{errorRegister.message}</p>
 					)}
 					<Box mb="1.5rem" style={{ textAlign: 'center' }}>
 						{loading ? (

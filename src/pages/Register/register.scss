@@ -1,5 +1,48 @@
-.registerForm {
-	padding: 3em;
-	width: 30em;
-	overflow: auto;
+@import '/src/sass/variables';
+@import '/src/sass/mixins';
+@import '/src/sass/base';
+
+.register {
+	height: 95vh;
+	background-image: url('../../assets/images/background2-large.jpg');
+	background-position: -40vh 50%;
+	background-size: 100%;
+	background-repeat: no-repeat;
+	display: flex;
+	justify-content: space-between;
+
+	&-logo {
+		display: flex;
+		flex-direction: column;
+		justify-self: flex-start;
+
+		@include tablet {
+			display: none;
+		}
+
+		&-temp {
+			font-size: 25px;
+			font-weight: 600;
+			color: $main-color;
+			margin-bottom: 40px;
+
+			@include tablet {
+				display: block;
+			}
+			@include laptop {
+				display: none;
+			}
+		}
+	}
+
+	&-form {
+		padding: 3em;
+		width: 40em;
+		overflow: auto;
+
+		@include tablet {
+			width: 100%;
+		}
+	}
 }
+
