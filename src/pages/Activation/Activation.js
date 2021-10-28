@@ -13,11 +13,12 @@ const Activation = ({ match }) => {
 
 	const handleActivateAccount = async () => {
 		const { data } = await axios.get(
-			`https://api.vtsign.tech/user/activation/${userId}`
+			`https://api.vtsign.tech/user/apt/activation/${userId}`
 		);
-		if(data === true)
+		if (data === true)
 			history.push('/')
 		else
+			console.log("error activation ...");
 			return;
 	}
 

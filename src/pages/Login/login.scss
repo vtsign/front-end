@@ -1,5 +1,48 @@
-.loginForm {
-	background-color: #3a3737;
-	padding: 3em;
-	width: 30em;
+@import '/src/sass/variables';
+@import '/src/sass/mixins';
+@import '/src/sass/base';
+
+.login {
+	height: 95vh;
+	background-image: url('../../assets/images/background1-large.jpg');
+	background-position: -30vh 10%;
+	background-size: cover;
+	background-repeat: no-repeat;
+	display: flex;
+	justify-content: space-between;
+
+	&-logo {
+		display: flex;
+		flex-direction: column;
+		justify-self: flex-start;
+
+		@include tablet {
+			display: none;
+		}
+
+		&-temp {
+			font-size: 25px;
+			font-weight: 600;
+			color: $main-color;
+			margin-bottom: 40px;
+
+			@include tablet {
+				display: block;
+			}
+			@include laptop {
+				display: none;
+			}
+		}
+	}
+
+	&-form {
+		background-color: #3a3737;
+		padding: 3em;
+		width: 35em;
+
+		@include tablet {
+			width: 100%;
+		}
+	}
 }
+

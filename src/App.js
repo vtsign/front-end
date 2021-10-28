@@ -1,25 +1,24 @@
 import React from 'react';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import './App.scss';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Footer from './components/Footer/Footer';
-import Home from './pages/Home/Home';
+import MainRouter from './components/Layout/MainRouter';
+import Activation from './pages/Activation/Activation';
 import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
-import Signing from './pages/Signing/Signing';
-import Activation from './pages/Activation/Activation';
 
 const App = () => {
 	return (
 		<BrowserRouter>
-			{/* <Header /> */}
-			<main>
-				<Route path="/" exact component={Home} />
+			{/* <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}> */}
+			<Switch>
 				<Route path="/login" component={Login} />
 				<Route path="/register" component={Register} />
-				<Route path="/signing" component={Signing} />
 				<Route path="/activation/:id" component={Activation} />
-			</main>
+				<Route path="/" component={MainRouter} />
+			</Switch>
 			<Footer />
+			{/* </div> */}
 		</BrowserRouter>
 	);
 };

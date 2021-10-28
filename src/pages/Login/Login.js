@@ -1,34 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import {
+	AccountCircle, Facebook, Google, Lock, Visibility,
+	VisibilityOff
+} from '@mui/icons-material';
 import {
 	Box,
-	Button,
-	Card,
-	Divider,
+	Button, CircularProgress, Divider,
 	Grid,
 	IconButton,
 	InputAdornment,
 	InputLabel,
-	Paper,
-	TextField,
-	Typography,
-	Stack,
+	Paper, Stack, TextField,
+	Typography
 } from '@mui/material';
-import './login.scss';
-import {
-	Visibility,
-	VisibilityOff,
-	AccountCircle,
-	Lock,
-	Google,
-	Facebook,
-} from '@mui/icons-material';
-import { Link, useHistory } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import Background from '../../assets/images/background1-large.jpg';
-import { REG_EMAIL, REG_PASSWORD } from '../../components/constants/global.js';
-import { useDispatch, useSelector } from 'react-redux'
-import { loginAction } from '../../redux/actions/userActions.js'
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
 import Logo from '../../assets/images/logo-white.png';
+import { REG_EMAIL, REG_PASSWORD } from '../../components/constants/global.js';
+import { loginAction } from '../../redux/actions/userActions.js';
+import './login.scss';
 
 const Login = () => {
 	const [hiddenPassword, setHiddenPassword] = useState(true);
@@ -37,13 +28,12 @@ const Login = () => {
 
 	const history = useHistory();
 
-	const userLogin = useSelector(state => state.userLogin);
-	const { userInfo } = userLogin;
+	const userLogin = useSelector((state) => state.userLogin);
+	const { userInfo, loading, error: errorRegister, isLogin } = userLogin;
 
 	useEffect(() => {
-		if(userInfo)
-			history.push('/')
-	}, [userInfo, history])
+		if (isLogin) history.push('/');
+	}, [userInfo, history]);
 
 	const {
 		register,
@@ -57,31 +47,22 @@ const Login = () => {
 	};
 
 	return (
-		<div
-			style={{
-				height: '95vh',
-				backgroundImage: `url(${Background})`,
-				backgroundPosition: '-30vh 10%',
-				backgroundSize: 'cover',
-				backgroundRepeat: 'no-repeat',
-				display: 'flex',
-				justifyContent: 'space-between',
-			}}
-		>
-			<div
-				style={{
-					display: 'flex',
-					flexDirection: 'column',
-					justifySelf: 'flex-start',
-				}}
+		<div className="login">
+			<div className="login-logo"
 			>
+				{/* <p className="login-logo">
+					VTSIGN
+				</p> */}
 				<img src={Logo} alt="logo" style={{ width: '15vw', margin: '3rem' }} />
 			</div>
 			<Paper
 				variant="outlined"
-				className="loginForm"
+				className="login-form"
 				style={{ maxHeight: '95vh', overflow: 'auto' }}
 			>
+			<p className="login-logo-temp">
+					VTSIGN
+				</p>
 				<Typography variant="h5" textAlign="center" fontWeight="bold" my="1rem">
 					Đăng nhập
 				</Typography>
@@ -160,16 +141,25 @@ const Login = () => {
 							/>
 						</Grid>
 					</Grid>
-					<Box mb="1.5rem">
-						<Button
-							variant="contained"
-							color="primary"
-							fullWidth
-							size="large"
-							onClick={handleSubmit(doLogin)}
-						>
-							Đăng nhập
-						</Button>
+					{errorRegister && (
+						<p style={{ textAlign: 'center', color: 'red', marginBottom: '2rem' }}>
+							{errorRegister.message}
+						</p>
+					)}
+					<Box mb="1.5rem" style={{ textAlign: 'center' }}>
+						{loading ? (
+							<CircularProgress />
+						) : (
+							<Button
+								variant="contained"
+								color="primary"
+								fullWidth
+								size="large"
+								onClick={handleSubmit(doLogin)}
+							>
+								Đăng nhập
+							</Button>
+						)}
 					</Box>
 					<Typography textAlign="center" my="1rem">
 						<Link to="/#" style={{ textDecoration: 'none' }}>

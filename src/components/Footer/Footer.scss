@@ -1,7 +1,16 @@
+@import '/src/sass/variables';
+@import '/src/sass/mixins';
+@import '/src/sass/base';
+
 footer {
 	position: absolute;
 	bottom: 0;
 	width: 100%;
 	background-color: #f9f9f9;
 	text-align: center;
+	height: $footer-height;
+
+	p{
+		line-height: $footer-height;
+	}
 }

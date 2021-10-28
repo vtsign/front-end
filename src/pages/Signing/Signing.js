@@ -1,22 +1,21 @@
-import React from 'react';
+import { CloudUpload, InsertDriveFile } from '@mui/icons-material';
 import {
 	Box,
-	Stepper,
-	Step,
-	StepLabel,
 	Button,
-	Typography,
-	Checkbox,
-	FormControlLabel,
-	Grid,
-	Container,
 	Card,
 	CardContent,
+	Checkbox,
+	Container,
+	FormControlLabel,
+	Grid,
 	InputLabel,
+	Step,
+	StepLabel,
+	Stepper,
 	TextField,
+	Typography,
 } from '@mui/material';
-import { CloudUpload, InsertDriveFile } from '@mui/icons-material';
-import Header from '../../components/Header/Header';
+import React from 'react';
 const steps = [
 	'Thêm tài liệu (PDF, Word, PNG,...)',
 	'Chọn người nhận và cài đặt',
@@ -412,7 +411,7 @@ const Signing = () => {
 
 	return (
 		<>
-			<Header />
+			{/* <Header /> */}
 			{/* <Grid container spacing={3} style={{ minHeight: '84vh', margin: 'auto'}}>
 				<Box
 					sx={{
