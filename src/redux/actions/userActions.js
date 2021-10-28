@@ -33,9 +33,11 @@ export const loginAction = (email, password) => async (dispatch) => {
 			config
 		);
 
+		localStorage.setItem("accessToken", data.data.access_token);
+		localStorage.setItem("refreshToken", data.data.refresh_token);
 		dispatch({
 			type: USER_LOGIN_SUCCESS,
-			payload: data,
+			payload: data.data,
 		});
 	} catch (error) {
 		dispatch({

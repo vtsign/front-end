@@ -1,35 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import {
+	AccountCircle, Facebook, Google, Lock, Visibility,
+	VisibilityOff
+} from '@mui/icons-material';
 import {
 	Box,
-	Button,
-	Card,
-	Divider,
+	Button, CircularProgress, Divider,
 	Grid,
 	IconButton,
 	InputAdornment,
 	InputLabel,
-	Paper,
-	TextField,
-	Typography,
-	Stack,
-	CircularProgress,
+	Paper, Stack, TextField,
+	Typography
 } from '@mui/material';
-import './login.scss';
-import {
-	Visibility,
-	VisibilityOff,
-	AccountCircle,
-	Lock,
-	Google,
-	Facebook,
-} from '@mui/icons-material';
-import { Link, useHistory } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import Background from '../../assets/images/background1-large.jpg';
-import { REG_EMAIL, REG_PASSWORD } from '../../components/constants/global.js';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginAction } from '../../redux/actions/userActions.js';
+import { Link, useHistory } from 'react-router-dom';
 import Logo from '../../assets/images/logo-white.png';
+import { REG_EMAIL, REG_PASSWORD } from '../../components/constants/global.js';
+import { loginAction } from '../../redux/actions/userActions.js';
+import './login.scss';
 
 const Login = () => {
 	const [hiddenPassword, setHiddenPassword] = useState(true);
@@ -39,10 +29,10 @@ const Login = () => {
 	const history = useHistory();
 
 	const userLogin = useSelector((state) => state.userLogin);
-	const { userInfo, loading, error: errorRegister } = userLogin;
+	const { userInfo, loading, error: errorRegister, isLogin } = userLogin;
 
 	useEffect(() => {
-		if (userInfo) history.push('/');
+		if (isLogin) history.push('/');
 	}, [userInfo, history]);
 
 	const {

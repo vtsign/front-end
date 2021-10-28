@@ -1,4 +1,6 @@
 @import '/src/sass/variables';
+@import '/src/sass/mixins';
+@import '/src/sass/base';
 .menu-mobile {
 	padding: 0;
 	.active {
@@ -14,4 +16,13 @@
 			color: white;
 		}
 	}
+}
+
+.menu-icon {
+    margin: auto;
+    font-size: 30px !important;
+
+    @include mobile {
+       font-size: 25px !important;
+    }
 }

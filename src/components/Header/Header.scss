@@ -15,8 +15,7 @@
 	&-toolbar {
 		@include flex(center, space-between);
 
-		&-logo{
-
+		&-logo {
 			font-size: 20px;
 			font-weight: 500;
 			&:hover {
@@ -25,34 +24,54 @@
 		}
 	}
 
-	&-menu {
+	.header-right {
 		display: flex;
 
-		@include mobile {
-			display: none;
+		&-logo {
+			width: 130px;
+			height: 50px;
+			vertical-align: middle;
+
+			@include mobile {
+				width: 100px;
+				height: 40px;
+			}
 		}
 
-		a {
-			@include flex(center, center);
+		&-menu {
+			display: flex;
+			margin-left: 25px;
 
-			width: 85px;
-			height: 100%;
-			margin: 0 2px;
+			@include tablet {
+				display: none;
+			}
 
-			font-size: 16px;
-			text-decoration: none;
-			color: rgb(255, 255, 255);
-			opacity: 0.5;
-			text-align: center;
-			line-height: 100%;
+			svg {
+				margin-right: 5px;
+			}
 
-			transition: all 0.1s ease 0s;
+			a {
+				@include flex(center, center);
 
-			&:hover,
-			&.active {
-				font-size: 17px;
+				width: 110px;
+				height: 100%;
+				margin: 0 2px;
+
+				font-size: 16px;
+				text-decoration: none;
 				color: rgb(255, 255, 255);
-				opacity: 1;
+				opacity: 0.5;
+				text-align: center;
+				line-height: 100%;
+
+				transition: all 0.1s ease 0s;
+
+				&:hover,
+				&.active {
+					font-size: 17px;
+					color: rgb(255, 255, 255);
+					opacity: 1;
+				}
 			}
 		}
 	}

@@ -72,10 +72,12 @@ const MenuMobile = () => {
 			>
 				{list()}
 			</SwipeableDrawer>
-			<MenuIcon
-				onClick={toggleDrawer(true)}
+            <MenuIcon
+                fontSize="large"
+                onClick={toggleDrawer(true)}
+                className = "menu-icon"
 				sx={{
-					display: { xs: 'inline', sm: 'none' },
+					display: { sm: 'inline', md: 'none' },
 					mr: 2,
 				}}
 			/>

@@ -8,9 +8,13 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import React, { Fragment } from 'react';
-import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { USER_LOGOUT } from '../../redux/constants/userConstants';
 
 const LeftHeader = () => {
+	const history = useHistory();
+	const dispatch = useDispatch();
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const open = Boolean(anchorEl);
 	const handleClick = (event) => {
@@ -19,6 +23,12 @@ const LeftHeader = () => {
 	const handleClose = () => {
 		setAnchorEl(null);
 	};
+
+	const logoutHandler = () => {
+		console.log('logout');
+		dispatch({ type: USER_LOGOUT });
+		history.push("/login");
+	}
 	return (
 		<Fragment>
 			<Box sx={{ display: 'flex' }}>
@@ -85,14 +95,12 @@ const LeftHeader = () => {
 					</ListItemIcon>
 					Settings
                 </MenuItem>
-                <Link to="/login">
-				<MenuItem>
+				<MenuItem onClick={logoutHandler}>
 					<ListItemIcon>
 						<Logout fontSize="small" />
 					</ListItemIcon>
 					Logout
 				</MenuItem>
-                </Link>
 			</Menu>
 		</Fragment>
 	);
