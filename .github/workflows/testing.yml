@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - ci
 
 env:
   IMAGE_NAME: ${{ secrets.DOCKER_HUB_USERNAME }}/front-end:testing
