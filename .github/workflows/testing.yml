@@ -1,9 +1,6 @@
 name: Testing
 
-on:
-  push:
-    branches:
-      - main
+on: push
 
 env:
   IMAGE_NAME: ${{ secrets.DOCKER_HUB_USERNAME }}/front-end:testing
