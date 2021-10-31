@@ -2,22 +2,22 @@ import React, { useState, useRef, useEffect } from 'react';
 import {
 	Avatar,
 	Box,
-	Stepper,
-	Step,
-	StepLabel,
 	Button,
-	Typography,
-	Checkbox,
-	FormControlLabel,
-	Grid,
-	Container,
 	Card,
 	CardContent,
+	Checkbox,
+	Container,
+	FormControlLabel,
+	Grid,
 	InputLabel,
+	Step,
+	StepLabel,
+	Stepper,
 	TextField,
 	Stack,
 	IconButton,
-	Divider
+	Divider,
+	Typography
 } from '@mui/material';
 import './signing.scss'
 import { CloudUpload, InsertDriveFile, BorderColor, CalendarToday, TextFields, PersonOutline, MailOutline, Computer, Brush } from '@mui/icons-material';
@@ -981,7 +981,7 @@ const Signing = () => {
 
 	return (
 		<>
-			<Header />
+			{/* <Header /> */}
 			<Container maxWidth={false}>
 				<Grid container spacing={1} className="sign__container" >
 					<Grid item lg={3} sm={6} xl={2} xs={12} display="flex" alignItems="center">

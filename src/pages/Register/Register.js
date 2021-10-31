@@ -12,6 +12,10 @@ import {
 	Box,
 	Button,
 	Stack,
+	Snackbar,
+	Alert,
+	Loading,
+	CircularProgress,
 } from '@mui/material';
 import './register.scss';
 import { Link } from 'react-router-dom';
@@ -30,16 +34,17 @@ const Register = () => {
 
 	const dispatch = useDispatch();
 
-	const userRegister = useSelector(state => state.userRegister);
-	const { userInfo } = userRegister;
+	const userRegister = useSelector((state) => state.userRegister);
+	const { userInfo, loading, error: errorRegister } = userRegister;
 
 	const history = useHistory();
 
 	useEffect(() => {
-		if(userInfo) {
+		console.log('errorRegistry', errorRegister);
+		if (userInfo) {
 			history.push('/login');
 		}
-	}, [userInfo, history])
+	}, [userInfo, errorRegister, history]);
 
 	const {
 		register,
@@ -64,31 +69,18 @@ const Register = () => {
 	};
 
 	return (
-		<div
-			style={{
-				height: '95vh',
-				backgroundImage: `url(${Background})`,
-				backgroundPosition: '-40vh 50%',
-				backgroundSize: '100%',
-				backgroundRepeat: 'no-repeat',
-				display: 'flex',
-				justifyContent: 'space-between',
-			}}
-		>
-			<div
-				style={{
-					display: 'flex',
-					flexDirection: 'column',
-					justifySelf: 'flex-start',
-				}}
+		<div className="register">
+			<div className="register-logo"
 			>
 				<img src={Logo} alt="logo" style={{ width: '15vw', margin: '3rem' }} />
 			</div>
 			<Paper
 				variant="outlined"
-				className="registerForm"
-				// style={{ overflow: 'auto' }}
+				className="register-form"
 			>
+					<p className="register-logo-temp">
+					VTSIGN
+				</p>
 				<Typography variant="h5" textAlign="center" fontWeight="bold" my="1rem">
 					Đăng ký
 				</Typography>
@@ -279,27 +271,28 @@ const Register = () => {
 							/>
 						</Grid>
 					</Grid>
-					<Box mb="1.5rem">
-						<Button
-							variant="contained"
-							color="primary"
-							fullWidth
-							size="large"
-							onClick={handleSubmit(doLogin)}
-						>
-							{/* {buttonLoading && (
-								<CircularProgress
-									size={22}
-									style={{ color: 'white', marginRight: 7 }}
-								/>
-							)} */}
-							Đăng ký
-						</Button>
+					{errorRegister && (
+						<p style={{ textAlign: 'center', color: 'red', marginBottom: "2rem" }}>{errorRegister.message}</p>
+					)}
+					<Box mb="1.5rem" style={{ textAlign: 'center' }}>
+						{loading ? (
+							<CircularProgress />
+						) : (
+							<Button
+								variant="contained"
+								color="primary"
+								fullWidth
+								size="large"
+								onClick={handleSubmit(doLogin)}
+							>
+								Đăng ký
+							</Button>
+						)}
 					</Box>
 					<Divider style={{ marginTop: '2rem', marginBottom: '2rem' }} />
 					<p style={{ textAlign: 'center', marginBottom: '2rem' }}>
 						Bạn đã có tài khoản?{' '}
-						<Link exact to="/">
+						<Link exact to="/login">
 							Đăng nhập?
 						</Link>
 					</p>

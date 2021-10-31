@@ -1,0 +1,33 @@
+$main-bg: #fff;
+$main-color: #1976d2;
+
+$txt-main-color: #000;
+$txt-second-color: #8d8d8d;
+$txt-white: #fff;
+
+$btn-main-bg: $main-color;
+$btn-main-color: #fff;
+
+$header-height: 65px;
+$header-tablet-height: 50px;
+$header-mobile-height: 50px;
+$header-shrink-height: 70px;
+
+$footer-height: 50px;
+$footer-tablet-height: 40px;
+$footer-mobile-height: 40px;
+
+$box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+
+$colors: (
+    "blue": #1976d2,
+    "orange": #fbb96b,
+    "pink": #fe7e73,
+    "white": #fff,
+    "black": #000,
+    "main": $main-color,
+    "red": #ff0000,
+);
+
+$mobile-width: 600px;
+$tablet-width: 900px;
