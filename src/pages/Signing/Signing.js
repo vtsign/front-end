@@ -27,7 +27,10 @@ import WebViewer from '@pdftron/webviewer';
 import '@pdftron/webviewer/public/core/CoreControls';
 import ReceiverAvatar from '../../components/ReceiverAvatar/ReceiverAvatar';
 import EditFormButton from '../../components/EditFormButton/EditFormButton';
-import { storage, addDocumentToSign } from '../../firebase/firebase';
+// import { storage, addDocumentToSign } from '../../firebase/firebase';
+import { addDocumentToSign } from '../../redux/actions/documentActions';
+import { useDispatch } from 'react-redux'
+import { useHistory } from 'react-router';
 
 const steps = [
 	'Thêm tài liệu (PDF, Word, PNG,...)',
@@ -92,7 +95,7 @@ export function FirstStep({ filePicker, fileData, setFileData }) {
 									alignItems: 'center',
 									justifyContent: 'center',
 									flexDirection: 'column',
-									minHeight: '55vh',
+									// minHeight: '55vh',
 									// backgroundColor: '#FAFAFA',
 									color: '#2F80ED',
 									cursor: 'pointer',
@@ -139,16 +142,16 @@ export function FirstStep({ filePicker, fileData, setFileData }) {
 	);
 }
 
-export function SecondStep({ receivers, setReceivers }) {
-	const {
-		register,
-		handleSubmit,
-		formState: { errors },
-	} = useForm();
+export function SecondStep({ receivers, setReceivers, register, handleSubmit, errors }) {
+	// const {
+	// 	register,
+	// 	handleSubmit,
+	// 	formState: { errors },
+	// } = useForm({ shouldUnregister: false, mode: 'onChange' });
 
 	const addReceivers = (formData) => {
 		console.log(formData);
-		setReceivers([...receivers, formData]);
+		setReceivers(receivers => [...receivers, formData]);
 		console.log(receivers);
 	};
 
@@ -180,14 +183,14 @@ export function SecondStep({ receivers, setReceivers }) {
 								>
 									<InputLabel>Tên người nhận</InputLabel>
 									<TextField
-										id="receiver"
+										id="name"
 										placeholder="Nguyễn Văn A"
 										sx={{ minWidth: '25vw' }}
-										{...register('receiver', {
+										{...register('name', {
 											required: 'Vui lòng nhập họ và tên người nhận',
 										})}
-										error={!!errors.receiver}
-										helperText={errors?.receiver?.message}
+										error={!!errors.name}
+										helperText={errors?.name?.message}
 									/>
 								</Grid>
 								<Grid
@@ -216,14 +219,14 @@ export function SecondStep({ receivers, setReceivers }) {
 								>
 									<InputLabel>Quyền hạn</InputLabel>
 									<TextField
-										id="privilege"
+										id="permission"
 										placeholder="Nguyễn Văn A"
 										sx={{ minWidth: '25vw' }}
-										{...register('privilege', {
+										{...register('permission', {
 											required: 'Lựa chọn quyền hạn',
 										})}
-										error={!!errors.privilege}
-										helperText={errors?.privilege?.message}
+										error={!!errors.permission}
+										helperText={errors?.permission?.message}
 									/>
 								</Grid>
 								<Grid
@@ -238,8 +241,8 @@ export function SecondStep({ receivers, setReceivers }) {
 										placeholder="Nguyễn Văn A"
 										sx={{ minWidth: '25vw' }}
 										{...register('key')}
-										// error={!!errors.key}
-										// helperText={errors?.key?.message}
+										error={!!errors.key}
+										helperText={errors?.key?.message}
 									/>
 								</Grid>
 								<Grid
@@ -285,8 +288,7 @@ export function SecondStep({ receivers, setReceivers }) {
 	);
 }
 
-export function ThirdStep({ viewer, fileData, receivers }) {
-	const [instance, setInstance] = useState(null);
+export function ThirdStep({ viewer, fileData, receivers, instance, setInstance }) {
 	const [dropPoint, setDropPoint] = useState(null);
 
 	useEffect(() => {
@@ -514,32 +516,10 @@ export function ThirdStep({ viewer, fileData, receivers }) {
 
 		// refresh viewer
 		await annotManager.drawAnnotationsFromList(annotsToDraw);
-		await uploadForSigning();
+		// await uploadForSigning();
 	};
 
-	const uploadForSigning = async () => {
-		// upload the PDF with fields as AcroForm
-		const storageRef = storage.ref();
-		const referenceString = `docToSign/${Date.now()}.pdf`;
-		const docRef = storageRef.child(referenceString);
-		const { docViewer, annotManager } = instance;
-		const doc = docViewer.getDocument();
-		const xfdfString = await annotManager.exportAnnotations({ widgets: true, fields: true });
-		const data = await doc.getFileData({ xfdfString });
-		const arr = new Uint8Array(data);
-		const blob = new Blob([arr], { type: 'application/pdf' });
-		docRef.put(blob).then(function (snapshot) {
-			console.log('Uploaded the blob');
-		});
 
-		// create an entry in the database
-		// const emails = assignees.map((assignee) => {
-		// 	return assignee.email;
-		// });
-		await addDocumentToSign(null, null, referenceString, null);
-		// dispatch(resetSignee());
-		// navigate('/');
-	};
 
 	const dragOver = (e) => {
 		e.preventDefault();
@@ -833,12 +813,14 @@ export function ThirdStep({ viewer, fileData, receivers }) {
 	);
 }
 
-export function LastStep({receivers}) {
-	const {
-		register,
-		handleSubmit,
-		formState: { errors },
-	} = useForm();
+export function LastStep({ receivers, register, errors }) {
+	const dispatch = useDispatch();
+
+	// const {
+	// 	register,
+	// 	handleSubmit,
+	// 	formState: { errors },
+	// } = useForm({ shouldUnregister: false, mode: 'onChange' });
 	return (
 		<>
 			<Grid>
@@ -931,11 +913,22 @@ const Signing = () => {
 	const [activeStep, setActiveStep] = React.useState(0);
 	const [skipped, setSkipped] = React.useState(new Set());
 
+	const [instance, setInstance] = useState(null);
 	const [fileData, setFileData] = useState(null);
 	const [receivers, setReceivers] = useState([]);
 
+	const history = useHistory();
+
 	const viewer = useRef(null);
 	const filePicker = useRef(null);
+
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm({ shouldUnregister: false, mode: 'onChange' });
+
+	const dispatch = useDispatch();
 
 	const isStepOptional = (step) => {
 		return step === 1;
@@ -945,7 +938,7 @@ const Signing = () => {
 		return skipped.has(step);
 	};
 
-	const handleNext = () => {
+	const handleNext = async (formData) => {
 		let newSkipped = skipped;
 		if (isStepSkipped(activeStep)) {
 			newSkipped = new Set(newSkipped.values());
@@ -954,6 +947,18 @@ const Signing = () => {
 
 		setActiveStep((prevActiveStep) => prevActiveStep + 1);
 		setSkipped(newSkipped);
+		console.log(formData)
+		console.log(receivers)
+		if(activeStep === 3) {
+			console.log('step 3')
+			receivers.map((receiver) => {
+				return {
+				...receiver,
+				private_message: ''
+			}})
+			history.push('/');
+			await handleSendFiles(formData);
+		}
 	};
 
 	const handlePrev = () => {
@@ -978,6 +983,24 @@ const Signing = () => {
 	const handleReset = () => {
 		setActiveStep(0);
 	};
+
+	const handleSendFiles = async formData => {
+		const { docViewer, annotManager } = instance;
+		const doc = docViewer.getDocument();
+		const xfdfString = await annotManager.exportAnnotations({ widgets: true, fields: true });
+		const data = await doc.getFileData({ xfdfString });
+		const arr = new Uint8Array(data);
+		const blob = new Blob([arr], { type: 'application/pdf' });
+		const file = new File([blob], doc.filename);
+
+		const json = {
+			receivers: receivers,
+			mail_title: formData.title,
+			mail_message: formData.message,
+		};
+
+		// dispatch(addDocumentToSign(json, file));
+	}
 
 	return (
 		<>
@@ -1007,16 +1030,18 @@ const Signing = () => {
 							/>
 						)}
 						{activeStep === 1 && (
-							<SecondStep receivers={receivers} setReceivers={setReceivers} />
+							<SecondStep receivers={receivers} setReceivers={setReceivers} register={register} handleSubmit={handleSubmit} errors={errors} />
 						)}
 						{activeStep === 2 && (
 							<ThirdStep
 								viewer={viewer}
 								fileData={fileData}
 								receivers={receivers}
+								instance={instance}
+								setInstance={setInstance}
 							/>
 						)}
-						{activeStep === 3 && <LastStep receivers={receivers} />}
+						{activeStep === 3 && <LastStep receivers={receivers} register={register} errors={errors} />}
 						<Grid display="flex" justifyContent="flex-end">
 							{activeStep === 0 && <FormControlLabel control={<Checkbox />} label="Chỉ mình tôi ký" />}
 							{activeStep > 0 && (
@@ -1024,7 +1049,7 @@ const Signing = () => {
 									Quay lại
 								</Button>
 							)}
-							<Button variant="contained" style={{ marginLeft: "14px" }} onClick={handleNext}>
+							<Button variant="contained" style={{ marginLeft: "14px" }} onClick={handleSubmit(handleNext)}>
 								{activeStep === steps.length - 1 ? 'Gửi' : 'Tiếp tục'}
 							</Button>
 						</Grid>

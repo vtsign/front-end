@@ -15,7 +15,7 @@ const ReceiverAvatar = ({ receiver }) => {
 				</Avatar>
 			</div>
 			<div className="receiver__info">
-				<span className="receiver__name">{receiver.receiver}</span>
+				<span className="receiver__name">{receiver.name}</span>
 				<span className="receiver__email">{receiver.email}</span>
 			</div>
 			<div
