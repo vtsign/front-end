@@ -17,7 +17,10 @@ import {
 	Stack,
 	IconButton,
 	Divider,
-	Typography
+	Typography,
+	FormControl,
+	Select,
+	MenuItem
 } from '@mui/material';
 import './signing.scss'
 import { CloudUpload, InsertDriveFile, BorderColor, CalendarToday, TextFields, PersonOutline, MailOutline, Computer, Brush } from '@mui/icons-material';
@@ -27,8 +30,8 @@ import WebViewer from '@pdftron/webviewer';
 import '@pdftron/webviewer/public/core/CoreControls';
 import ReceiverAvatar from '../../components/ReceiverAvatar/ReceiverAvatar';
 import EditFormButton from '../../components/EditFormButton/EditFormButton';
-// import { storage, addDocumentToSign } from '../../firebase/firebase';
-import { addDocumentToSign } from '../../redux/actions/documentActions';
+import { storage, addDocumentToSign } from '../../firebase/firebase';
+// import { addDocumentToSign } from '../../redux/actions/documentActions';
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router';
 
@@ -519,6 +522,33 @@ export function ThirdStep({ viewer, fileData, receivers, instance, setInstance }
 		// await uploadForSigning();
 	};
 
+	//   const uploadForSigning = async () => {
+	// 		// upload the PDF with fields as AcroForm
+	// 		const storageRef = storage.ref();
+	// 		const referenceString = `docToSign/${Date.now()}.pdf`;
+	// 		const docRef = storageRef.child(referenceString);
+	// 		const { docViewer, annotManager } = instance;
+	// 		const doc = docViewer.getDocument();
+	// 		const xfdfString = await annotManager.exportAnnotations({
+	// 			widgets: true,
+	// 			fields: true,
+	// 		});
+	// 		const data = await doc.getFileData({ xfdfString });
+	// 		const arr = new Uint8Array(data);
+	// 		const blob = new Blob([arr], { type: 'application/pdf' });
+	// 		docRef.put(blob).then(function (snapshot) {
+	// 			console.log('Uploaded the blob');
+	// 		});
+
+	// 		// create an entry in the database
+	// 		// const emails = assignees.map((assignee) => {
+	// 		// 	return assignee.email;
+	// 		// });
+	// 		await addDocumentToSign(null, null, referenceString, null);
+	// 		// dispatch(resetSignee());
+	// 		// navigate('/');
+	// 	};
+
 
 
 	const dragOver = (e) => {
@@ -553,6 +583,10 @@ export function ThirdStep({ viewer, fileData, receivers, instance, setInstance }
 		e.preventDefault();
 	};
 
+	const handleChange = (e) => {
+
+	}
+
 	return (
 		<>
 			<Grid>
@@ -563,6 +597,21 @@ export function ThirdStep({ viewer, fileData, receivers, instance, setInstance }
 			<Grid display="flex">
 				<Grid item lg={2} md={6} xl={2} xs={12} mr="2rem">
 					<Stack my={2}>
+						<Box padding={1}>
+							<FormControl sx={{ m: 1, minWidth: 120 }}>
+								<Select
+									value={receivers}
+									onChange={handleChange}
+									inputProps={{ 'aria-label': 'Without label' }}
+								>
+									{receivers.map((receiver) => (
+										<MenuItem value={10}>
+											{receiver.email}
+										</MenuItem>
+									))}
+								</Select>
+							</FormControl>
+						</Box>
 						<Box padding={1}>
 							<div
 								draggable
@@ -756,29 +805,6 @@ export function ThirdStep({ viewer, fileData, receivers, instance, setInstance }
 					</Stack>
 				</Grid>
 				<Grid item lg={8} md={6} xl={8} xs={12} mr="2rem" ref={viewer}></Grid>
-				{/* <div style={{ width: '600px', height: '450px' }} ref={viewer} /> */}
-				{/* <Grid item lg={8} md={12} xl={9} xs={12} mr="2rem">
-					<Card>
-						<CardContent>
-							<Box
-								sx={{
-									display: 'flex',
-									alignItems: 'center',
-									justifyContent: 'center',
-									flexDirection: 'column',
-									minHeight: '60vh',
-									backgroundColor: '#FAFAFA',
-									color: '#2F80ED',
-									cursor: 'pointer',
-								}}
-								ref={viewer}
-							>
-								<CloudUpload style={{ fontSize: '4rem' }} />
-								<Typography variant="h6">Tải tài liệu</Typography>
-							</Box>
-						</CardContent>
-					</Card>
-				</Grid> */}
 				<Grid item lg={2} md={12} xl={2} xs={12}>
 					{fileData && (
 						<div className="preview-file">
@@ -806,7 +832,9 @@ export function ThirdStep({ viewer, fileData, receivers, instance, setInstance }
 							</div>
 						</div>
 					)}
-					<Button variant="outlined" onClick={applyFields}>Gửi</Button>
+					<Button variant="outlined" onClick={applyFields}>
+						Gửi
+					</Button>
 				</Grid>
 			</Grid>
 		</>
@@ -950,14 +978,8 @@ const Signing = () => {
 		console.log(formData)
 		console.log(receivers)
 		if(activeStep === 3) {
-			console.log('step 3')
-			receivers.map((receiver) => {
-				return {
-				...receiver,
-				private_message: ''
-			}})
-			history.push('/');
 			await handleSendFiles(formData);
+			history.push('/');
 		}
 	};
 
@@ -988,7 +1010,9 @@ const Signing = () => {
 		const { docViewer, annotManager } = instance;
 		const doc = docViewer.getDocument();
 		const xfdfString = await annotManager.exportAnnotations({ widgets: true, fields: true });
+		console.log(xfdfString);
 		const data = await doc.getFileData({ xfdfString });
+		console.log(data)
 		const arr = new Uint8Array(data);
 		const blob = new Blob([arr], { type: 'application/pdf' });
 		const file = new File([blob], doc.filename);
@@ -999,7 +1023,7 @@ const Signing = () => {
 			mail_message: formData.message,
 		};
 
-		// dispatch(addDocumentToSign(json, file));
+		dispatch(addDocumentToSign(json, file));
 	}
 
 	return (
