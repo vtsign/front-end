@@ -530,11 +530,10 @@ export function ThirdStep({ viewer, fileData, receivers, instance, setInstance, 
 			fields: true,
 		});
 		const data = await doc.getFileData({ xfdfString });
-		console.log(data+"-----------------------------------------------------"+doc)
 		const arr = new Uint8Array(data);
 		const blob = new Blob([arr], { type: 'application/pdf' });
-        console.log(doc.filename)
-		const file = new File([blob], doc.filename);
+		console.log("safdfadsf", fileData.name);
+		const file = new File([blob], fileData.name);
 		setFile(file)
 	}
 
@@ -1102,6 +1101,7 @@ const Signing = () => {
 								instance={instance}
 								setInstance={setInstance}
 								setFile={setFile}
+								fileData={fileData}
 							/>
 						)}
 						{activeStep === 3 && (
