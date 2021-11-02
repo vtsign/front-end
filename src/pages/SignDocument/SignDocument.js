@@ -17,19 +17,19 @@ const SignDocument = () => {
 		WebViewer(
 			{
 				path: 'webviewer',
-				disabledElements: [
-					'ribbons',
-					'toggleNotesButton',
-					'searchButton',
-					'menuButton',
-					'rubberStampToolGroupButton',
-					'stampToolGroupButton',
-					'fileAttachmentToolGroupButton',
-					'calloutToolGroupButton',
-					'undo',
-					'redo',
-					'eraserToolButton',
-				],
+				// disabledElements: [
+				// 	'ribbons',
+				// 	'toggleNotesButton',
+				// 	'searchButton',
+				// 	'menuButton',
+				// 	'rubberStampToolGroupButton',
+				// 	'stampToolGroupButton',
+				// 	'fileAttachmentToolGroupButton',
+				// 	'calloutToolGroupButton',
+				// 	'undo',
+				// 	'redo',
+				// 	'eraserToolButton',
+				// ],
 			},
 			viewer.current
 		).then(async (instance) => {
@@ -42,8 +42,7 @@ const SignDocument = () => {
 			// load document
 			// const storageRef = storage.ref();
 			// const URL = await storageRef.child(docRef).getDownloadURL();
-			const URL =
-				'https://firebasestorage.googleapis.com/v0/b/pdftron-sign-app-19b93.appspot.com/o/docToSign%2F1635761224738.pdf?alt=media&token=2e962f16-52dc-494f-a7a2-bbda9753c88b';
+			const URL = "https://vtsign.blob.core.windows.net/test/hopdong.pdf"
 			docViewer.loadDocument(URL);
 
 			const normalStyles = (widget) => {

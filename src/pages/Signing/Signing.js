@@ -30,8 +30,8 @@ import WebViewer from '@pdftron/webviewer';
 import '@pdftron/webviewer/public/core/CoreControls';
 import ReceiverAvatar from '../../components/ReceiverAvatar/ReceiverAvatar';
 import EditFormButton from '../../components/EditFormButton/EditFormButton';
-import { storage, addDocumentToSign } from '../../firebase/firebase';
-// import { addDocumentToSign } from '../../redux/actions/documentActions';
+import { storage } from '../../firebase/firebase';
+import { addDocumentToSign } from '../../redux/actions/documentActions';
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router';
 
@@ -153,7 +153,6 @@ export function SecondStep({ receivers, setReceivers, register, handleSubmit, er
 	// } = useForm({ shouldUnregister: false, mode: 'onChange' });
 
 	const addReceivers = (formData) => {
-		console.log(formData);
 		setReceivers(receivers => [...receivers, formData]);
 		console.log(receivers);
 	};
@@ -291,7 +290,7 @@ export function SecondStep({ receivers, setReceivers, register, handleSubmit, er
 	);
 }
 
-export function ThirdStep({ viewer, fileData, receivers, instance, setInstance }) {
+export function ThirdStep({ viewer, fileData, receivers, instance, setInstance, setFile }) {
 	const [dropPoint, setDropPoint] = useState(null);
 
 	useEffect(() => {
@@ -520,34 +519,52 @@ export function ThirdStep({ viewer, fileData, receivers, instance, setInstance }
 		// refresh viewer
 		await annotManager.drawAnnotationsFromList(annotsToDraw);
 		// await uploadForSigning();
+		await composeFile();
 	};
 
-	//   const uploadForSigning = async () => {
-	// 		// upload the PDF with fields as AcroForm
-	// 		const storageRef = storage.ref();
-	// 		const referenceString = `docToSign/${Date.now()}.pdf`;
-	// 		const docRef = storageRef.child(referenceString);
-	// 		const { docViewer, annotManager } = instance;
-	// 		const doc = docViewer.getDocument();
-	// 		const xfdfString = await annotManager.exportAnnotations({
-	// 			widgets: true,
-	// 			fields: true,
-	// 		});
-	// 		const data = await doc.getFileData({ xfdfString });
-	// 		const arr = new Uint8Array(data);
-	// 		const blob = new Blob([arr], { type: 'application/pdf' });
-	// 		docRef.put(blob).then(function (snapshot) {
-	// 			console.log('Uploaded the blob');
-	// 		});
+	const composeFile = async () => {
+		const { docViewer, annotManager } = instance;
+		const doc = docViewer.getDocument();
+		const xfdfString = await annotManager.exportAnnotations({
+			widgets: true,
+			fields: true,
+		});
+		const data = await doc.getFileData({ xfdfString });
+		console.log(data+"-----------------------------------------------------"+doc)
+		const arr = new Uint8Array(data);
+		const blob = new Blob([arr], { type: 'application/pdf' });
+        console.log(doc.filename)
+		const file = new File([blob], doc.filename);
+		setFile(file)
+	}
 
-	// 		// create an entry in the database
-	// 		// const emails = assignees.map((assignee) => {
-	// 		// 	return assignee.email;
-	// 		// });
-	// 		await addDocumentToSign(null, null, referenceString, null);
-	// 		// dispatch(resetSignee());
-	// 		// navigate('/');
-	// 	};
+	  const uploadForSigning = async () => {
+			// upload the PDF with fields as AcroForm
+			const storageRef = storage.ref();
+			const referenceString = `docToSign/${Date.now()}.pdf`;
+			const docRef = storageRef.child(referenceString);
+			const { docViewer, annotManager } = instance;
+			const doc = docViewer.getDocument();
+			const xfdfString = await annotManager.exportAnnotations({
+				widgets: true,
+				fields: true,
+			});
+			const data = await doc.getFileData({ xfdfString });
+			console.log(data)
+			const arr = new Uint8Array(data);
+			const blob = new Blob([arr], { type: 'application/pdf' });
+			docRef.put(blob).then(function (snapshot) {
+				console.log('Uploaded the blob');
+			});
+
+			// create an entry in the database
+			// const emails = assignees.map((assignee) => {
+			// 	return assignee.email;
+			// });
+			// await addDocumentToSign(null, null, referenceString, null);
+			// dispatch(resetSignee());
+			// navigate('/');
+		};
 
 
 
@@ -945,6 +962,8 @@ const Signing = () => {
 	const [fileData, setFileData] = useState(null);
 	const [receivers, setReceivers] = useState([]);
 
+	const [file, setFile] = useState(null);
+
 	const history = useHistory();
 
 	const viewer = useRef(null);
@@ -966,7 +985,7 @@ const Signing = () => {
 		return skipped.has(step);
 	};
 
-	const handleNext = async (formData) => {
+	const handleNext = (formData) => {
 		let newSkipped = skipped;
 		if (isStepSkipped(activeStep)) {
 			newSkipped = new Set(newSkipped.values());
@@ -978,7 +997,7 @@ const Signing = () => {
 		console.log(formData)
 		console.log(receivers)
 		if(activeStep === 3) {
-			await handleSendFiles(formData);
+			handleSendFiles(formData);
 			history.push('/');
 		}
 	};
@@ -1006,17 +1025,30 @@ const Signing = () => {
 		setActiveStep(0);
 	};
 
-	const handleSendFiles = async formData => {
-		const { docViewer, annotManager } = instance;
-		const doc = docViewer.getDocument();
-		const xfdfString = await annotManager.exportAnnotations({ widgets: true, fields: true });
-		console.log(xfdfString);
-		const data = await doc.getFileData({ xfdfString });
-		console.log(data)
-		const arr = new Uint8Array(data);
-		const blob = new Blob([arr], { type: 'application/pdf' });
-		const file = new File([blob], doc.filename);
+	// const handleSendFiles = async formData => {
+	// 	const { docViewer, annotManager } = instance;
+	// 	// console.log(instance)
+	// 	const doc = docViewer.getDocument();
 
+	// 	console.log(doc);
+	// 	const xfdfString = await annotManager.exportAnnotations({ widgets: true, fields: true });
+	// 	// console.log(xfdfString);
+	// 	const data = await doc.getFileData({ xfdfString });
+	// 	// console.log(data)
+	// 	const arr = new Uint8Array(data);
+	// 	const blob = new Blob([arr], { type: 'application/pdf' });
+	// 	const file = new File([blob], doc.filename);
+
+	// 	const json = {
+	// 		receivers: receivers,
+	// 		mail_title: formData.title,
+	// 		mail_message: formData.message,
+	// 	};
+
+	// 	dispatch(addDocumentToSign(json, file));
+	// }
+	const handleSendFiles = formData => {
+		console.log(file)
 		const json = {
 			receivers: receivers,
 			mail_title: formData.title,
@@ -1030,7 +1062,7 @@ const Signing = () => {
 		<>
 			{/* <Header /> */}
 			<Container maxWidth={false}>
-				<Grid container spacing={1} className="sign__container" >
+				<Grid container spacing={1} className="sign__container">
 					<Grid item lg={3} sm={6} xl={2} xs={12} display="flex" alignItems="center">
 						<Stepper activeStep={activeStep} orientation="vertical">
 							{steps.map((label, index) => {
@@ -1054,7 +1086,13 @@ const Signing = () => {
 							/>
 						)}
 						{activeStep === 1 && (
-							<SecondStep receivers={receivers} setReceivers={setReceivers} register={register} handleSubmit={handleSubmit} errors={errors} />
+							<SecondStep
+								receivers={receivers}
+								setReceivers={setReceivers}
+								register={register}
+								handleSubmit={handleSubmit}
+								errors={errors}
+							/>
 						)}
 						{activeStep === 2 && (
 							<ThirdStep
@@ -1063,17 +1101,26 @@ const Signing = () => {
 								receivers={receivers}
 								instance={instance}
 								setInstance={setInstance}
+								setFile={setFile}
 							/>
 						)}
-						{activeStep === 3 && <LastStep receivers={receivers} register={register} errors={errors} />}
+						{activeStep === 3 && (
+							<LastStep receivers={receivers} register={register} errors={errors} />
+						)}
 						<Grid display="flex" justifyContent="flex-end">
-							{activeStep === 0 && <FormControlLabel control={<Checkbox />} label="Chỉ mình tôi ký" />}
+							{activeStep === 0 && (
+								<FormControlLabel control={<Checkbox />} label="Chỉ mình tôi ký" />
+							)}
 							{activeStep > 0 && (
 								<Button variant="outlined" onClick={handlePrev}>
 									Quay lại
 								</Button>
 							)}
-							<Button variant="contained" style={{ marginLeft: "14px" }} onClick={handleSubmit(handleNext)}>
+							<Button
+								variant="contained"
+								style={{ marginLeft: '14px' }}
+								onClick={handleSubmit(handleNext)}
+							>
 								{activeStep === steps.length - 1 ? 'Gửi' : 'Tiếp tục'}
 							</Button>
 						</Grid>

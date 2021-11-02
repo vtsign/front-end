@@ -5,7 +5,7 @@ import {
 	UPDATE_DOCUMENT_TO_SIGN_FAIL,
 } from '../constants/documentConstants.js';
 
-export const editDocReducer = (state , action) => {
+export const editDocReducer = (state = {} , action) => {
 	switch (action.type) {
 		case ADD_DOCUMENT_TO_SIGN:
 			return { document: action.payload };

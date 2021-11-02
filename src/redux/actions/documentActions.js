@@ -15,11 +15,14 @@ export const addDocumentToSign = (json, file) => async (dispatch) => {
 		// formData.append("files", file);
 		const header = {
 			'content-type': 'application/octet-stream',
+			'authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJycmZwYi50aG90dWFuQGluYm94LnRlc3RtYWlsLmFwcCIsImp0aSI6Ijc3MGQzN2U5LTJjZDEtNDQyMS04NmM5LThjYjBjOWNiMWNlYyIsImlzcyI6Imh0dHBzOi8vdnRzaWduLnRlY2gvIiwiaWF0IjoxNjM1ODY1Njg5LCJleHAiOjE2MzU5NTIwODl9.3BtvSHIs5IDAj2sMqR9BGQDEL7rF5cl31K42rUXpNnlDQ0MPNuDMWZ-o2yGtjVlaMPp2RmLFdPbfcFMj-ofiHQ'
 		};
 
 		const { data } = await axios.post(
-			'https://api.vtsign.tech/document/signing', formData,
-			header
+			'http://167.99.73.204:8765/document/signing', formData,
+			{
+				headers: header
+			}
 		);
 
 		dispatch({
