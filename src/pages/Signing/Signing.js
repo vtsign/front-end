@@ -532,9 +532,10 @@ export function ThirdStep({ viewer, fileData, receivers, instance, setInstance, 
 		const data = await doc.getFileData({ xfdfString });
 		const arr = new Uint8Array(data);
 		const blob = new Blob([arr], { type: 'application/pdf' });
-		console.log("safdfadsf", fileData.name);
+		// console.log("safdfadsf", fileData.name);
 		const file = new File([blob], fileData.name);
-		setFile(file)
+		console.log(file+"---------------------------------------------");
+		await setFile(file);
 	}
 
 	  const uploadForSigning = async () => {
@@ -1047,7 +1048,7 @@ const Signing = () => {
 	// 	dispatch(addDocumentToSign(json, file));
 	// }
 	const handleSendFiles = formData => {
-		console.log(file)
+		console.log('fg filre ndfnsn', file)
 		const json = {
 			receivers: receivers,
 			mail_title: formData.title,
@@ -1083,6 +1084,7 @@ const Signing = () => {
 								fileData={fileData}
 								setFileData={setFileData}
 							/>
+
 						)}
 						{activeStep === 1 && (
 							<SecondStep
@@ -1101,7 +1103,6 @@ const Signing = () => {
 								instance={instance}
 								setInstance={setInstance}
 								setFile={setFile}
-								fileData={fileData}
 							/>
 						)}
 						{activeStep === 3 && (

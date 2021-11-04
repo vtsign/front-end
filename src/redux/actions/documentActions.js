@@ -6,24 +6,26 @@ import {
 	UPDATE_DOCUMENT_TO_SIGN_FAIL,
 } from '../constants/documentConstants.js';
 import { mergeAnnotations } from '../../components/MergeAnnotations/MergeAnnotations.js';
+import documentApi from "../../api/documentApi";
 
 export const addDocumentToSign = (json, file) => async (dispatch) => {
 	try {
-		const formData = new FormData();
-		formData.append('data', JSON.stringify(json));
-		formData.append('files', file);
+		// const formData = new FormData();
+		// formData.append('data', JSON.stringify(json));
+		// formData.append('files', file);
 		// formData.append("files", file);
-		const header = {
-			'content-type': 'application/octet-stream',
-			'authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJycmZwYi50aG90dWFuQGluYm94LnRlc3RtYWlsLmFwcCIsImp0aSI6Ijc3MGQzN2U5LTJjZDEtNDQyMS04NmM5LThjYjBjOWNiMWNlYyIsImlzcyI6Imh0dHBzOi8vdnRzaWduLnRlY2gvIiwiaWF0IjoxNjM1ODY1Njg5LCJleHAiOjE2MzU5NTIwODl9.3BtvSHIs5IDAj2sMqR9BGQDEL7rF5cl31K42rUXpNnlDQ0MPNuDMWZ-o2yGtjVlaMPp2RmLFdPbfcFMj-ofiHQ'
-		};
+		// const header = {
+		// 	'content-type': 'application/octet-stream',
+		// 	'authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJycmZwYi50aG90dWFuQGluYm94LnRlc3RtYWlsLmFwcCIsImp0aSI6Ijc3MGQzN2U5LTJjZDEtNDQyMS04NmM5LThjYjBjOWNiMWNlYyIsImlzcyI6Imh0dHBzOi8vdnRzaWduLnRlY2gvIiwiaWF0IjoxNjM1ODY1Njg5LCJleHAiOjE2MzU5NTIwODl9.3BtvSHIs5IDAj2sMqR9BGQDEL7rF5cl31K42rUXpNnlDQ0MPNuDMWZ-o2yGtjVlaMPp2RmLFdPbfcFMj-ofiHQ'
+		// };
 
-		const { data } = await axios.post(
-			'http://167.99.73.204:8765/document/signing', formData,
-			{
-				headers: header
-			}
-		);
+		// const { data } = await axios.post(
+		// 	'http://167.99.73.204:8765/document/signing', formData,
+		// 	{
+		// 		headers: header
+		// 	}
+		// );
+		const { data } = await documentApi.postSigning(json, file);
 
 		dispatch({
 			type: ADD_DOCUMENT_TO_SIGN,

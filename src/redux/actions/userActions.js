@@ -35,6 +35,7 @@ export const loginAction = (email, password) => async (dispatch) => {
 
 		localStorage.setItem("accessToken", data.data.access_token);
 		localStorage.setItem("refreshToken", data.data.refresh_token);
+		localStorage.setItem("isLogin", true);
 		dispatch({
 			type: USER_LOGIN_SUCCESS,
 			payload: data.data,
