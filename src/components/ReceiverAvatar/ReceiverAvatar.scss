@@ -1,0 +1,38 @@
+.receiver {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0 24px 24px 24px;
+
+	&__avatar {
+		background-color: #EB5757;
+		vertical-align: middle;
+		cursor: pointer;
+	}
+
+	&__info {
+		flex-grow: 1;
+		margin-left: 12px;
+
+		.receiver__name {
+			display: block;
+            font-size: 16;
+            font-weight: 700;
+
+            color: #595959;
+		}
+
+		.receiver__email {
+			font-size: 12;
+            font-weight: 300;
+
+            color: #8c8c8c;
+		}
+	}
+
+	&__delete-btn {
+		color: red;
+		text-decoration: underline;
+		cursor: pointer;
+	}
+}

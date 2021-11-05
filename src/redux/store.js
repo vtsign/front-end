@@ -3,8 +3,11 @@ import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension'
 import {
 	userLoginReducer,
-	userRegisterReducer
+	userRegisterReducer,
 } from './reducers/userReducers.js'
+import {
+	editDocReducer
+} from './reducers/documentReducers.js'
 
 const initialState = {
 	userInfo: { name: 'abc'}
@@ -15,6 +18,7 @@ const middleware = [thunk]
 const reducer = combineReducers({
 	userLogin: userLoginReducer,
 	userRegister: userRegisterReducer,
+	editDoc: editDocReducer
 })
 
 const store = createStore(

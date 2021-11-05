@@ -10,7 +10,7 @@ import Register from './pages/Register/Register';
 const App = () => {
 	return (
 		<BrowserRouter>
-			{/* <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}> */}
+			<div className='app__container'>
 			<Switch>
 				<Route path="/login" component={Login} />
 				<Route path="/register" component={Register} />
@@ -18,7 +18,7 @@ const App = () => {
 				<Route path="/" component={MainRouter} />
 			</Switch>
 			<Footer />
-			{/* </div> */}
+			</div>
 		</BrowserRouter>
 	);
 };
