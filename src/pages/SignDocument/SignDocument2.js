@@ -17,9 +17,9 @@ const SignDocument2 = () => {
 
     const [userDocument, setUserDocument] = useState({});
     const [signedObj, setSignedObj] = useState({});
-    const [link, setLink] = useState('');
 
     const viewer = useRef(null);
+    const [link, setLink] = useState("");
 
     useEffect(() => {
         WebViewer(
@@ -38,9 +38,15 @@ const SignDocument2 = () => {
                     'redo',
                     'eraserToolButton',
                 ],
+                fullAPI: true,
             },
             viewer.current
         ).then(async (instance) => {
+            // PDFNet is only available with full API enabled
+            const { PDFNet } = instance;
+            await PDFNet.initialize();
+            window.PDFNet = PDFNet;
+
             const queryParam = new URLSearchParams(location.search);
             const r = queryParam.get('r');
             const c = queryParam.get('c');
@@ -61,8 +67,6 @@ const SignDocument2 = () => {
                 // select only the insert group
                 instance.setToolbarGroup('toolbarGroup-Insert');
 
-                console.log("Response from ------------ : ");
-                console.log(response);
                 // load document
                 const URL = response.data.documents[0].url;
                 //await storageRef.child(docRef).getDownloadURL();
@@ -154,9 +158,9 @@ const SignDocument2 = () => {
                 listXfdfs
             );
             files.push(new File([blob], userDocument.documents[0].id));
-
             const url = window.URL.createObjectURL(blob);
             setLink(url);
+
         }
 
         documentApi.signByReceiver(
@@ -205,6 +209,7 @@ const SignDocument2 = () => {
 						>
 							Complete signing
 						</Button>
+                        {link && <a href={link}>Download file</a>}
 					</Stack>
 				</Grid>
 				{/* <div className={'prepareDocument'}>

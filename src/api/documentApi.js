@@ -18,7 +18,7 @@ const documentApi = {
         return axiosClient.get(url);
     },
 
-    signedByReceiver: (signedObj, listFile) => {
+    signByReceiver: (signedObj, listFile) => {
         const url = `/document/apt/signing`;
         const formData = new FormData();
         formData.append('signed', JSON.stringify(signedObj));
@@ -31,7 +31,7 @@ const documentApi = {
             });
         }
         return axiosClient.post(url, formData, header);
-    },
+    }
 };
 
 export default documentApi;
