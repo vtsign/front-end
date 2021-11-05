@@ -3,7 +3,7 @@ import { Grid, Container, Button } from '@mui/material'
 import './SignDocument.scss'
 import WebViewer from '@pdftron/webviewer';
 import '@pdftron/webviewer/public/core/CoreControls';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 
 const SignDocument = () => {
 	const [annotManager, setAnnotatManager] = useState(null);

@@ -1,11 +1,13 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { navigate, useLocation } from '@reach/router';
-import { Box, Column, Heading, Row, Stack, Button } from 'gestalt';
+import { Box, Stack, Button, Grid, Container } from '@mui/material';
+// import { Box, Column, Heading, Row, Stack, Button } from 'gestalt';
 import WebViewer from '@pdftron/webviewer';
-import 'gestalt/dist/gestalt.css';
+// import 'gestalt/dist/gestalt.css';
 import './SignDocument.scss';
-import documentApi from '/src/api/documentApi';
-import { mergeAnnotations } from '/src/components/MergeAnnotations';
+import { useLocation } from 'react-router';
+// import {} from '@mui/material';
+import documentApi from '../../api/documentApi';
+import {mergeAnnotations } from '../../components/MergeAnnotations/MergeAnnotations';
 
 const SignDocument2 = () => {
     const [annotManager, setAnnotatManager] = useState(null);
@@ -45,7 +47,8 @@ const SignDocument2 = () => {
 
             try {
                 const response = await documentApi.getSigning(c, r);
-                setUserDocument(response);
+
+                setUserDocument(response.data);
                 setSignedObj((prevState) => ({
                     ...prevState,
                     contract_uuid: c,
@@ -58,8 +61,11 @@ const SignDocument2 = () => {
                 // select only the insert group
                 instance.setToolbarGroup('toolbarGroup-Insert');
 
+                console.log("Response from ------------ : ");
+                console.log(response);
                 // load document
-                const URL = response.documents[0].url; //await storageRef.child(docRef).getDownloadURL();
+                const URL = response.data.documents[0].url;
+                //await storageRef.child(docRef).getDownloadURL();
                 docViewer.loadDocument(URL);
 
                 const normalStyles = (widget) => {
@@ -90,7 +96,7 @@ const SignDocument2 = () => {
                                         normalStyles;
                                     if (
                                         !annot.fieldName.startsWith(
-                                            response.user.email
+                                            response.data.user.email
                                         )
                                     ) {
                                         annot.Hidden = true;
@@ -161,54 +167,92 @@ const SignDocument2 = () => {
             files
         );
 
-        navigate('/');
+        // navigate('/');
     };
 
     return (
-        <div className={'prepareDocument'}>
-            {link && <a href={link}>Download file</a>}
-            <Box display="flex" direction="row" flex="grow">
-                <Column span={2}>
-                    <Box padding={3}>
-                        <Heading size="md">Sign Document</Heading>
-                    </Box>
-                    <Box padding={3}>
-                        <Row gap={1}>
-                            <Stack>
-                                <Box padding={2}>
-                                    <Button
-                                        onClick={nextField}
-                                        accessibilityLabel="next field"
-                                        text="Next field"
-                                        iconEnd="arrow-forward"
-                                    />
-                                </Box>
-                                <Box padding={2}>
-                                    <Button
-                                        onClick={prevField}
-                                        accessibilityLabel="Previous field"
-                                        text="Previous field"
-                                        iconEnd="arrow-back"
-                                    />
-                                </Box>
-                                <Box padding={2}>
-                                    <Button
-                                        onClick={completeSigning}
-                                        accessibilityLabel="complete signing"
-                                        text="Complete signing"
-                                        iconEnd="compose"
-                                    />
-                                </Box>
-                            </Stack>
-                        </Row>
-                    </Box>
-                </Column>
-                <Column span={10}>
-                    <div className="webviewer" ref={viewer}></div>
-                </Column>
-            </Box>
-        </div>
-    );
+		<Container maxWidth={false}>
+			<Grid container>
+				<Grid lg={3}>
+					<h1 size="md">Sign Document</h1>
+				</Grid>
+				<Grid lg={6}>
+					<div className="webviewer" ref={viewer}></div>
+				</Grid>
+				<Grid lg={3}>
+					<Stack>
+						<Button
+							onClick={nextField}
+							accessibilityLabel="next field"
+							iconEnd="arrow-forward"
+							variant="outlined"
+						>
+							Next field
+						</Button>
+						<Button
+							onClick={prevField}
+							accessibilityLabel="Previous field"
+							iconEnd="arrow-back"
+							variant="outlined"
+						>
+							Previous field
+						</Button>
+						<Button
+							onClick={completeSigning}
+							accessibilityLabel="complete signing"
+							iconEnd="compose"
+							variant="outlined"
+						>
+							Complete signing
+						</Button>
+					</Stack>
+				</Grid>
+				{/* <div className={'prepareDocument'}>
+					{link && <a href={link}>Download file</a>}
+					<div style={{ display: 'flex', flexDirection: 'row', flex: 'grow' }}>
+						<div span={2}>
+							<div padding={3}>
+								<h1 size="md">Sign Document</h1>
+							</div>
+							<div padding={3}>
+								<div gap={1}>
+									<Stack>
+										<Box padding={2}>
+											<Button
+												onClick={nextField}
+												accessibilityLabel="next field"
+												text="Next field"
+												iconEnd="arrow-forward"
+											/>
+										</Box>
+										<Box padding={2}>
+											<Button
+												onClick={prevField}
+												accessibilityLabel="Previous field"
+												text="Previous field"
+												iconEnd="arrow-back"
+											/>
+										</Box>
+										<Box padding={2}>
+											<Button
+												onClick={completeSigning}
+												accessibilityLabel="complete signing"
+												text="Complete signing"
+												iconEnd="compose"
+											/>
+										</Box>
+									</Stack>
+								</div>
+							</div>
+						</div>
+						<div span={10}>
+							<div className="webviewer" ref={viewer}></div>
+						</div>
+					</div>
+				</div> */}
+			</Grid>
+		</Container>
+	);
 };
 
 export default SignDocument2;

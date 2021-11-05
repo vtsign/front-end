@@ -5,7 +5,7 @@ import NotFound from '../../pages/Common/NotFound';
 import Home from '../../pages/Home/Home';
 import Manage from '../../pages/Manage/Manage';
 import Sample from '../../pages/Sample/Sample';
-import SignDocument from '../../pages/SignDocument/SignDocument';
+import SignDocument2 from '../../pages/SignDocument/SignDocument2';
 import Signing from '../../pages/Signing/Signing';
 import Layout from './Layout';
 
@@ -21,7 +21,7 @@ const MainRouter = () => {
 				<Route path="/activation/:id" component={Activation} />
 				<Route path="/manage" component={Manage} />
 				<Route path="/template" component={Sample} />
-				<Route path="/signDocument" component={SignDocument} />
+				<Route path="/signDocument" component={SignDocument2} />
 				<Route path="*" component={NotFound} />
 			</Switch>
 		</Layout>

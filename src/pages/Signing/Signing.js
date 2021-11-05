@@ -24,7 +24,7 @@ import {
 } from '@mui/material';
 import './signing.scss'
 import { CloudUpload, InsertDriveFile, BorderColor, CalendarToday, TextFields, PersonOutline, MailOutline, Computer, Brush } from '@mui/icons-material';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm, useController } from 'react-hook-form';
 import Header from '../../components/Header/Header';
 import WebViewer from '@pdftron/webviewer';
 import '@pdftron/webviewer/public/core/CoreControls';
@@ -290,8 +290,13 @@ export function SecondStep({ receivers, setReceivers, register, handleSubmit, er
 	);
 }
 
-export function ThirdStep({ viewer, fileData, receivers, instance, setInstance, setFile }) {
+export function ThirdStep({ viewer, fileData, receivers, instance, setInstance, setFile, control }) {
 	const [dropPoint, setDropPoint] = useState(null);
+	const [currentAssignee, setCurrentAssignee] = useState(null);
+
+	useEffect(() => {
+		console.log(currentAssignee);
+	}, [currentAssignee])
 
 	useEffect(() => {
 		WebViewer(
@@ -376,7 +381,7 @@ export function ThirdStep({ viewer, fileData, receivers, instance, setInstance, 
 			type,
 			value,
 			flag,
-			name: `${type}_`,
+			name: `${currentAssignee}_${type}_`,
 		};
 
 		// set the type of annot
@@ -446,7 +451,7 @@ export function ThirdStep({ viewer, fileData, receivers, instance, setInstance, 
 							annot.getContents() + Date.now() + index,
 							{
 								type: 'Tx',
-								value: 'm-d-yyyy',
+								// value: 'm-d-yyyy',
 								// Actions need to be added for DatePickerWidgetAnnotation to recognize this field.
 								actions: {
 									F: [
@@ -615,19 +620,32 @@ export function ThirdStep({ viewer, fileData, receivers, instance, setInstance, 
 				<Grid item lg={2} md={6} xl={2} xs={12} mr="2rem">
 					<Stack my={2}>
 						<Box padding={1}>
-							<FormControl sx={{ m: 1, minWidth: 120 }}>
-								<Select
-									value={receivers}
-									onChange={handleChange}
-									inputProps={{ 'aria-label': 'Without label' }}
-								>
-									{receivers.map((receiver) => (
-										<MenuItem value={10}>
-											{receiver.email}
-										</MenuItem>
-									))}
-								</Select>
-							</FormControl>
+							<Typography gutterBottom>
+								<b>Người nhận</b>
+							</Typography>
+							<Controller
+								name="receiver"
+								control={control}
+								render={({ ref, value, ...inputProps }) => (
+									<TextField
+										select
+										fullWidth
+										variant="outlined"
+										size="small"
+										{...inputProps}
+										inputRef={ref}
+										value={value}
+										SelectProps={{ displayEmpty: true }}
+										onChange={(e) => setCurrentAssignee(e.target.value)}
+									>
+										{receivers.map((receiver) => (
+											<MenuItem key={receiver} value={receiver.email}>
+												{receiver.email}
+											</MenuItem>
+										))}
+									</TextField>
+								)}
+							/>
 						</Box>
 						<Box padding={1}>
 							<div
@@ -972,6 +990,7 @@ const Signing = () => {
 	const {
 		register,
 		handleSubmit,
+		control,
 		formState: { errors },
 	} = useForm({ shouldUnregister: false, mode: 'onChange' });
 
@@ -1048,7 +1067,6 @@ const Signing = () => {
 	// 	dispatch(addDocumentToSign(json, file));
 	// }
 	const handleSendFiles = formData => {
-		console.log('fg filre ndfnsn', file)
 		const json = {
 			receivers: receivers,
 			mail_title: formData.title,
@@ -1097,6 +1115,7 @@ const Signing = () => {
 						)}
 						{activeStep === 2 && (
 							<ThirdStep
+								control={control}
 								viewer={viewer}
 								fileData={fileData}
 								receivers={receivers}
