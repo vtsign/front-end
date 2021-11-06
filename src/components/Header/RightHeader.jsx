@@ -28,6 +28,7 @@ const LeftHeader = () => {
 		console.log('logout');
 		dispatch({ type: USER_LOGOUT });
 		history.push("/login");
+
 	}
 	return (
 		<Fragment>

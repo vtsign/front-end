@@ -1,26 +1,41 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 import './App.scss';
 import Footer from './components/Footer/Footer';
-import MainRouter from './components/Layout/MainRouter';
+import Header from './components/Header/Header';
 import Activation from './pages/Activation/Activation';
+import NotFound from './pages/Common/NotFound';
+import Home from './pages/Home/Home';
 import Login from './pages/Login/Login';
+import Manage from './pages/Manage/Manage';
 import Register from './pages/Register/Register';
+import Sample from './pages/Sample/Sample';
+import SignDocument2 from './pages/SignDocument/SignDocument2';
+import Signing from './pages/Signing/Signing';
+import PrivateRoute from './components/Layout/PrivateRoute';
 
-const App = () => {
+const App = ({ location }) => {
+	const headerExclusionArray = ['/home', '/', '/signing', '/manage', '/template', '/signDocument'];
 	return (
-		<BrowserRouter>
-			<div className='app__container'>
+		<div className="app__container">
+			{headerExclusionArray.indexOf(location.pathname) >= 0 && <Header />}
 			<Switch>
 				<Route path="/login" component={Login} />
 				<Route path="/register" component={Register} />
 				<Route path="/activation/:id" component={Activation} />
-				<Route path="/" component={MainRouter} />
+				<PrivateRoute path="/" exact component={Home} />
+				<Route path="/home" exact>
+					<Redirect to="/" />
+				</Route>
+				<PrivateRoute path="/signing" component={Signing} />
+				<PrivateRoute path="/manage" component={Manage} />
+				<PrivateRoute path="/template" component={Sample} />
+				<PrivateRoute path="/signDocument" component={SignDocument2} />
+				<Route path="*" component={NotFound} />
 			</Switch>
 			<Footer />
-			</div>
-		</BrowserRouter>
+		</div>
 	);
 };
 
-export default App;
+export default withRouter(App);

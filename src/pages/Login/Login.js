@@ -32,6 +32,10 @@ const Login = () => {
 	const { userInfo, loading, error: errorRegister, isLogin } = userLogin;
 
 	useEffect(() => {
+		localStorage.setItem("isLogin",false);
+	}, []);
+
+	useEffect(() => {
 		if (isLogin) history.push('/');
 	}, [userInfo, history]);
 

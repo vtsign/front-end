@@ -16,6 +16,13 @@ const Header = () => {
 		setValue(newValue);
 	};
 
+	const checkActive = (match, location) => {
+		//some additional logic to verify you are in the home URI
+		if(!location) return false;
+		const {pathname} = location;
+		return pathname === "/";
+	}
+
 	return (
 		<Box>
 			<AppBar className="header" position="static">
@@ -31,7 +38,7 @@ const Header = () => {
 						</Link>
 
 						<div className="header-right-menu">
-							<NavLink to="/home" activeClassName="active">
+							<NavLink to="/" activeClassName="active" exact >
 								<Home style={{ verticalAlign: 'middle', marginRight: '5px' }} />
 								Trang chủ
 							</NavLink>
