@@ -7,6 +7,7 @@ import Manage from '../../pages/Manage/Manage';
 import Sample from '../../pages/Sample/Sample';
 import SignDocument2 from '../../pages/SignDocument/SignDocument2';
 import Signing from '../../pages/Signing/Signing';
+import Signing2 from '../../pages/Signing/Signing2';
 import Layout from './Layout';
 
 const MainRouter = () => {
@@ -18,6 +19,7 @@ const MainRouter = () => {
 				</Route>
 				<Route path="/home" exact component={Home} />
 				<Route path="/signing" component={Signing} />
+				<Route path="/signing2" component={Signing2} />
 				<Route path="/activation/:id" component={Activation} />
 				<Route path="/manage" component={Manage} />
 				<Route path="/template" component={Sample} />

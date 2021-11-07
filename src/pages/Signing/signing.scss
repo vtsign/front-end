@@ -1,4 +1,23 @@
+@import '/src/sass/variables';
+@import '/src/sass/mixins';
+@import '/src/sass/base';
+
+$height: calc(100vh - (65px + 50px));
+
 .sign__container {
+	display: "flex";
+	align-items: stretch;
+	// height: calc(100% - 65px);
+	// height: 95vh;
+	height: -webkit-calc(100% - 88px);
+	height: -moz-calc(100% - 88px);
+	height: $height;
+	// background-color: #007fff;
+	// flex: 1 1 auto;
+
+	.sign__content {
+		height: calc(100% - 3rem);
+	}
 }
 .edit-form__btn {
 	background-color: #007fff;

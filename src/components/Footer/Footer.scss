@@ -3,13 +3,13 @@
 @import '/src/sass/base';
 
 footer {
-	position: absolute;
-	bottom: 0;
+	// position: absolute;
+	// bottom: 0;
 	width: 100%;
 	background-color: #f9f9f9;
 	text-align: center;
 	height: $footer-height;
-	position:fixed;
+	// position:fixed;
 
 	p{
 		line-height: $footer-height;
