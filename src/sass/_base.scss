@@ -12,6 +12,7 @@
 
 html {
     font-size: 14px;
+	height: 100%;
 
     @include mobile {
         font-size: 12px;
@@ -20,6 +21,7 @@ html {
 
 body {
     font-family: "Roboto", sans-serif;
+	height: 100%;
 }
 
 ul {

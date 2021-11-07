@@ -1,0 +1,25 @@
+.upload__title {
+	display: flex;
+	align-items: center;
+	height: 10%;
+}
+
+.upload__button {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 90%;
+	cursor: pointer;
+}
+
+.preview-file {
+	// display: flex;
+	// flex-direction: column;
+	// align-items: stretch;
+	padding: 1rem;
+	overflow: auto;
+
+	&thumbnail {
+		height: 50px;
+	}
+}
