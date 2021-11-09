@@ -34,7 +34,8 @@ import {
 	Brush,
 } from '@mui/icons-material';
 import { Controller, useForm, useController } from 'react-hook-form';
-import ReceiverAvatar from '../../ReceiverAvatar/ReceiverAvatar'
+import ReceiverAvatar from '../../ReceiverAvatar/ReceiverAvatar';
+import './AddReceivers.scss'
 
 const AddReceivers = () => {
 	const [receivers, setReceivers] = useState([]);
@@ -51,114 +52,99 @@ const AddReceivers = () => {
 	};
 
 	return (
-		<>
+		<Container maxWidth={false} style={{ height: '100%' }}>
 			<Grid>
 				<Typography variant="h6" my="1rem">
 					Thông tin người nhận
 				</Typography>
 			</Grid>
-			<Grid display="flex" my="1rem">
-				<Grid item lg={8} md={12} xl={7} xs={12} mr="2rem" style={{ height: '100%' }}>
-					<Card>
-						<CardContent>
-							<Box
-								sx={{
-									display: 'flex',
-									flexDirection: 'column',
-									color: '#2F80ED',
-									cursor: 'pointer',
-									margin: '0 2rem',
-								}}
-							>
-								<Grid
-									display="flex"
-									justifyContent="space-between"
-									alignItems="center"
-									my="1rem"
-								>
-									<InputLabel>Tên người nhận</InputLabel>
-									<TextField
-										id="name"
-										placeholder="Nguyễn Văn A"
-										sx={{ minWidth: '25vw' }}
-										{...register('name', {
-											required: 'Vui lòng nhập họ và tên người nhận',
-										})}
-										error={!!errors.name}
-										helperText={errors?.name?.message}
-									/>
-								</Grid>
-								<Grid
-									display="flex"
-									justifyContent="space-between"
-									alignItems="center"
-									my="1rem"
-								>
-									<InputLabel>Địa chỉ Email</InputLabel>
-									<TextField
-										id="email"
-										placeholder="Nguyễn Văn A"
-										sx={{ minWidth: '25vw' }}
-										{...register('email', {
-											required: 'Vui lòng nhập địa chỉ Email',
-										})}
-										error={!!errors.email}
-										helperText={errors?.email?.message}
-									/>
-								</Grid>
-								<Grid
-									display="flex"
-									justifyContent="space-between"
-									alignItems="center"
-									my="1rem"
-								>
-									<InputLabel>Quyền hạn</InputLabel>
-									<TextField
-										id="permission"
-										placeholder="Nguyễn Văn A"
-										sx={{ minWidth: '25vw' }}
-										{...register('permission', {
-											required: 'Lựa chọn quyền hạn',
-										})}
-										error={!!errors.permission}
-										helperText={errors?.permission?.message}
-									/>
-								</Grid>
-								<Grid
-									display="flex"
-									justifyContent="space-between"
-									alignItems="center"
-									my="1rem"
-								>
-									<InputLabel>Sử dụng khóa</InputLabel>
-									<TextField
-										id="key"
-										placeholder="Nguyễn Văn A"
-										sx={{ minWidth: '25vw' }}
-										{...register('key')}
-										error={!!errors.key}
-										helperText={errors?.key?.message}
-									/>
-								</Grid>
-								<Grid
-									display="flex"
-									justifyContent="flex-end"
-									alignItems="center"
-									my="1rem"
-								>
-									<Button
-										variant="contained"
-										onClick={handleSubmit(addReceivers)}
-									>
-										Tạo mới
-									</Button>
-								</Grid>
-							</Box>
-						</CardContent>
-					</Card>
+			<Grid container my="1rem" style={{ height: '100%' }}>
+				<Grid item lg={8} md={12} xl={8} xs={12}>
+					<Box className="add-receivers__container">
+						<Grid
+							display="flex"
+							justifyContent="space-between"
+							alignItems="center"
+							my="1rem"
+						>
+							<InputLabel>Tên người nhận</InputLabel>
+							<TextField
+								id="name"
+								placeholder="Nguyễn Văn A"
+								sx={{ minWidth: '25vw' }}
+								{...register('name', {
+									required: 'Vui lòng nhập họ và tên người nhận',
+								})}
+								error={!!errors.name}
+								helperText={errors?.name?.message}
+							/>
+						</Grid>
+						<Grid
+							display="flex"
+							justifyContent="space-between"
+							alignItems="center"
+							my="1rem"
+						>
+							<InputLabel>Địa chỉ Email</InputLabel>
+							<TextField
+								id="email"
+								placeholder="Nguyễn Văn A"
+								sx={{ minWidth: '25vw' }}
+								{...register('email', {
+									required: 'Vui lòng nhập địa chỉ Email',
+								})}
+								error={!!errors.email}
+								helperText={errors?.email?.message}
+							/>
+						</Grid>
+						<Grid
+							display="flex"
+							justifyContent="space-between"
+							alignItems="center"
+							my="1rem"
+						>
+							<InputLabel>Quyền hạn</InputLabel>
+							<TextField
+								id="permission"
+								placeholder="Nguyễn Văn A"
+								sx={{ minWidth: '25vw' }}
+								{...register('permission', {
+									required: 'Lựa chọn quyền hạn',
+								})}
+								error={!!errors.permission}
+								helperText={errors?.permission?.message}
+							/>
+						</Grid>
+						<Grid
+							display="flex"
+							justifyContent="space-between"
+							alignItems="center"
+							my="1rem"
+						>
+							<InputLabel>Sử dụng khóa</InputLabel>
+							<TextField
+								id="key"
+								placeholder="Nguyễn Văn A"
+								sx={{ minWidth: '25vw' }}
+								{...register('key')}
+								error={!!errors.key}
+								helperText={errors?.key?.message}
+							/>
+						</Grid>
+						<Grid
+							display="flex"
+							justifyContent="flex-end"
+							alignItems="center"
+							my="1rem"
+						>
+							<Button variant="contained" onClick={handleSubmit(addReceivers)}>
+								Tạo mới
+							</Button>
+						</Grid>
+					</Box>
 				</Grid>
-				<Grid item lg={4} md={6} xl={5} xs={12}>
-					<Card style={{ height: '100%' }}>
+				<Grid item lg={4} md={6} xl={4} xs={12}>
+					<Card style={{ overflowY: 'auto' }}>
 						<CardContent>
 							{receivers.length > 0 ? (
 								receivers.map((partner, index) => (
@@ -170,6 +156,7 @@ const AddReceivers = () => {
 										display: 'flex',
 										justifyContent: 'center',
 										alignItems: 'center',
+										height: '100%',
 									}}
 								>
 									<span>Chưa chọn có người nhận</span>
@@ -179,7 +166,7 @@ const AddReceivers = () => {
 					</Card>
 				</Grid>
 			</Grid>
-		</>
+		</Container>
 	);
 };
 

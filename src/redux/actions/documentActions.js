@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {
+	ADD_DOC_LIST,
 	ADD_DOCUMENT_TO_SIGN,
 	ADD_DOCUMENT_TO_SIGN_FAIL,
 	UPDATE_DOCUMENT_TO_SIGN,
@@ -7,6 +8,13 @@ import {
 } from '../constants/documentConstants.js';
 import { mergeAnnotations } from '../../components/MergeAnnotations/MergeAnnotations.js';
 import documentApi from "../../api/documentApi";
+
+export const addDocumentList = documents => {
+	return {
+		type: ADD_DOC_LIST,
+		payload: documents
+	}
+}
 
 export const addDocumentToSign = (json, file) => async (dispatch) => {
 	try {

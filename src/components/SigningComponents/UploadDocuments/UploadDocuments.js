@@ -81,11 +81,14 @@ const UploadDocuments = () => {
 	};
 	return (
 		<Container maxWidth={false} style={{ height: '100%' }}>
+			<Grid>
+				<Typography variant="h6" my="1rem">
+					Thêm tài liệu
+				</Typography>
+			</Grid>
+			{/* <Typography variant="h5">Thêm tài liệu</Typography> */}
 			<Grid container style={{ height: '100%' }}>
 				<Grid item xl={9} lg={9} md={9} xs={12}>
-					<Typography variant="h5" className="upload__title">
-						Thêm tài liệu
-					</Typography>
 					<Card
 						onClick={() => {
 							if (filePicker) {
@@ -99,12 +102,7 @@ const UploadDocuments = () => {
 								sx={{
 									display: 'flex',
 									alignItems: 'center',
-									// justifyContent: 'center',
 									flexDirection: 'column',
-									// minHeight: '55vh',
-									// backgroundColor: '#FAFAFA',
-									// height:"100%",
-									flex: '1',
 									color: '#2F80ED',
 									cursor: 'pointer',
 								}}
@@ -121,7 +119,7 @@ const UploadDocuments = () => {
 						style={{ display: 'none' }}
 					/>
 				</Grid>
-				<Grid item xl={3} lg={3} md={3} xs={12} style={{ height: "100%", display: "flex" }}>
+				<Grid item xl={3} lg={3} md={3} xs={12}>
 					{fileData && (
 						<Grid className="preview-file">
 							<Grid className="preview-file__item">

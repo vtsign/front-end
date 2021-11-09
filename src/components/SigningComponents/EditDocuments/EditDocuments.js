@@ -35,6 +35,7 @@ import {
 } from '@mui/icons-material';
 import { Controller, useForm, useController } from 'react-hook-form';
 import WebViewer from '@pdftron/webviewer';
+import './EditDocuments.scss'
 
 
 const EditDocuments = () => {
@@ -329,7 +330,7 @@ const EditDocuments = () => {
 					Ký tên và các thông tin khác
 				</Typography>
 			</Grid>
-			<Grid display="flex">
+			<Grid container style={{ height: "100%"}}>
 				<Grid item lg={2} md={6} xl={2} xs={12} mr="2rem">
 					<Stack my={2}>
 						<Box padding={1}>
@@ -580,9 +581,9 @@ const EditDocuments = () => {
 							</div>
 						</div>
 					)} */}
-					<Button variant="outlined" onClick={applyFields}>
+					{/* <Button variant="outlined" onClick={applyFields}>
 						Gửi
-					</Button>
+					</Button> */}
 				</Grid>
 			</Grid>
 		</>
