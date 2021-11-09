@@ -14,12 +14,14 @@
 
 .preview-file {
 	// display: flex;
-	// flex-direction: column;
+	// flex-direction: row;
 	// align-items: stretch;
+	height: 100%;
 	padding: 1rem;
-	overflow: auto;
+	overflow-y: auto;
 
-	&thumbnail {
-		height: 50px;
+	&__thumbnail {
+		width: 100%;
+        height: 15rem;
 	}
 }

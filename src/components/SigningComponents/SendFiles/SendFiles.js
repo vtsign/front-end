@@ -59,57 +59,55 @@ const SendFiles = () => {
 			</Grid>
 			<Grid display="flex" my="1rem">
 				<Grid item lg={8} md={12} xl={7} xs={12} mr="2rem">
-					<Card>
-						<CardContent>
-							<Box
-								sx={{
-									display: 'flex',
-									flexDirection: 'column',
-									minHeight: '60vh',
-									color: '#2F80ED',
-									cursor: 'pointer',
-									margin: '0 2rem',
-								}}
-							>
-								<Grid
-									display="flex"
-									justifyContent="space-between"
-									alignItems="center"
-									my="1rem"
-								>
-									<InputLabel>Chủ đề Email</InputLabel>
-									<TextField
-										id="title"
-										placeholder="Nguyễn Văn A"
-										sx={{ minWidth: '25vw' }}
-										{...register('title', {
-											required: 'Vui lòng nhập chủ đề Email',
-										})}
-										error={!!errors.title}
-										helperText={errors?.title?.message}
-									/>
-								</Grid>
-								<Grid
-									display="flex"
-									justifyContent="space-between"
-									alignItems="center"
-									my="1rem"
-								>
-									<InputLabel>Thông điệp Email</InputLabel>
-									<TextField
-										id="message"
-										placeholder="Thông điệp"
-										sx={{ minWidth: '25vw' }}
-										{...register('message', {
-											required: 'Vui lòng nhập thông điệp Email',
-										})}
-										error={!!errors.message}
-										helperText={errors?.message?.message}
-									/>
-								</Grid>
-							</Box>
-						</CardContent>
-					</Card>
+					<Box
+						sx={{
+							display: 'flex',
+							flexDirection: 'column',
+							// minHeight: '60vh',
+							color: '#2F80ED',
+							cursor: 'pointer',
+							margin: '0 2rem',
+						}}
+					>
+						<Grid
+							display="flex"
+							justifyContent="space-between"
+							alignItems="center"
+							my="1rem"
+						>
+							<InputLabel>Chủ đề Email</InputLabel>
+							<TextField
+								id="title"
+								placeholder="Nguyễn Văn A"
+								sx={{ minWidth: '25vw' }}
+								{...register('title', {
+									required: 'Vui lòng nhập chủ đề Email',
+								})}
+								error={!!errors.title}
+								helperText={errors?.title?.message}
+							/>
+						</Grid>
+						<Grid
+							display="flex"
+							justifyContent="space-between"
+							my="1rem"
+						>
+							<InputLabel>Thông điệp Email</InputLabel>
+							<TextField
+								id="message"
+								placeholder="Thông điệp"
+								sx={{ minWidth: '25vw' }}
+								multiline
+								rows={5}
+								rowsMax={10}
+								{...register('message', {
+									required: 'Vui lòng nhập thông điệp Email',
+								})}
+								error={!!errors.message}
+								helperText={errors?.message?.message}
+							/>
+						</Grid>
+					</Box>
 				</Grid>
 				<Grid item lg={4} md={6} xl={5} xs={12}>
 					<Card>

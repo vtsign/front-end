@@ -77,7 +77,7 @@ const Signing2 = () => {
 			<Grid container className="sign__container">
 				<Grid container className="sign__content">
 
-					<Grid item xl={3} lg={3} md={3} xs={12} alignSelf="center">
+					<Grid item xl={2} lg={2} md={3} xs={12} alignSelf="center">
 						<Stepper activeStep={activeStep} orientation="vertical" alignSelf="center">
 							{steps.map((label, index) => {
 								const stepProps = {};
@@ -91,14 +91,14 @@ const Signing2 = () => {
 							})}
 						</Stepper>
 					</Grid>
-					<Grid item xl={9} lg={9} md={9} xs={12}>
+					<Grid item xl={10} lg={10} md={9} xs={12}>
 						{activeStep === 0 && <UploadDocuments />}
 						{activeStep === 1 && <AddReceivers />}
 						{activeStep === 2 && <EditDocuments />}
 						{activeStep === 3 && <SendFiles />}
 					</Grid>
 				</Grid>
-				<Grid item xl={12} lg={12} md={12} xs={12} display="flex" justifyContent="flex-end" style={{ height: "3rem"}} >
+				<Grid item xl={12} lg={12} md={12} display="flex" justifyContent="flex-end" style={{ height: "3rem"}} >
 					{activeStep === 0 && (
 						<FormControlLabel control={<Checkbox />} label="Chỉ mình tôi ký" />
 					)}
