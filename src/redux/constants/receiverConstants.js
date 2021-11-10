@@ -1,0 +1,2 @@
+export const ADD_RECEIVERS = "ADD_RECEIVERS";
+export const REMOVE_RECEIVER = "REMOVE_RECEIVER";

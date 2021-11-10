@@ -10,10 +10,20 @@ const initialState = {
 	documentList: []
 }
 
+export const addDocListReducer = (state = initialState, action) => {
+	switch(action.type) {
+		case ADD_DOC_LIST:
+			return {
+				...state,
+				documentList: state.documentList.concat(action.payload),
+			};
+		default:
+			return state;
+	}
+}
+
 export const editDocReducer = (state = initialState , action) => {
 	switch (action.type) {
-		case ADD_DOC_LIST:
-			return { documentList: action.payload}
 		case ADD_DOCUMENT_TO_SIGN:
 			return { document: action.payload };
 		case ADD_DOCUMENT_TO_SIGN_FAIL:

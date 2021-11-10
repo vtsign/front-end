@@ -33,21 +33,25 @@ import {
 	Computer,
 	Brush,
 } from '@mui/icons-material';
-import { Controller, useForm, useController } from 'react-hook-form';
-// import Header from '../../components/Header/Header';
-import WebViewer from '@pdftron/webviewer';
 import '@pdftron/webviewer/public/core/CoreControls';
-// import ReceiverAvatar from '../../components/ReceiverAvatar/ReceiverAvatar';
-// import EditFormButton from '../components/EditFormButton/EditFormButton';
-// import { addDocumentToSign } from '../../redux/actions/documentActions';
-import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
 import './UploadDocuments.scss'
+import { addDocumentList } from '../../../redux/actions/documentActions';
+
+	let docList = [];
+
 
 const UploadDocuments = () => {
-	const [fileData, setFileData] = useState(null);
+	// const [fileData, setFileData] = useState(null);
 	const filePicker = useRef(null);
-	const setThumbnail = async (dataFile, object) => {
+
+	const dispatch = useDispatch();
+
+	const documents = useSelector(state => state.addDocList);
+	console.log(documents);
+
+
+	const setThumbnail = async (dataFile, object, callback) => {
 		const Object = object;
 		const coreControls = window.CoreControls;
 		coreControls.setWorkerPath('/webviewer/core');
@@ -60,7 +64,8 @@ const UploadDocuments = () => {
 			pageNumber: 1,
 			drawComplete: (canvas) => {
 				Object.thumbnailData = canvas.toDataURL();
-				setFileData(Object);
+				docList = [...docList, Object];
+				callback(docList);
 			},
 		});
 	};
@@ -68,16 +73,31 @@ const UploadDocuments = () => {
 	const handleSelectFile = (e) => {
 		const { files } = e.target;
 
-		const element = files[0];
-		const reader = new FileReader();
-		const selectedFile = {
-			name: element.name,
-		};
-		reader.readAsDataURL(element);
-		reader.onload = (event) => {
-			selectedFile.data = event.target.result;
-			setThumbnail(event.target.result, selectedFile);
-		};
+		for(let i = 0; i < files.length; i++) {
+			const element = files[i];
+			const reader = new FileReader();
+			const selectedFile = {
+				name: element.name,
+			};
+			// reader.readAsDataURL(element);
+			// reader.onload = (event) => {
+			// 	selectedFile.data = event.target.result;
+			// 	setThumbnail(event.target.result, selectedFile);
+			// };
+			console.log(element)
+			reader.readAsDataURL(element);
+			reader.onload = (event) => {
+				selectedFile.data = event.target.result;
+				setThumbnail(event.target.result, selectedFile, (documentList) => {
+					const docslist = documentList;
+					if (docslist.length === files.length) {
+						dispatch(addDocumentList(docList));
+						docslist.length = 0;
+					}
+				});
+			};
+		}
+
 	};
 	return (
 		<Container maxWidth={false} style={{ height: '100%' }}>
@@ -86,7 +106,6 @@ const UploadDocuments = () => {
 					Thêm tài liệu
 				</Typography>
 			</Grid>
-			{/* <Typography variant="h5">Thêm tài liệu</Typography> */}
 			<Grid container style={{ height: '100%' }}>
 				<Grid item xl={9} lg={9} md={9} xs={12}>
 					<Card
@@ -120,62 +139,30 @@ const UploadDocuments = () => {
 					/>
 				</Grid>
 				<Grid item xl={3} lg={3} md={3} xs={12}>
-					{fileData && (
+					{documents.documentList.length > 0 && (
 						<Grid className="preview-file">
-							<Grid className="preview-file__item">
-								<Grid className="preview-file__thumbnail">
-									<img
-										alt=""
-										src={fileData.thumbnailData}
-										style={{
-											height: '100%',
-											width: '100%',
-											objectFit: 'contain',
-										}}
-									/>
+							{documents.documentList.map((document) => (
+								<Grid className="preview-file__item">
+									<Grid className="preview-file__thumbnail">
+										<img
+											alt=""
+											src={document.thumbnailData}
+											style={{
+												height: '100%',
+												width: '100%',
+												objectFit: 'contain',
+											}}
+										/>
+									</Grid>
+									<Grid className="info">
+										<span
+											style={{ fontWeight: 'bold', wordWrap: 'break-word' }}
+										>
+											{document.name}
+										</span>
+									</Grid>
 								</Grid>
-								<Grid className="info">
-									<span style={{ fontWeight: 'bold', wordWrap: 'break-word' }}>
-										{fileData.name}
-									</span>
-								</Grid>
-							</Grid>
-							<Grid className="preview-file__item">
-								<Grid className="preview-file__thumbnail">
-									<img
-										alt=""
-										src={fileData.thumbnailData}
-										style={{
-											height: '100%',
-											width: '100%',
-											objectFit: 'contain',
-										}}
-									/>
-								</Grid>
-								<Grid className="info">
-									<span style={{ fontWeight: 'bold', wordWrap: 'break-word' }}>
-										{fileData.name}
-									</span>
-								</Grid>
-							</Grid>
-							<Grid className="preview-file__item">
-								<Grid className="preview-file__thumbnail">
-									<img
-										alt=""
-										src={fileData.thumbnailData}
-										style={{
-											height: '100%',
-											width: '100%',
-											objectFit: 'contain',
-										}}
-									/>
-								</Grid>
-								<Grid className="info">
-									<span style={{ fontWeight: 'bold', wordWrap: 'break-word' }}>
-										{fileData.name}
-									</span>
-								</Grid>
-							</Grid>
+							))}
 						</Grid>
 					)}
 				</Grid>

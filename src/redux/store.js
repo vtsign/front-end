@@ -6,11 +6,16 @@ import {
 	userRegisterReducer,
 } from './reducers/userReducers.js'
 import {
+	addDocListReducer,
 	editDocReducer
 } from './reducers/documentReducers.js'
+import {
+	receiverReducer
+} from './reducers/receiverReducers.js'
 
 const initialState = {
-	userInfo: { name: 'abc'}
+	userInfo: { name: 'abc'},
+	documentList: []
 }
 
 const middleware = [thunk]
@@ -18,7 +23,9 @@ const middleware = [thunk]
 const reducer = combineReducers({
 	userLogin: userLoginReducer,
 	userRegister: userRegisterReducer,
-	editDoc: editDocReducer
+	addDocList: addDocListReducer,
+	editDoc: editDocReducer,
+	receivers: receiverReducer
 })
 
 const store = createStore(
