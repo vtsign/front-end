@@ -35,7 +35,9 @@ import {
 } from '@mui/icons-material';
 import { Controller, useForm, useController } from 'react-hook-form';
 import ReceiverAvatar from '../../ReceiverAvatar/ReceiverAvatar';
-import './AddReceivers.scss'
+import './AddReceivers.scss';
+import { useDispatch } from 'react-redux';
+import { addReceiver } from '../../../redux/actions/receiverActions.js'
 
 const AddReceivers = () => {
 	const [receivers, setReceivers] = useState([]);
@@ -46,9 +48,12 @@ const AddReceivers = () => {
 		formState: { errors },
 	} = useForm();
 
+	const dispatch = useDispatch();
+
 	const addReceivers = (formData) => {
+		dispatch(addReceiver(formData))
 		setReceivers((receivers) => [...receivers, formData]);
-		console.log(receivers);
+		console.log(formData);
 	};
 
 	return (
