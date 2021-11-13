@@ -59,14 +59,16 @@ const steps = [
 const Signing2 = () => {
 	const [activeStep, setActiveStep] = React.useState(0);
 
+	const history = useHistory();
+
 	const { register, handleSubmit } = useForm();
 
 	const handleNext = (formData) => {
 		setActiveStep((prevActiveStep) => prevActiveStep + 1);
-		// if (activeStep === 3) {
-		// 	handleSendFiles(formData);
-		// 	history.push('/');
-		// }
+		if (activeStep === 4) {
+			// handleSendFiles(formData);
+			history.push('/');
+		}
 	};
 
 	const handlePrev = () => {

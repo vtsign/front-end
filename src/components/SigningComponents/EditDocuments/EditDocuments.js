@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import {
 	Avatar,
 	Box,
@@ -35,14 +35,23 @@ import {
 } from '@mui/icons-material';
 import { Controller, useForm, useController } from 'react-hook-form';
 import WebViewer from '@pdftron/webviewer';
-import './EditDocuments.scss'
+import './EditDocuments.scss';
+import { useDispatch, useSelector } from 'react-redux';
+import { saveWebviewerInstance } from '../../../redux/actions/webviewerActions'
+import { pdfTronContext } from '../../../redux/constants/contexts/pdfTronContext';
 
 
 const EditDocuments = () => {
-	const [instance, setInstance] = useState(null);
+	// const [instanced, setInstance] = useState(null);
 	const [dropPoint, setDropPoint] = useState(null);
 	const [currentAssignee, setCurrentAssignee] = useState(null);
 	const viewer = useRef(null);
+
+	const { instance, setInstance } = useContext(pdfTronContext);
+
+	const dispatch = useDispatch();
+	const documents = useSelector(state => state.addDocList);
+	console.log(documents)
 
 	useEffect(() => {
 		WebViewer(
@@ -69,10 +78,9 @@ const EditDocuments = () => {
 			},
 			viewer.current
 		).then((instance) => {
-			// setInstanced(instance);
-			const { docViewer, iframeWindow, Annotations } = instance;
 			setInstance(instance);
-			// docViewer.loadDocument(fileData.data);
+			const { docViewer, iframeWindow, Annotations } = instance;
+			// docViewer.loadDocument(documents.documentList[0].data);
 			Annotations.SignatureWidgetAnnotation.prototype.createSignHereElement = function () {
 				const div = document.createElement('div');
 				div.style.width = '100%';
@@ -93,6 +101,56 @@ const EditDocuments = () => {
 			});
 		});
 	}, []);
+	useEffect(() => {
+		(async () => {
+			// localStorage.setItem('currentDoc', state.currentDocShow);
+			if (instance && documents.documentList.length > -1) {
+				const { docViewer, Annotations } = instance;
+				const annotManager = docViewer.getAnnotationManager();
+				await annotManager.deleteAnnotations(annotManager.getAnnotationsList(), {
+					force: true,
+				});
+				await docViewer.loadDocument(
+					documents.documentList.length > 0
+						? documents.documentList[0].data
+						: null
+				);
+				// setTimeout(() => {
+				// 	if (
+				// 		typeof payload.fieldDocs[payload.current] !== 'undefined' &&
+				// 		payload.fieldDocs.length > 0
+				// 	) {
+				// 		payload.fieldDocs[payload.current].forEach((annot) => {
+				// 			if (!state.authors.includes(annot.customs.email)) return;
+				// 			const newAnnot = new Annotations.FreeTextAnnotation();
+				// 			newAnnot.PageNumber = annot.PageNumber;
+				// 			newAnnot.Rotation = annot.Rotation;
+
+				// 			newAnnot.setWidth(annot.getWidth());
+				// 			newAnnot.setHeight(annot.getHeight());
+
+				// 			newAnnot.X = annot.X;
+				// 			newAnnot.Y = annot.Y;
+
+				// 			newAnnot.setPadding(new Annotations.Rect(0, 0, 0, 0));
+				// 			newAnnot.customs = annot.customs;
+				// 			newAnnot.setContents(annot.getContents());
+				// 			newAnnot.FontSize = `${20.0}px`;
+				// 			newAnnot.FillColor = new Annotations.Color(23, 162, 184, 1);
+				// 			newAnnot.TextColor = new Annotations.Color(255, 255, 255, 1);
+				// 			newAnnot.StrokeThickness = 1;
+				// 			newAnnot.StrokeColor = new Annotations.Color(0, 165, 228);
+				// 			newAnnot.TextAlign = 'center';
+
+				// 			annotManager.deselectAllAnnotations();
+				// 			annotManager.addAnnotation(newAnnot, true);
+				// 			annotManager.redrawAnnotation(newAnnot);
+				// 		});
+				// 	}
+				// }, 500);
+			}
+		})();
+	}, [instance, documents]);
 
 	const addField = (type, point = {}, name = '', value = '', flag = {}) => {
 		const { docViewer, Annotations } = instance;
@@ -323,6 +381,10 @@ const EditDocuments = () => {
 		e.preventDefault();
 	};
 
+	const handleReloadDocument = event => {
+
+	}
+
 	return (
 		<>
 			<Grid>
@@ -330,7 +392,7 @@ const EditDocuments = () => {
 					Ký tên và các thông tin khác
 				</Typography>
 			</Grid>
-			<Grid container style={{ height: "100%"}}>
+			<Grid container style={{ height: '100%' }}>
 				<Grid item lg={2} md={6} xl={2} xs={12} mr="2rem">
 					<Stack my={2}>
 						<Box padding={1}>
@@ -553,34 +615,43 @@ const EditDocuments = () => {
 						</Box>
 					</Stack>
 				</Grid>
-				<Grid item lg={8} md={6} xl={8} xs={12} mr="2rem" ref={viewer} className="webviewer"></Grid>
-				<Grid item lg={2} md={12} xl={2} xs={12}>
-					{/* {fileData && (
-						<div className="preview-file">
-							<div
-								// data-id={index}
-								className="preview-file__item"
-								style={{ marginBottom: '1rem' }}
-							>
-								<div className="preview-file__thumbnail">
-									<img
-										alt=""
-										src={fileData.thumbnailData}
-										style={{
-											height: '100%',
-											width: '100%',
-											objectFit: 'contain',
-										}}
-									/>
-								</div>
-								<div className="info">
-									<span style={{ fontWeight: 'bold', wordWrap: 'break-word' }}>
-										{fileData.name}
-									</span>
-								</div>
-							</div>
-						</div>
-					)} */}
+				<Grid
+					item
+					xl={6}
+					lg={6}
+					md={6}
+					xs={12}
+					mr="2rem"
+					ref={viewer}
+					className="webviewer"
+				></Grid>
+				<Grid item xl={3} lg={3} md={12} xs={12}>
+					{documents.documentList.length > 0 && (
+						<Grid className="preview-file">
+							{documents.documentList.map((document, index) => (
+								<Grid className="preview-file__item" data-id={index} onClick={(e) => handleReloadDocument(e)}>
+									<Grid className="preview-file__thumbnail">
+										<img
+											alt=""
+											src={document.thumbnailData}
+											style={{
+												height: '100%',
+												width: '100%',
+												objectFit: 'contain',
+											}}
+										/>
+									</Grid>
+									<Grid className="info">
+										<span
+											style={{ fontWeight: 'bold', wordWrap: 'break-word' }}
+										>
+											{document.name}
+										</span>
+									</Grid>
+								</Grid>
+							))}
+						</Grid>
+					)}
 					{/* <Button variant="outlined" onClick={applyFields}>
 						Gửi
 					</Button> */}

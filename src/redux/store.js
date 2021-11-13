@@ -12,6 +12,9 @@ import {
 import {
 	receiverReducer
 } from './reducers/receiverReducers.js'
+import {
+	webviewerReducer
+} from './reducers/webviewerReducers.js'
 
 import { manageDocumentReducer } from './reducers/manageReducer.js';
 
@@ -28,7 +31,8 @@ const reducer = combineReducers({
 	editDoc: editDocReducer,
 	manageDoc: manageDocumentReducer,
 	addDocList: addDocListReducer,
-	receivers: receiverReducer
+	receivers: receiverReducer,
+	webviewer: webviewerReducer
 })
 
 const store = createStore(
