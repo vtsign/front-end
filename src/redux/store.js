@@ -12,6 +12,9 @@ import {
 import {
 	receiverReducer
 } from './reducers/receiverReducers.js'
+import {
+	webviewerReducer
+} from './reducers/webviewerReducers.js'
 
 const initialState = {
 	userInfo: { name: 'abc'},
@@ -25,7 +28,8 @@ const reducer = combineReducers({
 	userRegister: userRegisterReducer,
 	addDocList: addDocListReducer,
 	editDoc: editDocReducer,
-	receivers: receiverReducer
+	receivers: receiverReducer,
+	webviewer: webviewerReducer
 })
 
 const store = createStore(
