@@ -37,21 +37,24 @@ import { Controller, useForm, useController } from 'react-hook-form';
 import WebViewer from '@pdftron/webviewer';
 import './EditDocuments.scss';
 import { useDispatch, useSelector } from 'react-redux';
-import { saveWebviewerInstance } from '../../../redux/actions/webviewerActions'
+import { saveWebviewerInstance, setCurrentDocument, setDropPoint } from '../../../redux/actions/webviewerActions'
 import { pdfTronContext } from '../../../redux/constants/contexts/pdfTronContext';
 
 
 const EditDocuments = () => {
 	// const [instanced, setInstance] = useState(null);
-	const [dropPoint, setDropPoint] = useState(null);
+	// const [dropPoint, setDropPoint] = useState(null);
 	const [currentAssignee, setCurrentAssignee] = useState(null);
 	const viewer = useRef(null);
 
-	const { instance, setInstance } = useContext(pdfTronContext);
+	const { register, control } = useForm();
+
+	const { instance, setInstance, documentFields, updateDocumentFieldsList } = useContext(pdfTronContext);
 
 	const dispatch = useDispatch();
+	const receivers = useSelector(state => state.receivers);
 	const documents = useSelector(state => state.addDocList);
-	console.log(documents)
+	const webviewerInstances = useSelector(state => state.webviewer);
 
 	useEffect(() => {
 		WebViewer(
@@ -112,45 +115,45 @@ const EditDocuments = () => {
 				});
 				await docViewer.loadDocument(
 					documents.documentList.length > 0
-						? documents.documentList[0].data
+						? documents.documentList[webviewerInstances.currentDocument].data
 						: null
 				);
-				// setTimeout(() => {
-				// 	if (
-				// 		typeof payload.fieldDocs[payload.current] !== 'undefined' &&
-				// 		payload.fieldDocs.length > 0
-				// 	) {
-				// 		payload.fieldDocs[payload.current].forEach((annot) => {
-				// 			if (!state.authors.includes(annot.customs.email)) return;
-				// 			const newAnnot = new Annotations.FreeTextAnnotation();
-				// 			newAnnot.PageNumber = annot.PageNumber;
-				// 			newAnnot.Rotation = annot.Rotation;
+				setTimeout(() => {
+					if (
+						typeof documentFields[webviewerInstances.currentDocument] !== 'undefined' &&
+						documentFields.length > 0
+					) {
+						documentFields[webviewerInstances.currentDocument].forEach((annot) => {
+							// if (!state.authors.includes(annot.customs.email)) return;
+							const newAnnot = new Annotations.FreeTextAnnotation();
+							newAnnot.PageNumber = annot.PageNumber;
+							newAnnot.Rotation = annot.Rotation;
 
-				// 			newAnnot.setWidth(annot.getWidth());
-				// 			newAnnot.setHeight(annot.getHeight());
+							newAnnot.setWidth(annot.getWidth());
+							newAnnot.setHeight(annot.getHeight());
 
-				// 			newAnnot.X = annot.X;
-				// 			newAnnot.Y = annot.Y;
+							newAnnot.X = annot.X;
+							newAnnot.Y = annot.Y;
 
-				// 			newAnnot.setPadding(new Annotations.Rect(0, 0, 0, 0));
-				// 			newAnnot.customs = annot.customs;
-				// 			newAnnot.setContents(annot.getContents());
-				// 			newAnnot.FontSize = `${20.0}px`;
-				// 			newAnnot.FillColor = new Annotations.Color(23, 162, 184, 1);
-				// 			newAnnot.TextColor = new Annotations.Color(255, 255, 255, 1);
-				// 			newAnnot.StrokeThickness = 1;
-				// 			newAnnot.StrokeColor = new Annotations.Color(0, 165, 228);
-				// 			newAnnot.TextAlign = 'center';
+							newAnnot.setPadding(new Annotations.Rect(0, 0, 0, 0));
+							newAnnot.customs = annot.customs;
+							newAnnot.setContents(annot.getContents());
+							newAnnot.FontSize = `${20.0}px`;
+							newAnnot.FillColor = new Annotations.Color(23, 162, 184, 1);
+							newAnnot.TextColor = new Annotations.Color(255, 255, 255, 1);
+							newAnnot.StrokeThickness = 1;
+							newAnnot.StrokeColor = new Annotations.Color(0, 165, 228);
+							newAnnot.TextAlign = 'center';
 
-				// 			annotManager.deselectAllAnnotations();
-				// 			annotManager.addAnnotation(newAnnot, true);
-				// 			annotManager.redrawAnnotation(newAnnot);
-				// 		});
-				// 	}
-				// }, 500);
+							annotManager.deselectAllAnnotations();
+							annotManager.addAnnotation(newAnnot, true);
+							annotManager.redrawAnnotation(newAnnot);
+						});
+					}
+				}, 500);
 			}
 		})();
-	}, [instance, documents]);
+	}, [instance, documents, webviewerInstances.currentDocument]);
 
 	const addField = (type, point = {}, name = '', value = '', flag = {}) => {
 		const { docViewer, Annotations } = instance;
@@ -329,6 +332,7 @@ const EditDocuments = () => {
 		await annotManager.drawAnnotationsFromList(annotsToDraw);
 		// await uploadForSigning();
 		// await composeFile();
+		updateDocumentFieldsList(webviewerInstances.currentDocument);
 	};
 
 	// const composeFile = async () => {
@@ -359,7 +363,8 @@ const EditDocuments = () => {
 		const scrollElement = docViewer.getScrollViewElement();
 		const scrollLeft = scrollElement.scrollLeft || 0;
 		const scrollTop = scrollElement.scrollTop || 0;
-		setDropPoint({ x: e.pageX + scrollLeft, y: e.pageY + scrollTop });
+		// setDropPoint({ x: e.pageX + scrollLeft, y: e.pageY + scrollTop });
+		dispatch(setDropPoint({ x: e.pageX + scrollLeft, y: e.pageY + scrollTop }));
 		e.preventDefault();
 		return false;
 	};
@@ -375,14 +380,17 @@ const EditDocuments = () => {
 	};
 
 	const dragEnd = (e, type) => {
-		addField(type, dropPoint);
+		addField(type, webviewerInstances.dropPoint);
+		applyFields();
 		e.target.style.opacity = 1;
 		document.body.removeChild(document.getElementById('form-build-drag-image-copy'));
 		e.preventDefault();
 	};
 
 	const handleReloadDocument = event => {
-
+		// save updated file
+		updateDocumentFieldsList(webviewerInstances.currentDocument);
+		dispatch(setCurrentDocument(event.currentTarget.getAttribute('data-id')))
 	}
 
 	return (
@@ -399,7 +407,7 @@ const EditDocuments = () => {
 							<Typography gutterBottom>
 								<b>Người nhận</b>
 							</Typography>
-							{/* <Controller
+							<Controller
 								name="receiver"
 								control={control}
 								render={({ ref, value, ...inputProps }) => (
@@ -414,14 +422,14 @@ const EditDocuments = () => {
 										SelectProps={{ displayEmpty: true }}
 										onChange={(e) => setCurrentAssignee(e.target.value)}
 									>
-										{receivers.map((receiver) => (
+										{receivers.receivers.map((receiver) => (
 											<MenuItem key={receiver.email} value={receiver.email}>
 												{receiver.email}
 											</MenuItem>
 										))}
 									</TextField>
 								)}
-							/> */}
+							/>
 						</Box>
 						<Box padding={1}>
 							<div
