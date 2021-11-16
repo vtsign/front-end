@@ -16,7 +16,8 @@ export const PdfTronProvider = ({ children }) => {
 		const { docViewer } = instance;
 		const annotManager = docViewer.getAnnotationManager();
 		const xfdf = annotManager
-			.getAnnotationsList();
+			.getAnnotationsList()
+			.filter((annot) => annot.Subject === "Free Text");
 
 		if (index === -1 || documentFields.length === 0) {
 			setDocumentFields([...documentFields, xfdf]);
@@ -24,6 +25,7 @@ export const PdfTronProvider = ({ children }) => {
 			documentFields[index] = xfdf;
 			setDocumentFields([...documentFields]);
 		}
+		// documentFields[0].map(item => console.log(item.custom))
 		console.log(documentFields)
 	};
 

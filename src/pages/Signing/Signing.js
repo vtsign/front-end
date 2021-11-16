@@ -415,6 +415,7 @@ export function ThirdStep({ viewer, fileData, receivers, instance, setInstance, 
 				let field;
 
 				if (typeof annot.custom !== 'undefined') {
+					console.log(annot)
 					// create a form field based on the type of annotation
 					if (annot.custom.type === 'TEXT') {
 						field = new Annotations.Forms.Field(
@@ -534,6 +535,7 @@ export function ThirdStep({ viewer, fileData, receivers, instance, setInstance, 
 			widgets: true,
 			fields: true,
 		});
+		console.log(xfdfString)
 		const data = await doc.getFileData({ xfdfString });
 		const arr = new Uint8Array(data);
 		const blob = new Blob([arr], { type: 'application/pdf' });
