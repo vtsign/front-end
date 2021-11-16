@@ -208,6 +208,59 @@ const EditDocuments = () => {
 		annotManager.selectAnnotation(textAnnot);
 	};
 
+	const addFields = async () => {
+		const { docViewer, Annotations } = instance;
+		const annotManager = docViewer.getAnnotationManager();
+		const displayMode = docViewer.getDisplayModeManager().getDisplayMode();
+		const page = displayMode.getSelectedPages(
+			webviewerInstances.dropPoint,
+			webviewerInstances.dropPoint
+		);
+
+		if (page.first === null) {
+			return ;
+		}
+
+		const pageIndex = page.first;
+		const pagePoint = displayMode.windowToPage(
+			webviewerInstances.dropPoint,
+			pageIndex
+		);
+
+		const newAnnot = new Annotations.FreeTextAnnotation();
+		newAnnot.PageNumber = pageIndex;
+		newAnnot.Rotation = docViewer.getCompleteRotation(pageIndex) * 90;
+
+		newAnnot.setWidth(newAnnot.Rotation === 90 ? 50 : 250);
+		newAnnot.setHeight(newAnnot.Rotation === 90 ? 250 : 50);
+
+		newAnnot.X = pagePoint.x - newAnnot.getWidth() / 2;
+		newAnnot.Y = pagePoint.y - newAnnot.getHeight() / 2;
+
+		newAnnot.setPadding(new Annotations.Rect(0, 0, 0, 0));
+		newAnnot.customs = {
+			// add more info
+			// email: state.authors[state.mailSelected],
+			// author: state.authors[state.mailSelected].replace('.', '_'),
+			type: "SIGNATURE",
+		};
+		newAnnot.setContents("SIGNATURE_FOR");
+		newAnnot.FontSize = `${20.0}px`;
+		newAnnot.FillColor = new Annotations.Color(23, 162, 184, 1);
+		newAnnot.TextColor = new Annotations.Color(255, 255, 255, 1);
+		newAnnot.StrokeThickness = 1;
+		newAnnot.StrokeColor = new Annotations.Color(0, 165, 228);
+		newAnnot.TextAlign = 'center';
+		annotManager.deselectAllAnnotations();
+		annotManager.addAnnotation(newAnnot, true);
+		annotManager.redrawAnnotation(newAnnot);
+		annotManager.selectAnnotation(newAnnot);
+
+		updateDocumentFieldsList(webviewerInstances.currentDocument);
+
+		return {};
+	}
+
 	const applyFields = async () => {
 		const { Annotations, docViewer } = instance;
 		const annotManager = docViewer.getAnnotationManager();
@@ -220,7 +273,7 @@ const EditDocuments = () => {
 			annotationsList.map(async (annot, index) => {
 				let inputAnnot;
 				let field;
-
+				console.log(annot);
 				if (typeof annot.custom !== 'undefined') {
 					// create a form field based on the type of annotation
 					if (annot.custom.type === 'TEXT') {
@@ -380,8 +433,9 @@ const EditDocuments = () => {
 	};
 
 	const dragEnd = (e, type) => {
-		addField(type, webviewerInstances.dropPoint);
-		applyFields();
+		// addField(type, webviewerInstances.dropPoint);
+		addFields();
+		// applyFields();
 		e.target.style.opacity = 1;
 		document.body.removeChild(document.getElementById('form-build-drag-image-copy'));
 		e.preventDefault();
@@ -389,8 +443,9 @@ const EditDocuments = () => {
 
 	const handleReloadDocument = event => {
 		// save updated file
+		// applyFields();
 		updateDocumentFieldsList(webviewerInstances.currentDocument);
-		dispatch(setCurrentDocument(event.currentTarget.getAttribute('data-id')))
+		dispatch(setCurrentDocument(+event.currentTarget.getAttribute('data-id')))
 	}
 
 	return (
