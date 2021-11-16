@@ -10,14 +10,14 @@ import Register from './pages/Register/Register';
 const App = () => {
 	return (
 		<BrowserRouter>
-			<div className='app__container'>
-			<Switch>
-				<Route path="/login" component={Login} />
-				<Route path="/register" component={Register} />
-				<Route path="/activation/:id" component={Activation} />
-				<Route path="/" component={MainRouter} />
-			</Switch>
-			<Footer />
+			<div className="app__container">
+				<Switch>
+					<Route path="/login" component={Login} />
+					<Route path="/register" component={Register} />
+					<Route path="/activation/:id" component={Activation} />
+					<Route path="/" component={MainRouter} />
+				</Switch>
+				<Footer />
 			</div>
 		</BrowserRouter>
 	);
