@@ -1,4 +1,5 @@
 import axiosClient from './axiosClients';
+import axiosClientNoToken from "./axiosClientNoToken"
 
 const documentApi = {
     postSigning: (json, file) => {
@@ -13,8 +14,8 @@ const documentApi = {
         };
         return axiosClient.post(url, formData, header);
     },
-    getSigning: (c, r) => {
-        const url = `/document/apt/signing?c=${c}&r=${r}`;
+    getSigning: (c, r, s) => {
+        const url = `/document/apt/signing?c=${c}&r=${r}&s=${s}`;
         return axiosClient.get(url);
     },
 
@@ -30,7 +31,7 @@ const documentApi = {
                 formData.append('documents', file);
             });
         }
-        return axiosClient.post(url, formData, header);
+        return axiosClientNoToken.post(url, formData, header);
     }
 };
 

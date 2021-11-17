@@ -1,10 +1,20 @@
+import Paper from '@mui/material/Paper';
 import React from 'react';
-import { useSelector } from 'react-redux';
 import './home.scss';
 const Home = () => {
-	const userInfo = useSelector((state) => state.userInfo);
-	console.log(userInfo);
-	return <div></div>;
+	return (
+		<div className="home">
+			<div className="home-manage">
+				<Paper variant="outlined" />
+				<Paper variant="outlined" />
+
+				<Paper variant="outlined" />
+
+				<Paper variant="outlined" />
+			</div>
+			<div className="home-start"></div>
+		</div>
+	);
 };
 
 export default Home;

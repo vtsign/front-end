@@ -1,10 +1,15 @@
-.content {
-	display: flex;
-	.content__left {
-		width: 25%;
-		border-right: 1px solid rgb(0, 0, 0);
+@import '/src/sass/variables';
+@import '/src/sass/mixins';
+@import '/src/sass/base';
+
+.manage{
+
+	min-height: $content-height;
+	
+	&-sidebar{
+		border-right: 0.5px solid #eeeeee;
 	}
-	.content__right {
-		width: 75%;
+
+	&-content {
 	}
 }

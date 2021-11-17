@@ -35,16 +35,16 @@ const Register = () => {
 	const dispatch = useDispatch();
 
 	const userRegister = useSelector((state) => state.userRegister);
-	const { userInfo, loading, error: errorRegister } = userRegister;
+	const { user, loading, error: errorRegister } = userRegister;
 
 	const history = useHistory();
 
 	useEffect(() => {
 		console.log('errorRegistry', errorRegister);
-		if (userInfo) {
+		if (user) {
 			history.push('/login');
 		}
-	}, [userInfo, errorRegister, history]);
+	}, [user, errorRegister, history]);
 
 	const {
 		register,

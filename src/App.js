@@ -15,10 +15,12 @@ import Signing from './pages/Signing/Signing';
 import PrivateRoute from './components/Layout/PrivateRoute';
 
 const App = ({ location }) => {
-	const headerExclusionArray = ['/home', '/', '/signing', '/manage', '/template', '/signDocument'];
+	// const headerExclusionArray = ['/home', '/', '/signing',
+	// 	'/manage', '/manage/completed/', '/manage/waiting', '/manage/deleted', '/manage/need-sign', '/template', '/signDocument'];
+		 const headerExclusionArray = ['/login', '/register', '/activation/:id', '/notfound'];
 	return (
 		<div className="app__container">
-			{headerExclusionArray.indexOf(location.pathname) >= 0 && <Header />}
+			{headerExclusionArray.indexOf(location.pathname) < 0 && <Header />}
 			<Switch>
 				<Route path="/login" component={Login} />
 				<Route path="/register" component={Register} />
@@ -28,10 +30,13 @@ const App = ({ location }) => {
 					<Redirect to="/" />
 				</Route>
 				<PrivateRoute path="/signing" component={Signing} />
-				<PrivateRoute path="/manage" component={Manage} />
+				<PrivateRoute path={"/manage"} component={Manage} />
 				<PrivateRoute path="/template" component={Sample} />
-				<PrivateRoute path="/signDocument" component={SignDocument2} />
-				<Route path="*" component={NotFound} />
+				<Route path="/signDocument" component={SignDocument2} />
+				<Route path="/notfound" component={NotFound} />
+				<Route path="*">
+					<Redirect to='/notfound' />
+				</Route>
 			</Switch>
 			<Footer />
 		</div>

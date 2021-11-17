@@ -7,7 +7,7 @@
 	left: 0;
 	z-index: 99;
 	height: $header-height;
-	position:fixed;
+	position: fixed;
 
 	&-toolbar {
 		height: 100%;
@@ -31,9 +31,10 @@
 
 	.header-right {
 		display: flex;
+		height: 100%;
 
 		&-logo {
-			width: 120px;
+			width: 110px;
 			vertical-align: middle;
 
 			@include mobile {
@@ -56,9 +57,11 @@
 			a {
 				@include flex(center, center);
 
+				position: relative;
+
 				width: 110px;
 				height: 100%;
-				margin: 0 2px;
+				margin: 0 1px;
 
 				font-size: 16px;
 				text-decoration: none;
@@ -67,15 +70,53 @@
 				text-align: center;
 				line-height: 100%;
 
-				transition: all 0.1s ease 0s;
+				transition: all 0.3s ease 0s;
 
-				&:hover,
-				&.active {
-					font-size: 17px;
+				&:before {
+					content : "";
+					position: absolute;
+					left    : 0;
+					bottom  : 0;
+					height  : 1px;
+					width   : 0px;  /* or 100px */
+					border-bottom: 3px solid white;
+				  }
+
+				  &:hover {
 					color: rgb(255, 255, 255);
 					opacity: 1;
+
+					&:before {
+						content : "";
+						position: absolute;
+						left    : 0;
+						bottom  : 0;
+						height  : 1px;
+						width   : 100%;  /* or 100px */
+						border-bottom: 3px solid white;
+						transition: 0.3s;
+					  }
 				}
+
+				&.active {
+					color: rgb(255, 255, 255);
+					opacity: 1;
+					// border-bottom: 3px solid white;
+
+					&:before {
+						content : "";
+						position: absolute;
+						left    : 0;
+						bottom  : 0;
+						height  : 1px;
+						width   : 100%;  /* or 100px */
+						border-bottom: 3px solid white;
+						transition: 0.3s;
+					  }
+				}
+
 			}
+
 		}
 	}
 }

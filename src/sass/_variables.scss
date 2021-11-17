@@ -17,6 +17,11 @@ $footer-height: 50px;
 $footer-tablet-height: 40px;
 $footer-mobile-height: 40px;
 
+$content-height: calc(100vh - #{$header-height} - #{$footer-height});
+$content-tablet-height: calc(100vh - #{$header-tablet-height} - #{$footer-tablet-height});
+$content-mobile-height: calc(100vh - #{$header-mobile-height} - #{$footer-mobile-height});
+
+
 $box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 
 $colors: (

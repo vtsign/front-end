@@ -50,9 +50,10 @@ const SignDocument2 = () => {
             const queryParam = new URLSearchParams(location.search);
             const r = queryParam.get('r');
             const c = queryParam.get('c');
+            const s = queryParam.get('s');
 
             try {
-                const response = await documentApi.getSigning(c, r);
+                const response = await documentApi.getSigning(c, r, s);
 
                 setUserDocument(response.data);
                 setSignedObj((prevState) => ({

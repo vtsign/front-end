@@ -29,7 +29,7 @@ const Header = () => {
 				<Toolbar className="header-toolbar">
 					<div className="header-right">
 						<MenuMobile />
-						<Link to="/">
+						<Link to="/" style={{margin: 'auto'}}>
 							<img
 								src={Logo}
 								alt="logo"

@@ -6,26 +6,25 @@ const BASE_URL = process.env.REACT_APP_BASE_URL ||  'https://api.vtsign.tech';
 
 const getAccessToken = async () => {
 	const accessToken = localStorage.getItem("accessToken");
-	// const accessTokenExpired =localStorage.getItem("accessTokenExpired");
-	// const refreshToken = localStorage.getItem('refreshToken');
-	// const refreshTokenExpired =localStorage.getItem("refreshTokenExpired");
-	// if(accessTokenExpired > Date.now()) {
-	// 	return accessToken;
-	// }
-	// if(refreshTokenExpired < Date.now())
-	// {
-	// 	localStorage.setItem("isLogin", false);
-	// 	window.location.href = '/login';
-	// 	return;
-	// }
-	// const {access_token, refresh_token, access_token_expired, refresh_token_expired} = await axios.post(BASE_URL + '/refresh-token', {
-	// 	refresh_token: refreshToken
-	//   });
-
-	//   localStorage.setItem('accessToken', access_token);
-	//   localStorage.setItem('refreshToken', refresh_token);
-	//   localStorage.setItem('accessTokenExpired', access_token_expired);
-	//   localStorage.setItem('refreshTokenExpired', refresh_token_expired);
+	const refreshToken = localStorage.getItem('refreshToken');
+	const accessTokenExpired = localStorage.getItem('accessTokenExpired');
+	const refreshTokenExpired = localStorage.getItem('refreshTokenExpired');
+	if(accessTokenExpired > Date.now()) {
+		return accessToken;
+	}
+	if(refreshTokenExpired < Date.now()) {
+		localStorage.setItem("isLogin", "false");
+		window.location.href = '/login';
+		return;
+	}
+	const res = await axios.post(BASE_URL + '/auth/refresh-token', {
+		refresh_token: refreshToken
+	});
+	
+	  localStorage.setItem('accessToken', res.data.access_token);	
+	  localStorage.setItem('refreshToken', res.data.refresh_token);
+	  localStorage.setItem('accessTokenExpired', Date.now() + 4 * 60 * 1000);
+	  localStorage.setItem('refreshTokenExpired', Date.now() + 9 * 60 * 1000);
 
 	return accessToken;
 }
@@ -37,10 +36,11 @@ const axiosClient = axios.create({
 	},
 	paramsSerializer: (params) => queryString.stringify(params),
 });
+
 axiosClient.interceptors.request.use(
 	async (config) => {
 		// Handle token here ...
-		const token = await getAccessToken();
+		 const token = await getAccessToken();
 		if (token) {
 			config.headers.Authorization = `Bearer ${token}`;
 		}
@@ -49,11 +49,9 @@ axiosClient.interceptors.request.use(
 );
 axiosClient.interceptors.response.use(
 	(response) => {
-		console.log(response);
 		return response;
 	},
 	(error) => {
-		console.log('error', error);
 		// Handle errors
 		throw error;
 	}

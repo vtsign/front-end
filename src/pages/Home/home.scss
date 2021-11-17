@@ -1,0 +1,16 @@
+@import '/src/sass/variables';
+@import '/src/sass/mixins';
+@import '/src/sass/base';
+
+.home {
+
+    min-height: $content-height;
+
+    &-manage {
+        height: 30%;
+    }
+
+    &-start {
+        
+    }
+}

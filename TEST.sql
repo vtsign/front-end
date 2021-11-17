@@ -1,0 +1,3 @@
+ select usercontra0_.contract_uuid as contract7_3_0_, usercontra0_.user_contract_uuid as user_con1_3_0_, usercontra0_.user_contract_uuid as user_con1_3_1_, usercontra0_.contract_uuid as contract7_3_1_, usercontra0_.permission as permissi2_3_1_, usercontra0_.secret_key as secret_k3_3_1_, usercontra0_.signed_date as signed_d4_3_1_, usercontra0_.status as status5_3_1_, usercontra0_.user_uuid as user_uui8_3_1_, usercontra0_.viewed_date as viewed_d6_3_1_, user1_.user_uuid as user_uui1_2_2_, user1_.email as email2_2_2_, user1_.phone as phone3_2_2_ 
+ from user_contract usercontra0_ left outer join user user1_ on usercontra0_.user_uuid=user1_.user_uuid 
+ where usercontra0_.contract_uuid=?

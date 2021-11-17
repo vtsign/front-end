@@ -29,7 +29,7 @@ const Login = () => {
 	const history = useHistory();
 
 	const userLogin = useSelector((state) => state.userLogin);
-	const { userInfo, loading, error: errorRegister, isLogin } = userLogin;
+	const { user, loading, error: errorRegister, isLogin } = userLogin;
 
 	useEffect(() => {
 		localStorage.setItem("isLogin",false);
@@ -37,7 +37,7 @@ const Login = () => {
 
 	useEffect(() => {
 		if (isLogin) history.push('/');
-	}, [userInfo, history]);
+	}, [user, history, isLogin]);
 
 	const {
 		register,

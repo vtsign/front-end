@@ -1,0 +1,102 @@
+.detail-completed {
+	height: 100%;
+
+	&-main {
+		height: 100%;
+
+		//border-right: 0.5px solid #eeeeee;
+		padding: 20px;
+
+		.content-info {
+			border-bottom: 0.5px solid #eeeeee;
+			padding-bottom: 30px;
+			margin-bottom: 30px;
+
+			&-title {
+				font-size: 15px;
+				font-weight: 600;
+				margin-bottom: 10px;
+			}
+
+			p {
+				opacity: 0.6;
+				margin-bottom: 10px;
+			}
+
+			&-ground-btn {
+				margin-top: 30px;
+
+				button {
+					margin-right: 20px;
+					width: 120px;
+				}
+			}
+		}
+
+		.content-receivers {
+			border-bottom: 0.5px solid #eeeeee;
+			padding-bottom: 30px;
+			margin-bottom: 30px;
+
+			&-title {
+				font-size: 15px;
+				font-weight: 600;
+				margin-bottom: 10px;
+			}
+
+			&-item {
+				display: flex;
+				justify-content: space-between;
+                margin-bottom: 15px;
+
+				.receiver-info {
+					display: flex;
+					align-items: center;
+
+					h6 {
+						margin-right: 10px;
+					}
+					p:nth-child(1) {
+						padding-bottom: 5px;
+					}
+
+					p:nth-child(2) {
+						opacity: 0.6;
+					}
+				}
+
+				.receiver-sign-info {
+					p:nth-child(1) {
+						padding-bottom: 5px;
+					}
+					p:nth-child(2) {
+						opacity: 0.6;
+					}
+				}
+			}
+		}
+
+		.content-other {
+			&-title {
+				font-size: 15px;
+				font-weight: 600;
+				margin-bottom: 10px;
+			}
+
+			p {
+				opacity: 0.6;
+				margin-bottom: 10px;
+			}
+		}
+	}
+
+	&-thumbnail {
+		height: 100%;
+		padding: 20px;
+
+		div {
+			height: 100%;
+			border: 0.5px solid #eeeeee;
+		}
+	}
+}

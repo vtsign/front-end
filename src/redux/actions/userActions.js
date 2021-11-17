@@ -1,4 +1,3 @@
-import axios from 'axios';
 import {
 	USER_LOGIN_REQUEST,
 	USER_LOGIN_SUCCESS,
@@ -18,27 +17,11 @@ export const loginAction = (email, password) => async (dispatch) => {
 			type: USER_LOGIN_REQUEST,
 		});
 
-		const config = {
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		};
-
-		const data = await axios.post(
-			'https://api.vtsign.tech/auth/login',
-			{
-				email,
-				password,
-			},
-			config
-		);
-
-		localStorage.setItem("accessToken", data.data.access_token);
-		localStorage.setItem("refreshToken", data.data.refresh_token);
-		localStorage.setItem("isLogin", true);
+		const res = await authenApi.login(email, password);
+		
 		dispatch({
 			type: USER_LOGIN_SUCCESS,
-			payload: data.data,
+			payload: res.data,
 		});
 	} catch (error) {
 		dispatch({
@@ -65,13 +48,11 @@ export const registerAction =
 				last_name,
 			};
 
-			const { data } = await authenApi.register('/auth/register', dataSend);
-
-			console.log(DataTransferItem);
+			const res = await authenApi.register(dataSend);
 
 			dispatch({
 				type: USER_REGISTER_SUCCESS,
-				payload: data,
+				payload: res.data,
 			});
 		} catch (error) {
 			dispatch({
