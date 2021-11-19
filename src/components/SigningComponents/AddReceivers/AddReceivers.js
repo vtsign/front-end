@@ -138,6 +138,22 @@ const AddReceivers = () => {
 						</Grid>
 						<Grid
 							display="flex"
+							justifyContent="space-between"
+							alignItems="center"
+							my="1rem"
+						>
+							<InputLabel>Số điện thoại</InputLabel>
+							<TextField
+								id="key"
+								placeholder="Nguyễn Văn A"
+								sx={{ minWidth: '25vw' }}
+								{...register('key')}
+								error={!!errors.key}
+								helperText={errors?.key?.message}
+							/>
+						</Grid>
+						<Grid
+							display="flex"
 							justifyContent="flex-end"
 							alignItems="center"
 							my="1rem"

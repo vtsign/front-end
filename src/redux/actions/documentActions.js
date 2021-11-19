@@ -16,6 +16,10 @@ export const addDocumentList = documents => {
 	}
 }
 
+export const loadDocument = () => async (dispatch) => {
+	
+}
+
 export const addDocumentToSign = (json, file) => async (dispatch) => {
 	try {
 		// const formData = new FormData();

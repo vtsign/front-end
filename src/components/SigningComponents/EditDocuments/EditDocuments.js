@@ -208,7 +208,7 @@ const EditDocuments = () => {
 		annotManager.selectAnnotation(textAnnot);
 	};
 
-	const addFields = async () => {
+	const addFields = async (type) => {
 		const { docViewer, Annotations } = instance;
 		const annotManager = docViewer.getAnnotationManager();
 		const displayMode = docViewer.getDisplayModeManager().getDisplayMode();
@@ -242,9 +242,10 @@ const EditDocuments = () => {
 			// add more info
 			// email: state.authors[state.mailSelected],
 			// author: state.authors[state.mailSelected].replace('.', '_'),
-			type: "SIGNATURE",
+			name: `${type}_FOR_${currentAssignee}`,
+			type: type,
 		};
-		newAnnot.setContents("SIGNATURE_FOR");
+		newAnnot.setContents(newAnnot.customs.name);
 		newAnnot.FontSize = `${20.0}px`;
 		newAnnot.FillColor = new Annotations.Color(23, 162, 184, 1);
 		newAnnot.TextColor = new Annotations.Color(255, 255, 255, 1);
@@ -434,7 +435,7 @@ const EditDocuments = () => {
 
 	const dragEnd = (e, type) => {
 		// addField(type, webviewerInstances.dropPoint);
-		addFields();
+		addFields(type);
 		// applyFields();
 		e.target.style.opacity = 1;
 		document.body.removeChild(document.getElementById('form-build-drag-image-copy'));
@@ -477,6 +478,9 @@ const EditDocuments = () => {
 										SelectProps={{ displayEmpty: true }}
 										onChange={(e) => setCurrentAssignee(e.target.value)}
 									>
+										<MenuItem key="me" value="Me">
+											Me
+										</MenuItem>
 										{receivers.receivers.map((receiver) => (
 											<MenuItem key={receiver.email} value={receiver.email}>
 												{receiver.email}
