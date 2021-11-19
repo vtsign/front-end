@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import {
 	Avatar,
 	Box,
@@ -44,6 +44,7 @@ import { storage } from '../../firebase/firebase';
 import { addDocumentToSign } from '../../redux/actions/documentActions';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
+import { pdfTronContext } from '../../redux/constants/contexts/pdfTronContext';
 import UploadDocuments from '../../components/SigningComponents/UploadDocuments/UploadDocuments';
 import AddReceivers from '../../components/SigningComponents/AddReceivers/AddReceivers';
 import EditDocuments from '../../components/SigningComponents/EditDocuments/EditDocuments';
@@ -61,24 +62,40 @@ const Signing2 = () => {
 
 	const history = useHistory();
 
+	const { instance, setInstance, documentFields, updateDocumentFieldsList, handleSendDocuments } =
+		useContext(pdfTronContext);
+
 	const { register, handleSubmit } = useForm();
 
 	const handleNext = (formData) => {
-		setActiveStep((prevActiveStep) => prevActiveStep + 1);
+		// if(activeStep === 2) {
+		// 	(async () => {
+		// 		await handleSendDocuments();
+		// 		console.log("step 2")
+		// 	})();
+		// 	// handleSendDocuments();
+		// }
 		if (activeStep === 4) {
 			// handleSendFiles(formData);
 			history.push('/');
 		}
+		setActiveStep((prevActiveStep) => prevActiveStep + 1);
 	};
 
 	const handlePrev = () => {
 		setActiveStep((prevActiveStep) => prevActiveStep - 1);
 	};
+
+	const handleSend = () => {
+		(async () => {
+			await handleSendDocuments();
+			setActiveStep((prevActiveStep) => prevActiveStep + 1);
+		})();
+	}
 	return (
 		<Container maxWidth={false}>
 			<Grid container className="sign__container">
 				<Grid container className="sign__content">
-
 					<Grid item xl={2} lg={2} md={3} xs={12} alignSelf="center">
 						<Stepper activeStep={activeStep} orientation="vertical" alignSelf="center">
 							{steps.map((label, index) => {
@@ -100,7 +117,15 @@ const Signing2 = () => {
 						{activeStep === 3 && <SendFiles />}
 					</Grid>
 				</Grid>
-				<Grid item xl={12} lg={12} md={12} display="flex" justifyContent="flex-end" style={{ height: "3rem"}} >
+				<Grid
+					item
+					xl={12}
+					lg={12}
+					md={12}
+					display="flex"
+					justifyContent="flex-end"
+					style={{ height: '3rem' }}
+				>
 					{activeStep === 0 && (
 						<FormControlLabel control={<Checkbox />} label="Chỉ mình tôi ký" />
 					)}
@@ -109,13 +134,30 @@ const Signing2 = () => {
 							Quay lại
 						</Button>
 					)}
-					<Button
+					{activeStep === 2 ? (
+						<Button
+							variant="contained"
+							style={{ marginLeft: '14px' }}
+							onClick={handleSend}
+						>
+							Gửi
+						</Button>
+					) : (
+						<Button
+							variant="contained"
+							style={{ marginLeft: '14px' }}
+							onClick={handleSubmit(handleNext)}
+						>
+							{activeStep === steps.length - 1 ? 'Gửi' : 'Tiếp tục'}
+						</Button>
+					)}
+					{/* <Button
 						variant="contained"
 						style={{ marginLeft: '14px' }}
 						onClick={handleSubmit(handleNext)}
 					>
 						{activeStep === steps.length - 1 ? 'Gửi' : 'Tiếp tục'}
-					</Button>
+					</Button> */}
 				</Grid>
 			</Grid>
 		</Container>
