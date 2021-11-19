@@ -9,10 +9,10 @@ import MenuItem from '@mui/material/MenuItem';
 import Paper from '@mui/material/Paper';
 import Select from '@mui/material/Select';
 
-import "./contentHeader.scss"
+import './contentHeader.scss';
 
-
-const ContentHeader = ({title, description}) => {
+const ContentHeader = ({ title, description, isShow }) => {
+	console.log('isShow', isShow);
 	const [select, setSelect] = useState(10);
 	const handleChange = (event) => {
 		setSelect(event.target.value);
@@ -21,8 +21,8 @@ const ContentHeader = ({title, description}) => {
 		<Fragment>
 			<div className="content-header">
 				<div>
-                    <p className="content-header-title">{ title }</p>
-                    <div className="content-header-note">{ description }</div>
+					<p className="content-header-title">{title}</p>
+					<div className="content-header-note">{description}</div>
 				</div>
 				<div>
 					<Paper
@@ -43,7 +43,7 @@ const ContentHeader = ({title, description}) => {
 			<div>
 				<div>
 					<p>Danh sách tài liệu</p>
-					<FormControl sx={{ mt: 3, mb: 3 }}>
+					<FormControl sx={{ mt: 3, mb: 3 }} disabled={!isShow}>
 						<InputLabel id="demo-simple-select-label">Sắp xếp</InputLabel>
 						<Select
 							labelId="demo-simple-select-label"

@@ -1,0 +1,14 @@
+.no-data {
+	text-align: center;
+
+	&__icon {
+		width: 100px;
+		opacity: 0.5;
+		margin-bottom: 10px;
+		margin-top: 20px;
+	}
+
+	&__message {
+		opacity: 0.5;
+	}
+}

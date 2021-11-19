@@ -13,9 +13,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { getAllContracts } from '../../../../redux/actions/manageAction';
 import ContentHeader from '../../common/contentHeader';
+import NoData from '../../common/NoData';
 import ActionButton from '../button/ActionButton';
 import './style.scss';
-
 
 const useStyles = makeStyles({
 	contentSelectTile: {
@@ -27,18 +27,17 @@ const useStyles = makeStyles({
 	},
 });
 
-
 const calculateReceiverCompleted = (userContracts) => {
 	let totalReceiverCompleted = 0;
 
-	userContracts.forEach(userContract => {
-		if (userContract.status === "COMPLETED") {
+	userContracts.forEach((userContract) => {
+		if (userContract.status === 'COMPLETED') {
 			totalReceiverCompleted++;
 		}
-	})
+	});
 
 	return totalReceiverCompleted;
-}
+};
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 	height: 8,
@@ -56,14 +55,13 @@ const DocumentCompleted = () => {
 	const history = useHistory();
 	const [select, setSelect] = useState(10);
 
-
-	const manageDoc = useSelector(state => state.manageDoc);
+	const manageDoc = useSelector((state) => state.manageDoc);
 	const { isLoading, error, total_pages, current_page, total_items, contracts } = manageDoc;
 
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		dispatch(getAllContracts("WAITING", 1));
+		dispatch(getAllContracts('WAITING', 1));
 	}, [dispatch]);
 
 	const handleChange = (event) => {
@@ -76,67 +74,94 @@ const DocumentCompleted = () => {
 	};
 
 	const handleOnPageChage = (event, value) => {
-		dispatch(getAllContracts("WAITING", value))
-	}
-	console.log("contracts: ");
+		dispatch(getAllContracts('WAITING', value));
+	};
+	console.log('contracts: ');
 	console.log(contracts);
 	return (
 		<div className="content">
 			{/* {isLoading && <Loading />} */}
-			<ContentHeader title="Tài liệu chờ kí" description="Quản lý tài liệu chờ kí" />
-			<div>
-				<Table className="table-document">
-					<TableHead>
-						<TableRow>
-							<TableCell style={{ width: '30%', fontSize: 14, fontWeight: 600 }}>
-								Tên tài liệu
-							</TableCell>
-							<TableCell style={{ width: '17%', fontSize: 14, fontWeight: 600 }}>
-								Ngày tạo
-							</TableCell>
-							<TableCell style={{ width: '17%', fontSize: 14, fontWeight: 600 }}>
-								Trạng thái
-							</TableCell>
-							<TableCell style={{ width: '17%', fontSize: 14, fontWeight: 600 }}>
-								Thay đổi cuối
-							</TableCell>
-							<TableCell style={{ width: '19%', fontSize: 14, fontWeight: 600 }}>
-								Thao tác
-							</TableCell>
-						</TableRow>
-					</TableHead>
-					<TableBody className="table-document-body">
-						{contracts != null && contracts.map((row) => {
-							const totalCompleted = calculateReceiverCompleted(row.user_contracts);
-							const percentCompleted = totalCompleted / (row.user_contracts.length - 1) * 100;
-							console.log(totalCompleted);
-							return (
-								<TableRow key={row.id} onClick={() => selectDocumentHandler(row.id)}>
-									<TableCell style={{ color: '#2F80ED', fontSize: 14 }}>
-										{row.title}
-									</TableCell>
-									<TableCell>{moment(row.sent_date).format("DD/MM/YYYY LT")}</TableCell>
-									<TableCell>
-											<div>
-											<BorderLinearProgress
-												variant="determinate"
-												value={percentCompleted}
-											/>
-											<p style={{ textAlign: 'center' }}>{ totalCompleted }/{row.user_contracts.length -1} hoàn thành</p>
-										</div>
-										
-									</TableCell>
-									<TableCell>{moment(row.sent_date).format("DD/MM/YYYY LT")}</TableCell>
-									<TableCell onClick={(e) => e.stopPropagation()}>
-										<ActionButton />
-									</TableCell>
-								</TableRow>
-							);
-						})}
-					</TableBody>
-				</Table>
-			</div>
-			<Pagination className="content-pagination" count={total_pages} onChange={handleOnPageChage} color="primary" />
+			<ContentHeader
+				title="Tài liệu chờ kí"
+				description="Quản lý tài liệu chờ kí"
+				isShow={contracts.length > 0}
+			/>
+			{contracts.length <= 0 && <NoData />}
+			{contracts.length > 0 && (
+				<div>
+					<Table className="table-document">
+						<TableHead>
+							<TableRow>
+								<TableCell style={{ width: '30%', fontSize: 14, fontWeight: 600 }}>
+									Tên tài liệu
+								</TableCell>
+								<TableCell style={{ width: '17%', fontSize: 14, fontWeight: 600 }}>
+									Ngày tạo
+								</TableCell>
+								<TableCell style={{ width: '17%', fontSize: 14, fontWeight: 600 }}>
+									Trạng thái
+								</TableCell>
+								<TableCell style={{ width: '17%', fontSize: 14, fontWeight: 600 }}>
+									Thay đổi cuối
+								</TableCell>
+								<TableCell style={{ width: '19%', fontSize: 14, fontWeight: 600 }}>
+									Thao tác
+								</TableCell>
+							</TableRow>
+						</TableHead>
+						<TableBody className="table-document-body">
+							{contracts != null &&
+								contracts.map((row) => {
+									const totalCompleted = calculateReceiverCompleted(
+										row.user_contracts
+									);
+									const percentCompleted =
+										(totalCompleted / (row.user_contracts.length - 1)) * 100;
+									console.log(totalCompleted);
+									return (
+										<TableRow
+											key={row.id}
+											onClick={() => selectDocumentHandler(row.id)}
+										>
+											<TableCell style={{ color: '#2F80ED', fontSize: 14 }}>
+												{row.title}
+											</TableCell>
+											<TableCell>
+												{moment(row.sent_date).format('DD/MM/YYYY LT')}
+											</TableCell>
+											<TableCell>
+												<div>
+													<BorderLinearProgress
+														variant="determinate"
+														value={percentCompleted}
+													/>
+													<p style={{ textAlign: 'center' }}>
+														{totalCompleted}/
+														{row.user_contracts.length - 1} hoàn thành
+													</p>
+												</div>
+											</TableCell>
+											<TableCell>
+												{moment(row.sent_date).format('DD/MM/YYYY LT')}
+											</TableCell>
+											<TableCell onClick={(e) => e.stopPropagation()}>
+												<ActionButton />
+											</TableCell>
+										</TableRow>
+									);
+								})}
+						</TableBody>
+					</Table>
+				</div>
+			)}
+			{contracts.length > 0 && (
+				<Pagination
+					className="content-pagination"
+					count={total_pages}
+					onChange={handleOnPageChage}
+					color="primary"
+				/>
+			)}
 		</div>
 	);
 };
