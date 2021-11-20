@@ -7,7 +7,9 @@ const documentApi = {
 
         const formData = new FormData();
         formData.append('data', JSON.stringify(json));
-        formData.append('files', file);
+		file.forEach(item => {
+			formData.append('files', item);
+		})
         // formData.append("files", file);
         const header = {
             'content-type': 'application/octet-stream',

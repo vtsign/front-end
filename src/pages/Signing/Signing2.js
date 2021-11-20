@@ -42,7 +42,7 @@ import ReceiverAvatar from '../../components/ReceiverAvatar/ReceiverAvatar';
 import EditFormButton from '../../components/EditFormButton/EditFormButton';
 import { storage } from '../../firebase/firebase';
 import { addDocumentToSign } from '../../redux/actions/documentActions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { pdfTronContext } from '../../redux/constants/contexts/pdfTronContext';
 import UploadDocuments from '../../components/SigningComponents/UploadDocuments/UploadDocuments';
@@ -59,6 +59,7 @@ const steps = [
 
 const Signing2 = () => {
 	const [activeStep, setActiveStep] = React.useState(0);
+	const [files, setFiles] = useState(null);
 
 	const history = useHistory();
 
@@ -66,6 +67,9 @@ const Signing2 = () => {
 		useContext(pdfTronContext);
 
 	const { register, handleSubmit } = useForm();
+
+	const dispatch = useDispatch();
+	const receivers = useSelector(state => state.receivers.receivers)
 
 	const handleNext = (formData) => {
 		// if(activeStep === 2) {
@@ -77,6 +81,14 @@ const Signing2 = () => {
 		// }
 		if (activeStep === 4) {
 			// handleSendFiles(formData);
+			console.log(instance);
+			const json = {
+				receivers: receivers,
+				mail_title: formData.title,
+				mail_message: formData.message,
+			};
+
+			dispatch(addDocumentToSign(json, files));
 			history.push('/');
 		}
 		setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -86,9 +98,11 @@ const Signing2 = () => {
 		setActiveStep((prevActiveStep) => prevActiveStep - 1);
 	};
 
-	const handleSend = () => {
+	const handleExportFiles = () => {
 		(async () => {
-			await handleSendDocuments();
+			const files = await handleSendDocuments();
+			setFiles(files)
+			console.log(files)
 			setActiveStep((prevActiveStep) => prevActiveStep + 1);
 		})();
 	}
@@ -138,7 +152,7 @@ const Signing2 = () => {
 						<Button
 							variant="contained"
 							style={{ marginLeft: '14px' }}
-							onClick={handleSend}
+							onClick={handleExportFiles}
 						>
 							Gửi
 						</Button>
