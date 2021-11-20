@@ -144,12 +144,12 @@ const AddReceivers = () => {
 						>
 							<InputLabel>Số điện thoại</InputLabel>
 							<TextField
-								id="key"
+								id="phone"
 								placeholder="Nguyễn Văn A"
 								sx={{ minWidth: '25vw' }}
-								{...register('key')}
-								error={!!errors.key}
-								helperText={errors?.key?.message}
+								{...register('phone')}
+								error={!!errors.phone}
+								helperText={errors?.phone?.message}
 							/>
 						</Grid>
 						<Grid
