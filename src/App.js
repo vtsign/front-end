@@ -1,6 +1,7 @@
 import React from 'react';
 import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 import './App.scss';
+import { PdfTronProvider } from './redux/constants/contexts/pdfTronContext';
 import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
 import Activation from './pages/Activation/Activation';
@@ -10,9 +11,9 @@ import Login from './pages/Login/Login';
 import Manage from './pages/Manage/Manage';
 import Register from './pages/Register/Register';
 import Sample from './pages/Sample/Sample';
-import SignDocument2 from './pages/SignDocument/SignDocument2';
 import Signing from './pages/Signing/Signing';
 import PrivateRoute from './components/Layout/PrivateRoute';
+import Signing2 from './pages/Signing/Signing2';
 
 const App = ({ location }) => {
 	// const headerExclusionArray = ['/home', '/', '/signing',
@@ -30,12 +31,16 @@ const App = ({ location }) => {
 					<Redirect to="/" />
 				</Route>
 				<PrivateRoute path="/signing" component={Signing} />
-				<PrivateRoute path={"/manage"} component={Manage} />
+				<PrivateRoute path={'/manage'} component={Manage} />
 				<PrivateRoute path="/template" component={Sample} />
-				<Route path="/signDocument" component={SignDocument2} />
+				<Route path="/signing2">
+					<PdfTronProvider>
+						<Signing2 />
+					</PdfTronProvider>
+				</Route>
 				<Route path="/notfound" component={NotFound} />
 				<Route path="*">
-					<Redirect to='/notfound' />
+					<Redirect to="/notfound" />
 				</Route>
 			</Switch>
 			<Footer />
