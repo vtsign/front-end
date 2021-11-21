@@ -36,16 +36,22 @@ import {
 import { Controller, useForm, useController } from 'react-hook-form';
 import ReceiverAvatar from '../../ReceiverAvatar/ReceiverAvatar';
 import './AddReceivers.scss';
+import randomstring from "randomstring";
 import { useDispatch } from 'react-redux';
-import { addReceiver } from '../../../redux/actions/receiverActions.js'
+import { addReceiver } from '../../../redux/actions/receiverActions.js';
+import userApi from '../../../api/userApi'
+
+const permissions = ["Chỉ ký", "Chỉ đọc"];
 
 const AddReceivers = () => {
 	const [receivers, setReceivers] = useState([]);
-
+	const [showPhone, setShowPhone] = useState(false);
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
+		control,
+		setValue
 	} = useForm();
 
 	const dispatch = useDispatch();
@@ -55,6 +61,16 @@ const AddReceivers = () => {
 		setReceivers((receivers) => [...receivers, formData]);
 		console.log(formData);
 	};
+
+	const handleInputEmailBlur = async (e) => {
+		const email = e.target.value;
+		if(email.includes('@')) {
+			const userExists = await userApi.checkUserExists(email);
+			setShowPhone(userExists);
+		} else {
+			setShowPhone(false);
+		}
+	}
 
 	return (
 		<Container maxWidth={false} style={{ height: '100%' }}>
@@ -93,15 +109,34 @@ const AddReceivers = () => {
 							<InputLabel>Địa chỉ Email</InputLabel>
 							<TextField
 								id="email"
-								placeholder="Nguyễn Văn A"
+								placeholder="nguyenvana@email.com"
 								sx={{ minWidth: '25vw' }}
 								{...register('email', {
 									required: 'Vui lòng nhập địa chỉ Email',
 								})}
 								error={!!errors.email}
 								helperText={errors?.email?.message}
+								onBlur={handleInputEmailBlur}
 							/>
 						</Grid>
+						{showPhone && (
+							<Grid
+								display="flex"
+								justifyContent="space-between"
+								alignItems="center"
+								my="1rem"
+							>
+								<InputLabel>Số điện thoại</InputLabel>
+								<TextField
+									id="phone"
+									placeholder="+84999111222"
+									sx={{ minWidth: '25vw' }}
+									{...register('phone')}
+									error={!!errors.phone}
+									helperText={errors?.phone?.message}
+								/>
+							</Grid>
+						)}
 						<Grid
 							display="flex"
 							justifyContent="space-between"
@@ -109,15 +144,31 @@ const AddReceivers = () => {
 							my="1rem"
 						>
 							<InputLabel>Quyền hạn</InputLabel>
-							<TextField
-								id="permission"
-								placeholder="Nguyễn Văn A"
-								sx={{ minWidth: '25vw' }}
-								{...register('permission', {
-									required: 'Lựa chọn quyền hạn',
-								})}
-								error={!!errors.permission}
-								helperText={errors?.permission?.message}
+							<Controller
+								name="permission"
+								control={control}
+								render={({ ref, value, ...inputProps }) => (
+									<TextField
+										select
+										fullWidth
+										variant="outlined"
+										size="small"
+										style={{ width: '25vw' }}
+										{...inputProps}
+										inputRef={ref}
+										value={value}
+										defaultValue=""
+										SelectProps={{ displayEmpty: true }}
+										onChange={(e) => setValue(e.target.value)}
+									>
+										<MenuItem value="">Lựa chọn quyền hạn</MenuItem>
+										{permissions.map((permission) => (
+											<MenuItem key={permission} value={permission}>
+												{permission}
+											</MenuItem>
+										))}
+									</TextField>
+								)}
 							/>
 						</Grid>
 						<Grid
@@ -129,27 +180,12 @@ const AddReceivers = () => {
 							<InputLabel>Sử dụng khóa</InputLabel>
 							<TextField
 								id="key"
-								placeholder="Nguyễn Văn A"
+								placeholder="VTSign"
 								sx={{ minWidth: '25vw' }}
 								{...register('key')}
 								error={!!errors.key}
 								helperText={errors?.key?.message}
-							/>
-						</Grid>
-						<Grid
-							display="flex"
-							justifyContent="space-between"
-							alignItems="center"
-							my="1rem"
-						>
-							<InputLabel>Số điện thoại</InputLabel>
-							<TextField
-								id="phone"
-								placeholder="Nguyễn Văn A"
-								sx={{ minWidth: '25vw' }}
-								{...register('phone')}
-								error={!!errors.phone}
-								helperText={errors?.phone?.message}
+								value={'VT' + randomstring.generate(6)}
 							/>
 						</Grid>
 						<Grid

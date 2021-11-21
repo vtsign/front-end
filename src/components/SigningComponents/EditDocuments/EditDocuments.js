@@ -44,7 +44,7 @@ import { pdfTronContext } from '../../../redux/constants/contexts/pdfTronContext
 const EditDocuments = () => {
 	// const [instanced, setInstance] = useState(null);
 	// const [dropPoint, setDropPoint] = useState(null);
-	const [currentAssignee, setCurrentAssignee] = useState(null);
+
 	const viewer = useRef(null);
 
 	const { register, control } = useForm();
@@ -53,6 +53,7 @@ const EditDocuments = () => {
 
 	const dispatch = useDispatch();
 	const receivers = useSelector(state => state.receivers);
+	const [currentAssignee, setCurrentAssignee] = useState(receivers.receivers[0]);
 	const documents = useSelector(state => state.addDocList);
 	const webviewerInstances = useSelector(state => state.webviewer);
 
@@ -105,7 +106,9 @@ const EditDocuments = () => {
 		});
 	}, []);
 	useEffect(() => {
+
 		(async () => {
+			// setCurrentAssignee(receivers.receivers[0])
 			// localStorage.setItem('currentDoc', state.currentDocShow);
 			if (instance && documents.documentList.length > -1) {
 				const { docViewer, Annotations } = instance;
@@ -475,6 +478,7 @@ const EditDocuments = () => {
 										{...inputProps}
 										inputRef={ref}
 										value={value}
+										defaultValue="Me"
 										SelectProps={{ displayEmpty: true }}
 										onChange={(e) => setCurrentAssignee(e.target.value)}
 									>
