@@ -36,12 +36,12 @@ import {
 import { Controller, useForm, useController } from 'react-hook-form';
 import ReceiverAvatar from '../../ReceiverAvatar/ReceiverAvatar';
 import './AddReceivers.scss';
-import randomstring from "randomstring";
+import randomstring from 'randomstring';
 import { useDispatch } from 'react-redux';
 import { addReceiver } from '../../../redux/actions/receiverActions.js';
-import userApi from '../../../api/userApi'
+import userApi from '../../../api/userApi';
 
-const permissions = ["Chỉ ký", "Chỉ đọc"];
+const permissions = ['Chỉ ký', 'Chỉ đọc'];
 
 const AddReceivers = ({ register, handleSubmit, errors, control, setValue }) => {
 	const [receivers, setReceivers] = useState([]);
@@ -58,23 +58,20 @@ const AddReceivers = ({ register, handleSubmit, errors, control, setValue }) => 
 	const dispatch = useDispatch();
 
 	const addReceivers = (formData) => {
-		dispatch(addReceiver(formData))
+		dispatch(addReceiver(formData));
 		setReceivers((receivers) => [...receivers, formData]);
 		console.log(formData);
 	};
 
 	const handleInputEmailBlur = async (e) => {
 		const email = e.target.value;
-		if(email.includes('@')) {
+		if (email.includes('@')) {
 			const userExists = await userApi.checkUserExists(email);
-			setShowPhone(userExists);
+			setShowPhone(!userExists.data);
 		} else {
 			setShowPhone(false);
 		}
-	}
-	// useEffect(() => {
-	// 	console.log(getValues())
-	// }, [getValues])
+	};
 
 	return (
 		<Container maxWidth={false} style={{ height: '100%' }}>
