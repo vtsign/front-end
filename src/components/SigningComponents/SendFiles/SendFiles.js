@@ -36,19 +36,22 @@ import {
 import { Controller, useForm, useController } from 'react-hook-form';
 import WebViewer from '@pdftron/webviewer';
 import ReceiverAvatar from '../../ReceiverAvatar/ReceiverAvatar';
+import { useSelector } from 'react-redux';
 
 
-const SendFiles = () => {
+const SendFiles = ({ register, errors }) => {
 
-	const {
-		register,
-		handleSubmit,
-		formState: { errors },
-	} = useForm();
-	const receiver = {
-		name: 'abc',
-		email: 'abc@gmail.com'
-	}
+	// const {
+	// 	register,
+	// 	handleSubmit,
+	// 	formState: { errors },
+	// 	getValues
+	// } = useForm();
+	const receivers = useSelector(state => state.receivers.receivers)
+
+	// useEffect(() => {
+	// 	console.log(getValues());
+	// }, [getValues, getValues()])
 
 	return (
 		<>
@@ -112,10 +115,10 @@ const SendFiles = () => {
 				<Grid item lg={4} md={6} xl={5} xs={12}>
 					<Card>
 						<CardContent>
-							<ReceiverAvatar receiver />
-							{/* {receivers.length > 0 ? (
+							{/* <ReceiverAvatar receiver /> */}
+							{receivers.length > 0 ? (
 								receivers.map((partner, index) => (
-									<ReceiverAvatar receiver={partner} />
+									<ReceiverAvatar receiver={partner} hideButton={true} />
 								))
 							) : (
 								<div
@@ -128,7 +131,7 @@ const SendFiles = () => {
 								>
 									<span>Chưa chọn có người nhận</span>
 								</div>
-							)} */}
+							)}
 						</CardContent>
 					</Card>
 				</Grid>

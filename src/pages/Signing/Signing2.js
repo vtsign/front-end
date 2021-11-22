@@ -66,7 +66,14 @@ const Signing2 = () => {
 	const { instance, setInstance, documentFields, updateDocumentFieldsList, handleSendDocuments } =
 		useContext(pdfTronContext);
 
-	const { register, handleSubmit } = useForm();
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+		control,
+		setValue,
+		getValues,
+	} = useForm();
 
 	const dispatch = useDispatch();
 	const receivers = useSelector(state => state.receivers.receivers)
@@ -79,17 +86,18 @@ const Signing2 = () => {
 		// 	})();
 		// 	// handleSendDocuments();
 		// }
-		if (activeStep === 4) {
+		console.log(formData);
+		if (activeStep === 3) {
 			// handleSendFiles(formData);
-			console.log(instance);
 			const json = {
 				receivers: receivers,
 				mail_title: formData.title,
 				mail_message: formData.message,
 			};
+			console.log(json)
 
-			dispatch(addDocumentToSign(json, files));
-			history.push('/');
+			// dispatch(addDocumentToSign(json, files));
+			// history.push('/');
 		}
 		setActiveStep((prevActiveStep) => prevActiveStep + 1);
 	};
@@ -126,9 +134,9 @@ const Signing2 = () => {
 					</Grid>
 					<Grid item xl={10} lg={10} md={9} xs={12}>
 						{activeStep === 0 && <UploadDocuments />}
-						{activeStep === 1 && <AddReceivers />}
-						{activeStep === 2 && <EditDocuments />}
-						{activeStep === 3 && <SendFiles />}
+						{activeStep === 1 && <AddReceivers register={register} handleSubmit={handleSubmit} errors={errors} control={control} setValue={setValue} />}
+						{activeStep === 2 && <EditDocuments register={register} control={control} />}
+						{activeStep === 3 && <SendFiles register={register} errors={errors} />}
 					</Grid>
 				</Grid>
 				<Grid

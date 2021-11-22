@@ -2,7 +2,7 @@ import React from 'react';
 import { Avatar, AvatarContainer, AvatarLabel, Typography } from '@mui/material';
 import './ReceiverAvatar.scss'
 
-const ReceiverAvatar = ({ receiver }) => {
+const ReceiverAvatar = ({ receiver, hideButton=false }) => {
 	return (
 		<div className="receiver">
 			<div>
@@ -18,14 +18,16 @@ const ReceiverAvatar = ({ receiver }) => {
 				<span className="receiver__name">{receiver.name}</span>
 				<span className="receiver__email">{receiver.email}</span>
 			</div>
-			<div
-				role="button"
-				tabIndex="0"
-				className="receiver__delete-btn"
-				// onClick={handleDeletePartner}
-			>
-				Xóa
-			</div>
+			{hideButton === false && (
+				<div
+					role="button"
+					tabIndex="0"
+					className="receiver__delete-btn"
+					// onClick={handleDeletePartner}
+				>
+					Xóa
+				</div>
+			)}
 		</div>
 	);
 }

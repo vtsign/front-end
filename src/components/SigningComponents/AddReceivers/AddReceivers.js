@@ -43,16 +43,17 @@ import userApi from '../../../api/userApi'
 
 const permissions = ["Chỉ ký", "Chỉ đọc"];
 
-const AddReceivers = () => {
+const AddReceivers = ({ register, handleSubmit, errors, control, setValue }) => {
 	const [receivers, setReceivers] = useState([]);
 	const [showPhone, setShowPhone] = useState(false);
-	const {
-		register,
-		handleSubmit,
-		formState: { errors },
-		control,
-		setValue
-	} = useForm();
+	// const {
+	// 	register,
+	// 	handleSubmit,
+	// 	formState: { errors },
+	// 	control,
+	// 	setValue,
+	// 	getValues
+	// } = useForm();
 
 	const dispatch = useDispatch();
 
@@ -71,6 +72,9 @@ const AddReceivers = () => {
 			setShowPhone(false);
 		}
 	}
+	// useEffect(() => {
+	// 	console.log(getValues())
+	// }, [getValues])
 
 	return (
 		<Container maxWidth={false} style={{ height: '100%' }}>
@@ -159,7 +163,7 @@ const AddReceivers = () => {
 										value={value}
 										defaultValue=""
 										SelectProps={{ displayEmpty: true }}
-										onChange={(e) => setValue(e.target.value)}
+										onChange={(e) => setValue("permission", e.target.value)}
 									>
 										<MenuItem value="">Lựa chọn quyền hạn</MenuItem>
 										{permissions.map((permission) => (
