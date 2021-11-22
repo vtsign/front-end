@@ -10,6 +10,7 @@ import {
 	USER_ACTIVATION_FAIL,
 } from '../constants/userConstants.js';
 import authenApi from '../../api/authenApi';
+import userApi from '../../api/userApi.js';
 
 export const loginAction = (email, password) => async (dispatch) => {
 	try {
@@ -17,13 +18,15 @@ export const loginAction = (email, password) => async (dispatch) => {
 			type: USER_LOGIN_REQUEST,
 		});
 
-		const res = await authenApi.login(email, password);
-		
+		const res = await userApi.login(email, password);
+		console.log(res);
+
 		dispatch({
 			type: USER_LOGIN_SUCCESS,
 			payload: res.data,
 		});
 	} catch (error) {
+		console.log(error);
 		dispatch({
 			type: USER_LOGIN_FAIL,
 			payload: error.response.data,
@@ -57,7 +60,7 @@ export const registerAction =
 		} catch (error) {
 			dispatch({
 				type: USER_REGISTER_FAIL,
-				payload: error.response.data,
+				payload: error.response,
 			});
 		}
 	};

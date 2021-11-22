@@ -10,13 +10,15 @@ import Paper from '@mui/material/Paper';
 import Select from '@mui/material/Select';
 
 import './contentHeader.scss';
+import { useSelector } from 'react-redux';
 
-const ContentHeader = ({ title, description, isShow }) => {
-	console.log('isShow', isShow);
+const ContentHeader = ({ title, description }) => {
 	const [select, setSelect] = useState(10);
 	const handleChange = (event) => {
 		setSelect(event.target.value);
 	};
+	const { contracts } = useSelector((state) => state.manageDoc);
+	console.log(contracts);
 	return (
 		<Fragment>
 			<div className="content-header">
@@ -43,20 +45,22 @@ const ContentHeader = ({ title, description, isShow }) => {
 			<div>
 				<div>
 					<p>Danh sách tài liệu</p>
-					<FormControl sx={{ mt: 3, mb: 3 }} disabled={!isShow}>
-						<InputLabel id="demo-simple-select-label">Sắp xếp</InputLabel>
-						<Select
-							labelId="demo-simple-select-label"
-							id="demo-simple-select"
-							value={select}
-							label="Sắp xếp"
-							onChange={handleChange}
-							className="content-btn-sort"
-						>
-							<MenuItem value={10}>Tất cả</MenuItem>
-							<MenuItem value={20}>Gần nhất</MenuItem>
-						</Select>
-					</FormControl>
+					{contracts != null && contracts.length > 0 && (
+						<FormControl sx={{ mt: 3, mb: 3 }}>
+							<InputLabel id="demo-simple-select-label">Sắp xếp</InputLabel>
+							<Select
+								labelId="demo-simple-select-label"
+								id="demo-simple-select"
+								value={select}
+								label="Sắp xếp"
+								onChange={handleChange}
+								className="content-btn-sort"
+							>
+								<MenuItem value={10}>Tất cả</MenuItem>
+								<MenuItem value={20}>Gần nhất</MenuItem>
+							</Select>
+						</FormControl>
+					)}
 				</div>
 			</div>
 		</Fragment>

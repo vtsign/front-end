@@ -15,6 +15,8 @@ import { getAllContracts } from '../../../../redux/actions/manageAction';
 import ContentHeader from '../../common/contentHeader';
 import NoData from '../../common/NoData';
 import ActionButton from '../button/ActionButton';
+import { convertTime } from '../../../../utils/time';
+
 import './style.scss';
 
 const useStyles = makeStyles({
@@ -76,16 +78,9 @@ const DocumentCompleted = () => {
 	const handleOnPageChage = (event, value) => {
 		dispatch(getAllContracts('WAITING', value));
 	};
-	console.log('contracts: ');
-	console.log(contracts);
 	return (
 		<div className="content">
-			{/* {isLoading && <Loading />} */}
-			<ContentHeader
-				title="Tài liệu chờ kí"
-				description="Quản lý tài liệu chờ kí"
-				isShow={contracts.length > 0}
-			/>
+			<ContentHeader title="Tài liệu chờ kí" description="Quản lý tài liệu chờ kí" />
 			{contracts.length <= 0 && <NoData />}
 			{contracts.length > 0 && (
 				<div>
@@ -117,7 +112,6 @@ const DocumentCompleted = () => {
 									);
 									const percentCompleted =
 										(totalCompleted / (row.user_contracts.length - 1)) * 100;
-									console.log(totalCompleted);
 									return (
 										<TableRow
 											key={row.id}
@@ -126,9 +120,7 @@ const DocumentCompleted = () => {
 											<TableCell style={{ color: '#2F80ED', fontSize: 14 }}>
 												{row.title}
 											</TableCell>
-											<TableCell>
-												{moment(row.sent_date).format('DD/MM/YYYY LT')}
-											</TableCell>
+											<TableCell>{convertTime(row.sent_date)}</TableCell>
 											<TableCell>
 												<div>
 													<BorderLinearProgress
@@ -141,9 +133,7 @@ const DocumentCompleted = () => {
 													</p>
 												</div>
 											</TableCell>
-											<TableCell>
-												{moment(row.sent_date).format('DD/MM/YYYY LT')}
-											</TableCell>
+											<TableCell>{convertTime(row.sent_date)}</TableCell>
 											<TableCell onClick={(e) => e.stopPropagation()}>
 												<ActionButton />
 											</TableCell>
