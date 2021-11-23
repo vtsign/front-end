@@ -18,12 +18,13 @@ export const loginAction = (email, password) => async (dispatch) => {
 		});
 
 		const res = await authenApi.login(email, password);
-		
+
 		dispatch({
 			type: USER_LOGIN_SUCCESS,
 			payload: res.data,
 		});
 	} catch (error) {
+		console.log(error);
 		dispatch({
 			type: USER_LOGIN_FAIL,
 			payload: error.response.data,
@@ -57,7 +58,7 @@ export const registerAction =
 		} catch (error) {
 			dispatch({
 				type: USER_REGISTER_FAIL,
-				payload: error.response.data,
+				payload: error.response,
 			});
 		}
 	};

@@ -6,7 +6,7 @@ const getContracts = (status, page) => {
 	return axiosClient.get(url);
 };
 
-const manageApi = {
+const manageDocumentsApi = {
 	getContractsCompleted: (page = 1) => {
 		return getContracts('COMPLETED', page);
 	},
@@ -16,7 +16,11 @@ const manageApi = {
     getQuickViewContracts: () => {
         const url = `/document/count`;
         return axiosClient.get(url);
-    }
+	},
+	getContractById: (id) => {
+		const url = `/document/contract?c=${id}`;
+        return axiosClient.get(url);
+	}
 };
 
-export default manageApi;
+export default manageDocumentsApi;

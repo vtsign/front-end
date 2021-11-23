@@ -7,6 +7,7 @@ import { receiverReducer } from './reducers/receiverReducers.js';
 import { webviewerReducer } from './reducers/webviewerReducers.js';
 
 import { manageDocumentReducer } from './reducers/manageReducer.js';
+import { manageDocumentDetailReducer } from './reducers/manageReducer.js';
 
 const initialState = {
 	userInfo: { name: 'abc' },
@@ -23,6 +24,7 @@ const reducer = combineReducers({
 	addDocList: addDocListReducer,
 	receivers: receiverReducer,
 	webviewer: webviewerReducer,
+	manageDocDetail: manageDocumentDetailReducer,
 });
 
 const store = createStore(

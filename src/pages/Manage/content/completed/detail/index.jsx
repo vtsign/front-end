@@ -12,13 +12,13 @@ const contentDialogDelete = {
 };
 
 const DetailDocumentCompleted = () => {
-	const [openKey, setOpenKey] = useState(false);
+	const [openDialogDelete, setOpenDialogDelete] = useState(false);
 	const openDialogKey = () => {
-		setOpenKey(true);
+		setOpenDialogDelete(true);
 	};
 
 	const closeDialogKey = () => {
-		setOpenKey(false);
+		setOpenDialogDelete(false);
 	};
 
 	return (
@@ -37,6 +37,12 @@ const DetailDocumentCompleted = () => {
 						<Button onClick={openDialogKey} variant="outlined" color="error">
 							Xóa
 						</Button>
+						<DialogCommon
+								open={openDialogDelete}
+								closeDialogKey={closeDialogKey}
+								title={contentDialogDelete.title}
+								content={contentDialogDelete.content}
+							/>
 						<Button
 							variant="outlined"
 							endIcon={
@@ -45,12 +51,6 @@ const DetailDocumentCompleted = () => {
 								/>
 							}
 						>
-							<DialogCommon
-								open={openKey}
-								closeDialogKey={closeDialogKey}
-								title={contentDialogDelete.title}
-								content={contentDialogDelete.content}
-							/>
 							Thêm
 						</Button>
 					</div>

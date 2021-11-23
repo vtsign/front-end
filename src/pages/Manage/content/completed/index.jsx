@@ -38,10 +38,10 @@ const DocumentCompleted = () => {
 	return (
 		<div className="content">
 			{/* {isLoading && <Loading />} */}
+
 			<ContentHeader
 				title="Tài liệu đã hoàn thành"
 				description="Quản lý tài liệu đã hoàn thành"
-				isShow={contracts.length > 0}
 			/>
 			{contracts.length <= 0 && <NoData></NoData>}
 			{contracts.length > 0 && (

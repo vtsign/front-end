@@ -4,35 +4,32 @@ import { useSelector } from 'react-redux';
 
 export const pdfTronContext = React.createContext();
 
-const initialStae = {
-
-}
+const initialStae = {};
 
 export const PdfTronProvider = ({ children }) => {
-	const documents = useSelector(state => state.addDocList.documentList);
+	const documents = useSelector((state) => state.addDocList.documentList);
 	const [instance, setInstance] = useState(null);
 	const [documentFields, setDocumentFields] = useState([]);
 
 	const handleSendDocuments = async () => {
 		const files = [];
-		console.log(instance)
+		console.log(instance);
 
 		const { docViewer } = instance;
 		const annotationManager = docViewer.getAnnotationManager();
 		// documents.forEach((doc, index) => {
-			for(let i = 0; i < documents.length; i++) {
-
-				await docViewer.loadDocument(documents[i].data);
-				annotationManager.addAnnotations(documentFields[i]);
-				const file = await applyFields(documents[i]);
-				console.log(file)
-				// xfdfString = handleXFDF.openFieldFlagByEmail(sendDocument.author, xfdfString, 'ReadOnly');
-				files.push(file);
-			}
+		for (let i = 0; i < documents.length; i++) {
+			await docViewer.loadDocument(documents[i].data);
+			annotationManager.addAnnotations(documentFields[i]);
+			const file = await applyFields(documents[i]);
+			console.log(file);
+			// xfdfString = handleXFDF.openFieldFlagByEmail(sendDocument.author, xfdfString, 'ReadOnly');
+			files.push(file);
+		}
 		// })
 		// console.log(files)
 		return files;
-	}
+	};
 
 	const updateDocumentFieldsList = (index = -1) => {
 		if (instance === null) return;
@@ -40,7 +37,7 @@ export const PdfTronProvider = ({ children }) => {
 		const annotManager = docViewer.getAnnotationManager();
 		const xfdf = annotManager
 			.getAnnotationsList()
-			.filter((annot) => annot.Subject === "Free Text");
+			.filter((annot) => annot.Subject === 'Free Text');
 
 		if (index === -1 || documentFields.length === 0) {
 			setDocumentFields([...documentFields, xfdf]);
@@ -70,7 +67,7 @@ export const PdfTronProvider = ({ children }) => {
 			// flags.set('ReadOnly', (author.replace('.', '_') === annot.customs.author) ? false : true);
 			flags.set('ReadOnly', true);
 			switch (annot.customs.type) {
-				case "SIGNATURE":
+				case 'SIGNATURE':
 					field = new Annotations.Forms.Field(`${annot.customs.author}#Sig${index}`, {
 						type: 'Sig',
 						flags,
@@ -90,14 +87,14 @@ export const PdfTronProvider = ({ children }) => {
 						},
 					});
 					break;
-				case "TEXT":
+				case 'TEXT':
 					field = new Annotations.Forms.Field(`${annot.customs.author}#Name${index}`, {
 						type: 'Tx',
 						flags,
 					});
 					applyAnnotation = new Annotations.TextWidgetAnnotation(field);
 					break;
-				case "DATE":
+				case 'DATE':
 					field = new Annotations.Forms.Field(`${annot.customs.author}#Date${index}`, {
 						type: 'Tx',
 						value: 'm-d-yyyy',
@@ -186,11 +183,11 @@ export const PdfTronProvider = ({ children }) => {
 		documentFields,
 
 		updateDocumentFieldsList,
-		handleSendDocuments
+		handleSendDocuments,
 	};
 
 	return <pdfTronContext.Provider value={exportContext}>{children}</pdfTronContext.Provider>;
-}
+};
 
 PdfTronProvider.propTypes = {
 	children: PropTypes.element,

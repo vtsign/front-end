@@ -1,32 +1,16 @@
-import axios from 'axios';
-
-const config = {
-	headers: {
-		'Content-Type': 'application/json',
-	},
-};
-
-const BASE_URL = process.env.REACT_APP_BASE_URL || 'https://api.vtsign.tech';
+import axios from './axiosClientNoToken';
 
 const authenApi = {
 	register(data) {
-		return axios.post(
-			BASE_URL + '/auth/register',
-			{
-				...data,
-			},
-			config
-		);
+		return axios.post('/auth/register', {
+			...data,
+		});
 	},
 	async login(email, password) {
-		const res = await axios.post(
-			BASE_URL + '/auth/login',
-			{
-				email,
-				password,
-			},
-			config
-		);
+		const res = await axios.post('/auth/login', {
+			email,
+			password,
+		});
 		const { data } = res;
 		localStorage.setItem('user', data);
 		localStorage.setItem('accessToken', data.access_token);
