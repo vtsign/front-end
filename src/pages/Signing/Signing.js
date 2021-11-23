@@ -77,12 +77,12 @@ export function FirstStep({ filePicker, fileData, setFileData }) {
 	};
 
 	return (
-		<>
-			<Grid my="1rem">
+		<Grid container>
+			{/* <Grid my="1rem">
 				<Typography variant="h6">Thêm tài liệu</Typography>
-			</Grid>
-			<Grid display="flex" my="1rem">
-				<Grid item lg={9} md={12} xl={9} xs={12} mr="2rem" style={{ height: '100%' }}>
+			</Grid> */}
+			<Grid display="flex" my="1rem" flexGrow="1" style={{ height: "50vh" }}>
+				<Grid item lg={9} md={12} xl={9} xs={12} mr="2rem">
 					<Card
 						onClick={() => {
 							if (filePicker) {
@@ -141,7 +141,7 @@ export function FirstStep({ filePicker, fileData, setFileData }) {
 					)}
 				</Grid>
 			</Grid>
-		</>
+		</Grid>
 	);
 }
 
@@ -415,6 +415,7 @@ export function ThirdStep({ viewer, fileData, receivers, instance, setInstance, 
 				let field;
 
 				if (typeof annot.custom !== 'undefined') {
+					console.log(annot)
 					// create a form field based on the type of annotation
 					if (annot.custom.type === 'TEXT') {
 						field = new Annotations.Forms.Field(
@@ -534,6 +535,7 @@ export function ThirdStep({ viewer, fileData, receivers, instance, setInstance, 
 			widgets: true,
 			fields: true,
 		});
+		console.log(xfdfString)
 		const data = await doc.getFileData({ xfdfString });
 		const arr = new Uint8Array(data);
 		const blob = new Blob([arr], { type: 'application/pdf' });
@@ -639,7 +641,7 @@ export function ThirdStep({ viewer, fileData, receivers, instance, setInstance, 
 										onChange={(e) => setCurrentAssignee(e.target.value)}
 									>
 										{receivers.map((receiver) => (
-											<MenuItem key={receiver} value={receiver.email}>
+											<MenuItem key={receiver.email} value={receiver.email}>
 												{receiver.email}
 											</MenuItem>
 										))}
@@ -1078,7 +1080,6 @@ const Signing = () => {
 
 	return (
 		<>
-			{/* <Header /> */}
 			<Container maxWidth={false}>
 				<Grid container spacing={1} className="sign__container">
 					<Grid item lg={3} sm={6} xl={2} xs={12} display="flex" alignItems="center">
@@ -1096,13 +1097,15 @@ const Signing = () => {
 						</Stepper>
 					</Grid>
 					<Grid item lg={9} sm={6} xl={10} xs={12}>
+						<Grid my="1rem">
+							<Typography variant="h6">Thêm tài liệu</Typography>
+						</Grid>
 						{activeStep === 0 && (
 							<FirstStep
 								filePicker={filePicker}
 								fileData={fileData}
 								setFileData={setFileData}
 							/>
-
 						)}
 						{activeStep === 1 && (
 							<SecondStep

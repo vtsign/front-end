@@ -4,6 +4,7 @@ import './App.scss';
 import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
 import Loading from './components/Loading/Loading';
+import { PdfTronProvider } from './redux/constants/contexts/pdfTronContext';
 
 const NotFound = React.lazy(() => import('./pages/Common/NotFound'));
 const Home = React.lazy(() => import('./pages/Home/Home'));
@@ -11,8 +12,8 @@ const Login = React.lazy(() => import('./pages/Login/Login'));
 const Manage = React.lazy(() => import('./pages/Manage/Manage'));
 const Register = React.lazy(() => import('./pages/Register/Register'));
 const Sample = React.lazy(() => import('./pages/Sample/Sample'));
-const SignDocument2 = React.lazy(() => import('./pages/SignDocument/SignDocument2'));
-const Signing = React.lazy(() => import('./pages/Signing/Signing'));
+const SignDocument = React.lazy(() => import('./pages/SignDocument/SignDocument'));
+const Signing = React.lazy(() => import('./pages/Signing/Signing2'));
 const PrivateRoute = React.lazy(() => import('./components/Layout/PrivateRoute'));
 const Activation = React.lazy(() => import('./pages/Activation/Activation'));
 
@@ -32,10 +33,14 @@ const App = ({ location }) => {
 					<Route path="/home" exact>
 						<Redirect to="/" />
 					</Route>
-					<PrivateRoute path="/signing" component={Signing} />
+					<PrivateRoute path="/signing">
+						<PdfTronProvider>
+							<Signing />
+						</PdfTronProvider>
+					</PrivateRoute>
 					<PrivateRoute path={'/manage'} component={Manage} />
 					<PrivateRoute path="/template" component={Sample} />
-					<Route path="/signDocument" component={SignDocument2} />
+					<Route path="/signDocument" component={SignDocument} />
 					<Route path="/notfound" component={NotFound} />
 					<Route path="*">
 						<Redirect to="/notfound" />

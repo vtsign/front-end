@@ -1,78 +1,111 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Grid, Container, Button } from '@mui/material'
-import './SignDocument.scss'
+import React, { useRef, useEffect, useState } from 'react';
+import { Box, Stack, Button, Grid, Container } from '@mui/material';
+// import { Box, Column, Heading, Row, Stack, Button } from 'gestalt';
 import WebViewer from '@pdftron/webviewer';
-import '@pdftron/webviewer/public/core/CoreControls';
-import { useHistory, useLocation } from 'react-router';
+// import 'gestalt/dist/gestalt.css';
+import './SignDocument.scss';
+import { useLocation } from 'react-router';
+// import {} from '@mui/material';
+import documentApi from '../../api/documentApi';
+import { mergeAnnotations } from '../../components/MergeAnnotations/MergeAnnotations';
+import DialogKey from './DialogKey';
 
-const SignDocument = () => {
+const SignDocument2 = () => {
 	const [annotManager, setAnnotatManager] = useState(null);
 	const [annotPosition, setAnnotPosition] = useState(0);
 
-	const viewer = useRef(null);
 
-	const history = useHistory();
+	const [userDocument, setUserDocument] = useState(null);
+	// const [signedObj, setSignedObj] = useState({});
+
+	const viewer = useRef(null);
+	const [link, setLink] = useState('');
+
+	const location = useLocation();
+	const queryParam = new URLSearchParams(location.search);
+	const r = queryParam.get('r');
+	const c = queryParam.get('c');
 
 	useEffect(() => {
-		WebViewer(
-			{
-				path: 'webviewer',
-				// disabledElements: [
-				// 	'ribbons',
-				// 	'toggleNotesButton',
-				// 	'searchButton',
-				// 	'menuButton',
-				// 	'rubberStampToolGroupButton',
-				// 	'stampToolGroupButton',
-				// 	'fileAttachmentToolGroupButton',
-				// 	'calloutToolGroupButton',
-				// 	'undo',
-				// 	'redo',
-				// 	'eraserToolButton',
-				// ],
-			},
-			viewer.current
-		).then(async (instance) => {
-			const { docViewer, annotManager, Annotations } = instance;
-			setAnnotatManager(annotManager);
+		if (userDocument != null) {
+			WebViewer(
+				{
+					path: 'webviewer',
+					disabledElements: [
+						'ribbons',
+						'toggleNotesButton',
+						'searchButton',
+						'menuButton',
+						'rubberStampToolGroupButton',
+						'stampToolGroupButton',
+						'fileAttachmentToolGroupButton',
+						'calloutToolGroupButton',
+						'undo',
+						'redo',
+						'eraserToolButton',
+					],
+					fullAPI: true,
+				},
+				viewer.current
+			).then(async (instance) => {
+				// PDFNet is only available with full API enabled
+				const { PDFNet } = instance;
+				await PDFNet.initialize();
+				window.PDFNet = PDFNet;
 
-			// select only the insert group
-			instance.setToolbarGroup('toolbarGroup-Insert');
+				try {
 
-			// load document
-			// const storageRef = storage.ref();
-			// const URL = await storageRef.child(docRef).getDownloadURL();
-			const URL = "https://vtsign.blob.core.windows.net/test/hopdong.pdf"
-			docViewer.loadDocument(URL);
+					// setUserDocument(response.data);
+					// setSignedObj((prevState) => ({
+					// 	...prevState,
+					// 	contract_uuid: c,
+					// 	user_uuid: r,
+					// }));
 
-			const normalStyles = (widget) => {
-				if (widget instanceof Annotations.TextWidgetAnnotation) {
-					return {
-						'background-color': '#a5c7ff',
-						color: 'white',
+					const { docViewer, annotManager, Annotations } = instance;
+					setAnnotatManager(annotManager);
+
+					// select only the insert group
+					instance.setToolbarGroup('toolbarGroup-Insert');
+
+					// load document
+					// const URL = response.data.documents[0].url;
+					// docViewer.loadDocument(URL);
+					docViewer.loadDocument(userDocument.documents[0].url);
+
+					const normalStyles = (widget) => {
+						if (widget instanceof Annotations.TextWidgetAnnotation) {
+							return {
+								'background-color': '#a5c7ff',
+								color: 'white',
+							};
+						} else if (widget instanceof Annotations.SignatureWidgetAnnotation) {
+							return {
+								border: '1px solid #a5c7ff',
+							};
+						}
 					};
-				} else if (widget instanceof Annotations.SignatureWidgetAnnotation) {
-					return {
-						border: '1px solid #a5c7ff',
-					};
-				}
-			};
 
-			annotManager.on('annotationChanged', (annotations, action, { imported }) => {
-				if (imported && action === 'add') {
-					annotations.forEach(function (annot) {
-						if (annot instanceof Annotations.WidgetAnnotation) {
-							Annotations.WidgetAnnotation.getCustomStyles = normalStyles;
-							// if (!annot.fieldName.startsWith(email)) {
-							// 	annot.Hidden = true;
-							// 	annot.Listable = false;
-							// }
+					annotManager.on('annotationChanged', (annotations, action, { imported }) => {
+						if (imported && action === 'add') {
+							annotations.forEach(function (annot) {
+								if (annot instanceof Annotations.WidgetAnnotation) {
+									Annotations.WidgetAnnotation.getCustomStyles = normalStyles;
+									if (!annot.fieldName.startsWith(userDocument.user.email)) {
+										annot.Hidden = true;
+										annot.Listable = false;
+									}
+								}
+							});
 						}
 					});
+				} catch (error) {
+					console.error('Error on showing documents:');
+					console.error(error.message);
 				}
 			});
-		});
-	}, []);
+		}
+	}, [userDocument]);
 
 	const nextField = () => {
 		let annots = annotManager.getAnnotationsList();
@@ -94,27 +127,81 @@ const SignDocument = () => {
 		}
 	};
 
-	const handleSignCompleted = async () => {
-		const xfdf = await annotManager.exportAnnotations({ widgets: false, links: false });
-		// await updateDocumentToSign(docId, email, xfdf);
-		history.push('/');
+	const completeSigning = async () => {
+		const xfdf = await annotManager.exportAnnotations();
+
+		const document_xfdf = {
+			xfdf,
+			document_uuid: userDocument.documents[0].id,
+		};
+
+		const files = [];
+		if (userDocument.last_sign) {
+			const listXfdfs = userDocument.documents[0].xfdfs.map((x) => x.xfdf);
+			listXfdfs.push(xfdf);
+
+			const blob = await mergeAnnotations(userDocument.documents[0].url, listXfdfs);
+			files.push(new File([blob], userDocument.documents[0].id));
+			const url = window.URL.createObjectURL(blob);
+			setLink(url);
+		}
+
+		documentApi.signByReceiver(
+			{
+				contract_uuid: c,
+                user_uuid: r,
+				document_xfdfs: [document_xfdf],
+			},
+			files
+		);
+
+		// navigate('/');
 	};
 
 	return (
 		<Container maxWidth={false}>
-			<Grid container>
-				<Grid item xl={3}></Grid>
-				<Grid item xl={6}>
-					<div className="webviewer" ref={viewer}></div>
+			{userDocument == null && <DialogKey setUserDocument={setUserDocument}/>}
+			{userDocument != null && (
+				<Grid container>
+					<Grid lg={3}>
+						<h1 size="md">Sign Document</h1>
+					</Grid>
+					<Grid lg={6}>
+						<div className="webviewer" ref={viewer}></div>
+					</Grid>
+					<Grid lg={3}>
+						<Stack>
+							<Button
+								onClick={nextField}
+								accessibilityLabel="next field"
+								iconEnd="arrow-forward"
+								variant="outlined"
+							>
+								Next field
+							</Button>
+							<Button
+								onClick={prevField}
+								accessibilityLabel="Previous field"
+								iconEnd="arrow-back"
+								variant="outlined"
+							>
+								Previous field
+							</Button>
+							<Button
+								onClick={completeSigning}
+								accessibilityLabel="complete signing"
+								iconEnd="compose"
+								variant="outlined"
+							>
+								Complete signing
+							</Button>
+							{link && <a href={link}>Download file</a>}
+						</Stack>
+					</Grid>
 				</Grid>
-				<Grid item xl={3}>
-						<Button onClick={handleSignCompleted} variant="outlined">
-							Kết thúc
-						</Button>
-				</Grid>
-			</Grid>
+			)}
 		</Container>
 	);
-}
+};
 
-export default SignDocument
+export default SignDocument2;

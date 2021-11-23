@@ -10,7 +10,6 @@ import {
 	USER_ACTIVATION_FAIL,
 } from '../constants/userConstants.js';
 import authenApi from '../../api/authenApi';
-import userApi from '../../api/userApi.js';
 
 export const loginAction = (email, password) => async (dispatch) => {
 	try {
@@ -18,8 +17,7 @@ export const loginAction = (email, password) => async (dispatch) => {
 			type: USER_LOGIN_REQUEST,
 		});
 
-		const res = await userApi.login(email, password);
-		console.log(res);
+		const res = await authenApi.login(email, password);
 
 		dispatch({
 			type: USER_LOGIN_SUCCESS,

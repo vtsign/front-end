@@ -1,6 +1,19 @@
+@import '/src/sass/variables';
+@import '/src/sass/mixins';
+@import '/src/sass/base';
+
 .app__container {
 	-webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    height:100%;
+    // height: calc(100vh - $footer-height - $header-height);
+	height: 100%;
+
+	// display: flex;
+	// flex-direction: column;
+
+	// flex-wrap: nowrap;
+	// justify-content: flex-start;
+	// align-items: stretch;
+	// align-content: stretch;
 }

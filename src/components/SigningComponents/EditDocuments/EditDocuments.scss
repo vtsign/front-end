@@ -1,0 +1,17 @@
+.webviewer {
+	height: 90%;
+}
+
+.preview-file {
+	// display: flex;
+	// flex-direction: row;
+	// align-items: stretch;
+	height: 100%;
+	padding: 1rem;
+	overflow-y: auto;
+
+	&__thumbnail {
+		width: 100%;
+        height: 15rem;
+	}
+}
