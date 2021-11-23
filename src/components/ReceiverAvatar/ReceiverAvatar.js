@@ -1,16 +1,21 @@
 import React from 'react';
 import { Avatar, AvatarContainer, AvatarLabel, Typography } from '@mui/material';
-import './ReceiverAvatar.scss'
+import './ReceiverAvatar.scss';
+import { useDispatch } from 'react-redux';
+import { removeReceiver } from '../../redux/actions/receiverActions'
 
-const ReceiverAvatar = ({ receiver, hideButton=false }) => {
+const ReceiverAvatar = ({ receiver, hideButton=false, index }) => {
+	const dispatch = useDispatch();
+
+	const handleDeleteReceiver = () => {
+		dispatch(removeReceiver(index));
+		console.log(index);
+	}
+
 	return (
 		<div className="receiver">
 			<div>
-				<Avatar
-					className="receiver__avatar"
-					size={48}
-					gap={1}
-				>
+				<Avatar className="receiver__avatar" size={48} gap={1}>
 					B
 				</Avatar>
 			</div>
@@ -23,7 +28,8 @@ const ReceiverAvatar = ({ receiver, hideButton=false }) => {
 					role="button"
 					tabIndex="0"
 					className="receiver__delete-btn"
-					// onClick={handleDeletePartner}
+					data-id={index}
+					onClick={handleDeleteReceiver}
 				>
 					Xóa
 				</div>

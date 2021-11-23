@@ -42,7 +42,11 @@ const Signing2 = () => {
 		formState: { errors },
 		control,
 		setValue,
-	} = useForm();
+	} = useForm({
+		defaultValues: {
+			permission: "sign"
+		}
+	});
 
 	const dispatch = useDispatch();
 	const receivers = useSelector((state) => state.receivers.receivers);
@@ -64,6 +68,12 @@ const Signing2 = () => {
 			};
 
 			dispatch(addDocumentToSign(json, files));
+			dispatch({
+				type: "RESET_RECEIVERS"
+			})
+			dispatch({
+				type: "RESET_DOC_LIST"
+			})
 			history.push('/');
 		}
 		setActiveStep((prevActiveStep) => prevActiveStep + 1);

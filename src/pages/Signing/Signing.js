@@ -541,7 +541,7 @@ export function ThirdStep({ viewer, fileData, receivers, instance, setInstance, 
 		const blob = new Blob([arr], { type: 'application/pdf' });
 		// console.log("safdfadsf", fileData.name);
 		const file = new File([blob], fileData.name);
-		console.log(file+"---------------------------------------------");
+		console.log(file);
 		await setFile(file);
 	}
 
