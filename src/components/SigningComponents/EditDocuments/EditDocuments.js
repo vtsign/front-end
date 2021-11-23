@@ -1,45 +1,29 @@
-import React, { useState, useRef, useEffect, useContext } from 'react';
 import {
-	Avatar,
-	Box,
-	Button,
-	Card,
-	CardContent,
-	Checkbox,
-	Container,
-	FormControlLabel,
-	Grid,
-	InputLabel,
-	Step,
-	StepLabel,
-	Stepper,
-	TextField,
-	Stack,
-	IconButton,
-	Divider,
-	Typography,
-	FormControl,
-	Select,
-	MenuItem,
-} from '@mui/material';
-import {
-	CloudUpload,
-	InsertDriveFile,
 	BorderColor,
-	CalendarToday,
-	TextFields,
-	PersonOutline,
-	MailOutline,
-	Computer,
 	Brush,
+	CalendarToday,
+	Computer,
+	MailOutline,
+	PersonOutline,
+	TextFields
 } from '@mui/icons-material';
-import { Controller, useForm, useController } from 'react-hook-form';
+import {
+	Box,
+	Divider,
+	Grid,
+	IconButton,
+	MenuItem,
+	Stack,
+	TextField,
+	Typography
+} from '@mui/material';
 import WebViewer from '@pdftron/webviewer';
-import './EditDocuments.scss';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { saveWebviewerInstance, setCurrentDocument, setDropPoint } from '../../../redux/actions/webviewerActions'
+import { setCurrentDocument, setDropPoint } from '../../../redux/actions/webviewerActions';
 import { pdfTronContext } from '../../../redux/constants/contexts/pdfTronContext';
-
+import './EditDocuments.scss';
 
 const EditDocuments = () => {
 	// const [instanced, setInstance] = useState(null);
@@ -49,13 +33,14 @@ const EditDocuments = () => {
 
 	const { register, control } = useForm();
 
-	const { instance, setInstance, documentFields, updateDocumentFieldsList } = useContext(pdfTronContext);
+	const { instance, setInstance, documentFields, updateDocumentFieldsList } =
+		useContext(pdfTronContext);
 
 	const dispatch = useDispatch();
-	const receivers = useSelector(state => state.receivers);
+	const receivers = useSelector((state) => state.receivers);
 	const [currentAssignee, setCurrentAssignee] = useState(receivers.receivers[0]);
-	const documents = useSelector(state => state.addDocList);
-	const webviewerInstances = useSelector(state => state.webviewer);
+	const documents = useSelector((state) => state.addDocList);
+	const webviewerInstances = useSelector((state) => state.webviewer);
 
 	useEffect(() => {
 		WebViewer(
@@ -106,7 +91,6 @@ const EditDocuments = () => {
 		});
 	}, []);
 	useEffect(() => {
-
 		(async () => {
 			// setCurrentAssignee(receivers.receivers[0])
 			// localStorage.setItem('currentDoc', state.currentDocShow);
@@ -221,14 +205,11 @@ const EditDocuments = () => {
 		);
 
 		if (page.first === null) {
-			return ;
+			return;
 		}
 
 		const pageIndex = page.first;
-		const pagePoint = displayMode.windowToPage(
-			webviewerInstances.dropPoint,
-			pageIndex
-		);
+		const pagePoint = displayMode.windowToPage(webviewerInstances.dropPoint, pageIndex);
 
 		const newAnnot = new Annotations.FreeTextAnnotation();
 		newAnnot.PageNumber = pageIndex;
@@ -263,7 +244,7 @@ const EditDocuments = () => {
 		updateDocumentFieldsList(webviewerInstances.currentDocument);
 
 		return {};
-	}
+	};
 
 	const applyFields = async () => {
 		const { Annotations, docViewer } = instance;
@@ -408,8 +389,6 @@ const EditDocuments = () => {
 	// 	await setFile(file);
 	// }
 
-
-
 	const dragOver = (e) => {
 		e.preventDefault();
 		return false;
@@ -445,12 +424,12 @@ const EditDocuments = () => {
 		e.preventDefault();
 	};
 
-	const handleReloadDocument = event => {
+	const handleReloadDocument = (event) => {
 		// save updated file
 		// applyFields();
 		updateDocumentFieldsList(webviewerInstances.currentDocument);
-		dispatch(setCurrentDocument(+event.currentTarget.getAttribute('data-id')))
-	}
+		dispatch(setCurrentDocument(+event.currentTarget.getAttribute('data-id')));
+	};
 
 	return (
 		<>
@@ -700,7 +679,12 @@ const EditDocuments = () => {
 					{documents.documentList.length > 0 && (
 						<Grid className="preview-file">
 							{documents.documentList.map((document, index) => (
-								<Grid className="preview-file__item" data-id={index} onClick={(e) => handleReloadDocument(e)}>
+								<Grid
+									className="preview-file__item"
+									data-id={index}
+									key={index}
+									onClick={(e) => handleReloadDocument(e)}
+								>
 									<Grid className="preview-file__thumbnail">
 										<img
 											alt=""

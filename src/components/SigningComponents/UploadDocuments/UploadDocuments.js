@@ -8,14 +8,11 @@ import './UploadDocuments.scss';
 let docList = [];
 
 const UploadDocuments = () => {
-	// const [fileData, setFileData] = useState(null);
-
 	const filePicker = useRef(null);
 
 	const dispatch = useDispatch();
 
 	const documents = useSelector((state) => state.addDocList);
-	console.log(documents);
 
 	const setThumbnail = async (selectedFile, filesLength) => {
 		const coreControls = window.CoreControls;

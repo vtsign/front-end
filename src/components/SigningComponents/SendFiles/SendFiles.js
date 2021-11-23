@@ -1,42 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react';
 import {
-	Avatar,
-	Box,
-	Button,
-	Card,
-	CardContent,
-	Checkbox,
-	Container,
-	FormControlLabel,
-	Grid,
-	InputLabel,
-	Step,
-	StepLabel,
-	Stepper,
-	TextField,
-	Stack,
-	IconButton,
-	Divider,
-	Typography,
-	FormControl,
-	Select,
-	MenuItem,
+	Box, Card,
+	CardContent, Grid,
+	InputLabel, TextField, Typography
 } from '@mui/material';
-import {
-	CloudUpload,
-	InsertDriveFile,
-	BorderColor,
-	CalendarToday,
-	TextFields,
-	PersonOutline,
-	MailOutline,
-	Computer,
-	Brush,
-} from '@mui/icons-material';
-import { Controller, useForm, useController } from 'react-hook-form';
-import WebViewer from '@pdftron/webviewer';
-import ReceiverAvatar from '../../ReceiverAvatar/ReceiverAvatar';
+import React from 'react';
 import { useSelector } from 'react-redux';
+import ReceiverAvatar from '../../ReceiverAvatar/ReceiverAvatar';
 
 
 const SendFiles = ({ register, errors }) => {
@@ -81,7 +50,7 @@ const SendFiles = ({ register, errors }) => {
 							<InputLabel>Chủ đề Email</InputLabel>
 							<TextField
 								id="title"
-								placeholder="Nguyễn Văn A"
+								placeholder="Chủ để Email"
 								sx={{ minWidth: '25vw' }}
 								{...register('title', {
 									required: 'Vui lòng nhập chủ đề Email',
@@ -115,10 +84,9 @@ const SendFiles = ({ register, errors }) => {
 				<Grid item lg={4} md={6} xl={5} xs={12}>
 					<Card>
 						<CardContent>
-							{/* <ReceiverAvatar receiver /> */}
 							{receivers.length > 0 ? (
 								receivers.map((partner, index) => (
-									<ReceiverAvatar receiver={partner} hideButton={true} />
+									<ReceiverAvatar receiver={partner} key={index} hideButton={true} />
 								))
 							) : (
 								<div

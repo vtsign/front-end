@@ -1,60 +1,38 @@
-import React, { useState, useRef, useEffect } from 'react';
 import {
-	Avatar,
 	Box,
 	Button,
 	Card,
 	CardContent,
-	Checkbox,
 	Container,
-	FormControlLabel,
 	Grid,
 	InputLabel,
-	Step,
-	StepLabel,
-	Stepper,
-	TextField,
-	Stack,
-	IconButton,
-	Divider,
-	Typography,
-	FormControl,
-	Select,
 	MenuItem,
+	TextField,
+	Typography,
 } from '@mui/material';
-import {
-	CloudUpload,
-	InsertDriveFile,
-	BorderColor,
-	CalendarToday,
-	TextFields,
-	PersonOutline,
-	MailOutline,
-	Computer,
-	Brush,
-} from '@mui/icons-material';
-import { Controller, useForm, useController } from 'react-hook-form';
+import randomstring from 'randomstring';
+import React, { useState } from 'react';
+import { Controller } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import userApi from '../../../api/userApi';
+import { addReceiver } from '../../../redux/actions/receiverActions.js';
 import ReceiverAvatar from '../../ReceiverAvatar/ReceiverAvatar';
 import './AddReceivers.scss';
-import randomstring from 'randomstring';
-import { useDispatch } from 'react-redux';
-import { addReceiver } from '../../../redux/actions/receiverActions.js';
-import userApi from '../../../api/userApi';
 
-const permissions = ['Chỉ ký', 'Chỉ đọc'];
+const permissions = [
+	{
+		key: 'read',
+		value: 'Chỉ đọc',
+	},
+	{
+		key: 'sign',
+		value: 'Đọc và ký',
+	},
+];
 
 const AddReceivers = ({ register, handleSubmit, errors, control, setValue }) => {
 	const [receivers, setReceivers] = useState([]);
 	const [showPhone, setShowPhone] = useState(false);
-	// const {
-	// 	register,
-	// 	handleSubmit,
-	// 	formState: { errors },
-	// 	control,
-	// 	setValue,
-	// 	getValues
-	// } = useForm();
-
 	const dispatch = useDispatch();
 
 	const addReceivers = (formData) => {
@@ -160,12 +138,12 @@ const AddReceivers = ({ register, handleSubmit, errors, control, setValue }) => 
 										value={value}
 										defaultValue=""
 										SelectProps={{ displayEmpty: true }}
-										onChange={(e) => setValue("permission", e.target.value)}
+										onChange={(e) => setValue('permission', e.target.value)}
 									>
 										<MenuItem value="">Lựa chọn quyền hạn</MenuItem>
 										{permissions.map((permission) => (
-											<MenuItem key={permission} value={permission}>
-												{permission}
+											<MenuItem key={permission.key} value={permission.key}>
+												{permission.value}
 											</MenuItem>
 										))}
 									</TextField>
@@ -206,7 +184,7 @@ const AddReceivers = ({ register, handleSubmit, errors, control, setValue }) => 
 						<CardContent>
 							{receivers.length > 0 ? (
 								receivers.map((partner, index) => (
-									<ReceiverAvatar receiver={partner} />
+									<ReceiverAvatar receiver={partner} key={index} />
 								))
 							) : (
 								<div
