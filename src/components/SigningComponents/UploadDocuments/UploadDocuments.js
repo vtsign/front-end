@@ -1,103 +1,57 @@
-import React, { useState, useRef, useEffect } from 'react';
-import {
-	Avatar,
-	Box,
-	Button,
-	Card,
-	CardContent,
-	Checkbox,
-	Container,
-	FormControlLabel,
-	Grid,
-	InputLabel,
-	Step,
-	StepLabel,
-	Stepper,
-	TextField,
-	Stack,
-	IconButton,
-	Divider,
-	Typography,
-	FormControl,
-	Select,
-	MenuItem,
-} from '@mui/material';
-import {
-	CloudUpload,
-	InsertDriveFile,
-	BorderColor,
-	CalendarToday,
-	TextFields,
-	PersonOutline,
-	MailOutline,
-	Computer,
-	Brush,
-} from '@mui/icons-material';
+import { CloudUpload } from '@mui/icons-material';
+import { Box, Card, CardContent, Container, Grid, Typography } from '@mui/material';
 import '@pdftron/webviewer/public/core/CoreControls';
+import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import './UploadDocuments.scss'
 import { addDocumentList } from '../../../redux/actions/documentActions';
-
-	let docList = [];
-
+import './UploadDocuments.scss';
+let docList = [];
 
 const UploadDocuments = () => {
 	// const [fileData, setFileData] = useState(null);
+
 	const filePicker = useRef(null);
 
 	const dispatch = useDispatch();
 
-	const documents = useSelector(state => state.addDocList);
+	const documents = useSelector((state) => state.addDocList);
 	console.log(documents);
 
-
-	const setThumbnail = async (dataFile, object, callback) => {
-		const Object = object;
+	const setThumbnail = async (selectedFile, filesLength) => {
 		const coreControls = window.CoreControls;
 		coreControls.setWorkerPath('/webviewer/core');
-		const doc = await coreControls.createDocument(dataFile, {
+		const doc = await coreControls.createDocument(selectedFile.data, {
 			extension: 'pdf',
 		});
 
-		Object.pageCount = doc.getPageCount();
+		selectedFile.pageCount = doc.getPageCount();
 		doc.loadCanvasAsync({
 			pageNumber: 1,
 			drawComplete: (canvas) => {
-				Object.thumbnailData = canvas.toDataURL();
-				docList = [...docList, Object];
-				callback(docList);
+				selectedFile.thumbnailData = canvas.toDataURL();
+				docList = [...docList, selectedFile];
+				if (docList.length === filesLength) {
+					dispatch(addDocumentList(docList));
+					docList.length = 0;
+				}
 			},
 		});
 	};
 
 	const handleSelectFile = (e) => {
 		const { files } = e.target;
-
-		for(let i = 0; i < files.length; i++) {
-			const element = files[i];
+		for (let file of files) {
 			const reader = new FileReader();
 			const selectedFile = {
-				name: element.name,
+				name: file.name,
 			};
-			// reader.readAsDataURL(element);
-			// reader.onload = (event) => {
-			// 	selectedFile.data = event.target.result;
-			// 	setThumbnail(event.target.result, selectedFile);
-			// };
-			console.log(element)
-			reader.readAsDataURL(element);
+			reader.readAsDataURL(file);
 			reader.onload = (event) => {
-				selectedFile.data = event.target.result;
-				setThumbnail(event.target.result, selectedFile, (documentList) => {
-					const docslist = documentList;
-					if (docslist.length === files.length) {
-						dispatch(addDocumentList(docList));
-						docslist.length = 0;
-					}
-				});
+				const data = event.target.result;
+				selectedFile.data = data;
+				setThumbnail(selectedFile, files.length);
 			};
 		}
-
 	};
 	return (
 		<Container maxWidth={false} style={{ height: '100%' }}>
@@ -133,6 +87,7 @@ const UploadDocuments = () => {
 					</Card>
 					<input
 						type="file"
+						multiple
 						ref={filePicker}
 						onChange={handleSelectFile}
 						style={{ display: 'none' }}
@@ -141,8 +96,8 @@ const UploadDocuments = () => {
 				<Grid item xl={3} lg={3} md={3} xs={12}>
 					{documents.documentList.length > 0 && (
 						<Grid className="preview-file">
-							{documents.documentList.map((document) => (
-								<Grid className="preview-file__item">
+							{documents.documentList.map((document, index) => (
+								<Grid className="preview-file__item" key={index}>
 									<Grid className="preview-file__thumbnail">
 										<img
 											alt=""
