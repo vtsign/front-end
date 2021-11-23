@@ -23,8 +23,8 @@ const getAccessToken = async () => {
 	
 	  localStorage.setItem('accessToken', res.data.access_token);	
 	  localStorage.setItem('refreshToken', res.data.refresh_token);
-	  localStorage.setItem('accessTokenExpired', Date.now() + 4 * 60 * 1000);
-	  localStorage.setItem('refreshTokenExpired', Date.now() + 9 * 60 * 1000);
+	  localStorage.setItem('accessTokenExpired', Date.now() + 44 * 60 * 1000);
+	  localStorage.setItem('refreshTokenExpired', Date.now() + 59 * 60 * 1000);
 
 	return accessToken;
 }

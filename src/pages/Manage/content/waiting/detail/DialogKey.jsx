@@ -22,7 +22,7 @@ export default function DialogKey({ open, closeDialogKey }) {
 
 
 	const inputKeyHandler = (event) => {
-		setKey(event.target.valeue);
+		setKey(event.target.value);
 	};
 
 	return (

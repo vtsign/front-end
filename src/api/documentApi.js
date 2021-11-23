@@ -18,7 +18,7 @@ const documentApi = {
     },
     getSigning: (c, r, s) => {
         const url = `/document/apt/signing?c=${c}&r=${r}&s=${s}`;
-        return axiosClient.get(url);
+        return axiosClientNoToken.get(url);
     },
 
     signByReceiver: (signedObj, listFile) => {

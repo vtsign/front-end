@@ -12,6 +12,7 @@ import Manage from './pages/Manage/Manage';
 import Register from './pages/Register/Register';
 import Sample from './pages/Sample/Sample';
 import Signing2 from './pages/Signing/Signing2';
+import SignDocument from './pages/SignDocument/SignDocument';
 import { PdfTronProvider } from './redux/constants/contexts/pdfTronContext';
 
 const App = ({ location }) => {
@@ -41,6 +42,7 @@ const App = ({ location }) => {
 						<Signing2 />
 					</PdfTronProvider>
 				</Route>
+				<Route path="/signDocument" component={SignDocument} />
 				<Route path="/notfound" component={NotFound} />
 				<Route path="*">
 					<Redirect to="/notfound" />
