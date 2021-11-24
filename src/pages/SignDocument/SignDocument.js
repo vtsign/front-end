@@ -159,14 +159,14 @@ const SignDocument2 = () => {
 	};
 
 	return (
-		<Container maxWidth={false}>
+		<Container className="sign-document" maxWidth={false}>
 			{userDocument == null && <DialogKey setUserDocument={setUserDocument}/>}
 			{userDocument != null && (
 				<Grid container>
-					<Grid lg={3}>
+					{/* <Grid lg={3}>
 						<h1 size="md">Sign Document</h1>
-					</Grid>
-					<Grid lg={6}>
+					</Grid> */}
+					<Grid lg={9}>
 						<div className="webviewer" ref={viewer}></div>
 					</Grid>
 					<Grid lg={3}>

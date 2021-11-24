@@ -180,7 +180,7 @@ const AddReceivers = ({ register, handleSubmit, errors, control, setValue }) => 
 								{...register('key')}
 								error={!!errors.key}
 								helperText={errors?.key?.message}
-								value={'VT' + randomstring.generate(6)}
+								defaultValue={'VT' + randomstring.generate(6)}
 							/>
 						</Grid>
 						<Grid

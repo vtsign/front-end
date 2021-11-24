@@ -20,7 +20,13 @@ const Activation = React.lazy(() => import('./pages/Activation/Activation'));
 const App = ({ location }) => {
 	// const headerExclusionArray = ['/home', '/', '/signing',
 	// 	'/manage', '/manage/completed/', '/manage/waiting', '/manage/deleted', '/manage/need-sign', '/template', '/signDocument'];
-	const headerExclusionArray = ['/login', '/register', '/activation/:id', '/notfound'];
+	const headerExclusionArray = [
+		'/login',
+		'/register',
+		'/activation/:id',
+		'/notfound',
+		'/signDocument',
+	];
 	return (
 		<div className="app__container">
 			<Suspense fallback={<Loading />}>

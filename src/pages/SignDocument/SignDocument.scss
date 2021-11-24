@@ -1,3 +1,11 @@
+@import '/src/sass/variables';
+@import '/src/sass/mixins';
+@import '/src/sass/base';
+
+.sign-document {
+	min-height: $content-height-no-header;
+}
+
 .webviewer {
 	height: 90vh;
 }

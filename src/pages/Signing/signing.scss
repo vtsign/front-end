@@ -11,7 +11,7 @@ $height: calc(100vh - (65px + 50px));
 	// height: 95vh;
 	// height: -webkit-calc(100% - 88px);
 	// height: -moz-calc(100% - 88px);
-	height: $height;
+	min-height: $content-height;
 	// background-color: #007fff;
 	// flex: 1 1 auto;
 
