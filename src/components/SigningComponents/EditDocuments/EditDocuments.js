@@ -224,9 +224,9 @@ const EditDocuments = () => {
 		newAnnot.setPadding(new Annotations.Rect(0, 0, 0, 0));
 		newAnnot.customs = {
 			// add more info
-			// email: state.authors[state.mailSelected],
-			// author: state.authors[state.mailSelected].replace('.', '_'),
-			name: `${type}_FOR_${currentAssignee}`,
+			email: currentAssignee,
+			author: currentAssignee,//state.authors[state.mailSelected].replace('.', '_'),
+			name: `${currentAssignee}_${type}`,
 			type: type,
 		};
 		newAnnot.setContents(newAnnot.customs.name);

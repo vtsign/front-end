@@ -22,7 +22,7 @@ import { pdfTronContext } from '../../redux/constants/contexts/pdfTronContext';
 import './signing.scss';
 
 const steps = [
-	'Thêm tài liệu (PDF, Word, PNG,...)',
+	'Thêm tài liệu',
 	'Chọn người nhận và cài đặt',
 	'Ký tên và các thông tin khác',
 	'Kiểm tra và gửi file',
@@ -148,7 +148,7 @@ const Signing2 = () => {
 							style={{ marginLeft: '14px' }}
 							onClick={handleExportFiles}
 						>
-							Gửi
+							Tiếp tục
 						</Button>
 					) : (
 						<Button

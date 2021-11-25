@@ -4,8 +4,6 @@ import { useSelector } from 'react-redux';
 
 export const pdfTronContext = React.createContext();
 
-const initialStae = {};
-
 export const PdfTronProvider = ({ children }) => {
 	const documents = useSelector((state) => state.addDocList.documentList);
 	const [instance, setInstance] = useState(null);
@@ -13,7 +11,6 @@ export const PdfTronProvider = ({ children }) => {
 
 	const handleSendDocuments = async () => {
 		const files = [];
-		console.log(instance);
 
 		const { docViewer } = instance;
 		const annotationManager = docViewer.getAnnotationManager();
@@ -22,8 +19,6 @@ export const PdfTronProvider = ({ children }) => {
 			await docViewer.loadDocument(documents[i].data);
 			annotationManager.addAnnotations(documentFields[i]);
 			const file = await applyFields(documents[i]);
-			console.log(file);
-			// xfdfString = handleXFDF.openFieldFlagByEmail(sendDocument.author, xfdfString, 'ReadOnly');
 			files.push(file);
 		}
 		// })
@@ -64,8 +59,6 @@ export const PdfTronProvider = ({ children }) => {
 			if (typeof annot.customs === 'undefined') return;
 
 			const flags = new WidgetFlags();
-			// flags.set('ReadOnly', (author.replace('.', '_') === annot.customs.author) ? false : true);
-			flags.set('ReadOnly', true);
 			switch (annot.customs.type) {
 				case 'SIGNATURE':
 					field = new Annotations.Forms.Field(`${annot.customs.author}#Sig${index}`, {
