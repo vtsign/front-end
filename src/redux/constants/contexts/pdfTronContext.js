@@ -22,7 +22,7 @@ export const PdfTronProvider = ({ children }) => {
 			files.push(file);
 		}
 		// })
-		// console.log(files)
+		console.log(files)
 		return files;
 	};
 

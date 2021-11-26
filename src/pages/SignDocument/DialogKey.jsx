@@ -38,6 +38,7 @@ export default function DialogKey({ setUserDocument }) {
 	const handleSubmit = async () => {
 		try {
 			const response = await documentApi.getSigning(c, r, key);
+			// console.log(response)
 			setUserDocument(response.data);
 			setOpen(false);
 		} catch (error) {

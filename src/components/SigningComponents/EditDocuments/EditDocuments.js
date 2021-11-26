@@ -90,6 +90,7 @@ const EditDocuments = () => {
 			});
 		});
 	}, []);
+
 	useEffect(() => {
 		(async () => {
 			// setCurrentAssignee(receivers.receivers[0])
