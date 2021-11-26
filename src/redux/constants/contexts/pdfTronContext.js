@@ -44,16 +44,13 @@ export const PdfTronProvider = ({ children }) => {
 		// console.log(documentFields)
 	};
 
-	const updateDocumentFieldsList2 = (index = -1) => {
+	const updateDocumentFieldsList2 = async (index = -1) => {
 		if (instance === null) return;
 		const { docViewer } = instance;
 		const annotManager = docViewer.getAnnotationManager();
 		
-		const xfdf = annotManager
-			.getAnnotationsList()
-			.filter((annot) =>  annot.Subject === "Widget");
+		const xfdf = await annotManager.exportAnnotations()
 		
-
 		if (index === -1 || documentFields.length === 0) {
 			setDocumentFields([...documentFields, xfdf]);
 		} else {

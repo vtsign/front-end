@@ -77,18 +77,7 @@ const SignDocument2 = () => {
 
 				docViewer.loadDocument(currentDocument.url);
 
-				setTimeout(() => {
-					if (
-						typeof documentFields[currentDocument.index] !== 'undefined' &&
-						documentFields.length > 0
-					) {
-						documentFields[currentDocument.index].forEach((annot) => {
-							annotManager.deselectAllAnnotations();
-							annotManager.addAnnotation(annot, true);
-							annotManager.redrawAnnotation(annot);
-						});
-					}
-				}, 500);
+				
 
 				const normalStyles = (widget) => {
 					if (widget instanceof Annotations.TextWidgetAnnotation) {
@@ -102,12 +91,24 @@ const SignDocument2 = () => {
 						};
 					}
 				};
+				setTimeout(() => {
+					if (
+						typeof documentFields[currentDocument.index] !== 'undefined' &&
+						documentFields.length > 0
+					) {
+						
+							annotManager.deselectAllAnnotations();
+							annotManager.importAnnotations(documentFields[currentDocument.index])
+					}
+				}, 1000);
 
 				annotManager.on('annotationChanged', (annotations, action, { imported }) => {
 					if (imported && action === 'add') {
 						annotations.forEach(function (annot) {
+							
 							if (annot instanceof Annotations.WidgetAnnotation) {
 								Annotations.WidgetAnnotation.getCustomStyles = normalStyles;
+								console.log(annot.custom+ "===================================>")
 								if (!annot.fieldName.startsWith(userDocument.user.email)) {
 									annot.Hidden = true;
 									annot.Listable = false;
@@ -116,6 +117,8 @@ const SignDocument2 = () => {
 						});
 					}
 				});
+				
+
 			} catch (error) {
 				console.error('Error on showing documents:');
 				console.error(error.message);
@@ -191,9 +194,9 @@ const SignDocument2 = () => {
 		});
 	};
 
-	const handleDocumentChange = (document) => {
+	const handleDocumentChange = async(document) => {
+		await updateDocumentFieldsList2(preIndex);
 		setCurrentDocument(document);
-		updateDocumentFieldsList2(preIndex);
 		setPreIndex(document.index);
 	};
 
