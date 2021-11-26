@@ -46,7 +46,11 @@ const App = ({ location }) => {
 					</PrivateRoute>
 					<PrivateRoute path={'/manage'} component={Manage} />
 					<PrivateRoute path="/template" component={Sample} />
-					<Route path="/signDocument" component={SignDocument} />
+					<Route path="/signDocument">
+						<PdfTronProvider>
+							<SignDocument />
+						</PdfTronProvider>
+					</Route>
 					<Route path="/notfound" component={NotFound} />
 					<Route path="*">
 						<Redirect to="/notfound" />

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useContext, useRef, useEffect, useState } from 'react';
 import { Box, Stack, Button, Grid, Container } from '@mui/material';
 // import { Box, Column, Heading, Row, Stack, Button } from 'gestalt';
 import WebViewer from '@pdftron/webviewer';
@@ -9,14 +9,18 @@ import { useLocation } from 'react-router';
 import documentApi from '../../api/documentApi';
 import { mergeAnnotations } from '../../components/MergeAnnotations/MergeAnnotations';
 import DialogKey from './DialogKey';
+import { pdfTronContext } from '../../redux/constants/contexts/pdfTronContext';
 
 const SignDocument2 = () => {
+	const { instance, setInstance, documentFields, updateDocumentFieldsList2 } =
+		useContext(pdfTronContext);
 	const [annotManager, setAnnotatManager] = useState(null);
 	const [annotPosition, setAnnotPosition] = useState(0);
 
-
 	const [userDocument, setUserDocument] = useState(null);
-	// const [signedObj, setSignedObj] = useState({});
+	const [documents, setDocuments] = useState([]);
+	const [currentDocument, setCurrentDocument] = useState(null);
+	const [preIndex, setPreIndex] = useState(0);
 
 	const viewer = useRef(null);
 	const [link, setLink] = useState('');
@@ -49,63 +53,75 @@ const SignDocument2 = () => {
 				viewer.current
 			).then(async (instance) => {
 				// PDFNet is only available with full API enabled
-				const { PDFNet } = instance;
+				setInstance(instance);
+				const { PDFNet, CoreControls } = instance;
 				await PDFNet.initialize();
 				window.PDFNet = PDFNet;
+				window.CoreControls = CoreControls;
 
-				try {
-
-					// setUserDocument(response.data);
-					// setSignedObj((prevState) => ({
-					// 	...prevState,
-					// 	contract_uuid: c,
-					// 	user_uuid: r,
-					// }));
-
-					const { docViewer, annotManager, Annotations } = instance;
-					setAnnotatManager(annotManager);
-
-					// select only the insert group
-					instance.setToolbarGroup('toolbarGroup-Insert');
-
-					// load document
-					// const URL = response.data.documents[0].url;
-					// docViewer.loadDocument(URL);
-					docViewer.loadDocument(userDocument.documents[0].url);
-
-					const normalStyles = (widget) => {
-						if (widget instanceof Annotations.TextWidgetAnnotation) {
-							return {
-								'background-color': '#a5c7ff',
-								color: 'white',
-							};
-						} else if (widget instanceof Annotations.SignatureWidgetAnnotation) {
-							return {
-								border: '1px solid #a5c7ff',
-							};
-						}
-					};
-
-					annotManager.on('annotationChanged', (annotations, action, { imported }) => {
-						if (imported && action === 'add') {
-							annotations.forEach(function (annot) {
-								if (annot instanceof Annotations.WidgetAnnotation) {
-									Annotations.WidgetAnnotation.getCustomStyles = normalStyles;
-									if (!annot.fieldName.startsWith(userDocument.user.email)) {
-										annot.Hidden = true;
-										annot.Listable = false;
-									}
-								}
-							});
-						}
-					});
-				} catch (error) {
-					console.error('Error on showing documents:');
-					console.error(error.message);
-				}
+				userDocument.documents.forEach((document, index) => {
+					document.index = index;
+					setThumbnail(instance, document);
+				});
+				setCurrentDocument(userDocument.documents[0]);
 			});
 		}
 	}, [userDocument]);
+
+	useEffect(() => {
+		if (currentDocument != null) {
+			try {
+				const { docViewer, annotManager, Annotations } = instance;
+				setAnnotatManager(annotManager);
+				instance.setToolbarGroup('toolbarGroup-Insert');
+
+				docViewer.loadDocument(currentDocument.url);
+
+				setTimeout(() => {
+					if (
+						typeof documentFields[currentDocument.index] !== 'undefined' &&
+						documentFields.length > 0
+					) {
+						documentFields[currentDocument.index].forEach((annot) => {
+							annotManager.deselectAllAnnotations();
+							annotManager.addAnnotation(annot, true);
+							annotManager.redrawAnnotation(annot);
+						});
+					}
+				}, 500);
+
+				const normalStyles = (widget) => {
+					if (widget instanceof Annotations.TextWidgetAnnotation) {
+						return {
+							'background-color': '#a5c7ff',
+							color: 'white',
+						};
+					} else if (widget instanceof Annotations.SignatureWidgetAnnotation) {
+						return {
+							border: '1px solid #a5c7ff',
+						};
+					}
+				};
+
+				annotManager.on('annotationChanged', (annotations, action, { imported }) => {
+					if (imported && action === 'add') {
+						annotations.forEach(function (annot) {
+							if (annot instanceof Annotations.WidgetAnnotation) {
+								Annotations.WidgetAnnotation.getCustomStyles = normalStyles;
+								if (!annot.fieldName.startsWith(userDocument.user.email)) {
+									annot.Hidden = true;
+									annot.Listable = false;
+								}
+							}
+						});
+					}
+				});
+			} catch (error) {
+				console.error('Error on showing documents:');
+				console.error(error.message);
+			}
+		}
+	}, [currentDocument]);
 
 	const nextField = () => {
 		let annots = annotManager.getAnnotationsList();
@@ -149,7 +165,7 @@ const SignDocument2 = () => {
 		documentApi.signByReceiver(
 			{
 				contract_uuid: c,
-                user_uuid: r,
+				user_uuid: r,
 				document_xfdfs: [document_xfdf],
 			},
 			files
@@ -158,9 +174,32 @@ const SignDocument2 = () => {
 		// navigate('/');
 	};
 
+	const setThumbnail = async (instance, document) => {
+		const coreControls = instance.CoreControls;
+		coreControls.setWorkerPath('/webviewer/core');
+		const doc = await coreControls.createDocument(document.url, {
+			extension: 'pdf',
+		});
+
+		document.pageCount = doc.getPageCount();
+		doc.loadCanvasAsync({
+			pageNumber: 1,
+			drawComplete: (canvas) => {
+				document.thumbnailData = canvas.toDataURL();
+				setDocuments((prev) => [...prev, document]);
+			},
+		});
+	};
+
+	const handleDocumentChange = (document) => {
+		setCurrentDocument(document);
+		updateDocumentFieldsList2(preIndex);
+		setPreIndex(document.index);
+	};
+
 	return (
 		<Container className="sign-document" maxWidth={false}>
-			{userDocument == null && <DialogKey setUserDocument={setUserDocument}/>}
+			{userDocument == null && <DialogKey setUserDocument={setUserDocument} />}
 			{userDocument != null && (
 				<Grid container>
 					{/* <Grid lg={3}>
@@ -197,6 +236,23 @@ const SignDocument2 = () => {
 							</Button>
 							{link && <a href={link}>Download file</a>}
 						</Stack>
+						{documents.map((document) => (
+							<Grid
+								key={document.index}
+								onClick={() => handleDocumentChange(document)}
+							>
+								<Grid>
+									<img
+										width="50%"
+										alt={document.origin_name}
+										src={document.thumbnailData}
+									/>
+								</Grid>
+								<Grid>
+									<span>{document.origin_name}</span>
+								</Grid>
+							</Grid>
+						))}
 					</Grid>
 				</Grid>
 			)}
