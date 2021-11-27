@@ -16,6 +16,7 @@ const SignDocument2 = () => {
 		useContext(pdfTronContext);
 	const [annotManager, setAnnotatManager] = useState(null);
 	const [annotPosition, setAnnotPosition] = useState(0);
+	const [key, setKey] = useState();
 	const history = useHistory();
 
 	const [userDocument, setUserDocument] = useState(null);
@@ -148,14 +149,21 @@ const SignDocument2 = () => {
 		}));
 
 		const files = [];
-		if (userDocument.last_sign) {
-			for(const doc of documents) {
-				const listXfdfs = doc.xfdfs.map((x) => x.xfdf);
-				listXfdfs.push(documentXFDFs[doc.id]);
-				
-				const blob = await mergeAnnotations(doc.url, listXfdfs);
-				files.push(new File([blob], doc.id));
+		try {
+			const response = await documentApi.getSigning(c, r, key);
+			const data = response.data;
+			if (data.last_sign) {
+				for(const doc of data.documents) {
+					const listXfdfs = doc.xfdfs.map((x) => x.xfdf);
+					listXfdfs.push(documentXFDFs[doc.id]);
+					
+					const blob = await mergeAnnotations(doc.url, listXfdfs);
+					files.push(new File([blob], doc.id));
+				}
 			}
+		} catch (error) {
+			alert('something went wrong!!!');
+			console.error(error);
 		}
 
 		documentApi.signByReceiver(
@@ -197,7 +205,7 @@ const SignDocument2 = () => {
 
 	return (
 		<Container className="sign-document" maxWidth={false}>
-			{userDocument == null && <DialogKey setUserDocument={setUserDocument} />}
+			{userDocument == null && <DialogKey setUserDocument={setUserDocument} setKey={setKey} />}
 			{userDocument != null && (
 				<Grid container>
 					{/* <Grid lg={3}>
