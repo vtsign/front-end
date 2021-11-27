@@ -4,6 +4,7 @@ import {
 	ADD_DOCUMENT_TO_SIGN_FAIL,
 	UPDATE_DOCUMENT_TO_SIGN,
 	UPDATE_DOCUMENT_TO_SIGN_FAIL,
+	RESET_DOC_LIST
 } from '../constants/documentConstants.js';
 
 const initialState = {
@@ -17,6 +18,11 @@ export const addDocListReducer = (state = initialState, action) => {
 				...state,
 				documentList: state.documentList.concat(action.payload),
 			};
+		case RESET_DOC_LIST:
+			return {
+				...state,
+				documentList: []
+			}
 		default:
 			return state;
 	}

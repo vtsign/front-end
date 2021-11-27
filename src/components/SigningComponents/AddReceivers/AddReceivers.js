@@ -13,31 +13,43 @@ import {
 import randomstring from 'randomstring';
 import React, { useState } from 'react';
 import { Controller } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import userApi from '../../../api/userApi';
 import { addReceiver } from '../../../redux/actions/receiverActions.js';
 import ReceiverAvatar from '../../ReceiverAvatar/ReceiverAvatar';
 import './AddReceivers.scss';
+import { REG_EMAIL } from '../../constants/global.js';
+import { useToast } from '../../toast/useToast.js';
 
 const permissions = [
-	{
-		key: 'read',
-		value: 'Chỉ đọc',
-	},
 	{
 		key: 'sign',
 		value: 'Đọc và ký',
 	},
+	{
+		key: 'read',
+		value: 'Chỉ đọc',
+	},
 ];
 
 const AddReceivers = ({ register, handleSubmit, errors, control, setValue }) => {
-	const [receivers, setReceivers] = useState([]);
+	// const [receivers, setReceivers] = useState([]);
 	const [showPhone, setShowPhone] = useState(false);
 	const dispatch = useDispatch();
+	const receivers = useSelector(state => state.receivers.receivers);
+	const { error } = useToast();
 
 	const addReceivers = (formData) => {
+		const receiverEmails = receivers.map(receiver => {
+			return receiver.email;
+		})
+		// console.log(receiverEmails)
+		if (receiverEmails.includes(formData.email)) {
+			error('Người nhận đã tồn tại');
+			return;
+		}
 		dispatch(addReceiver(formData));
-		setReceivers((receivers) => [...receivers, formData]);
+		// setReceivers((receivers) => [...receivers, formData]);
 		console.log(formData);
 	};
 
@@ -92,6 +104,10 @@ const AddReceivers = ({ register, handleSubmit, errors, control, setValue }) => 
 								sx={{ minWidth: '25vw' }}
 								{...register('email', {
 									required: 'Vui lòng nhập địa chỉ Email',
+									pattern: {
+										value: REG_EMAIL,
+										message: 'Email sai định dạng',
+									},
 								})}
 								error={!!errors.email}
 								helperText={errors?.email?.message}
@@ -136,11 +152,11 @@ const AddReceivers = ({ register, handleSubmit, errors, control, setValue }) => 
 										{...inputProps}
 										inputRef={ref}
 										value={value}
-										defaultValue=""
+										defaultValue={permissions[0].key}
 										SelectProps={{ displayEmpty: true }}
 										onChange={(e) => setValue('permission', e.target.value)}
 									>
-										<MenuItem value="">Lựa chọn quyền hạn</MenuItem>
+										{/* <MenuItem value="">Lựa chọn quyền hạn</MenuItem> */}
 										{permissions.map((permission) => (
 											<MenuItem key={permission.key} value={permission.key}>
 												{permission.value}
@@ -184,7 +200,7 @@ const AddReceivers = ({ register, handleSubmit, errors, control, setValue }) => 
 						<CardContent>
 							{receivers.length > 0 ? (
 								receivers.map((partner, index) => (
-									<ReceiverAvatar receiver={partner} key={index} />
+									<ReceiverAvatar receiver={partner} index={index} />
 								))
 							) : (
 								<div

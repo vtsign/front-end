@@ -31,14 +31,14 @@ const EditDocuments = () => {
 
 	const viewer = useRef(null);
 
-	const { register, control } = useForm();
+	const { register, control, getValues } = useForm();
 
 	const { instance, setInstance, documentFields, updateDocumentFieldsList } =
 		useContext(pdfTronContext);
 
 	const dispatch = useDispatch();
 	const receivers = useSelector((state) => state.receivers);
-	const [currentAssignee, setCurrentAssignee] = useState(receivers.receivers[0]);
+	const [currentAssignee, setCurrentAssignee] = useState("Me");
 	const documents = useSelector((state) => state.addDocList);
 	const webviewerInstances = useSelector((state) => state.webviewer);
 
@@ -224,9 +224,9 @@ const EditDocuments = () => {
 		newAnnot.setPadding(new Annotations.Rect(0, 0, 0, 0));
 		newAnnot.customs = {
 			// add more info
-			// email: state.authors[state.mailSelected],
-			// author: state.authors[state.mailSelected].replace('.', '_'),
-			name: `${type}_FOR_${currentAssignee}`,
+			email: currentAssignee,
+			author: currentAssignee,//state.authors[state.mailSelected].replace('.', '_'),
+			name: `${currentAssignee}_${type}`,
 			type: type,
 		};
 		newAnnot.setContents(newAnnot.customs.name);
@@ -258,8 +258,9 @@ const EditDocuments = () => {
 			annotationsList.map(async (annot, index) => {
 				let inputAnnot;
 				let field;
-				console.log(annot);
+
 				if (typeof annot.custom !== 'undefined') {
+					console.log(annot);
 					// create a form field based on the type of annotation
 					if (annot.custom.type === 'TEXT') {
 						field = new Annotations.Forms.Field(
@@ -370,7 +371,6 @@ const EditDocuments = () => {
 		await annotManager.drawAnnotationsFromList(annotsToDraw);
 		// await uploadForSigning();
 		// await composeFile();
-		updateDocumentFieldsList(webviewerInstances.currentDocument);
 	};
 
 	// const composeFile = async () => {
@@ -418,7 +418,9 @@ const EditDocuments = () => {
 	const dragEnd = (e, type) => {
 		// addField(type, webviewerInstances.dropPoint);
 		addFields(type);
-		// applyFields();
+		console.log(currentAssignee)
+		if (currentAssignee === "Me")
+			applyFields();
 		e.target.style.opacity = 1;
 		document.body.removeChild(document.getElementById('form-build-drag-image-copy'));
 		e.preventDefault();
@@ -462,7 +464,7 @@ const EditDocuments = () => {
 										onChange={(e) => setCurrentAssignee(e.target.value)}
 									>
 										<MenuItem key="me" value="Me">
-											Me
+											Tôi
 										</MenuItem>
 										{receivers.receivers.map((receiver) => (
 											<MenuItem key={receiver.email} value={receiver.email}>

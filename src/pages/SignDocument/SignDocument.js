@@ -1,25 +1,29 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useContext, useRef, useEffect, useState } from 'react';
 import { Box, Stack, Button, Grid, Container } from '@mui/material';
 // import { Box, Column, Heading, Row, Stack, Button } from 'gestalt';
 import WebViewer from '@pdftron/webviewer';
 // import 'gestalt/dist/gestalt.css';
 import './SignDocument.scss';
-import { useLocation } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 // import {} from '@mui/material';
 import documentApi from '../../api/documentApi';
 import { mergeAnnotations } from '../../components/MergeAnnotations/MergeAnnotations';
 import DialogKey from './DialogKey';
+import { pdfTronContext } from '../../redux/constants/contexts/pdfTronContext';
 
 const SignDocument2 = () => {
+	const { instance, setInstance, documentXFDFs, updateDocumentXFDFs } =
+		useContext(pdfTronContext);
 	const [annotManager, setAnnotatManager] = useState(null);
 	const [annotPosition, setAnnotPosition] = useState(0);
-
+	const history = useHistory();
 
 	const [userDocument, setUserDocument] = useState(null);
-	// const [signedObj, setSignedObj] = useState({});
+	const [documents, setDocuments] = useState([]);
+	const [currentDocument, setCurrentDocument] = useState(null);
+	const [previousDocument, setPreviousDocument] = useState(null);
 
 	const viewer = useRef(null);
-	const [link, setLink] = useState('');
 
 	const location = useLocation();
 	const queryParam = new URLSearchParams(location.search);
@@ -49,63 +53,69 @@ const SignDocument2 = () => {
 				viewer.current
 			).then(async (instance) => {
 				// PDFNet is only available with full API enabled
-				const { PDFNet } = instance;
+				setInstance(instance);
+				const { PDFNet, CoreControls } = instance;
 				await PDFNet.initialize();
 				window.PDFNet = PDFNet;
+				window.CoreControls = CoreControls;
 
-				try {
-
-					// setUserDocument(response.data);
-					// setSignedObj((prevState) => ({
-					// 	...prevState,
-					// 	contract_uuid: c,
-					// 	user_uuid: r,
-					// }));
-
-					const { docViewer, annotManager, Annotations } = instance;
-					setAnnotatManager(annotManager);
-
-					// select only the insert group
-					instance.setToolbarGroup('toolbarGroup-Insert');
-
-					// load document
-					// const URL = response.data.documents[0].url;
-					// docViewer.loadDocument(URL);
-					docViewer.loadDocument(userDocument.documents[0].url);
-
-					const normalStyles = (widget) => {
-						if (widget instanceof Annotations.TextWidgetAnnotation) {
-							return {
-								'background-color': '#a5c7ff',
-								color: 'white',
-							};
-						} else if (widget instanceof Annotations.SignatureWidgetAnnotation) {
-							return {
-								border: '1px solid #a5c7ff',
-							};
-						}
-					};
-
-					annotManager.on('annotationChanged', (annotations, action, { imported }) => {
-						if (imported && action === 'add') {
-							annotations.forEach(function (annot) {
-								if (annot instanceof Annotations.WidgetAnnotation) {
-									Annotations.WidgetAnnotation.getCustomStyles = normalStyles;
-									if (!annot.fieldName.startsWith(userDocument.user.email)) {
-										annot.Hidden = true;
-										annot.Listable = false;
-									}
-								}
-							});
-						}
-					});
-				} catch (error) {
-					console.error('Error on showing documents:');
-					console.error(error.message);
-				}
+				userDocument.documents.forEach((document) => setThumbnail(instance, document));
+				const currentDocument = userDocument.documents[0];
+				setCurrentDocument(currentDocument);
+				setPreviousDocument(currentDocument);
 			});
 		}
 	}, [userDocument]);
+
+	useEffect(() => {
+		if (currentDocument != null) {
+			try {
+				const { docViewer, annotManager, Annotations } = instance;
+				setAnnotatManager(annotManager);
+				instance.setToolbarGroup('toolbarGroup-Insert');
+
+				docViewer.loadDocument(currentDocument.url);
+
+				const normalStyles = (widget) => {
+					if (widget instanceof Annotations.TextWidgetAnnotation) {
+						return {
+							'background-color': '#a5c7ff',
+							color: 'white',
+						};
+					} else if (widget instanceof Annotations.SignatureWidgetAnnotation) {
+						return {
+							border: '1px solid #a5c7ff',
+						};
+					}
+				};
+				
+				setTimeout(async () => {
+					const xfdf = documentXFDFs[currentDocument.id];
+					if (!!xfdf) {
+						annotManager.deselectAllAnnotations();
+						annotManager.importAnnotations(xfdf);
+					}
+				}, 1000);
+
+				annotManager.on('annotationChanged', (annotations, action, { imported }) => {
+					if (imported && action === 'add') {
+						annotations.forEach(function (annot) {
+							if (annot instanceof Annotations.WidgetAnnotation) {
+								Annotations.WidgetAnnotation.getCustomStyles = normalStyles;
+								if (!annot.fieldName.startsWith(userDocument.user.email)) {
+									annot.Hidden = true;
+									annot.Listable = false;
+								}
+							}
+						});
+					}
+				});
+			} catch (error) {
+				console.error('Error on showing documents:');
+				console.error(error.message);
+			}
+		}
+	}, [currentDocument]);
 
 	const nextField = () => {
 		let annots = annotManager.getAnnotationsList();
@@ -129,38 +139,65 @@ const SignDocument2 = () => {
 
 	const completeSigning = async () => {
 		const xfdf = await annotManager.exportAnnotations();
+		documentXFDFs[currentDocument.id] = xfdf;
 
-		const document_xfdf = {
-			xfdf,
-			document_uuid: userDocument.documents[0].id,
-		};
+		const keys = Object.keys(documentXFDFs);
+		const xfdfs = keys.map(key => ({
+			document_uuid: key,
+			xfdf: documentXFDFs[key],
+		}));
 
 		const files = [];
 		if (userDocument.last_sign) {
-			const listXfdfs = userDocument.documents[0].xfdfs.map((x) => x.xfdf);
-			listXfdfs.push(xfdf);
-
-			const blob = await mergeAnnotations(userDocument.documents[0].url, listXfdfs);
-			files.push(new File([blob], userDocument.documents[0].id));
-			const url = window.URL.createObjectURL(blob);
-			setLink(url);
+			for(const doc of documents) {
+				const listXfdfs = doc.xfdfs.map((x) => x.xfdf);
+				listXfdfs.push(documentXFDFs[doc.id]);
+				
+				const blob = await mergeAnnotations(doc.url, listXfdfs);
+				files.push(new File([blob], doc.id));
+			}
 		}
 
 		documentApi.signByReceiver(
 			{
 				contract_uuid: c,
-                user_uuid: r,
-				document_xfdfs: [document_xfdf],
+				user_uuid: r,
+				document_xfdfs: xfdfs,
 			},
 			files
 		);
 
-		// navigate('/');
+		history.push('/');
+	};
+
+	const setThumbnail = async (instance, document) => {
+		const coreControls = instance.CoreControls;
+		coreControls.setWorkerPath('/webviewer/core');
+		const doc = await coreControls.createDocument(document.url, {
+			extension: 'pdf',
+		});
+
+		document.pageCount = doc.getPageCount();
+		doc.loadCanvasAsync({
+			pageNumber: 1,
+			drawComplete: (canvas) => {
+				document.thumbnailData = canvas.toDataURL();
+				setDocuments((prev) => [...prev, document]);
+			},
+		});
+	};
+
+	const handleDocumentChange = async (document) => {
+		if(previousDocument.id !== document.id) {
+			await updateDocumentXFDFs(previousDocument.id);
+			setCurrentDocument(document);
+			setPreviousDocument(document);
+		}
 	};
 
 	return (
 		<Container className="sign-document" maxWidth={false}>
-			{userDocument == null && <DialogKey setUserDocument={setUserDocument}/>}
+			{userDocument == null && <DialogKey setUserDocument={setUserDocument} />}
 			{userDocument != null && (
 				<Grid container>
 					{/* <Grid lg={3}>
@@ -171,7 +208,7 @@ const SignDocument2 = () => {
 					</Grid>
 					<Grid lg={3}>
 						<Stack>
-							<Button
+							{/* <Button
 								onClick={nextField}
 								accessibilityLabel="next field"
 								iconEnd="arrow-forward"
@@ -186,7 +223,7 @@ const SignDocument2 = () => {
 								variant="outlined"
 							>
 								Previous field
-							</Button>
+							</Button> */}
 							<Button
 								onClick={completeSigning}
 								accessibilityLabel="complete signing"
@@ -195,8 +232,21 @@ const SignDocument2 = () => {
 							>
 								Complete signing
 							</Button>
-							{link && <a href={link}>Download file</a>}
 						</Stack>
+						{documents.map((document) => (
+							<Grid key={document.id} onClick={() => handleDocumentChange(document)}>
+								<Grid>
+									<img
+										width="50%"
+										alt={document.origin_name}
+										src={document.thumbnailData}
+									/>
+								</Grid>
+								<Grid>
+									<span>{document.origin_name}</span>
+								</Grid>
+							</Grid>
+						))}
 					</Grid>
 				</Grid>
 			)}

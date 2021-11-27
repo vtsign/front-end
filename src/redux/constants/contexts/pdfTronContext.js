@@ -4,16 +4,14 @@ import { useSelector } from 'react-redux';
 
 export const pdfTronContext = React.createContext();
 
-const initialStae = {};
-
 export const PdfTronProvider = ({ children }) => {
 	const documents = useSelector((state) => state.addDocList.documentList);
 	const [instance, setInstance] = useState(null);
 	const [documentFields, setDocumentFields] = useState([]);
+	const documentXFDFs = {};
 
 	const handleSendDocuments = async () => {
 		const files = [];
-		console.log(instance);
 
 		const { docViewer } = instance;
 		const annotationManager = docViewer.getAnnotationManager();
@@ -22,8 +20,6 @@ export const PdfTronProvider = ({ children }) => {
 			await docViewer.loadDocument(documents[i].data);
 			annotationManager.addAnnotations(documentFields[i]);
 			const file = await applyFields(documents[i]);
-			console.log(file);
-			// xfdfString = handleXFDF.openFieldFlagByEmail(sendDocument.author, xfdfString, 'ReadOnly');
 			files.push(file);
 		}
 		// })
@@ -49,6 +45,16 @@ export const PdfTronProvider = ({ children }) => {
 		// console.log(documentFields)
 	};
 
+	const updateDocumentXFDFs = async (docId) => {
+		if (instance === null) return;
+		const { docViewer } = instance;
+		const annotManager = docViewer.getAnnotationManager();
+		
+		const xfdf = await annotManager.exportAnnotations();
+		documentXFDFs[docId] = xfdf;
+	};
+
+
 	const applyFields = async (document) => {
 		const { Annotations, docViewer } = instance;
 		const { WidgetFlags } = Annotations;
@@ -64,8 +70,6 @@ export const PdfTronProvider = ({ children }) => {
 			if (typeof annot.customs === 'undefined') return;
 
 			const flags = new WidgetFlags();
-			// flags.set('ReadOnly', (author.replace('.', '_') === annot.customs.author) ? false : true);
-			flags.set('ReadOnly', true);
 			switch (annot.customs.type) {
 				case 'SIGNATURE':
 					field = new Annotations.Forms.Field(`${annot.customs.author}#Sig${index}`, {
@@ -97,7 +101,6 @@ export const PdfTronProvider = ({ children }) => {
 				case 'DATE':
 					field = new Annotations.Forms.Field(`${annot.customs.author}#Date${index}`, {
 						type: 'Tx',
-						value: 'm-d-yyyy',
 						flags,
 						actions: {
 							F: [
@@ -181,7 +184,8 @@ export const PdfTronProvider = ({ children }) => {
 		instance,
 		setInstance,
 		documentFields,
-
+		documentXFDFs,
+		updateDocumentXFDFs,
 		updateDocumentFieldsList,
 		handleSendDocuments,
 	};

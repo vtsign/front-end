@@ -22,7 +22,7 @@ import { pdfTronContext } from '../../redux/constants/contexts/pdfTronContext';
 import './signing.scss';
 
 const steps = [
-	'Thêm tài liệu (PDF, Word, PNG,...)',
+	'Thêm tài liệu',
 	'Chọn người nhận và cài đặt',
 	'Ký tên và các thông tin khác',
 	'Kiểm tra và gửi file',
@@ -42,7 +42,11 @@ const Signing2 = () => {
 		formState: { errors },
 		control,
 		setValue,
-	} = useForm();
+	} = useForm({
+		defaultValues: {
+			permission: "sign"
+		}
+	});
 
 	const dispatch = useDispatch();
 	const receivers = useSelector((state) => state.receivers.receivers);
@@ -64,6 +68,12 @@ const Signing2 = () => {
 			};
 
 			dispatch(addDocumentToSign(json, files));
+			dispatch({
+				type: "RESET_RECEIVERS"
+			})
+			dispatch({
+				type: "RESET_DOC_LIST"
+			})
 			history.push('/');
 		}
 		setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -138,7 +148,7 @@ const Signing2 = () => {
 							style={{ marginLeft: '14px' }}
 							onClick={handleExportFiles}
 						>
-							Gửi
+							Tiếp tục
 						</Button>
 					) : (
 						<Button
