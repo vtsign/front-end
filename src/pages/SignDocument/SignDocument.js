@@ -88,7 +88,7 @@ const SignDocument2 = () => {
 						};
 					}
 				};
-				
+
 				setTimeout(async () => {
 					const xfdf = documentXFDFs[currentDocument.id];
 					if (!!xfdf) {
@@ -152,7 +152,7 @@ const SignDocument2 = () => {
 			for(const doc of documents) {
 				const listXfdfs = doc.xfdfs.map((x) => x.xfdf);
 				listXfdfs.push(documentXFDFs[doc.id]);
-				
+
 				const blob = await mergeAnnotations(doc.url, listXfdfs);
 				files.push(new File([blob], doc.id));
 			}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
+import { mergeAnnotations } from '../../../components/MergeAnnotations/MergeAnnotations';
 
 export const pdfTronContext = React.createContext();
 
@@ -17,7 +18,13 @@ export const PdfTronProvider = ({ children }) => {
 		const annotationManager = docViewer.getAnnotationManager();
 		// documents.forEach((doc, index) => {
 		for (let i = 0; i < documents.length; i++) {
-			await docViewer.loadDocument(documents[i].data);
+			await docViewer.loadDocument(documents[i]);
+			annotationManager.addAnnotations(documentFields[i]);
+			const xfdf = await annotationManager.exportAnnotations();
+			const fileMerge = await mergeAnnotations(documents[i].data, xfdf);
+			console.log(fileMerge);
+
+			await docViewer.loadDocument(fileMerge);
 			annotationManager.addAnnotations(documentFields[i]);
 			const file = await applyFields(documents[i]);
 			files.push(file);
@@ -49,7 +56,7 @@ export const PdfTronProvider = ({ children }) => {
 		if (instance === null) return;
 		const { docViewer } = instance;
 		const annotManager = docViewer.getAnnotationManager();
-		
+
 		const xfdf = await annotManager.exportAnnotations();
 		documentXFDFs[docId] = xfdf;
 	};

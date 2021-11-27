@@ -33,19 +33,23 @@ const EditDocuments = () => {
 
 	const { register, control, getValues } = useForm();
 
-	const { instance, setInstance, documentFields, updateDocumentFieldsList } =
+	const { instance, setInstance, documentFields, updateDocumentFieldsList, updateDocumentXFDFs } =
 		useContext(pdfTronContext);
+
+	const myInfo = localStorage.getItem('user')
+		? JSON.parse(localStorage.getItem('user'))
+		: null;
+
 
 	const dispatch = useDispatch();
 	const receivers = useSelector((state) => state.receivers);
-	const [currentAssignee, setCurrentAssignee] = useState("Me");
+	const [currentAssignee, setCurrentAssignee] = useState(myInfo.email ?? 'Me');
 	const documents = useSelector((state) => state.addDocList);
 	const webviewerInstances = useSelector((state) => state.webviewer);
 
 	useEffect(() => {
 		WebViewer(
 			{
-				extension: 'pdf',
 				path: 'webviewer',
 				disabledElements: [
 					'viewControlsButton',
@@ -64,10 +68,15 @@ const EditDocuments = () => {
 					'eraserToolButton',
 					'toolsHeader',
 				],
+				fullAPI: true,
 			},
 			viewer.current
-		).then((instance) => {
+		).then(async (instance) => {
 			setInstance(instance);
+			const { PDFNet, CoreControls } = instance;
+			await PDFNet.initialize();
+			window.PDFNet = PDFNet;
+			window.CoreControls = CoreControls;
 			const { docViewer, iframeWindow, Annotations } = instance;
 			// docViewer.loadDocument(documents.documentList[0].data);
 			Annotations.SignatureWidgetAnnotation.prototype.createSignHereElement = function () {
@@ -93,6 +102,7 @@ const EditDocuments = () => {
 	useEffect(() => {
 		(async () => {
 			// setCurrentAssignee(receivers.receivers[0])
+			console.log(myInfo);
 			// localStorage.setItem('currentDoc', state.currentDocShow);
 			if (instance && documents.documentList.length > -1) {
 				const { docViewer, Annotations } = instance;
@@ -246,132 +256,131 @@ const EditDocuments = () => {
 		return {};
 	};
 
-	const applyFields = async () => {
-		const { Annotations, docViewer } = instance;
-		const annotManager = docViewer.getAnnotationManager();
-		const fieldManager = annotManager.getFieldManager();
-		const annotationsList = annotManager.getAnnotationsList();
-		const annotsToDelete = [];
-		const annotsToDraw = [];
+	// const applyFields = async () => {
+	// 	const { Annotations, docViewer } = instance;
+	// 	const annotManager = docViewer.getAnnotationManager();
+	// 	const fieldManager = annotManager.getFieldManager();
+	// 	const annotationsList = annotManager.getAnnotationsList();
+	// 	const annotsToDelete = [];
+	// 	const annotsToDraw = [];
 
-		await Promise.all(
-			annotationsList.map(async (annot, index) => {
-				let inputAnnot;
-				let field;
+	// 	await Promise.all(
+	// 		annotationsList.map(async (annot, index) => {
+	// 			let inputAnnot;
+	// 			let field;
 
-				if (typeof annot.custom !== 'undefined') {
-					console.log(annot);
-					// create a form field based on the type of annotation
-					if (annot.custom.type === 'TEXT') {
-						field = new Annotations.Forms.Field(
-							annot.getContents() + Date.now() + index,
-							{
-								type: 'Tx',
-								value: annot.custom.value,
-							}
-						);
-						inputAnnot = new Annotations.TextWidgetAnnotation(field);
-					} else if (annot.custom.type === 'SIGNATURE') {
-						field = new Annotations.Forms.Field(
-							annot.getContents() + Date.now() + index,
-							{
-								type: 'Sig',
-							}
-						);
-						inputAnnot = new Annotations.SignatureWidgetAnnotation(field, {
-							appearance: '_DEFAULT',
-							appearances: {
-								_DEFAULT: {
-									Normal: {
-										data: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjEuMWMqnEsAAAANSURBVBhXY/j//z8DAAj8Av6IXwbgAAAAAElFTkSuQmCC',
-										offset: {
-											x: 100,
-											y: 100,
-										},
-									},
-								},
-							},
-						});
-					} else if (annot.custom.type === 'DATE') {
-						field = new Annotations.Forms.Field(
-							annot.getContents() + Date.now() + index,
-							{
-								type: 'Tx',
-								// value: 'm-d-yyyy',
-								// Actions need to be added for DatePickerWidgetAnnotation to recognize this field.
-								actions: {
-									F: [
-										{
-											name: 'JavaScript',
-											// You can customize the date format here between the two double-quotation marks
-											// or leave this blank to use the default format
-											javascript: 'AFDate_FormatEx("mmm d, yyyy");',
-										},
-									],
-									K: [
-										{
-											name: 'JavaScript',
-											// You can customize the date format here between the two double-quotation marks
-											// or leave this blank to use the default format
-											javascript: 'AFDate_FormatEx("mmm d, yyyy");',
-										},
-									],
-								},
-							}
-						);
+	// 			if (typeof annot.custom !== 'undefined') {
+	// 				// create a form field based on the type of annotation
+	// 				if (annot.custom.type === 'TEXT') {
+	// 					field = new Annotations.Forms.Field(
+	// 						annot.getContents() + Date.now() + index,
+	// 						{
+	// 							type: 'Tx',
+	// 							value: annot.custom.value,
+	// 						}
+	// 					);
+	// 					inputAnnot = new Annotations.TextWidgetAnnotation(field);
+	// 				} else if (annot.custom.type === 'SIGNATURE') {
+	// 					field = new Annotations.Forms.Field(
+	// 						annot.getContents() + Date.now() + index,
+	// 						{
+	// 							type: 'Sig',
+	// 						}
+	// 					);
+	// 					inputAnnot = new Annotations.SignatureWidgetAnnotation(field, {
+	// 						appearance: '_DEFAULT',
+	// 						appearances: {
+	// 							_DEFAULT: {
+	// 								Normal: {
+	// 									data: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjEuMWMqnEsAAAANSURBVBhXY/j//z8DAAj8Av6IXwbgAAAAAElFTkSuQmCC',
+	// 									offset: {
+	// 										x: 100,
+	// 										y: 100,
+	// 									},
+	// 								},
+	// 							},
+	// 						},
+	// 					});
+	// 				} else if (annot.custom.type === 'DATE') {
+	// 					field = new Annotations.Forms.Field(
+	// 						annot.getContents() + Date.now() + index,
+	// 						{
+	// 							type: 'Tx',
+	// 							// value: 'm-d-yyyy',
+	// 							// Actions need to be added for DatePickerWidgetAnnotation to recognize this field.
+	// 							actions: {
+	// 								F: [
+	// 									{
+	// 										name: 'JavaScript',
+	// 										// You can customize the date format here between the two double-quotation marks
+	// 										// or leave this blank to use the default format
+	// 										javascript: 'AFDate_FormatEx("mmm d, yyyy");',
+	// 									},
+	// 								],
+	// 								K: [
+	// 									{
+	// 										name: 'JavaScript',
+	// 										// You can customize the date format here between the two double-quotation marks
+	// 										// or leave this blank to use the default format
+	// 										javascript: 'AFDate_FormatEx("mmm d, yyyy");',
+	// 									},
+	// 								],
+	// 							},
+	// 						}
+	// 					);
 
-						inputAnnot = new Annotations.DatePickerWidgetAnnotation(field);
-					} else {
-						// exit early for other annotations
-						annotManager.deleteAnnotation(annot, false, true); // prevent duplicates when importing xfdf
-						return;
-					}
-				} else {
-					// exit early for other annotations
-					return;
-				}
+	// 					inputAnnot = new Annotations.DatePickerWidgetAnnotation(field);
+	// 				} else {
+	// 					// exit early for other annotations
+	// 					annotManager.deleteAnnotation(annot, false, true); // prevent duplicates when importing xfdf
+	// 					return;
+	// 				}
+	// 			} else {
+	// 				// exit early for other annotations
+	// 				return;
+	// 			}
 
-				// set position
-				inputAnnot.PageNumber = annot.getPageNumber();
-				inputAnnot.X = annot.getX();
-				inputAnnot.Y = annot.getY();
-				inputAnnot.rotation = annot.Rotation;
-				if (annot.Rotation === 0 || annot.Rotation === 180) {
-					inputAnnot.Width = annot.getWidth();
-					inputAnnot.Height = annot.getHeight();
-				} else {
-					inputAnnot.Width = annot.getHeight();
-					inputAnnot.Height = annot.getWidth();
-				}
+	// 			// set position
+	// 			inputAnnot.PageNumber = annot.getPageNumber();
+	// 			inputAnnot.X = annot.getX();
+	// 			inputAnnot.Y = annot.getY();
+	// 			inputAnnot.rotation = annot.Rotation;
+	// 			if (annot.Rotation === 0 || annot.Rotation === 180) {
+	// 				inputAnnot.Width = annot.getWidth();
+	// 				inputAnnot.Height = annot.getHeight();
+	// 			} else {
+	// 				inputAnnot.Width = annot.getHeight();
+	// 				inputAnnot.Height = annot.getWidth();
+	// 			}
 
-				// delete original annotation
-				annotsToDelete.push(annot);
+	// 			// delete original annotation
+	// 			annotsToDelete.push(annot);
 
-				// customize styles of the form field
-				Annotations.WidgetAnnotation.getCustomStyles = function (widget) {
-					if (widget instanceof Annotations.SignatureWidgetAnnotation) {
-						return {
-							border: '1px solid #a5c7ff',
-						};
-					}
-				};
-				Annotations.WidgetAnnotation.getCustomStyles(inputAnnot);
+	// 			// customize styles of the form field
+	// 			Annotations.WidgetAnnotation.getCustomStyles = function (widget) {
+	// 				if (widget instanceof Annotations.SignatureWidgetAnnotation) {
+	// 					return {
+	// 						border: '1px solid #a5c7ff',
+	// 					};
+	// 				}
+	// 			};
+	// 			Annotations.WidgetAnnotation.getCustomStyles(inputAnnot);
 
-				// draw the annotation the viewer
-				annotManager.addAnnotation(inputAnnot);
-				fieldManager.addField(field);
-				annotsToDraw.push(inputAnnot);
-			})
-		);
+	// 			// draw the annotation the viewer
+	// 			annotManager.addAnnotation(inputAnnot);
+	// 			fieldManager.addField(field);
+	// 			annotsToDraw.push(inputAnnot);
+	// 		})
+	// 	);
 
-		// delete old annotations
-		annotManager.deleteAnnotations(annotsToDelete, null, true);
+	// 	// delete old annotations
+	// 	annotManager.deleteAnnotations(annotsToDelete, null, true);
 
-		// refresh viewer
-		await annotManager.drawAnnotationsFromList(annotsToDraw);
-		// await uploadForSigning();
-		// await composeFile();
-	};
+	// 	// refresh viewer
+	// 	await annotManager.drawAnnotationsFromList(annotsToDraw);
+	// 	// await uploadForSigning();
+	// 	// await composeFile();
+	// };
 
 	// const composeFile = async () => {
 	// 	const { docViewer, annotManager } = instance;
@@ -388,6 +397,125 @@ const EditDocuments = () => {
 	// 	console.log(file+"---------------------------------------------");
 	// 	await setFile(file);
 	// }
+
+	const applyFields = async (document) => {
+		const { Annotations, docViewer } = instance;
+		const { WidgetFlags } = Annotations;
+		const annotManager = docViewer.getAnnotationManager();
+		const fieldManager = annotManager.getFieldManager();
+		const annotationsList = annotManager.getAnnotationsList();
+		const annotsToDelete = [];
+		const annotsToDraw = [];
+		// annotManager.setCurrentUser(author.replace('.', '_'));
+		annotationsList.forEach((annot, index) => {
+			let applyAnnotation;
+			let field;
+			if (typeof annot.customs === 'undefined') return;
+
+			const flags = new WidgetFlags();
+			if(annot.customs.author === myInfo.email) {
+
+				switch (annot.customs.type) {
+					case 'SIGNATURE':
+						field = new Annotations.Forms.Field(`${annot.customs.author}#Sig${index}`, {
+							type: 'Sig',
+							flags,
+						});
+						applyAnnotation = new Annotations.SignatureWidgetAnnotation(field, {
+							appearance: '_DEFAULT',
+							appearances: {
+								_DEFAULT: {
+									Normal: {
+										data: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjEuMWMqnEsAAAANSURBVBhXY/j//z8DAAj8Av6IXwbgAAAAAElFTkSuQmCC',
+										offset: {
+											x: 100,
+											y: 100,
+										},
+									},
+								},
+							},
+						});
+						break;
+					case 'TEXT':
+						field = new Annotations.Forms.Field(`${annot.customs.author}#Name${index}`, {
+							type: 'Tx',
+							flags,
+						});
+						applyAnnotation = new Annotations.TextWidgetAnnotation(field);
+						break;
+					case 'DATE':
+						field = new Annotations.Forms.Field(`${annot.customs.author}#Date${index}`, {
+							type: 'Tx',
+							value: 'm-d-yyyy',
+							flags,
+							actions: {
+								F: [
+									{
+										name: 'JavaScript',
+										javascript: 'AFDate_FormatEx("mmm d, yyyy");',
+									},
+								],
+								K: [
+									{
+										name: 'JavaScript',
+										javascript: 'AFDate_FormatEx("mmm d, yyyy");',
+									},
+								],
+							},
+						});
+
+						applyAnnotation = new Annotations.DatePickerWidgetAnnotation(field);
+						break;
+					default:
+						break;
+				}
+				const zoom = docViewer.getZoom();
+				applyAnnotation.PageNumber = annot.getPageNumber();
+				applyAnnotation.X = annot.getX();
+				applyAnnotation.Y = annot.getY();
+				applyAnnotation.rotation = annot.Rotation;
+				applyAnnotation.setWidth(
+					(applyAnnotation.rotation === 90 ? annot.getHeight() : annot.getWidth()) * zoom
+				);
+				applyAnnotation.setHeight(
+					(applyAnnotation.rotation === 90 ? annot.getWidth() : annot.getHeight()) * zoom
+				);
+				Annotations.WidgetAnnotation.getCustomStyles = function (widget) {
+					if (widget instanceof Annotations.TextWidgetAnnotation) {
+						return {
+							'font-size': `calc(1rem / ${zoom}`,
+							'text-align': 'center',
+							borderBottom: '2px solid #a5c7ff',
+							color: 'black',
+							'background-color': '#e0e3e6',
+							fontWeight: 'bold',
+						};
+					}
+					if (widget instanceof Annotations.SignatureWidgetAnnotation) {
+						return {
+							borderBottom: '2px solid #a5c7ff',
+						};
+					}
+					return {};
+				};
+
+				Annotations.WidgetAnnotation.getCustomStyles(applyAnnotation);
+
+				annotsToDelete.push(annot);
+				annotManager.addAnnotation(applyAnnotation);
+				fieldManager.addField(field);
+				annotsToDraw.push(applyAnnotation);
+			}
+		});
+		await annotManager.deleteAnnotations(annotsToDelete, { force: true });
+
+		// refresh viewer
+		await annotManager.drawAnnotationsFromList(annotsToDraw);
+		// await uploadForSigning();
+		// await composeFile();
+		// updateDocumentFieldsList(webviewerInstances.currentDocument);
+	};
+
 
 	const dragOver = (e) => {
 		e.preventDefault();
@@ -419,7 +547,8 @@ const EditDocuments = () => {
 		// addField(type, webviewerInstances.dropPoint);
 		addFields(type);
 		console.log(currentAssignee)
-		if (currentAssignee === "Me")
+		console.log(getValues())
+		if (currentAssignee === myInfo.email)
 			applyFields();
 		e.target.style.opacity = 1;
 		document.body.removeChild(document.getElementById('form-build-drag-image-copy'));
@@ -430,6 +559,7 @@ const EditDocuments = () => {
 		// save updated file
 		// applyFields();
 		updateDocumentFieldsList(webviewerInstances.currentDocument);
+		updateDocumentXFDFs(webviewerInstances.currentDocument);
 		dispatch(setCurrentDocument(+event.currentTarget.getAttribute('data-id')));
 	};
 
@@ -459,11 +589,11 @@ const EditDocuments = () => {
 										{...inputProps}
 										inputRef={ref}
 										value={value}
-										defaultValue="Me"
+										defaultValue={myInfo.email ?? ""}
 										SelectProps={{ displayEmpty: true }}
 										onChange={(e) => setCurrentAssignee(e.target.value)}
 									>
-										<MenuItem key="me" value="Me">
+										<MenuItem key="me" value={myInfo.email}>
 											Tôi
 										</MenuItem>
 										{receivers.receivers.map((receiver) => (
