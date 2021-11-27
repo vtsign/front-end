@@ -12,7 +12,7 @@ import DialogKey from './DialogKey';
 import { pdfTronContext } from '../../redux/constants/contexts/pdfTronContext';
 
 const SignDocument2 = () => {
-	const { instance, setInstance, documentFields, updateDocumentFieldsList2 } =
+	const { instance, setInstance, documentXFDFs, updateDocumentXFDFs } =
 		useContext(pdfTronContext);
 	const [annotManager, setAnnotatManager] = useState(null);
 	const [annotPosition, setAnnotPosition] = useState(0);
@@ -20,7 +20,7 @@ const SignDocument2 = () => {
 	const [userDocument, setUserDocument] = useState(null);
 	const [documents, setDocuments] = useState([]);
 	const [currentDocument, setCurrentDocument] = useState(null);
-	const [preIndex, setPreIndex] = useState(0);
+	const [previousDocument, setPreviousDocument] = useState(null);
 
 	const viewer = useRef(null);
 	const [link, setLink] = useState('');
@@ -59,11 +59,10 @@ const SignDocument2 = () => {
 				window.PDFNet = PDFNet;
 				window.CoreControls = CoreControls;
 
-				userDocument.documents.forEach((document, index) => {
-					document.index = index;
-					setThumbnail(instance, document);
-				});
-				setCurrentDocument(userDocument.documents[0]);
+				userDocument.documents.forEach((document) => setThumbnail(instance, document));
+				const currentDocument = userDocument.documents[0];
+				setCurrentDocument(currentDocument);
+				setPreviousDocument(currentDocument);
 			});
 		}
 	}, [userDocument]);
@@ -77,8 +76,6 @@ const SignDocument2 = () => {
 
 				docViewer.loadDocument(currentDocument.url);
 
-				
-
 				const normalStyles = (widget) => {
 					if (widget instanceof Annotations.TextWidgetAnnotation) {
 						return {
@@ -91,24 +88,20 @@ const SignDocument2 = () => {
 						};
 					}
 				};
-				setTimeout(() => {
-					if (
-						typeof documentFields[currentDocument.index] !== 'undefined' &&
-						documentFields.length > 0
-					) {
-						
-							annotManager.deselectAllAnnotations();
-							annotManager.importAnnotations(documentFields[currentDocument.index])
+				
+				setTimeout(async () => {
+					const xfdf = documentXFDFs[currentDocument.id];
+					if (!!xfdf) {
+						annotManager.deselectAllAnnotations();
+						annotManager.importAnnotations(xfdf);
 					}
 				}, 1000);
 
 				annotManager.on('annotationChanged', (annotations, action, { imported }) => {
 					if (imported && action === 'add') {
 						annotations.forEach(function (annot) {
-							
 							if (annot instanceof Annotations.WidgetAnnotation) {
 								Annotations.WidgetAnnotation.getCustomStyles = normalStyles;
-								console.log(annot.custom+ "===================================>")
 								if (!annot.fieldName.startsWith(userDocument.user.email)) {
 									annot.Hidden = true;
 									annot.Listable = false;
@@ -117,8 +110,6 @@ const SignDocument2 = () => {
 						});
 					}
 				});
-				
-
 			} catch (error) {
 				console.error('Error on showing documents:');
 				console.error(error.message);
@@ -194,10 +185,10 @@ const SignDocument2 = () => {
 		});
 	};
 
-	const handleDocumentChange = async(document) => {
-		await updateDocumentFieldsList2(preIndex);
+	const handleDocumentChange = async (document) => {
+		await updateDocumentXFDFs(previousDocument.id);
 		setCurrentDocument(document);
-		setPreIndex(document.index);
+		setPreviousDocument(document);
 	};
 
 	return (
@@ -213,7 +204,7 @@ const SignDocument2 = () => {
 					</Grid>
 					<Grid lg={3}>
 						<Stack>
-							<Button
+							{/* <Button
 								onClick={nextField}
 								accessibilityLabel="next field"
 								iconEnd="arrow-forward"
@@ -228,7 +219,7 @@ const SignDocument2 = () => {
 								variant="outlined"
 							>
 								Previous field
-							</Button>
+							</Button> */}
 							<Button
 								onClick={completeSigning}
 								accessibilityLabel="complete signing"
@@ -240,10 +231,7 @@ const SignDocument2 = () => {
 							{link && <a href={link}>Download file</a>}
 						</Stack>
 						{documents.map((document) => (
-							<Grid
-								key={document.index}
-								onClick={() => handleDocumentChange(document)}
-							>
+							<Grid key={document.id} onClick={() => handleDocumentChange(document)}>
 								<Grid>
 									<img
 										width="50%"

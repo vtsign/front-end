@@ -8,6 +8,7 @@ export const PdfTronProvider = ({ children }) => {
 	const documents = useSelector((state) => state.addDocList.documentList);
 	const [instance, setInstance] = useState(null);
 	const [documentFields, setDocumentFields] = useState([]);
+	const documentXFDFs = {};
 
 	const handleSendDocuments = async () => {
 		const files = [];
@@ -44,19 +45,13 @@ export const PdfTronProvider = ({ children }) => {
 		// console.log(documentFields)
 	};
 
-	const updateDocumentFieldsList2 = async (index = -1) => {
+	const updateDocumentXFDFs = async (docId) => {
 		if (instance === null) return;
 		const { docViewer } = instance;
 		const annotManager = docViewer.getAnnotationManager();
 		
-		const xfdf = await annotManager.exportAnnotations()
-		
-		if (index === -1 || documentFields.length === 0) {
-			setDocumentFields([...documentFields, xfdf]);
-		} else {
-			documentFields[index] = xfdf;
-			setDocumentFields([...documentFields]);
-		}
+		const xfdf = await annotManager.exportAnnotations();
+		documentXFDFs[docId] = xfdf;
 	};
 
 
@@ -190,7 +185,8 @@ export const PdfTronProvider = ({ children }) => {
 		instance,
 		setInstance,
 		documentFields,
-		updateDocumentFieldsList2,
+		documentXFDFs,
+		updateDocumentXFDFs,
 		updateDocumentFieldsList,
 		handleSendDocuments,
 	};
