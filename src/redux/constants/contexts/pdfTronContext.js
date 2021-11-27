@@ -101,7 +101,6 @@ export const PdfTronProvider = ({ children }) => {
 				case 'DATE':
 					field = new Annotations.Forms.Field(`${annot.customs.author}#Date${index}`, {
 						type: 'Tx',
-						value: 'm-d-yyyy',
 						flags,
 						actions: {
 							F: [

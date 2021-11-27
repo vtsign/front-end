@@ -4,7 +4,7 @@ import { Box, Stack, Button, Grid, Container } from '@mui/material';
 import WebViewer from '@pdftron/webviewer';
 // import 'gestalt/dist/gestalt.css';
 import './SignDocument.scss';
-import { useLocation } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 // import {} from '@mui/material';
 import documentApi from '../../api/documentApi';
 import { mergeAnnotations } from '../../components/MergeAnnotations/MergeAnnotations';
@@ -16,6 +16,7 @@ const SignDocument2 = () => {
 		useContext(pdfTronContext);
 	const [annotManager, setAnnotatManager] = useState(null);
 	const [annotPosition, setAnnotPosition] = useState(0);
+	const history = useHistory();
 
 	const [userDocument, setUserDocument] = useState(null);
 	const [documents, setDocuments] = useState([]);
@@ -23,7 +24,6 @@ const SignDocument2 = () => {
 	const [previousDocument, setPreviousDocument] = useState(null);
 
 	const viewer = useRef(null);
-	const [link, setLink] = useState('');
 
 	const location = useLocation();
 	const queryParam = new URLSearchParams(location.search);
@@ -139,33 +139,35 @@ const SignDocument2 = () => {
 
 	const completeSigning = async () => {
 		const xfdf = await annotManager.exportAnnotations();
+		documentXFDFs[currentDocument.id] = xfdf;
 
-		const document_xfdf = {
-			xfdf,
-			document_uuid: userDocument.documents[0].id,
-		};
+		const keys = Object.keys(documentXFDFs);
+		const xfdfs = keys.map(key => ({
+			document_uuid: key,
+			xfdf: documentXFDFs[key],
+		}));
 
 		const files = [];
 		if (userDocument.last_sign) {
-			const listXfdfs = userDocument.documents[0].xfdfs.map((x) => x.xfdf);
-			listXfdfs.push(xfdf);
-
-			const blob = await mergeAnnotations(userDocument.documents[0].url, listXfdfs);
-			files.push(new File([blob], userDocument.documents[0].id));
-			const url = window.URL.createObjectURL(blob);
-			setLink(url);
+			for(const doc of documents) {
+				const listXfdfs = doc.xfdfs.map((x) => x.xfdf);
+				listXfdfs.push(documentXFDFs[doc.id]);
+				
+				const blob = await mergeAnnotations(doc.url, listXfdfs);
+				files.push(new File([blob], doc.id));
+			}
 		}
 
 		documentApi.signByReceiver(
 			{
 				contract_uuid: c,
 				user_uuid: r,
-				document_xfdfs: [document_xfdf],
+				document_xfdfs: xfdfs,
 			},
 			files
 		);
 
-		// navigate('/');
+		history.push('/');
 	};
 
 	const setThumbnail = async (instance, document) => {
@@ -186,9 +188,11 @@ const SignDocument2 = () => {
 	};
 
 	const handleDocumentChange = async (document) => {
-		await updateDocumentXFDFs(previousDocument.id);
-		setCurrentDocument(document);
-		setPreviousDocument(document);
+		if(previousDocument.id !== document.id) {
+			await updateDocumentXFDFs(previousDocument.id);
+			setCurrentDocument(document);
+			setPreviousDocument(document);
+		}
 	};
 
 	return (
@@ -228,7 +232,6 @@ const SignDocument2 = () => {
 							>
 								Complete signing
 							</Button>
-							{link && <a href={link}>Download file</a>}
 						</Stack>
 						{documents.map((document) => (
 							<Grid key={document.id} onClick={() => handleDocumentChange(document)}>
