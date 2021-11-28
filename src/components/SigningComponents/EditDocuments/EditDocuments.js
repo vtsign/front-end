@@ -33,7 +33,7 @@ const EditDocuments = () => {
 
 	const { register, control, getValues } = useForm();
 
-	const { instance, setInstance, documentFields, updateDocumentFieldsList, updateDocumentXFDFs } =
+	const { instance, setInstance, documentFields, updateDocumentFieldsList, updateDocumentXFDFs, updateDocumentXFDFs2, documentXFDFs, documentXFDFs2 } =
 		useContext(pdfTronContext);
 
 	const myInfo = localStorage.getItem('user')
@@ -51,23 +51,23 @@ const EditDocuments = () => {
 		WebViewer(
 			{
 				path: 'webviewer',
-				disabledElements: [
-					'viewControlsButton',
-					'selectToolButton',
-					'leftPanelButton',
-					'ribbons',
-					'toggleNotesButton',
-					'searchButton',
-					'menuButton',
-					'rubberStampToolGroupButton',
-					'stampToolGroupButton',
-					'fileAttachmentToolGroupButton',
-					'calloutToolGroupButton',
-					'undo',
-					'redo',
-					'eraserToolButton',
-					'toolsHeader',
-				],
+				// disabledElements: [
+				// 	'viewControlsButton',
+				// 	'selectToolButton',
+				// 	'leftPanelButton',
+				// 	'ribbons',
+				// 	'toggleNotesButton',
+				// 	'searchButton',
+				// 	'menuButton',
+				// 	'rubberStampToolGroupButton',
+				// 	'stampToolGroupButton',
+				// 	'fileAttachmentToolGroupButton',
+				// 	'calloutToolGroupButton',
+				// 	'undo',
+				// 	'redo',
+				// 	'eraserToolButton',
+				// 	'toolsHeader',
+				// ],
 				fullAPI: true,
 			},
 			viewer.current
@@ -115,39 +115,46 @@ const EditDocuments = () => {
 						? documents.documentList[webviewerInstances.currentDocument].data
 						: null
 				);
-				setTimeout(() => {
-					if (
-						typeof documentFields[webviewerInstances.currentDocument] !== 'undefined' &&
-						documentFields.length > 0
-					) {
-						documentFields[webviewerInstances.currentDocument].forEach((annot) => {
-							// if (!state.authors.includes(annot.customs.email)) return;
-							const newAnnot = new Annotations.FreeTextAnnotation();
-							newAnnot.PageNumber = annot.PageNumber;
-							newAnnot.Rotation = annot.Rotation;
-
-							newAnnot.setWidth(annot.getWidth());
-							newAnnot.setHeight(annot.getHeight());
-
-							newAnnot.X = annot.X;
-							newAnnot.Y = annot.Y;
-
-							newAnnot.setPadding(new Annotations.Rect(0, 0, 0, 0));
-							newAnnot.customs = annot.customs;
-							newAnnot.setContents(annot.getContents());
-							newAnnot.FontSize = `${20.0}px`;
-							newAnnot.FillColor = new Annotations.Color(23, 162, 184, 1);
-							newAnnot.TextColor = new Annotations.Color(255, 255, 255, 1);
-							newAnnot.StrokeThickness = 1;
-							newAnnot.StrokeColor = new Annotations.Color(0, 165, 228);
-							newAnnot.TextAlign = 'center';
-
-							annotManager.deselectAllAnnotations();
-							annotManager.addAnnotation(newAnnot, true);
-							annotManager.redrawAnnotation(newAnnot);
-						});
+				setTimeout( () => {
+					const xfdf = documentXFDFs2[webviewerInstances.currentDocument];
+					if (!!xfdf) {
+						annotManager.deselectAllAnnotations();
+						annotManager.importAnnotations(xfdf);
 					}
-				}, 500);
+				}, 1000);
+				// setTimeout(() => {
+				// 	if (
+				// 		typeof documentFields[webviewerInstances.currentDocument] !== 'undefined' &&
+				// 		documentFields.length > 0
+				// 	) {
+				// 		documentFields[webviewerInstances.currentDocument].forEach((annot) => {
+				// 			if (!state.authors.includes(annot.customs.email)) return;
+				// 			const newAnnot = new Annotations.FreeTextAnnotation();
+				// 			newAnnot.PageNumber = annot.PageNumber;
+				// 			newAnnot.Rotation = annot.Rotation;
+
+				// 			newAnnot.setWidth(annot.getWidth());
+				// 			newAnnot.setHeight(annot.getHeight());
+
+				// 			newAnnot.X = annot.X;
+				// 			newAnnot.Y = annot.Y;
+
+				// 			newAnnot.setPadding(new Annotations.Rect(0, 0, 0, 0));
+				// 			newAnnot.customs = annot.customs;
+				// 			newAnnot.setContents(annot.getContents());
+				// 			newAnnot.FontSize = `${20.0}px`;
+				// 			newAnnot.FillColor = new Annotations.Color(23, 162, 184, 1);
+				// 			newAnnot.TextColor = new Annotations.Color(255, 255, 255, 1);
+				// 			newAnnot.StrokeThickness = 1;
+				// 			newAnnot.StrokeColor = new Annotations.Color(0, 165, 228);
+				// 			newAnnot.TextAlign = 'center';
+
+				// 			annotManager.deselectAllAnnotations();
+				// 			annotManager.importAnnotations(updateDocumentXFDFs(webviewerInstances.currentDocument));
+				// 			// annotManager.redrawAnnotation(newAnnot);
+				// 		// });
+				// 	}
+				// }, 1000);
 			}
 		})();
 	}, [instance, documents, webviewerInstances.currentDocument]);
@@ -256,148 +263,6 @@ const EditDocuments = () => {
 		return {};
 	};
 
-	// const applyFields = async () => {
-	// 	const { Annotations, docViewer } = instance;
-	// 	const annotManager = docViewer.getAnnotationManager();
-	// 	const fieldManager = annotManager.getFieldManager();
-	// 	const annotationsList = annotManager.getAnnotationsList();
-	// 	const annotsToDelete = [];
-	// 	const annotsToDraw = [];
-
-	// 	await Promise.all(
-	// 		annotationsList.map(async (annot, index) => {
-	// 			let inputAnnot;
-	// 			let field;
-
-	// 			if (typeof annot.custom !== 'undefined') {
-	// 				// create a form field based on the type of annotation
-	// 				if (annot.custom.type === 'TEXT') {
-	// 					field = new Annotations.Forms.Field(
-	// 						annot.getContents() + Date.now() + index,
-	// 						{
-	// 							type: 'Tx',
-	// 							value: annot.custom.value,
-	// 						}
-	// 					);
-	// 					inputAnnot = new Annotations.TextWidgetAnnotation(field);
-	// 				} else if (annot.custom.type === 'SIGNATURE') {
-	// 					field = new Annotations.Forms.Field(
-	// 						annot.getContents() + Date.now() + index,
-	// 						{
-	// 							type: 'Sig',
-	// 						}
-	// 					);
-	// 					inputAnnot = new Annotations.SignatureWidgetAnnotation(field, {
-	// 						appearance: '_DEFAULT',
-	// 						appearances: {
-	// 							_DEFAULT: {
-	// 								Normal: {
-	// 									data: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjEuMWMqnEsAAAANSURBVBhXY/j//z8DAAj8Av6IXwbgAAAAAElFTkSuQmCC',
-	// 									offset: {
-	// 										x: 100,
-	// 										y: 100,
-	// 									},
-	// 								},
-	// 							},
-	// 						},
-	// 					});
-	// 				} else if (annot.custom.type === 'DATE') {
-	// 					field = new Annotations.Forms.Field(
-	// 						annot.getContents() + Date.now() + index,
-	// 						{
-	// 							type: 'Tx',
-	// 							// value: 'm-d-yyyy',
-	// 							// Actions need to be added for DatePickerWidgetAnnotation to recognize this field.
-	// 							actions: {
-	// 								F: [
-	// 									{
-	// 										name: 'JavaScript',
-	// 										// You can customize the date format here between the two double-quotation marks
-	// 										// or leave this blank to use the default format
-	// 										javascript: 'AFDate_FormatEx("mmm d, yyyy");',
-	// 									},
-	// 								],
-	// 								K: [
-	// 									{
-	// 										name: 'JavaScript',
-	// 										// You can customize the date format here between the two double-quotation marks
-	// 										// or leave this blank to use the default format
-	// 										javascript: 'AFDate_FormatEx("mmm d, yyyy");',
-	// 									},
-	// 								],
-	// 							},
-	// 						}
-	// 					);
-
-	// 					inputAnnot = new Annotations.DatePickerWidgetAnnotation(field);
-	// 				} else {
-	// 					// exit early for other annotations
-	// 					annotManager.deleteAnnotation(annot, false, true); // prevent duplicates when importing xfdf
-	// 					return;
-	// 				}
-	// 			} else {
-	// 				// exit early for other annotations
-	// 				return;
-	// 			}
-
-	// 			// set position
-	// 			inputAnnot.PageNumber = annot.getPageNumber();
-	// 			inputAnnot.X = annot.getX();
-	// 			inputAnnot.Y = annot.getY();
-	// 			inputAnnot.rotation = annot.Rotation;
-	// 			if (annot.Rotation === 0 || annot.Rotation === 180) {
-	// 				inputAnnot.Width = annot.getWidth();
-	// 				inputAnnot.Height = annot.getHeight();
-	// 			} else {
-	// 				inputAnnot.Width = annot.getHeight();
-	// 				inputAnnot.Height = annot.getWidth();
-	// 			}
-
-	// 			// delete original annotation
-	// 			annotsToDelete.push(annot);
-
-	// 			// customize styles of the form field
-	// 			Annotations.WidgetAnnotation.getCustomStyles = function (widget) {
-	// 				if (widget instanceof Annotations.SignatureWidgetAnnotation) {
-	// 					return {
-	// 						border: '1px solid #a5c7ff',
-	// 					};
-	// 				}
-	// 			};
-	// 			Annotations.WidgetAnnotation.getCustomStyles(inputAnnot);
-
-	// 			// draw the annotation the viewer
-	// 			annotManager.addAnnotation(inputAnnot);
-	// 			fieldManager.addField(field);
-	// 			annotsToDraw.push(inputAnnot);
-	// 		})
-	// 	);
-
-	// 	// delete old annotations
-	// 	annotManager.deleteAnnotations(annotsToDelete, null, true);
-
-	// 	// refresh viewer
-	// 	await annotManager.drawAnnotationsFromList(annotsToDraw);
-	// 	// await uploadForSigning();
-	// 	// await composeFile();
-	// };
-
-	// const composeFile = async () => {
-	// 	const { docViewer, annotManager } = instance;
-	// 	const doc = docViewer.getDocument();
-	// 	const xfdfString = await annotManager.exportAnnotations({
-	// 		widgets: true,
-	// 		fields: true,
-	// 	});
-	// 	const data = await doc.getFileData({ xfdfString });
-	// 	const arr = new Uint8Array(data);
-	// 	const blob = new Blob([arr], { type: 'application/pdf' });
-	// 	// console.log("safdfadsf", fileData.name);
-	// 	const file = new File([blob], fileData.name);
-	// 	console.log(file+"---------------------------------------------");
-	// 	await setFile(file);
-	// }
-
 	const applyFields = async (document) => {
 		const { Annotations, docViewer } = instance;
 		const { WidgetFlags } = Annotations;
@@ -446,7 +311,6 @@ const EditDocuments = () => {
 					case 'DATE':
 						field = new Annotations.Forms.Field(`${annot.customs.author}#Date${index}`, {
 							type: 'Tx',
-							value: 'm-d-yyyy',
 							flags,
 							actions: {
 								F: [
@@ -546,8 +410,6 @@ const EditDocuments = () => {
 	const dragEnd = (e, type) => {
 		// addField(type, webviewerInstances.dropPoint);
 		addFields(type);
-		console.log(currentAssignee)
-		console.log(getValues())
 		if (currentAssignee === myInfo.email)
 			applyFields();
 		e.target.style.opacity = 1;
@@ -555,12 +417,12 @@ const EditDocuments = () => {
 		e.preventDefault();
 	};
 
-	const handleReloadDocument = (event) => {
+	const handleReloadDocument = async (index) => {
 		// save updated file
 		// applyFields();
 		updateDocumentFieldsList(webviewerInstances.currentDocument);
-		updateDocumentXFDFs(webviewerInstances.currentDocument);
-		dispatch(setCurrentDocument(+event.currentTarget.getAttribute('data-id')));
+		await updateDocumentXFDFs2(webviewerInstances.currentDocument);
+		dispatch(setCurrentDocument(index));
 	};
 
 	return (
@@ -815,7 +677,7 @@ const EditDocuments = () => {
 									className="preview-file__item"
 									data-id={index}
 									key={index}
-									onClick={(e) => handleReloadDocument(e)}
+									onClick={() => handleReloadDocument(index)}
 								>
 									<Grid className="preview-file__thumbnail">
 										<img

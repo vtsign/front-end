@@ -9,6 +9,7 @@ export const PdfTronProvider = ({ children }) => {
 	const documents = useSelector((state) => state.addDocList.documentList);
 	const [instance, setInstance] = useState(null);
 	const [documentFields, setDocumentFields] = useState([]);
+	const [documentXFDFs2, setDocumentXFDFs2] = useState({});
 	const documentXFDFs = {};
 
 	const handleSendDocuments = async () => {
@@ -18,13 +19,8 @@ export const PdfTronProvider = ({ children }) => {
 		const annotationManager = docViewer.getAnnotationManager();
 		// documents.forEach((doc, index) => {
 		for (let i = 0; i < documents.length; i++) {
-			await docViewer.loadDocument(documents[i]);
-			annotationManager.addAnnotations(documentFields[i]);
-			const xfdf = await annotationManager.exportAnnotations();
-			const fileMerge = await mergeAnnotations(documents[i].data, xfdf);
-			console.log(fileMerge);
-
-			await docViewer.loadDocument(fileMerge);
+			await docViewer.loadDocument(documents[i].data);
+			// annotationManager.importAnnotations(documentXFDFs2[i]);
 			annotationManager.addAnnotations(documentFields[i]);
 			const file = await applyFields(documents[i]);
 			files.push(file);
@@ -34,13 +30,23 @@ export const PdfTronProvider = ({ children }) => {
 		return files;
 	};
 
-	const updateDocumentFieldsList = (index = -1) => {
+	// const handleMergeDocument = async (index) => {
+	// 	const xfdf = await updateDocumentXFDFs(index);
+	// 	const fileMerge = await mergeAnnotations(documents[index].data, [xfdf]);
+	// 	const url =  URL.createObjectURL(fileMerge);
+	// 	if(documents[index].data.startsWith('blob')) {
+	// 		URL.revokeObjectURL(documents[index].data);
+	// 	}
+	// 	documents[index].data = url;
+	// }
+
+	const updateDocumentFieldsList = async (index = -1) => {
 		if (instance === null) return;
 		const { docViewer } = instance;
 		const annotManager = docViewer.getAnnotationManager();
 		const xfdf = annotManager
 			.getAnnotationsList()
-			.filter((annot) => annot.Subject === 'Free Text');
+			.filter((annot) => annot.Subject !== null);
 
 		if (index === -1 || documentFields.length === 0) {
 			setDocumentFields([...documentFields, xfdf]);
@@ -48,6 +54,8 @@ export const PdfTronProvider = ({ children }) => {
 			documentFields[index] = xfdf;
 			setDocumentFields([...documentFields]);
 		}
+
+		// await updateDocumentXFDFs(index);
 		// documentFields[0].map(item => console.log(item.custom))
 		// console.log(documentFields)
 	};
@@ -56,11 +64,19 @@ export const PdfTronProvider = ({ children }) => {
 		if (instance === null) return;
 		const { docViewer } = instance;
 		const annotManager = docViewer.getAnnotationManager();
-
 		const xfdf = await annotManager.exportAnnotations();
 		documentXFDFs[docId] = xfdf;
-	};
 
+	};
+	const updateDocumentXFDFs2 = async (docId) => {
+		if (instance === null) return;
+		const { docViewer } = instance;
+		const annotManager = docViewer.getAnnotationManager();
+		const xfdf = await annotManager.exportAnnotations();
+		documentXFDFs2[docId] = xfdf;
+		setDocumentXFDFs2({...documentXFDFs2})
+
+	};
 
 	const applyFields = async (document) => {
 		const { Annotations, docViewer } = instance;
@@ -191,10 +207,13 @@ export const PdfTronProvider = ({ children }) => {
 		instance,
 		setInstance,
 		documentFields,
-		documentXFDFs,
-		updateDocumentXFDFs,
 		updateDocumentFieldsList,
 		handleSendDocuments,
+		documentXFDFs,
+		updateDocumentXFDFs,
+		documentXFDFs2,
+		updateDocumentXFDFs2,
+		// handleMergeDocument
 	};
 
 	return <pdfTronContext.Provider value={exportContext}>{children}</pdfTronContext.Provider>;
