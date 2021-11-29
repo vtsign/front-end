@@ -26,21 +26,16 @@ import { pdfTronContext } from '../../../redux/constants/contexts/pdfTronContext
 import './EditDocuments.scss';
 
 const EditDocuments = () => {
-	// const [instanced, setInstance] = useState(null);
-	// const [dropPoint, setDropPoint] = useState(null);
-
 	const viewer = useRef(null);
 
-	const { register, control, getValues } = useForm();
+	const { control } = useForm();
 
 	const {
 		instance,
 		setInstance,
 		documentFields,
 		updateDocumentFieldsList,
-		updateDocumentXFDFs,
 		updateDocumentXFDFs2,
-		documentXFDFs,
 		documentXFDFs2,
 	} = useContext(pdfTronContext);
 
@@ -56,23 +51,23 @@ const EditDocuments = () => {
 		WebViewer(
 			{
 				path: 'webviewer',
-				// disabledElements: [
-				// 	'viewControlsButton',
-				// 	'selectToolButton',
-				// 	'leftPanelButton',
-				// 	'ribbons',
-				// 	'toggleNotesButton',
-				// 	'searchButton',
-				// 	'menuButton',
-				// 	'rubberStampToolGroupButton',
-				// 	'stampToolGroupButton',
-				// 	'fileAttachmentToolGroupButton',
-				// 	'calloutToolGroupButton',
-				// 	'undo',
-				// 	'redo',
-				// 	'eraserToolButton',
-				// 	'toolsHeader',
-				// ],
+				disabledElements: [
+					'viewControlsButton',
+					'selectToolButton',
+					'leftPanelButton',
+					'ribbons',
+					'toggleNotesButton',
+					'searchButton',
+					'menuButton',
+					'rubberStampToolGroupButton',
+					'stampToolGroupButton',
+					'fileAttachmentToolGroupButton',
+					'calloutToolGroupButton',
+					'undo',
+					'redo',
+					'eraserToolButton',
+					'toolsHeader',
+				],
 				fullAPI: true,
 			},
 			viewer.current
@@ -82,7 +77,7 @@ const EditDocuments = () => {
 			await PDFNet.initialize();
 			window.PDFNet = PDFNet;
 			window.CoreControls = CoreControls;
-			const { docViewer, iframeWindow, Annotations } = instance;
+			const { iframeWindow, Annotations } = instance;
 			// docViewer.loadDocument(documents.documentList[0].data);
 			Annotations.SignatureWidgetAnnotation.prototype.createSignHereElement = function () {
 				const div = document.createElement('div');
@@ -106,11 +101,8 @@ const EditDocuments = () => {
 	}, []);
 	useEffect(() => {
 		(async () => {
-			// setCurrentAssignee(receivers.receivers[0])
-			console.log(myInfo);
-			// localStorage.setItem('currentDoc', state.currentDocShow);
 			if (instance && documents.documentList.length > -1) {
-				const { docViewer, Annotations } = instance;
+				const { docViewer } = instance;
 				const annotManager = docViewer.getAnnotationManager();
 				await annotManager.deleteAnnotations(annotManager.getAnnotationsList(), {
 					force: true,
@@ -120,107 +112,26 @@ const EditDocuments = () => {
 						? documents.documentList[webviewerInstances.currentDocument].data
 						: null
 				);
-				setTimeout(() => {
 					const listAnnotInitials = annotManager.getAnnotationsList();
-					annotManager.deleteAnnotations(listAnnotInitials, true);
-					
 					const xfdf = documentXFDFs2[webviewerInstances.currentDocument];
-					const annotation = documentFields[webviewerInstances.currentDocument];
-					if (!!xfdf) {
+					const annotations = documentFields[webviewerInstances.currentDocument];
+
+					if (annotations != null || !!xfdf) {
+						annotManager.deleteAnnotations(listAnnotInitials, true);
 						annotManager.deselectAllAnnotations();
-						annotManager.importAnnotations(xfdf);
-						annotManager.addAnnotations(annotation);
+
+						if (!!xfdf) {
+							annotManager.importAnnotations(xfdf);
+						}
+
+						if (annotations.length > 0) {
+							annotManager.addAnnotations(annotations);
+						}
 					}
-				}, 1000);
-				// setTimeout(() => {
-				// 	if (
-				// 		typeof documentFields[webviewerInstances.currentDocument] !== 'undefined' &&
-				// 		documentFields.length > 0
-				// 	) {
-				// 		documentFields[webviewerInstances.currentDocument].forEach((annot) => {
-				// 			if (!state.authors.includes(annot.customs.email)) return;
-				// 			const newAnnot = new Annotations.FreeTextAnnotation();
-				// 			newAnnot.PageNumber = annot.PageNumber;
-				// 			newAnnot.Rotation = annot.Rotation;
 
-				// 			newAnnot.setWidth(annot.getWidth());
-				// 			newAnnot.setHeight(annot.getHeight());
-
-				// 			newAnnot.X = annot.X;
-				// 			newAnnot.Y = annot.Y;
-
-				// 			newAnnot.setPadding(new Annotations.Rect(0, 0, 0, 0));
-				// 			newAnnot.customs = annot.customs;
-				// 			newAnnot.setContents(annot.getContents());
-				// 			newAnnot.FontSize = `${20.0}px`;
-				// 			newAnnot.FillColor = new Annotations.Color(23, 162, 184, 1);
-				// 			newAnnot.TextColor = new Annotations.Color(255, 255, 255, 1);
-				// 			newAnnot.StrokeThickness = 1;
-				// 			newAnnot.StrokeColor = new Annotations.Color(0, 165, 228);
-				// 			newAnnot.TextAlign = 'center';
-
-				// 			annotManager.deselectAllAnnotations();
-				// 			annotManager.importAnnotations(updateDocumentXFDFs(webviewerInstances.currentDocument));
-				// 			// annotManager.redrawAnnotation(newAnnot);
-				// 		// });
-				// 	}
-				// }, 1000);
 			}
 		})();
 	}, [instance, documents, webviewerInstances.currentDocument]);
-
-	const addField = (type, point = {}, name = '', value = '', flag = {}) => {
-		const { docViewer, Annotations } = instance;
-		const annotManager = docViewer.getAnnotationManager();
-		const doc = docViewer.getDocument();
-		const displayMode = docViewer.getDisplayModeManager().getDisplayMode();
-		const page = displayMode.getSelectedPages(point, point);
-		if (!!point.x && page.first == null) {
-			return; //don't add field to an invalid page location
-		}
-		const page_idx = page.first !== null ? page.first : docViewer.getCurrentPage();
-		const page_info = doc.getPageInfo(page_idx);
-		const page_point = displayMode.windowToPage(point, page_idx);
-		const zoom = docViewer.getZoom();
-
-		var textAnnot = new Annotations.FreeTextAnnotation();
-		textAnnot.PageNumber = page_idx;
-		const rotation = docViewer.getCompleteRotation(page_idx) * 90;
-		textAnnot.Rotation = rotation;
-		if (rotation === 270 || rotation === 90) {
-			textAnnot.Width = 50.0 / zoom;
-			textAnnot.Height = 250.0 / zoom;
-		} else {
-			textAnnot.Width = 250.0 / zoom;
-			textAnnot.Height = 50.0 / zoom;
-		}
-		textAnnot.X = (page_point.x || page_info.width / 2) - textAnnot.Width / 2;
-		textAnnot.Y = (page_point.y || page_info.height / 2) - textAnnot.Height / 2;
-
-		textAnnot.setPadding(new Annotations.Rect(0, 0, 0, 0));
-		textAnnot.custom = {
-			type,
-			value,
-			flag,
-			name: `${currentAssignee}_${type}_`,
-		};
-
-		// set the type of annot
-		textAnnot.setContents(textAnnot.custom.name);
-		textAnnot.FontSize = '' + 20.0 / zoom + 'px';
-		textAnnot.FillColor = new Annotations.Color(211, 211, 211, 0.5);
-		textAnnot.TextColor = new Annotations.Color(0, 165, 228);
-		textAnnot.StrokeThickness = 1;
-		textAnnot.StrokeColor = new Annotations.Color(0, 165, 228);
-		textAnnot.TextAlign = 'center';
-
-		textAnnot.Author = annotManager.getCurrentUser();
-
-		annotManager.deselectAllAnnotations();
-		annotManager.addAnnotation(textAnnot, true);
-		annotManager.redrawAnnotation(textAnnot);
-		annotManager.selectAnnotation(textAnnot);
-	};
 
 	const addFields = async (type) => {
 		const { docViewer, Annotations } = instance;
@@ -431,11 +342,11 @@ const EditDocuments = () => {
 	};
 
 	const handleReloadDocument = async (index) => {
-		// save updated file
-		// applyFields();
-		await updateDocumentFieldsList(webviewerInstances.currentDocument);
-		await updateDocumentXFDFs2(webviewerInstances.currentDocument);
-		dispatch(setCurrentDocument(index));
+		if (index !== webviewerInstances.currentDocument) {
+			await updateDocumentFieldsList(webviewerInstances.currentDocument);
+			await updateDocumentXFDFs2(webviewerInstances.currentDocument);
+			dispatch(setCurrentDocument(index));
+		}
 	};
 
 	return (
@@ -471,11 +382,16 @@ const EditDocuments = () => {
 										<MenuItem key="me" value={myInfo.email}>
 											Tôi
 										</MenuItem>
-										{receivers.receivers.map((receiver) => (
-											<MenuItem key={receiver.email} value={receiver.email}>
-												{receiver.email}
-											</MenuItem>
-										))}
+										{receivers.receivers
+											.filter((r) => r.permission !== 'read')
+											.map((receiver) => (
+												<MenuItem
+													key={receiver.email}
+													value={receiver.email}
+												>
+													{receiver.name}
+												</MenuItem>
+											))}
 									</TextField>
 								)}
 							/>
@@ -496,7 +412,6 @@ const EditDocuments = () => {
 										cursor: 'pointer',
 										marginRight: '7px',
 									}}
-									onClick={() => addField('SIGNATURE')}
 									accessibilityLabel="add signature"
 									text="Add signature"
 									iconEnd="compose"
@@ -523,7 +438,6 @@ const EditDocuments = () => {
 										marginRight: '7px',
 									}}
 									className="edit-form__btn"
-									onClick={() => addField('DATE')}
 									accessibilityLabel="add date field"
 									text="Add date"
 									iconEnd="calendar"
@@ -551,7 +465,6 @@ const EditDocuments = () => {
 										marginRight: '7px',
 									}}
 									className="edit-form__btn"
-									onClick={() => addField('TEXT')}
 									accessibilityLabel="add text"
 									text="Add text"
 									iconEnd="text-sentence-case"
@@ -578,7 +491,6 @@ const EditDocuments = () => {
 										marginRight: '7px',
 									}}
 									className="edit-form__btn"
-									onClick={() => addField('TEXT')}
 									accessibilityLabel="add text"
 									text="Add text"
 									iconEnd="text-sentence-case"
@@ -605,7 +517,6 @@ const EditDocuments = () => {
 										marginRight: '7px',
 									}}
 									className="edit-form__btn"
-									onClick={() => addField('TEXT')}
 									accessibilityLabel="add text"
 									text="Add text"
 									iconEnd="text-sentence-case"
@@ -633,7 +544,6 @@ const EditDocuments = () => {
 										marginRight: '7px',
 									}}
 									className="edit-form__btn"
-									onClick={() => addField('TEXT')}
 									accessibilityLabel="add text"
 									text="Add text"
 									iconEnd="text-sentence-case"
@@ -660,7 +570,6 @@ const EditDocuments = () => {
 										marginRight: '7px',
 									}}
 									className="edit-form__btn"
-									onClick={() => addField('TEXT')}
 									accessibilityLabel="add text"
 									text="Add text"
 									iconEnd="text-sentence-case"
@@ -714,9 +623,6 @@ const EditDocuments = () => {
 							))}
 						</Grid>
 					)}
-					{/* <Button variant="outlined" onClick={applyFields}>
-						Gửi
-					</Button> */}
 				</Grid>
 			</Grid>
 		</>

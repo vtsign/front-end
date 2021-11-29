@@ -69,53 +69,58 @@ const SignDocument2 = () => {
 	}, [userDocument]);
 
 	useEffect(() => {
-		if (currentDocument != null) {
-			try {
-				const { docViewer, annotManager, Annotations } = instance;
-				setAnnotatManager(annotManager);
-				instance.setToolbarGroup('toolbarGroup-Insert');
+		(async () => {
+			if (currentDocument != null) {
+				try {
+					const { docViewer, annotManager, Annotations } = instance;
+					setAnnotatManager(annotManager);
+					instance.setToolbarGroup('toolbarGroup-Insert');
 
-				docViewer.loadDocument(currentDocument.url);
+					await docViewer.loadDocument(currentDocument.url);
 
-				const normalStyles = (widget) => {
-					if (widget instanceof Annotations.TextWidgetAnnotation) {
-						return {
-							'background-color': '#a5c7ff',
-							color: 'white',
-						};
-					} else if (widget instanceof Annotations.SignatureWidgetAnnotation) {
-						return {
-							border: '1px solid #a5c7ff',
-						};
-					}
-				};
-				
-				setTimeout(async () => {
+					const normalStyles = (widget) => {
+						if (widget instanceof Annotations.TextWidgetAnnotation) {
+							return {
+								'background-color': '#a5c7ff',
+								color: 'white',
+							};
+						} else if (widget instanceof Annotations.SignatureWidgetAnnotation) {
+							return {
+								border: '1px solid #a5c7ff',
+							};
+						}
+					};
+
+					// docViewer.on('documentLoaded', () => {
+					const listAnnotInitials = annotManager.getAnnotationsList();
+					annotManager.deleteAnnotations(listAnnotInitials, true);
+
 					const xfdf = documentXFDFs[currentDocument.id];
 					if (!!xfdf) {
 						annotManager.deselectAllAnnotations();
 						annotManager.importAnnotations(xfdf);
 					}
-				}, 1000);
+					// });
 
-				annotManager.on('annotationChanged', (annotations, action, { imported }) => {
-					if (imported && action === 'add') {
-						annotations.forEach(function (annot) {
-							if (annot instanceof Annotations.WidgetAnnotation) {
-								Annotations.WidgetAnnotation.getCustomStyles = normalStyles;
-								if (!annot.fieldName.startsWith(userDocument.user.email)) {
-									annot.Hidden = true;
-									annot.Listable = false;
+					annotManager.on('annotationChanged', (annotations, action, { imported }) => {
+						if (imported && action === 'add') {
+							annotations.forEach(function (annot) {
+								if (annot instanceof Annotations.WidgetAnnotation) {
+									Annotations.WidgetAnnotation.getCustomStyles = normalStyles;
+									if (!annot.fieldName.startsWith(userDocument.user.email)) {
+										annot.Hidden = true;
+										annot.Listable = false;
+									}
 								}
-							}
-						});
-					}
-				});
-			} catch (error) {
-				console.error('Error on showing documents:');
-				console.error(error.message);
+							});
+						}
+					});
+				} catch (error) {
+					console.error('Error on showing documents:');
+					console.error(error.message);
+				}
 			}
-		}
+		})();
 	}, [currentDocument]);
 
 	const nextField = () => {
@@ -143,7 +148,7 @@ const SignDocument2 = () => {
 		documentXFDFs[currentDocument.id] = xfdf;
 
 		const keys = Object.keys(documentXFDFs);
-		const xfdfs = keys.map(key => ({
+		const xfdfs = keys.map((key) => ({
 			document_uuid: key,
 			xfdf: documentXFDFs[key],
 		}));
@@ -153,10 +158,10 @@ const SignDocument2 = () => {
 			const response = await documentApi.getSigning(c, r, key);
 			const data = response.data;
 			if (data.last_sign) {
-				for(const doc of data.documents) {
+				for (const doc of data.documents) {
 					const listXfdfs = doc.xfdfs.map((x) => x.xfdf);
 					listXfdfs.push(documentXFDFs[doc.id]);
-					
+
 					const blob = await mergeAnnotations(doc.url, listXfdfs);
 					files.push(new File([blob], doc.id));
 				}
@@ -196,7 +201,7 @@ const SignDocument2 = () => {
 	};
 
 	const handleDocumentChange = async (document) => {
-		if(previousDocument.id !== document.id) {
+		if (previousDocument.id !== document.id) {
 			await updateDocumentXFDFs(previousDocument.id);
 			setCurrentDocument(document);
 			setPreviousDocument(document);
@@ -205,7 +210,9 @@ const SignDocument2 = () => {
 
 	return (
 		<Container className="sign-document" maxWidth={false}>
-			{userDocument == null && <DialogKey setUserDocument={setUserDocument} setKey={setKey} />}
+			{userDocument == null && (
+				<DialogKey setUserDocument={setUserDocument} setKey={setKey} />
+			)}
 			{userDocument != null && (
 				<Grid container>
 					{/* <Grid lg={3}>

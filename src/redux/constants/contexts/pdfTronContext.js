@@ -10,13 +10,19 @@ export const PdfTronProvider = ({ children }) => {
 	const [instance, setInstance] = useState(null);
 	const [documentFields, setDocumentFields] = useState([]);
 	const [documentXFDFs2, setDocumentXFDFs2] = useState({});
-	const documentXFDFs = {};
+	const [documentXFDFs, setDocumentXFDFs] = useState({});
+
+	const webviewerInstances = useSelector((state) => state.webviewer);
 
 	const handleSendDocuments = async () => {
 		const files = [];
 
+		await updateDocumentFieldsList(webviewerInstances.currentDocument);
+		await updateDocumentXFDFs2(webviewerInstances.currentDocument);
+
 		const { docViewer } = instance;
 		const annotationManager = docViewer.getAnnotationManager();
+
 		for (let i = 0; i < documents.length; i++) {
 			await docViewer.loadDocument(documents[i].data);
 			const fileMerge = await mergeAnnotations(documents[i].data, [documentXFDFs2[i]]);
@@ -51,12 +57,18 @@ export const PdfTronProvider = ({ children }) => {
 		const annotManager = docViewer.getAnnotationManager();
 		const xfdf = await annotManager.exportAnnotations();
 		documentXFDFs[docId] = xfdf;
+		setDocumentXFDFs({ ...documentXFDFs });
+
+		const annotsDelete = annotManager.getAnnotationsList();
+		await annotManager.deleteAnnotations(annotsDelete, true);
 	};
 	const updateDocumentXFDFs2 = async (docId) => {
 		if (instance === null) return;
 		const { docViewer } = instance;
 		const annotManager = docViewer.getAnnotationManager();
 
+		// 1 -> 2
+		// file 1 bi xoa (nguoi nhan)
 		await annotManager.deleteAnnotations(documentFields[docId], true);
 
 		const xfdf = await annotManager.exportAnnotations();
@@ -75,7 +87,6 @@ export const PdfTronProvider = ({ children }) => {
 		const annotationsList = annotManager.getAnnotationsList();
 		const annotsToDelete = [];
 		const annotsToDraw = [];
-		// annotManager.setCurrentUser(author.replace('.', '_'));
 		annotationsList.forEach((annot, index) => {
 			let applyAnnotation;
 			let field;
@@ -181,15 +192,8 @@ export const PdfTronProvider = ({ children }) => {
 		const data = await doc.getFileData({ xfdfString });
 		const arr = new Uint8Array(data);
 		const blob = new Blob([arr], { type: 'application/pdf' });
-		// console.log("safdfadsf", fileData.name);
 		const file = new File([blob], document.name);
 		return file;
-
-		// // refresh viewer
-		// await annotManager.drawAnnotationsFromList(annotsToDraw);
-		// await uploadForSigning();
-		// await composeFile();
-		// updateDocumentFieldsList(webviewerInstances.currentDocument);
 	};
 
 	const exportContext = {
@@ -202,7 +206,6 @@ export const PdfTronProvider = ({ children }) => {
 		updateDocumentXFDFs,
 		documentXFDFs2,
 		updateDocumentXFDFs2,
-		// handleMergeDocument
 	};
 
 	return <pdfTronContext.Provider value={exportContext}>{children}</pdfTronContext.Provider>;
