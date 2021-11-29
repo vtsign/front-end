@@ -22,8 +22,8 @@ import './dialogKey.scss';
 // 	return <Slide direction="up" ref={ref} {...props} />;
 // });
 
-export default function DialogKey({ setUserDocument }) {
-	const [key, setKey] = useState('');
+export default function DialogKey({ setUserDocument, setKey }) {
+	const [keyCurrent, setKeyCurrent] = useState('');
 	const [open, setOpen] = useState(true);
 	const [errorMessage, setErrorMessage] = useState('');
 	const location = useLocation();
@@ -32,13 +32,14 @@ export default function DialogKey({ setUserDocument }) {
 	const c = queryParam.get('c');
 
 	const inputKeyHandler = (event) => {
-		setKey(event.target.value);
+		setKeyCurrent(event.target.value);
 	};
 
 	const handleSubmit = async () => {
 		try {
-			const response = await documentApi.getSigning(c, r, key);
+			const response = await documentApi.getSigning(c, r, keyCurrent);
 			setUserDocument(response.data);
+			setKey(keyCurrent);
 			setOpen(false);
 		} catch (error) {
 			setErrorMessage(error.message);
