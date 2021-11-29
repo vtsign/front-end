@@ -17,28 +17,17 @@ export const PdfTronProvider = ({ children }) => {
 
 		const { docViewer } = instance;
 		const annotationManager = docViewer.getAnnotationManager();
-		// documents.forEach((doc, index) => {
 		for (let i = 0; i < documents.length; i++) {
 			await docViewer.loadDocument(documents[i].data);
-			// annotationManager.importAnnotations(documentXFDFs2[i]);
+			const fileMerge = await mergeAnnotations(documents[i].data, [documentXFDFs2[i]]);
+			const url = URL.createObjectURL(fileMerge);
+			await docViewer.loadDocument(url);
 			annotationManager.addAnnotations(documentFields[i]);
 			const file = await applyFields(documents[i]);
 			files.push(file);
 		}
-		// })
-		// console.log(files)
 		return files;
 	};
-
-	// const handleMergeDocument = async (index) => {
-	// 	const xfdf = await updateDocumentXFDFs(index);
-	// 	const fileMerge = await mergeAnnotations(documents[index].data, [xfdf]);
-	// 	const url =  URL.createObjectURL(fileMerge);
-	// 	if(documents[index].data.startsWith('blob')) {
-	// 		URL.revokeObjectURL(documents[index].data);
-	// 	}
-	// 	documents[index].data = url;
-	// }
 
 	const updateDocumentFieldsList = async (index = -1) => {
 		if (instance === null) return;
@@ -46,7 +35,7 @@ export const PdfTronProvider = ({ children }) => {
 		const annotManager = docViewer.getAnnotationManager();
 		const xfdf = annotManager
 			.getAnnotationsList()
-			.filter((annot) => annot.Subject !== null);
+			.filter((annot) => annot.Subject === 'Free Text');
 
 		if (index === -1 || documentFields.length === 0) {
 			setDocumentFields([...documentFields, xfdf]);
@@ -54,10 +43,6 @@ export const PdfTronProvider = ({ children }) => {
 			documentFields[index] = xfdf;
 			setDocumentFields([...documentFields]);
 		}
-
-		// await updateDocumentXFDFs(index);
-		// documentFields[0].map(item => console.log(item.custom))
-		// console.log(documentFields)
 	};
 
 	const updateDocumentXFDFs = async (docId) => {
@@ -66,16 +51,20 @@ export const PdfTronProvider = ({ children }) => {
 		const annotManager = docViewer.getAnnotationManager();
 		const xfdf = await annotManager.exportAnnotations();
 		documentXFDFs[docId] = xfdf;
-
 	};
 	const updateDocumentXFDFs2 = async (docId) => {
 		if (instance === null) return;
 		const { docViewer } = instance;
 		const annotManager = docViewer.getAnnotationManager();
+
+		await annotManager.deleteAnnotations(documentFields[docId], true);
+
 		const xfdf = await annotManager.exportAnnotations();
 		documentXFDFs2[docId] = xfdf;
-		setDocumentXFDFs2({...documentXFDFs2})
+		setDocumentXFDFs2({ ...documentXFDFs2 });
 
+		const annotsDelete = annotManager.getAnnotationsList();
+		await annotManager.deleteAnnotations(annotsDelete, true);
 	};
 
 	const applyFields = async (document) => {

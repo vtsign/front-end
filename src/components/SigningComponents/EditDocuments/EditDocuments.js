@@ -5,7 +5,7 @@ import {
 	Computer,
 	MailOutline,
 	PersonOutline,
-	TextFields
+	TextFields,
 } from '@mui/icons-material';
 import {
 	Box,
@@ -15,7 +15,7 @@ import {
 	MenuItem,
 	Stack,
 	TextField,
-	Typography
+	Typography,
 } from '@mui/material';
 import WebViewer from '@pdftron/webviewer';
 import React, { useContext, useEffect, useRef, useState } from 'react';
@@ -33,13 +33,18 @@ const EditDocuments = () => {
 
 	const { register, control, getValues } = useForm();
 
-	const { instance, setInstance, documentFields, updateDocumentFieldsList, updateDocumentXFDFs, updateDocumentXFDFs2, documentXFDFs, documentXFDFs2 } =
-		useContext(pdfTronContext);
+	const {
+		instance,
+		setInstance,
+		documentFields,
+		updateDocumentFieldsList,
+		updateDocumentXFDFs,
+		updateDocumentXFDFs2,
+		documentXFDFs,
+		documentXFDFs2,
+	} = useContext(pdfTronContext);
 
-	const myInfo = localStorage.getItem('user')
-		? JSON.parse(localStorage.getItem('user'))
-		: null;
-
+	const myInfo = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
 
 	const dispatch = useDispatch();
 	const receivers = useSelector((state) => state.receivers);
@@ -115,11 +120,16 @@ const EditDocuments = () => {
 						? documents.documentList[webviewerInstances.currentDocument].data
 						: null
 				);
-				setTimeout( () => {
+				setTimeout(() => {
+					const listAnnotInitials = annotManager.getAnnotationsList();
+					annotManager.deleteAnnotations(listAnnotInitials, true);
+					
 					const xfdf = documentXFDFs2[webviewerInstances.currentDocument];
+					const annotation = documentFields[webviewerInstances.currentDocument];
 					if (!!xfdf) {
 						annotManager.deselectAllAnnotations();
 						annotManager.importAnnotations(xfdf);
+						annotManager.addAnnotations(annotation);
 					}
 				}, 1000);
 				// setTimeout(() => {
@@ -242,7 +252,7 @@ const EditDocuments = () => {
 		newAnnot.customs = {
 			// add more info
 			email: currentAssignee,
-			author: currentAssignee,//state.authors[state.mailSelected].replace('.', '_'),
+			author: currentAssignee, //state.authors[state.mailSelected].replace('.', '_'),
 			name: `${currentAssignee}_${type}`,
 			type: type,
 		};
@@ -278,8 +288,7 @@ const EditDocuments = () => {
 			if (typeof annot.customs === 'undefined') return;
 
 			const flags = new WidgetFlags();
-			if(annot.customs.author === myInfo.email) {
-
+			if (annot.customs.author === myInfo.email) {
 				switch (annot.customs.type) {
 					case 'SIGNATURE':
 						field = new Annotations.Forms.Field(`${annot.customs.author}#Sig${index}`, {
@@ -302,31 +311,37 @@ const EditDocuments = () => {
 						});
 						break;
 					case 'TEXT':
-						field = new Annotations.Forms.Field(`${annot.customs.author}#Name${index}`, {
-							type: 'Tx',
-							flags,
-						});
+						field = new Annotations.Forms.Field(
+							`${annot.customs.author}#Name${index}`,
+							{
+								type: 'Tx',
+								flags,
+							}
+						);
 						applyAnnotation = new Annotations.TextWidgetAnnotation(field);
 						break;
 					case 'DATE':
-						field = new Annotations.Forms.Field(`${annot.customs.author}#Date${index}`, {
-							type: 'Tx',
-							flags,
-							actions: {
-								F: [
-									{
-										name: 'JavaScript',
-										javascript: 'AFDate_FormatEx("mmm d, yyyy");',
-									},
-								],
-								K: [
-									{
-										name: 'JavaScript',
-										javascript: 'AFDate_FormatEx("mmm d, yyyy");',
-									},
-								],
-							},
-						});
+						field = new Annotations.Forms.Field(
+							`${annot.customs.author}#Date${index}`,
+							{
+								type: 'Tx',
+								flags,
+								actions: {
+									F: [
+										{
+											name: 'JavaScript',
+											javascript: 'AFDate_FormatEx("mmm d, yyyy");',
+										},
+									],
+									K: [
+										{
+											name: 'JavaScript',
+											javascript: 'AFDate_FormatEx("mmm d, yyyy");',
+										},
+									],
+								},
+							}
+						);
 
 						applyAnnotation = new Annotations.DatePickerWidgetAnnotation(field);
 						break;
@@ -380,7 +395,6 @@ const EditDocuments = () => {
 		// updateDocumentFieldsList(webviewerInstances.currentDocument);
 	};
 
-
 	const dragOver = (e) => {
 		e.preventDefault();
 		return false;
@@ -410,8 +424,7 @@ const EditDocuments = () => {
 	const dragEnd = (e, type) => {
 		// addField(type, webviewerInstances.dropPoint);
 		addFields(type);
-		if (currentAssignee === myInfo.email)
-			applyFields();
+		if (currentAssignee === myInfo.email) applyFields();
 		e.target.style.opacity = 1;
 		document.body.removeChild(document.getElementById('form-build-drag-image-copy'));
 		e.preventDefault();
@@ -420,7 +433,7 @@ const EditDocuments = () => {
 	const handleReloadDocument = async (index) => {
 		// save updated file
 		// applyFields();
-		updateDocumentFieldsList(webviewerInstances.currentDocument);
+		await updateDocumentFieldsList(webviewerInstances.currentDocument);
 		await updateDocumentXFDFs2(webviewerInstances.currentDocument);
 		dispatch(setCurrentDocument(index));
 	};
@@ -451,7 +464,7 @@ const EditDocuments = () => {
 										{...inputProps}
 										inputRef={ref}
 										value={value}
-										defaultValue={myInfo.email ?? ""}
+										defaultValue={myInfo.email ?? ''}
 										SelectProps={{ displayEmpty: true }}
 										onChange={(e) => setCurrentAssignee(e.target.value)}
 									>
