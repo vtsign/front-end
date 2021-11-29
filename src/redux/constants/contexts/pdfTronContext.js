@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
+import { mergeAnnotations } from '../../../components/MergeAnnotations/MergeAnnotations';
 
 export const pdfTronContext = React.createContext();
 
@@ -8,6 +9,7 @@ export const PdfTronProvider = ({ children }) => {
 	const documents = useSelector((state) => state.addDocList.documentList);
 	const [instance, setInstance] = useState(null);
 	const [documentFields, setDocumentFields] = useState([]);
+	const [documentXFDFs2, setDocumentXFDFs2] = useState({});
 	const documentXFDFs = {};
 
 	const handleSendDocuments = async () => {
@@ -15,19 +17,19 @@ export const PdfTronProvider = ({ children }) => {
 
 		const { docViewer } = instance;
 		const annotationManager = docViewer.getAnnotationManager();
-		// documents.forEach((doc, index) => {
 		for (let i = 0; i < documents.length; i++) {
 			await docViewer.loadDocument(documents[i].data);
+			const fileMerge = await mergeAnnotations(documents[i].data, [documentXFDFs2[i]]);
+			const url = URL.createObjectURL(fileMerge);
+			await docViewer.loadDocument(url);
 			annotationManager.addAnnotations(documentFields[i]);
 			const file = await applyFields(documents[i]);
 			files.push(file);
 		}
-		// })
-		// console.log(files)
 		return files;
 	};
 
-	const updateDocumentFieldsList = (index = -1) => {
+	const updateDocumentFieldsList = async (index = -1) => {
 		if (instance === null) return;
 		const { docViewer } = instance;
 		const annotManager = docViewer.getAnnotationManager();
@@ -41,19 +43,29 @@ export const PdfTronProvider = ({ children }) => {
 			documentFields[index] = xfdf;
 			setDocumentFields([...documentFields]);
 		}
-		// documentFields[0].map(item => console.log(item.custom))
-		// console.log(documentFields)
 	};
 
 	const updateDocumentXFDFs = async (docId) => {
 		if (instance === null) return;
 		const { docViewer } = instance;
 		const annotManager = docViewer.getAnnotationManager();
-		
 		const xfdf = await annotManager.exportAnnotations();
 		documentXFDFs[docId] = xfdf;
 	};
+	const updateDocumentXFDFs2 = async (docId) => {
+		if (instance === null) return;
+		const { docViewer } = instance;
+		const annotManager = docViewer.getAnnotationManager();
 
+		await annotManager.deleteAnnotations(documentFields[docId], true);
+
+		const xfdf = await annotManager.exportAnnotations();
+		documentXFDFs2[docId] = xfdf;
+		setDocumentXFDFs2({ ...documentXFDFs2 });
+
+		const annotsDelete = annotManager.getAnnotationsList();
+		await annotManager.deleteAnnotations(annotsDelete, true);
+	};
 
 	const applyFields = async (document) => {
 		const { Annotations, docViewer } = instance;
@@ -184,10 +196,13 @@ export const PdfTronProvider = ({ children }) => {
 		instance,
 		setInstance,
 		documentFields,
-		documentXFDFs,
-		updateDocumentXFDFs,
 		updateDocumentFieldsList,
 		handleSendDocuments,
+		documentXFDFs,
+		updateDocumentXFDFs,
+		documentXFDFs2,
+		updateDocumentXFDFs2,
+		// handleMergeDocument
 	};
 
 	return <pdfTronContext.Provider value={exportContext}>{children}</pdfTronContext.Provider>;

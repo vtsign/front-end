@@ -12,7 +12,7 @@ const authenApi = {
 			password,
 		});
 		const { data } = res;
-		localStorage.setItem('user', data);
+		localStorage.setItem('user', JSON.stringify(data));
 		localStorage.setItem('accessToken', data.access_token);
 		localStorage.setItem('refreshToken', data.refresh_token);
 		localStorage.setItem('accessTokenExpired', Date.now() + 44 * 60 * 1000);
