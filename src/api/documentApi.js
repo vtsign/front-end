@@ -10,14 +10,13 @@ const documentApi = {
 		file.forEach((item) => {
 			formData.append('files', item);
 		});
-		// formData.append("files", file);
 		const header = {
 			'content-type': 'application/octet-stream',
 		};
 		return axiosClient.post(url, formData, header);
 	},
-	getSigning: (c, r, s) => {
-		const url = `/document/apt/signing?c=${c}&r=${r}&s=${s}`;
+	getSigning: (c, r, uc, s) => {
+		const url = `/document/apt/signing?c=${c}&r=${r}&uc=${uc}&s=${s}`;
 		return axiosClientNoToken.get(url);
 	},
 

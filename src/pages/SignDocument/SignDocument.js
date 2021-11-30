@@ -30,6 +30,7 @@ const SignDocument2 = () => {
 	const queryParam = new URLSearchParams(location.search);
 	const r = queryParam.get('r');
 	const c = queryParam.get('c');
+	const uc = queryParam.get('uc');
 
 	useEffect(() => {
 		if (userDocument != null) {
@@ -155,7 +156,7 @@ const SignDocument2 = () => {
 
 		const files = [];
 		try {
-			const response = await documentApi.getSigning(c, r, key);
+			const response = await documentApi.getSigning(c, r, uc, key);
 			const data = response.data;
 			if (data.last_sign) {
 				for (const doc of data.documents) {
@@ -175,6 +176,7 @@ const SignDocument2 = () => {
 			{
 				contract_uuid: c,
 				user_uuid: r,
+				user_contract_uuid: uc,
 				document_xfdfs: xfdfs,
 			},
 			files

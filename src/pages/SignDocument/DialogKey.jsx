@@ -30,6 +30,7 @@ export default function DialogKey({ setUserDocument, setKey }) {
 	const queryParam = new URLSearchParams(location.search);
 	const r = queryParam.get('r');
 	const c = queryParam.get('c');
+	const uc = queryParam.get('uc');
 
 	const inputKeyHandler = (event) => {
 		setKeyCurrent(event.target.value);
@@ -37,7 +38,7 @@ export default function DialogKey({ setUserDocument, setKey }) {
 
 	const handleSubmit = async () => {
 		try {
-			const response = await documentApi.getSigning(c, r, keyCurrent);
+			const response = await documentApi.getSigning(c, r, uc, keyCurrent);
 			setUserDocument(response.data);
 			setKey(keyCurrent);
 			setOpen(false);
