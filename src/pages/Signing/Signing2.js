@@ -20,6 +20,7 @@ import UploadDocuments from '../../components/SigningComponents/UploadDocuments/
 import { addDocumentToSign } from '../../redux/actions/documentActions';
 import { pdfTronContext } from '../../redux/constants/contexts/pdfTronContext';
 import './signing.scss';
+import { useToast } from '../../components/toast/useToast.js';
 
 const steps = [
 	'Thêm tài liệu',
@@ -36,12 +37,16 @@ const Signing2 = () => {
 
 	const { handleSendDocuments } = useContext(pdfTronContext);
 
+	const { error } = useToast();
+
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
 		control,
+		getValues,
 		setValue,
+		reset
 	} = useForm({
 		defaultValues: {
 			permission: "sign"
@@ -49,35 +54,40 @@ const Signing2 = () => {
 	});
 
 	const dispatch = useDispatch();
+	const documents = useSelector((state) => state.addDocList.documentList);
 	const receivers = useSelector((state) => state.receivers.receivers);
 
-	const handleNext = (formData) => {
-		// if(activeStep === 2) {
-		// 	(async () => {
-		// 		await handleSendDocuments();
-		// 		console.log("step 2")
-		// 	})();
-		// 	// handleSendDocuments();
-		// }
-		if (activeStep === 3) {
-			// handleSendFiles(formData);
-			const json = {
-				receivers: receivers,
-				mail_title: formData.title,
-				mail_message: formData.message,
-			};
-
-			dispatch(addDocumentToSign(json, files));
-			dispatch({
-				type: "RESET_RECEIVERS"
-			})
-			dispatch({
-				type: "RESET_DOC_LIST"
-			})
-			history.push('/');
+	const handleNext = () => {
+		if(activeStep === 0) {
+			if(documents.length === 0) {
+				error("Vui lòng tải tài liệu để sử dụng dịch vụ");
+				return;
+			}
+		} else if (activeStep === 1) {
+			if(receivers.length === 0) {
+				error("Vui lòng thêm người nhận tài liệu");
+				return;
+			}
 		}
 		setActiveStep((prevActiveStep) => prevActiveStep + 1);
 	};
+
+	const completeSigning = formData => {
+		const json = {
+			receivers: receivers,
+			mail_title: formData.title,
+			mail_message: formData.message,
+		};
+
+		dispatch(addDocumentToSign(json, files));
+		dispatch({
+			type: 'RESET_RECEIVERS',
+		});
+		dispatch({
+			type: 'RESET_DOC_LIST',
+		});
+		history.push('/');
+	}
 
 	const handlePrev = () => {
 		setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -116,7 +126,9 @@ const Signing2 = () => {
 								handleSubmit={handleSubmit}
 								errors={errors}
 								control={control}
+								getValues={getValues}
 								setValue={setValue}
+								reset={reset}
 							/>
 						)}
 						{activeStep === 2 && (
@@ -134,9 +146,6 @@ const Signing2 = () => {
 					justifyContent="flex-end"
 					style={{ height: '3rem' }}
 				>
-					{activeStep === 0 && (
-						<FormControlLabel control={<Checkbox />} label="Chỉ mình tôi ký" />
-					)}
 					{activeStep > 0 && (
 						<Button variant="outlined" onClick={handlePrev}>
 							Quay lại
@@ -150,22 +159,23 @@ const Signing2 = () => {
 						>
 							Tiếp tục
 						</Button>
+					) : activeStep === 3 ? (
+						<Button
+							variant="contained"
+							style={{ marginLeft: '14px' }}
+							onClick={handleSubmit(completeSigning)}
+						>
+							{activeStep === steps.length - 1 ? 'Gửi' : 'Tiếp tục'}
+						</Button>
 					) : (
 						<Button
 							variant="contained"
 							style={{ marginLeft: '14px' }}
-							onClick={handleSubmit(handleNext)}
+							onClick={handleNext}
 						>
 							{activeStep === steps.length - 1 ? 'Gửi' : 'Tiếp tục'}
 						</Button>
 					)}
-					{/* <Button
-						variant="contained"
-						style={{ marginLeft: '14px' }}
-						onClick={handleSubmit(handleNext)}
-					>
-						{activeStep === steps.length - 1 ? 'Gửi' : 'Tiếp tục'}
-					</Button> */}
 				</Grid>
 			</Grid>
 		</Container>

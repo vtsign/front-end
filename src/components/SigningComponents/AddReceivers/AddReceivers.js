@@ -32,7 +32,13 @@ const permissions = [
 	},
 ];
 
-const AddReceivers = ({ register, handleSubmit, errors, control, setValue }) => {
+const defaultValues = {
+	name: "",
+	email: "",
+	permission: "sign"
+}
+
+const AddReceivers = ({ register, handleSubmit, errors, control, getValues, setValue, reset }) => {
 	// const [receivers, setReceivers] = useState([]);
 	const [showPhone, setShowPhone] = useState(false);
 	const dispatch = useDispatch();
@@ -49,6 +55,7 @@ const AddReceivers = ({ register, handleSubmit, errors, control, setValue }) => 
 			return;
 		}
 		dispatch(addReceiver(formData));
+		reset(defaultValues);
 		// setReceivers((receivers) => [...receivers, formData]);
 		console.log(formData);
 	};
@@ -70,7 +77,7 @@ const AddReceivers = ({ register, handleSubmit, errors, control, setValue }) => 
 					Thông tin người nhận
 				</Typography>
 			</Grid>
-			<Grid container my="1rem" style={{ height: '100%' }}>
+			<Grid container style={{ height: '100%' }}>
 				<Grid item lg={8} md={12} xl={8} xs={12}>
 					<Box className="add-receivers__container">
 						<Grid
@@ -180,7 +187,7 @@ const AddReceivers = ({ register, handleSubmit, errors, control, setValue }) => 
 								{...register('key')}
 								error={!!errors.key}
 								helperText={errors?.key?.message}
-								defaultValue={'VT' + randomstring.generate(6)}
+								value={'VT' + randomstring.generate(6)}
 							/>
 						</Grid>
 						<Grid
@@ -196,7 +203,7 @@ const AddReceivers = ({ register, handleSubmit, errors, control, setValue }) => 
 					</Box>
 				</Grid>
 				<Grid item lg={4} md={6} xl={4} xs={12}>
-					<Card style={{ overflowY: 'auto' }}>
+					<Card className="receiver__list">
 						<CardContent>
 							{receivers.length > 0 ? (
 								receivers.map((partner, index) => (
