@@ -4,13 +4,13 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import moment from 'moment';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { getAllContracts } from '../../../../redux/actions/manageAction';
 import ContentHeader from '../../common/contentHeader';
 import NoData from '../../common/NoData';
-import PaginationCommon from '../../common/Pagination';
+import { Pagination } from '@mui/material';
 import ActionButton from '../button/ActionButton';
 import './style.scss';
 
@@ -19,6 +19,7 @@ const DocumentCompleted = () => {
 
 	const manageDoc = useSelector((state) => state.manageDoc);
 	const { isLoading, error, total_pages, contracts } = manageDoc;
+	const [page, setPage] = useState(1);
 
 	const dispatch = useDispatch();
 
@@ -31,8 +32,9 @@ const DocumentCompleted = () => {
 		history.push(path);
 	};
 
-	const handleOnPageChange = (event, value) => {
-		dispatch(getAllContracts('COMPLETED', value));
+	const handleOnPageChange = (event, page) => {
+		dispatch(getAllContracts('COMPLETED', page));
+		setPage(page);
 	};
 
 	return (
@@ -77,7 +79,12 @@ const DocumentCompleted = () => {
 											<TableCell style={{ color: '#2F80ED', fontSize: 14 }}>
 												{row.title}
 											</TableCell>
-											<TableCell> </TableCell>
+											<TableCell>
+												{
+													row.user_contracts.find((uc) => uc.owner).user
+														.full_name
+												}
+											</TableCell>
 											<TableCell>
 												{moment(row.complete_date).format('DD/MM/YYYY LT')}
 											</TableCell>
@@ -98,9 +105,12 @@ const DocumentCompleted = () => {
 				</div>
 			)}
 			{contracts.length > 0 && (
-				<PaginationCommon
-					totalPages={total_pages}
-					handleOnPageChange={handleOnPageChange}
+				<Pagination
+					className="content-pagination"
+					count={total_pages}
+					defaultPage={page}
+					onChange={handleOnPageChange}
+					color="primary"
 				/>
 			)}
 		</div>

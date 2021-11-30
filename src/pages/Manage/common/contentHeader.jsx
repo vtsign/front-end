@@ -18,7 +18,6 @@ const ContentHeader = ({ title, description }) => {
 		setSelect(event.target.value);
 	};
 	const { contracts } = useSelector((state) => state.manageDoc);
-	console.log(contracts);
 	return (
 		<Fragment>
 			<div className="content-header">

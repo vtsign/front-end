@@ -15,7 +15,7 @@ const Home = () => {
 		};
 
 		getQuickViewDocument();
-	}, []);
+	});
 	return (
 		<div className="home">
 			<div className="home__manage">

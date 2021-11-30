@@ -45,7 +45,6 @@ export default function ActionButton({selectDocumentHandler, id}) {
 				}}
 			>
 				<MenuItem onClick={handleDetail}>Chi tiết</MenuItem>
-				<MenuItem onClick={handleClose}>Chỉnh sửa</MenuItem>
                 <MenuItem onClick={handleClose}>Xóa</MenuItem>
 				<MenuItem onClick={handleDownload}>Tải xuống</MenuItem>
 			</Menu>

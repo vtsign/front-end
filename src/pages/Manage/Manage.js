@@ -7,8 +7,9 @@ import DocumentCompletedDetail from './content/completed/detail';
 import DocumentWaiting from './content/waiting';
 import DocumentWaitingDetail from './content/waiting/detail';
 import DocumentNeedSign from './content/needSign';
+import DocumentNeedSignDetail from './content/needSign/detail';
 import DocumentDeleted from './content/deleted';
-import { Redirect, Route, Switch, useRouteMatch } from 'react-router';
+import { Redirect, Route, useRouteMatch } from 'react-router';
 
 const Manage = () => {
 	const match = useRouteMatch();
@@ -25,6 +26,7 @@ const Manage = () => {
 				<Route path={`${match.url}/completed`} exact component={DocumentCompleted} />
 				<Route path={`${match.url}/waiting/:id`} component={DocumentWaitingDetail} />
 				<Route path={`${match.url}/waiting`} exact component={DocumentWaiting} />
+				<Route path={`${match.url}/need-sign/:id`} component={DocumentNeedSignDetail} />
 				<Route path={`${match.url}/need-sign`} component={DocumentNeedSign} />
 				<Route path={`${match.url}/deleted`} component={DocumentDeleted} />
 				{/* <DocumentCompleted /> */}

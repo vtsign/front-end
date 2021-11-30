@@ -33,7 +33,7 @@ const calculateReceiverCompleted = (userContracts) => {
 	let totalReceiverCompleted = 0;
 
 	userContracts.forEach((userContract) => {
-		if (userContract.status === 'COMPLETED') {
+		if (userContract.status === 'SIGNED' || userContract.status === 'READ') {
 			totalReceiverCompleted++;
 		}
 	});
@@ -58,7 +58,7 @@ const DocumentCompleted = () => {
 	const [select, setSelect] = useState(10);
 
 	const manageDoc = useSelector((state) => state.manageDoc);
-	const { isLoading, error, total_pages, current_page, total_items, contracts } = manageDoc;
+	const { isLoading, error, total_pages, contracts } = manageDoc;
 
 	const dispatch = useDispatch();
 
@@ -80,7 +80,7 @@ const DocumentCompleted = () => {
 	};
 	return (
 		<div className="content">
-			<ContentHeader title="Tài liệu chờ kí" description="Quản lý tài liệu chờ kí" />
+			<ContentHeader title="Tài liệu chờ ký" description="Quản lý tài liệu chờ ký" />
 			{contracts.length <= 0 && <NoData />}
 			{contracts.length > 0 && (
 				<div>

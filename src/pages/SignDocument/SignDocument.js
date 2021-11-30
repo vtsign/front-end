@@ -167,22 +167,24 @@ const SignDocument2 = () => {
 					files.push(new File([blob], doc.id));
 				}
 			}
+
+
+			await documentApi.signByReceiver(
+				{
+					contract_uuid: c,
+					user_uuid: r,
+					user_contract_uuid: uc,
+					document_xfdfs: xfdfs,
+				},
+				files
+			);
+	
+			history.push('/');
+
 		} catch (error) {
-			alert('something went wrong!!!');
+			alert(error.message);
 			console.error(error);
 		}
-
-		documentApi.signByReceiver(
-			{
-				contract_uuid: c,
-				user_uuid: r,
-				user_contract_uuid: uc,
-				document_xfdfs: xfdfs,
-			},
-			files
-		);
-
-		history.push('/');
 	};
 
 	const setThumbnail = async (instance, document) => {

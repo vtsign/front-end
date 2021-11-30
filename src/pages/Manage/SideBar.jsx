@@ -3,23 +3,16 @@ import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 import FactCheckOutlinedIcon from '@mui/icons-material/FactCheckOutlined';
 import FileCopyOutlinedIcon from '@mui/icons-material/FileCopyOutlined';
 import RestorePageOutlinedIcon from '@mui/icons-material/RestorePageOutlined';
-import {
-	List,
-	ListItem,
-	ListItemButton,
-	ListItemIcon,
-	ListItemText
-} from '@mui/material';
+import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { Fragment } from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
 import './sideBar.scss';
 
 const LeftManage = () => {
-
 	const history = useHistory();
 	const goBackHandler = () => {
 		history.goBack();
-	}
+	};
 
 	return (
 		<Fragment>
@@ -29,7 +22,7 @@ const LeftManage = () => {
 						<ListItemIcon className="item-icon">
 							<ArrowBackIosRoundedIcon />
 						</ListItemIcon>
-						<ListItemText className = "item-text" primary="Quản lý tài liệu" />
+						<ListItemText className="item-text" primary="Quản lý tài liệu" />
 					</ListItemButton>
 				</ListItem>
 				<NavLink to="/manage/completed" activeClassName="sidebar-item-active">
@@ -38,7 +31,7 @@ const LeftManage = () => {
 							<ListItemIcon className="item-icon">
 								<FactCheckOutlinedIcon />
 							</ListItemIcon>
-							<ListItemText className = "item-text" primary="Đã hoàn thành" />
+							<ListItemText className="item-text" primary="Đã hoàn thành" />
 						</ListItemButton>
 					</ListItem>
 				</NavLink>
@@ -48,7 +41,7 @@ const LeftManage = () => {
 							<ListItemIcon className="item-icon">
 								<RestorePageOutlinedIcon />
 							</ListItemIcon>
-							<ListItemText className = "item-text" primary="Chờ kí" />
+							<ListItemText className="item-text" primary="Chờ ký" />
 						</ListItemButton>
 					</ListItem>
 				</NavLink>
@@ -58,7 +51,7 @@ const LeftManage = () => {
 							<ListItemIcon className="item-icon">
 								<FileCopyOutlinedIcon />
 							</ListItemIcon>
-							<ListItemText className = "item-text" primary="Cần kí" />
+							<ListItemText className="item-text" primary="Cần ký" />
 						</ListItemButton>
 					</ListItem>
 				</NavLink>
@@ -68,7 +61,7 @@ const LeftManage = () => {
 							<ListItemIcon className="item-icon">
 								<DeleteOutlineRoundedIcon />
 							</ListItemIcon>
-							<ListItemText className = "item-text" primary="Đã xóa" />
+							<ListItemText className="item-text" primary="Đã xóa" />
 						</ListItemButton>
 					</ListItem>
 				</NavLink>

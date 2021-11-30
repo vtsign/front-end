@@ -20,8 +20,14 @@ export const getAllContracts = (type, page) => async (dispatch) => {
 			case 'COMPLETED':
 				res = await manageApi.getContractsCompleted(page);
 				break;
-			default:
+			case 'ACTION_REQUIRE':
+				res = await manageApi.getContractsNeedSign(page);
+				break;
+			case 'WAITING':
 				res = await manageApi.getContractsWaiting(page);
+				break;
+			default:
+				res = await manageApi.getContractsDeleted(page);
 				break;
 		}
 
