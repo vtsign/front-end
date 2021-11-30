@@ -51,7 +51,7 @@ const DocumentDeleted = () => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		dispatch(getAllContracts('ACTION_REQUIRE', 1));
+		dispatch(getAllContracts({ status: 'DELETED', page: 1 }));
 	}, [dispatch]);
 
 	const handleChange = (event) => {
@@ -59,16 +59,20 @@ const DocumentDeleted = () => {
 	};
 
 	const selectDocumentHandler = (id) => {
-		const path = `/manage/waiting/${id}`;
+		const path = `/manage/deleted/${id}`;
 		history.push(path);
 	};
 
-	const handleOnPageChage = (event, value) => {
-		dispatch(getAllContracts('WAITING', value));
+	const handleOnPageChage = (event, page) => {
+		dispatch(getAllContracts({ status: 'DELETED', page }));
 	};
 	return (
 		<div className="content">
-			<ContentHeader title="Tài liệu đã xóa" description="Quản lý các tài liệu đã xóa" />
+			<ContentHeader
+				title="Tài liệu đã xóa"
+				description="Quản lý các tài liệu đã xóa"
+				status="DELETED"
+			/>
 			{contracts.length <= 0 && <NoData />}
 			{contracts.length > 0 && (
 				<div>

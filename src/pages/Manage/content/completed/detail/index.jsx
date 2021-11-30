@@ -46,6 +46,26 @@ const DetailDocumentNeedSign = () => {
 		}
 	}, [contract]);
 
+	const handleDownloadFile = () => {
+		contract.documents.forEach((doc) => {
+			fetch(doc.url)
+				.then((response) => response.blob())
+				.then((blob) => {
+					// 2. Create blob link to download
+					const url = window.URL.createObjectURL(new Blob([blob]));
+					const link = document.createElement('a');
+					link.href = url;
+					link.setAttribute('download', doc.origin_name);
+					// 3. Append to html page
+					document.body.appendChild(link);
+					// 4. Force download
+					link.click();
+					// 5. Clean up and remove the link
+					link.parentNode.removeChild(link);
+				});
+		});
+	};
+
 	return (
 		<Fragment>
 			{contract && (
@@ -69,7 +89,9 @@ const DetailDocumentNeedSign = () => {
 									title={contentDialogDelete.title}
 									content={contentDialogDelete.content}
 								/>
-								<Button variant="outlined">Tải xuống</Button>
+								<Button variant="outlined" onClick={handleDownloadFile}>
+									Tải xuống
+								</Button>
 							</div>
 						</div>
 						<div className="content-receivers">

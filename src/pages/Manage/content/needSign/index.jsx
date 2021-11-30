@@ -53,7 +53,7 @@ const DocumentNeedSign = () => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		dispatch(getAllContracts('ACTION_REQUIRE', 1));
+		dispatch(getAllContracts({ status: 'ACTION_REQUIRE', page: 1 }));
 	}, [dispatch]);
 
 	const handleChange = (event) => {
@@ -65,12 +65,16 @@ const DocumentNeedSign = () => {
 		history.push(path);
 	};
 
-	const handleOnPageChage = (event, value) => {
-		dispatch(getAllContracts('ACTION_REQUIRE', value));
+	const handleOnPageChage = (event, page) => {
+		dispatch(getAllContracts({ status: 'ACTION_REQUIRE', page }));
 	};
 	return (
 		<div className="content">
-			<ContentHeader title="Tài liệu cần ký" description="Quản lý tài liệu cần ký" />
+			<ContentHeader
+				title="Tài liệu cần ký"
+				description="Quản lý tài liệu cần ký"
+				status="ACTION_REQUIRE"
+			/>
 			{contracts.length <= 0 && <NoData />}
 			{contracts.length > 0 && (
 				<div>
