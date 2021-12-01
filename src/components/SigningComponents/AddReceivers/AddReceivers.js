@@ -33,6 +33,7 @@ const permissions = [
 ];
 
 const defaultValues = {
+
 	name: '',
 	email: '',
 	phone: '',
@@ -82,13 +83,13 @@ const AddReceivers = ({ register, handleSubmit, errors, control, getValues, setV
 	}, [email]);
 
 	return (
-		<Container maxWidth={false} style={{ height: '100%' }}>
+		<Container maxWidth={false} >
 			<Grid>
 				<Typography variant="h6" my="1rem">
 					Thông tin người nhận
 				</Typography>
 			</Grid>
-			<Grid container style={{ height: '100%' }}>
+			<Grid container >
 				<Grid item lg={8} md={12} xl={8} xs={12}>
 					<Box className="add-receivers__container">
 						<Grid
