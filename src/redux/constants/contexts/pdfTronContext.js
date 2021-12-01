@@ -69,9 +69,9 @@ export const PdfTronProvider = ({ children }) => {
 		const { docViewer } = instance;
 		const annotManager = docViewer.getAnnotationManager();
 
-		// 1 -> 2
-		// file 1 bi xoa (nguoi nhan)
-		await annotManager.deleteAnnotations(documentFields[docId], true);
+		if(documentFields[docId] && documentFields[docId].length > 0) {
+			await annotManager.deleteAnnotations(documentFields[docId], true);
+		}
 
 		const xfdf = await annotManager.exportAnnotations();
 		documentXFDFs2[docId] = xfdf;
