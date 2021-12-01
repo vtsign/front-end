@@ -4,7 +4,6 @@ import './App.scss';
 import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
 import Loading from './components/Loading/Loading';
-import { PdfTronProvider } from './redux/constants/contexts/pdfTronContext';
 
 const NotFound = React.lazy(() => import('./pages/Common/NotFound'));
 const Home = React.lazy(() => import('./pages/Home/Home'));
@@ -39,18 +38,10 @@ const App = ({ location }) => {
 					<Route path="/home" exact>
 						<Redirect to="/" />
 					</Route>
-					<PrivateRoute path="/signing">
-						<PdfTronProvider>
-							<Signing />
-						</PdfTronProvider>
-					</PrivateRoute>
+					<PrivateRoute path="/signing" component={Signing} />
 					<PrivateRoute path={'/manage'} component={Manage} />
 					<PrivateRoute path="/template" component={Sample} />
-					<Route path="/signDocument">
-						<PdfTronProvider>
-							<SignDocument />
-						</PdfTronProvider>
-					</Route>
+					<Route path="/signDocument" component={SignDocument} />
 					<Route path="/notfound" component={NotFound} />
 					<Route path="*">
 						<Redirect to="/notfound" />
