@@ -11,14 +11,14 @@ import {
 	Typography,
 } from '@mui/material';
 import randomstring from 'randomstring';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Controller } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import userApi from '../../../api/userApi';
 import { addReceiver } from '../../../redux/actions/receiverActions.js';
 import ReceiverAvatar from '../../ReceiverAvatar/ReceiverAvatar';
 import './AddReceivers.scss';
-import { REG_EMAIL } from '../../constants/global.js';
+import { REG_EMAIL, REG_PHONE } from '../../constants/global.js';
 import { useToast } from '../../toast/useToast.js';
 
 const permissions = [
@@ -33,42 +33,53 @@ const permissions = [
 ];
 
 const defaultValues = {
-	name: "",
-	email: "",
-	permission: "sign"
-}
+	name: '',
+	email: '',
+	phone: '',
+	permission: 'sign',
+};
 
 const AddReceivers = ({ register, handleSubmit, errors, control, getValues, setValue, reset }) => {
 	// const [receivers, setReceivers] = useState([]);
 	const [showPhone, setShowPhone] = useState(false);
+	const [email, setEmail] = useState('');
 	const dispatch = useDispatch();
-	const receivers = useSelector(state => state.receivers.receivers);
+	const receivers = useSelector((state) => state.receivers.receivers);
 	const { error } = useToast();
 
 	const addReceivers = (formData) => {
-		const receiverEmails = receivers.map(receiver => {
+		const receiverEmails = receivers.map((receiver) => {
 			return receiver.email;
-		})
-		// console.log(receiverEmails)
+		});
 		if (receiverEmails.includes(formData.email)) {
 			error('Người nhận đã tồn tại');
 			return;
 		}
+		if (!showPhone) {
+			formData.phone = null;
+		}
+		setShowPhone(false);
 		dispatch(addReceiver(formData));
 		reset(defaultValues);
-		// setReceivers((receivers) => [...receivers, formData]);
-		console.log(formData);
 	};
 
-	const handleInputEmailBlur = async (e) => {
-		const email = e.target.value;
-		if (email.includes('@')) {
-			const userExists = await userApi.checkUserExists(email);
-			setShowPhone(!userExists.data);
+	useEffect(() => {
+		if (email) {
+			const timer = setTimeout(async () => {
+				if (REG_EMAIL.test(email)) {
+					const userExists = await userApi.checkUserExists(email);
+					setShowPhone(!userExists.data);
+				} else {
+					setShowPhone(false);
+				}
+			}, 300);
+			return () => {
+				clearTimeout(timer);
+			};
 		} else {
 			setShowPhone(false);
 		}
-	};
+	}, [email]);
 
 	return (
 		<Container maxWidth={false} style={{ height: '100%' }}>
@@ -118,7 +129,7 @@ const AddReceivers = ({ register, handleSubmit, errors, control, getValues, setV
 								})}
 								error={!!errors.email}
 								helperText={errors?.email?.message}
-								onBlur={handleInputEmailBlur}
+								onChange={(e) => setEmail(e.target.value)}
 							/>
 						</Grid>
 						{showPhone && (
@@ -133,9 +144,16 @@ const AddReceivers = ({ register, handleSubmit, errors, control, getValues, setV
 									id="phone"
 									placeholder="+84999111222"
 									sx={{ minWidth: '25vw' }}
-									{...register('phone')}
+									{...register('phone', {
+										required: 'Vui lòng nhập SĐT',
+										pattern: {
+											value: REG_PHONE,
+											message: 'SĐT sai định dạng',
+										},
+									})}
 									error={!!errors.phone}
-									helperText={errors?.phone?.message}
+									// helperText={errors?.phone?.message}
+									helperText="Người nhận chưa có tài khoản hệ thống cần nhập SĐT"
 								/>
 							</Grid>
 						)}
@@ -182,12 +200,12 @@ const AddReceivers = ({ register, handleSubmit, errors, control, getValues, setV
 							<InputLabel>Sử dụng khóa</InputLabel>
 							<TextField
 								id="key"
-								placeholder="VTSign"
+								placeholder="Khóa sẽ gửi qua SĐT người nhận"
 								sx={{ minWidth: '25vw' }}
 								{...register('key')}
 								error={!!errors.key}
 								helperText={errors?.key?.message}
-								value={'VT' + randomstring.generate(6)}
+								defaultValue={'VT' + randomstring.generate(6)}
 							/>
 						</Grid>
 						<Grid
