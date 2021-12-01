@@ -1,5 +1,7 @@
 import React from 'react';
 import { Avatar, AvatarContainer, AvatarLabel, Typography } from '@mui/material';
+
+import { Edit, MenuBook } from '@mui/icons-material';
 import './ReceiverAvatar.scss';
 import { useDispatch } from 'react-redux';
 import { removeReceiver } from '../../redux/actions/receiverActions'
@@ -16,7 +18,7 @@ const ReceiverAvatar = ({ receiver, hideButton=false, index }) => {
 		<div className="receiver">
 			<div>
 				<Avatar className="receiver__avatar" size={48} gap={1}>
-					B
+					{receiver.permission === "sign" ? <Edit /> : <MenuBook />}
 				</Avatar>
 			</div>
 			<div className="receiver__info">

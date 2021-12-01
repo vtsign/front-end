@@ -11,14 +11,14 @@ import {
 	Typography,
 } from '@mui/material';
 import randomstring from 'randomstring';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Controller } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import userApi from '../../../api/userApi';
 import { addReceiver } from '../../../redux/actions/receiverActions.js';
 import ReceiverAvatar from '../../ReceiverAvatar/ReceiverAvatar';
 import './AddReceivers.scss';
-import { REG_EMAIL } from '../../constants/global.js';
+import { REG_EMAIL, REG_PHONE } from '../../constants/global.js';
 import { useToast } from '../../toast/useToast.js';
 
 const permissions = [
@@ -32,45 +32,64 @@ const permissions = [
 	},
 ];
 
-const AddReceivers = ({ register, handleSubmit, errors, control, setValue }) => {
+const defaultValues = {
+
+	name: '',
+	email: '',
+	phone: '',
+	permission: 'sign',
+};
+
+const AddReceivers = ({ register, handleSubmit, errors, control, getValues, setValue, reset }) => {
 	// const [receivers, setReceivers] = useState([]);
 	const [showPhone, setShowPhone] = useState(false);
+	const [email, setEmail] = useState('');
 	const dispatch = useDispatch();
-	const receivers = useSelector(state => state.receivers.receivers);
+	const receivers = useSelector((state) => state.receivers.receivers);
 	const { error } = useToast();
 
 	const addReceivers = (formData) => {
-		const receiverEmails = receivers.map(receiver => {
+		const receiverEmails = receivers.map((receiver) => {
 			return receiver.email;
-		})
-		// console.log(receiverEmails)
+		});
 		if (receiverEmails.includes(formData.email)) {
 			error('Người nhận đã tồn tại');
 			return;
 		}
+		if (!showPhone) {
+			formData.phone = null;
+		}
+		setShowPhone(false);
 		dispatch(addReceiver(formData));
-		// setReceivers((receivers) => [...receivers, formData]);
-		console.log(formData);
+		reset(defaultValues);
 	};
 
-	const handleInputEmailBlur = async (e) => {
-		const email = e.target.value;
-		if (email.includes('@')) {
-			const userExists = await userApi.checkUserExists(email);
-			setShowPhone(!userExists.data);
+	useEffect(() => {
+		if (email) {
+			const timer = setTimeout(async () => {
+				if (REG_EMAIL.test(email)) {
+					const userExists = await userApi.checkUserExists(email);
+					setShowPhone(!userExists.data);
+				} else {
+					setShowPhone(false);
+				}
+			}, 300);
+			return () => {
+				clearTimeout(timer);
+			};
 		} else {
 			setShowPhone(false);
 		}
-	};
+	}, [email]);
 
 	return (
-		<Container maxWidth={false} style={{ height: '100%' }}>
+		<Container maxWidth={false} >
 			<Grid>
 				<Typography variant="h6" my="1rem">
 					Thông tin người nhận
 				</Typography>
 			</Grid>
-			<Grid container my="1rem" style={{ height: '100%' }}>
+			<Grid container >
 				<Grid item lg={8} md={12} xl={8} xs={12}>
 					<Box className="add-receivers__container">
 						<Grid
@@ -111,7 +130,7 @@ const AddReceivers = ({ register, handleSubmit, errors, control, setValue }) => 
 								})}
 								error={!!errors.email}
 								helperText={errors?.email?.message}
-								onBlur={handleInputEmailBlur}
+								onChange={(e) => setEmail(e.target.value)}
 							/>
 						</Grid>
 						{showPhone && (
@@ -126,9 +145,16 @@ const AddReceivers = ({ register, handleSubmit, errors, control, setValue }) => 
 									id="phone"
 									placeholder="+84999111222"
 									sx={{ minWidth: '25vw' }}
-									{...register('phone')}
+									{...register('phone', {
+										required: 'Vui lòng nhập SĐT',
+										pattern: {
+											value: REG_PHONE,
+											message: 'SĐT sai định dạng',
+										},
+									})}
 									error={!!errors.phone}
-									helperText={errors?.phone?.message}
+									// helperText={errors?.phone?.message}
+									helperText="Người nhận chưa có tài khoản hệ thống cần nhập SĐT"
 								/>
 							</Grid>
 						)}
@@ -175,7 +201,7 @@ const AddReceivers = ({ register, handleSubmit, errors, control, setValue }) => 
 							<InputLabel>Sử dụng khóa</InputLabel>
 							<TextField
 								id="key"
-								placeholder="VTSign"
+								placeholder="Khóa sẽ gửi qua SĐT người nhận"
 								sx={{ minWidth: '25vw' }}
 								{...register('key')}
 								error={!!errors.key}
@@ -196,7 +222,7 @@ const AddReceivers = ({ register, handleSubmit, errors, control, setValue }) => 
 					</Box>
 				</Grid>
 				<Grid item lg={4} md={6} xl={4} xs={12}>
-					<Card style={{ overflowY: 'auto' }}>
+					<Card className="receiver__list">
 						<CardContent>
 							{receivers.length > 0 ? (
 								receivers.map((partner, index) => (

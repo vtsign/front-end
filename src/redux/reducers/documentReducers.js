@@ -4,15 +4,18 @@ import {
 	ADD_DOCUMENT_TO_SIGN_FAIL,
 	UPDATE_DOCUMENT_TO_SIGN,
 	UPDATE_DOCUMENT_TO_SIGN_FAIL,
-	RESET_DOC_LIST
+	RESET_DOC_LIST,
+	SHOW_LOADING,
 } from '../constants/documentConstants.js';
 
 const initialState = {
-	documentList: []
-}
+	documentList: [],
+	loading: false,
+};
 
 export const addDocListReducer = (state = initialState, action) => {
-	switch(action.type) {
+	const payload = action.payload;
+	switch (action.type) {
 		case ADD_DOC_LIST:
 			return {
 				...state,
@@ -21,14 +24,19 @@ export const addDocListReducer = (state = initialState, action) => {
 		case RESET_DOC_LIST:
 			return {
 				...state,
-				documentList: []
-			}
+				documentList: [],
+			};
+		case SHOW_LOADING:
+			return {
+				...state,
+				SHOW_LOADING: payload,
+			};
 		default:
 			return state;
 	}
-}
+};
 
-export const editDocReducer = (state = initialState , action) => {
+export const editDocReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case ADD_DOCUMENT_TO_SIGN:
 			return { document: action.payload };
@@ -41,4 +49,4 @@ export const editDocReducer = (state = initialState , action) => {
 		default:
 			return state;
 	}
-}
+};

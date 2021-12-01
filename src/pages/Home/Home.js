@@ -10,12 +10,11 @@ const Home = () => {
 	useEffect(() => {
 		const getQuickViewDocument = async () => {
 			const res = await manageApi.getQuickViewContracts();
-			console.log(res);
 			setQuickDoc(res.data);
 		};
 
 		getQuickViewDocument();
-	});
+	}, []);
 	return (
 		<div className="home">
 			<div className="home__manage">
