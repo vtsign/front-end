@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 
 import SearchIcon from '@mui/icons-material/Search';
 import FormControl from '@mui/material/FormControl';
@@ -8,16 +8,32 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Paper from '@mui/material/Paper';
 import Select from '@mui/material/Select';
+import { getAllContracts } from '../../../redux/actions/manageAction';
 
 import './contentHeader.scss';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-const ContentHeader = ({ title, description }) => {
+const ContentHeader = ({ title, description, status }) => {
 	const [select, setSelect] = useState(10);
 	const handleChange = (event) => {
 		setSelect(event.target.value);
 	};
 	const { contracts } = useSelector((state) => state.manageDoc);
+
+	const [search, setSearch] = useState('');
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			dispatch(getAllContracts({ status, page: 1, title: search }));
+		}, 500);
+
+		return () => clearTimeout(timer);
+	}, [search]);
+
+	const handleSearch = (event) => {
+		setSearch(event.target.value);
+	};
 	return (
 		<Fragment>
 			<div className="content-header">
@@ -27,15 +43,15 @@ const ContentHeader = ({ title, description }) => {
 				</div>
 				<div>
 					<Paper
-						component="form"
 						sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', minWidth: 300 }}
 					>
 						<InputBase
 							sx={{ ml: 1, flex: 1 }}
-							placeholder="Search contract"
+							placeholder="Tìm kiếm tài liệu..."
 							inputProps={{ 'aria-label': 'search google maps' }}
+							onChange={handleSearch}
 						/>
-						<IconButton type="submit" sx={{ p: '10px' }} aria-label="search">
+						<IconButton type="button" sx={{ p: '10px' }} aria-label="search">
 							<SearchIcon />
 						</IconButton>
 					</Paper>
@@ -43,22 +59,24 @@ const ContentHeader = ({ title, description }) => {
 			</div>
 			<div>
 				<div>
-					<p>Danh sách tài liệu</p>
 					{contracts != null && contracts.length > 0 && (
-						<FormControl sx={{ mt: 3, mb: 3 }}>
-							<InputLabel id="demo-simple-select-label">Sắp xếp</InputLabel>
-							<Select
-								labelId="demo-simple-select-label"
-								id="demo-simple-select"
-								value={select}
-								label="Sắp xếp"
-								onChange={handleChange}
-								className="content-btn-sort"
-							>
-								<MenuItem value={10}>Tất cả</MenuItem>
-								<MenuItem value={20}>Gần nhất</MenuItem>
-							</Select>
-						</FormControl>
+						<Fragment>
+							<p>Danh sách tài liệu</p>
+							<FormControl sx={{ mt: 3, mb: 3 }}>
+								<InputLabel id="demo-simple-select-label">Sắp xếp</InputLabel>
+								<Select
+									labelId="demo-simple-select-label"
+									id="demo-simple-select"
+									value={select}
+									label="Sắp xếp"
+									onChange={handleChange}
+									className="content-btn-sort"
+								>
+									<MenuItem value={10}>Tất cả</MenuItem>
+									<MenuItem value={20}>Gần nhất</MenuItem>
+								</Select>
+							</FormControl>
+						</Fragment>
 					)}
 				</div>
 			</div>

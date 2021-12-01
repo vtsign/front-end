@@ -9,27 +9,27 @@ import {
 
 import manageApi from '../../api/manageApi';
 
-export const getAllContracts = (type, page) => async (dispatch) => {
+export const getAllContracts = (query) => async (dispatch) => {
 	try {
 		dispatch({
 			type: DOCUMENT_GET_PAGE_REQUEST,
 		});
 
-		let res = {};
-		switch (type) {
-			case 'COMPLETED':
-				res = await manageApi.getContractsCompleted(page);
-				break;
-			case 'ACTION_REQUIRE':
-				res = await manageApi.getContractsNeedSign(page);
-				break;
-			case 'WAITING':
-				res = await manageApi.getContractsWaiting(page);
-				break;
-			default:
-				res = await manageApi.getContractsDeleted(page);
-				break;
-		}
+		let res = await manageApi.getContracts(query);
+		// switch (type) {
+		// 	case 'COMPLETED':
+		// 		res = await manageApi.getContractsCompleted(query);
+		// 		break;
+		// 	case 'ACTION_REQUIRE':
+		// 		res = await manageApi.getContractsNeedSign(query);
+		// 		break;
+		// 	case 'WAITING':
+		// 		res = await manageApi.getContractsWaiting(query);
+		// 		break;
+		// 	default:
+		// 		res = await manageApi.getContractsDeleted(query);
+		// 		break;
+		// }
 
 		dispatch({
 			type: DOCUMENT_GET_PAGE_SUCCESS,

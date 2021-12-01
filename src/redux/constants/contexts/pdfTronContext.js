@@ -25,9 +25,11 @@ export const PdfTronProvider = ({ children }) => {
 
 		for (let i = 0; i < documents.length; i++) {
 			await docViewer.loadDocument(documents[i].data);
-			const fileMerge = await mergeAnnotations(documents[i].data, [documentXFDFs2[i]]);
-			const url = URL.createObjectURL(fileMerge);
-			await docViewer.loadDocument(url);
+			if (documentXFDFs2[i]) {
+				const fileMerge = await mergeAnnotations(documents[i].data, [documentXFDFs2[i]]);
+				const url = URL.createObjectURL(fileMerge);
+				await docViewer.loadDocument(url);
+			}
 			annotationManager.addAnnotations(documentFields[i]);
 			const file = await applyFields(documents[i]);
 			files.push(file);

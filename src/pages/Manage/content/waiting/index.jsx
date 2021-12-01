@@ -63,7 +63,7 @@ const DocumentCompleted = () => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		dispatch(getAllContracts('WAITING', 1));
+		dispatch(getAllContracts({ status: 'WAITING', page: 1 }));
 	}, [dispatch]);
 
 	const handleChange = (event) => {
@@ -76,11 +76,15 @@ const DocumentCompleted = () => {
 	};
 
 	const handleOnPageChage = (event, value) => {
-		dispatch(getAllContracts('WAITING', value));
+		dispatch(getAllContracts({ status: 'WAITING', page: value }));
 	};
 	return (
 		<div className="content">
-			<ContentHeader title="Tài liệu chờ ký" description="Quản lý tài liệu chờ ký" />
+			<ContentHeader
+				title="Tài liệu chờ ký"
+				description="Quản lý tài liệu chờ ký"
+				status="WAITING"
+			/>
 			{contracts.length <= 0 && <NoData />}
 			{contracts.length > 0 && (
 				<div>

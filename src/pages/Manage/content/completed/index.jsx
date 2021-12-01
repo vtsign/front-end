@@ -18,13 +18,13 @@ const DocumentCompleted = () => {
 	const history = useHistory();
 
 	const manageDoc = useSelector((state) => state.manageDoc);
-	const { isLoading, error, total_pages, contracts } = manageDoc;
+	const { total_pages, contracts } = manageDoc;
 	const [page, setPage] = useState(1);
 
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		dispatch(getAllContracts('COMPLETED', 1));
+		dispatch(getAllContracts({ status: 'COMPLETED', page: 1 }));
 	}, [dispatch]);
 
 	const selectDocumentHandler = (id) => {
@@ -33,7 +33,7 @@ const DocumentCompleted = () => {
 	};
 
 	const handleOnPageChange = (event, page) => {
-		dispatch(getAllContracts('COMPLETED', page));
+		dispatch(getAllContracts({ status: 'COMPLETED', page }));
 		setPage(page);
 	};
 
@@ -44,9 +44,10 @@ const DocumentCompleted = () => {
 			<ContentHeader
 				title="Tài liệu đã hoàn thành"
 				description="Quản lý tài liệu đã hoàn thành"
+				status="COMPLETED"
 			/>
-			{contracts.length <= 0 && <NoData></NoData>}
-			{contracts.length > 0 && (
+			{contracts && contracts.length <= 0 && <NoData></NoData>}
+			{contracts && contracts.length > 0 && (
 				<div>
 					<Table className="table-document">
 						<TableHead>
@@ -94,7 +95,7 @@ const DocumentCompleted = () => {
 											<TableCell onClick={(e) => e.stopPropagation()}>
 												<ActionButton
 													selectDocumentHandler={selectDocumentHandler}
-													id={row.id}
+													contract={row}
 												/>
 											</TableCell>
 										</TableRow>

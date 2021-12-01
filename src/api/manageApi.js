@@ -1,23 +1,18 @@
 import axiosClient from './axiosClients';
 
-const getContracts = (status, page) => {
-	const url = `/document/filter?status=${status}&page=${page}&size=4`;
-
-	return axiosClient.get(url);
-};
-
 const manageDocumentsApi = {
-	getContractsCompleted: (page = 1) => {
-		return getContracts('COMPLETED', page);
-	},
-	getContractsWaiting: (page = 1) => {
-		return getContracts('WAITING', page);
-	},
-	getContractsNeedSign: (page = 1) => {
-		return getContracts('ACTION_REQUIRE', page);
-	},
-	getContractsDeleted: (page = 1) => {
-		return getContracts('DELETED', page);
+	getContracts: (query) => {
+		const keys = Object.keys(query);
+		let params = keys.reduce((acc, key) => {
+			const value = query[key];
+			if (value) {
+				return `${acc}&${key}=${value}`;
+			}
+			return acc;
+		}, '');
+		params = params.slice(1);
+		const url = `/document/filter?${params}`;
+		return axiosClient.get(url);
 	},
 	getQuickViewContracts: () => {
 		const url = `/document/count`;

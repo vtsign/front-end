@@ -31,7 +31,7 @@ export const manageDocumentReducer = (state = stateDocumentsInitials, action) =>
 				contracts,
 			};
 		case DOCUMENT_GET_PAGE_FAIL:
-			return { error: action.payload };
+			return {  ...state, error: action.payload };
 		default:
 			return state;
 	}
