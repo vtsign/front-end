@@ -20,7 +20,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import ReceiverAvatar from '../../ReceiverAvatar/ReceiverAvatar';
 
-const SendFiles = ({ register, errors }) => {
+const SendFiles = ({ register, errors, Controller, control }) => {
 	const [openModal, setOpenModal] = useState(false);
 	// const {
 	// 	register,
@@ -150,34 +150,35 @@ const SendFiles = ({ register, errors }) => {
 								>
 									Đến:
 								</Typography>
-								<TextField
-									id="status"
-									name="status"
-									select
-									fullWidth
-									variant="outlined"
-									size="small"
-									// {...statusProps}
-									// inputRef={statusRef}
-									// value={filterForm.watch('status')}
-									SelectProps={{
-										displayEmpty: true,
-									}}
-								>
-									{receivers.map((receivers) => (
-										<MenuItem
-											value={receivers.name}
-											key={receivers.name}
-											// selected={
-											// 	filterForm.watch(
-											// 		"warehouseID"
-											// 	) === warehouse.value
-											// }
+								<Controller
+									name="receiver"
+									control={control}
+									render={({ ref, value, ...inputProps }) => (
+										<TextField
+											select
+											fullWidth
+											variant="outlined"
+											size="small"
+											{...inputProps}
+											inputRef={ref}
+											value={value}
+											defaultValue={receivers[0].name ?? ''}
+											SelectProps={{ displayEmpty: true }}
+											// onChange={(e) => setCurrentAssignee(e.target.value)}
 										>
-											{receivers.name}
-										</MenuItem>
-									))}
-								</TextField>
+											{receivers.receivers
+												.filter((r) => r.permission !== 'read')
+												.map((receiver) => (
+													<MenuItem
+														key={receiver.email}
+														value={receiver.email}
+													>
+														{receiver.name}
+													</MenuItem>
+												))}
+										</TextField>
+									)}
+								/>
 							</Grid>
 							<TextField fullWidth={true} multiline rows={5} rowsMax={10} />
 						</DialogContent>
