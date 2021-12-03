@@ -1,6 +1,5 @@
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress, { circularProgressClasses } from '@mui/material/CircularProgress';
-import LinearProgress from '@mui/material/LinearProgress';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
