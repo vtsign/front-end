@@ -1,14 +1,15 @@
+import React, { useRef, useState } from 'react';
 import { CloudUpload } from '@mui/icons-material';
-import { Box, Card, CardContent, Container, Grid, Typography } from '@mui/material';
+import { Box, Card, CardContent, Container, Grid, Typography, CircularProgress } from '@mui/material';
 import '@pdftron/webviewer/public/core/CoreControls';
-import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addDocumentList } from '../../../redux/actions/documentActions';
+import { addDocumentList, removeDocument } from '../../../redux/actions/documentActions';
 import './UploadDocuments.scss';
 let docList = [];
 
 const UploadDocuments = () => {
 	const filePicker = useRef(null);
+	const [loading, setLoading] = useState(false);
 
 	const dispatch = useDispatch();
 
@@ -30,12 +31,15 @@ const UploadDocuments = () => {
 				if (docList.length === filesLength) {
 					dispatch(addDocumentList(docList));
 					docList.length = 0;
+					setLoading(false);
 				}
 			},
 		});
+
 	};
 
 	const handleSelectFile = (e) => {
+		setLoading(true);
 		const { files } = e.target;
 		for (let file of files) {
 			const reader = new FileReader();
@@ -50,6 +54,10 @@ const UploadDocuments = () => {
 			};
 		}
 	};
+
+	const handleRemoveFile = e => {
+		dispatch(removeDocument(e.target.getAttribute('data-id')))
+	}
 	return (
 		<Container maxWidth={false} style={{ height: '100%' }}>
 			<Grid>
@@ -67,25 +75,30 @@ const UploadDocuments = () => {
 						}}
 						className="upload__button"
 					>
-						<CardContent>
-							<Box
-								sx={{
-									display: 'flex',
-									alignItems: 'center',
-									flexDirection: 'column',
-									color: '#2F80ED',
-									cursor: 'pointer',
-								}}
-							>
-								<CloudUpload style={{ fontSize: '5rem' }} />
-								<Typography variant="h6">Tải tài liệu</Typography>
-							</Box>
-						</CardContent>
+						{loading ? (
+							<CircularProgress />
+						) : (
+							<CardContent>
+								<Box
+									sx={{
+										display: 'flex',
+										alignItems: 'center',
+										flexDirection: 'column',
+										color: '#2F80ED',
+										cursor: 'pointer',
+									}}
+								>
+									<CloudUpload style={{ fontSize: '5rem' }} />
+									<Typography variant="h6">Tải tài liệu</Typography>
+								</Box>
+							</CardContent>
+						)}
 					</Card>
 					<input
 						type="file"
 						multiple
 						ref={filePicker}
+						accept="application/pdf"
 						onChange={handleSelectFile}
 						style={{ display: 'none' }}
 					/>
@@ -113,6 +126,13 @@ const UploadDocuments = () => {
 											{document.name}
 										</span>
 									</Grid>
+									<Typography
+										style={{ color: 'red', textDecoration: 'underline', cursor: "pointer" }}
+										data-id={index}
+										onClick={handleRemoveFile}
+									>
+										Xoá
+									</Typography>
 								</Grid>
 							))}
 						</Grid>

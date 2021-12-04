@@ -5,6 +5,7 @@ import {
 	ADD_DOCUMENT_TO_SIGN_FAIL,
 	UPDATE_DOCUMENT_TO_SIGN,
 	UPDATE_DOCUMENT_TO_SIGN_FAIL,
+	REMOVE_DOCUMENT,
 } from '../constants/documentConstants.js';
 import documentApi from "../../api/documentApi";
 
@@ -16,7 +17,7 @@ export const addDocumentList = documents => {
 }
 
 export const loadDocument = () => async (dispatch) => {
-	
+
 }
 
 export const addDocumentToSign = (json, file) => async (dispatch) => {
@@ -60,5 +61,12 @@ export const updateDocumentToSign = (json, file, xfdf) => async (dispatch) => {
 			type: UPDATE_DOCUMENT_TO_SIGN_FAIL,
 			payload: error.response.data,
 		});
+	}
+}
+
+export const removeDocument = (index) => {
+	return {
+		type: REMOVE_DOCUMENT,
+		payload: index
 	}
 }
