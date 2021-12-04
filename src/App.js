@@ -16,6 +16,7 @@ const SignDocument = React.lazy(() => import('./pages/SignDocument/SignDocument'
 const Signing = React.lazy(() => import('./pages/Signing/Signing2'));
 const PrivateRoute = React.lazy(() => import('./components/Layout/PrivateRoute'));
 const Activation = React.lazy(() => import('./pages/Activation/Activation'));
+const UserProfile = React.lazy(() => import('./pages/UserProfile/UserProfile'));
 
 const App = ({ location }) => {
 	// const headerExclusionArray = ['/home', '/', '/signing',
@@ -46,6 +47,7 @@ const App = ({ location }) => {
 					</PrivateRoute>
 					<PrivateRoute path={'/manage'} component={Manage} />
 					<PrivateRoute path="/template" component={Sample} />
+					<PrivateRoute path="/profile" component={UserProfile} />
 					<Route path="/signDocument">
 						<PdfTronProvider>
 							<SignDocument />
