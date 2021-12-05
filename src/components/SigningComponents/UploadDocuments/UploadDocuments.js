@@ -7,9 +7,9 @@ import { addDocumentList, removeDocument } from '../../../redux/actions/document
 import './UploadDocuments.scss';
 let docList = [];
 
-const UploadDocuments = () => {
+const UploadDocuments = ({ loading, setLoading }) => {
 	const filePicker = useRef(null);
-	const [loading, setLoading] = useState(false);
+	// const [loading, setLoading] = useState(false);
 
 	const dispatch = useDispatch();
 

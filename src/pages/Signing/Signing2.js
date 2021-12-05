@@ -50,11 +50,20 @@ const Signing2 = () => {
 		getValues,
 		setValue,
 		reset,
+		watch
 	} = useForm({
 		defaultValues: {
+			name: '',
+			email: '',
+			phone: '',
 			permission: 'sign',
 		},
 	});
+
+	React.useEffect(() => {
+
+		console.log(getValues());
+	}, [getValues])
 
 	const dispatch = useDispatch();
 	const documents = useSelector((state) => state.addDocList.documentList);
@@ -150,7 +159,7 @@ const Signing2 = () => {
 							</Stepper>
 						</Grid>
 						<Grid item xl={10} lg={10} md={9} xs={12}>
-							{activeStep === 0 && <UploadDocuments />}
+							{activeStep === 0 && <UploadDocuments loading={loading} setLoading={setLoading} />}
 							{activeStep === 1 && (
 								<AddReceivers
 									register={register}
@@ -160,9 +169,10 @@ const Signing2 = () => {
 									getValues={getValues}
 									setValue={setValue}
 									reset={reset}
+									watch={watch}
 								/>
 							)}
-							{activeStep === 2 && <EditDocuments register={register} control={control} loading={loading} /> }
+							{activeStep === 2 && <EditDocuments register={register} control={control} loading={loading} setLoading={setLoading} /> }
 							{activeStep === 3 && <SendFiles register={register} errors={errors} control={control} handleSubmit={handleSubmit} loading={loading} /> }
 						</Grid>
 					</Grid>
@@ -201,6 +211,7 @@ const Signing2 = () => {
 								variant="contained"
 								style={{ marginLeft: '14px' }}
 								onClick={handleNext}
+								disabled={loading}
 							>
 								{activeStep === steps.length - 1 ? 'Gửi' : 'Tiếp tục'}
 							</Button>

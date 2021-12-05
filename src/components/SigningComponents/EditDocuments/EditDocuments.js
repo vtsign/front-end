@@ -26,7 +26,7 @@ import { pdfTronContext } from '../../../redux/constants/contexts/pdfTronContext
 import Loading from '../../Loading/Loading.jsx';
 import './EditDocuments.scss';
 
-const EditDocuments = ({ loading }) => {
+const EditDocuments = ({ loading, setLoading }) => {
 	const viewer = useRef(null);
 
 	const { control } = useForm();
@@ -101,6 +101,7 @@ const EditDocuments = ({ loading }) => {
 		});
 	}, []);
 	useEffect(() => {
+		setLoading(true);
 		(async () => {
 			if (instance && documents.documentList.length > -1) {
 				const { docViewer } = instance;
@@ -113,6 +114,7 @@ const EditDocuments = ({ loading }) => {
 						? documents.documentList[webviewerInstances.currentDocument].data
 						: null
 				);
+				setLoading(false);
 					const listAnnotInitials = annotManager.getAnnotationsList();
 					const xfdf = documentXFDFs2[webviewerInstances.currentDocument];
 					const annotations = documentFields[webviewerInstances.currentDocument];

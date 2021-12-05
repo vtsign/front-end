@@ -23,12 +23,12 @@ import { useToast } from '../../toast/useToast.js';
 
 const permissions = [
 	{
-		key: 'sign',
-		value: 'Đọc và ký',
+		label: 'Đọc và ký',
+		value: 'sign',
 	},
 	{
-		key: 'read',
-		value: 'Chỉ đọc',
+		label: 'Chỉ đọc',
+		value: 'read',
 	},
 ];
 
@@ -40,7 +40,7 @@ const defaultValues = {
 	permission: 'sign',
 };
 
-const AddReceivers = ({ register, handleSubmit, errors, control, getValues, setValue, reset }) => {
+const AddReceivers = ({ register, handleSubmit, errors, control, getValues, setValue, reset, watch }) => {
 	// const [receivers, setReceivers] = useState([]);
 	const [showPhone, setShowPhone] = useState(false);
 	const [email, setEmail] = useState('');
@@ -49,13 +49,14 @@ const AddReceivers = ({ register, handleSubmit, errors, control, getValues, setV
 	const { error } = useToast();
 
 	const addReceivers = (formData) => {
+		console.log(formData)
 		const receiverEmails = receivers.map((receiver) => {
 			return receiver.email;
 		});
-		if (receiverEmails.includes(formData.email)) {
-			error('Người nhận đã tồn tại');
-			return;
-		}
+		// if (receiverEmails.includes(formData.email)) {
+		// 	error('Người nhận đã tồn tại');
+		// 	return;
+		// }
 		if (!showPhone) {
 			formData.phone = null;
 		}
@@ -83,13 +84,13 @@ const AddReceivers = ({ register, handleSubmit, errors, control, getValues, setV
 	}, [email]);
 
 	return (
-		<Container maxWidth={false} >
+		<Container maxWidth={false}>
 			<Grid>
 				<Typography variant="h6" my="1rem">
 					Thông tin người nhận
 				</Typography>
 			</Grid>
-			<Grid container >
+			<Grid container>
 				<Grid item lg={8} md={12} xl={8} xs={12}>
 					<Box className="add-receivers__container">
 						<Grid
@@ -178,14 +179,21 @@ const AddReceivers = ({ register, handleSubmit, errors, control, getValues, setV
 										{...inputProps}
 										inputRef={ref}
 										value={value}
-										defaultValue={permissions[0].key}
-										SelectProps={{ displayEmpty: true }}
+										defaultValue={getValues('permission')}
+										// SelectProps={{ displayEmpty: true }}
 										onChange={(e) => setValue('permission', e.target.value)}
 									>
 										{/* <MenuItem value="">Lựa chọn quyền hạn</MenuItem> */}
 										{permissions.map((permission) => (
-											<MenuItem key={permission.key} value={permission.key}>
-												{permission.value}
+											<MenuItem
+												key={permission.value}
+												value={permission.value}
+												// selected={
+												// 	watch('permission') ===
+												// 	permission.value
+												// }
+											>
+												{permission.label}
 											</MenuItem>
 										))}
 									</TextField>
