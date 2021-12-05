@@ -49,10 +49,6 @@ const Signing = () => {
 		},
 	});
 
-	React.useEffect(() => {
-		console.log(getValues());
-	}, [getValues]);
-
 	const dispatch = useDispatch();
 	const documents = useSelector((state) => state.addDocList.documentList);
 	const receivers = useSelector((state) => state.receivers.receivers);
