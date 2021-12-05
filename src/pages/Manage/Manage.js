@@ -27,7 +27,7 @@ const Manage = () => {
 				<Route path={`${match.url}/waiting/:id`} component={DocumentWaitingDetail} />
 				<Route path={`${match.url}/waiting`} exact component={DocumentWaiting} />
 				<Route path={`${match.url}/need-sign/:id`} component={DocumentNeedSignDetail} />
-				<Route path={`${match.url}/need-sign`} component={DocumentNeedSign} />
+				<Route path={`${match.url}/need-sign`} exact component={DocumentNeedSign} />
 				<Route path={`${match.url}/deleted`} component={DocumentDeleted} />
 				{/* <DocumentCompleted /> */}
 			</Grid>

@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect } from 'react';
+import { Fragment, useState, useEffect, useRef } from 'react';
 
 import SearchIcon from '@mui/icons-material/Search';
 import FormControl from '@mui/material/FormControl';
@@ -15,6 +15,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const ContentHeader = ({ title, description, status }) => {
 	const [select, setSelect] = useState(10);
+	const didMount = useRef(false);
+
 	const handleChange = (event) => {
 		setSelect(event.target.value);
 	};
@@ -24,10 +26,13 @@ const ContentHeader = ({ title, description, status }) => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		const timer = setTimeout(() => {
-			dispatch(getAllContracts({ status, page: 1, title: search }));
-		}, 500);
-
+		let timer;
+		if (didMount.current) {
+			timer = setTimeout(() => {
+				dispatch(getAllContracts({ status, page: 1, title: search }));
+			}, 500);
+		}
+		else didMount.current = true;
 		return () => clearTimeout(timer);
 	}, [search]);
 

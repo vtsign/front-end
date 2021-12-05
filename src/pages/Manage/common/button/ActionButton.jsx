@@ -1,17 +1,35 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
+import { useHistory } from 'react-router';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
 import './actionButton.scss';
+import DialogCommon from '../dialogDelete';
 
-export default function ActionButton({ selectDocumentHandler, contract }) {
+const contentDialogDelete = {
+	title: 'Xoá hợp đồng?',
+	content:
+		'Hơp đồng đã xóa sẽ có sẵn trong thùng Đã xóa của bạn trong một thời gian ngắn (tối đa 24 giờ) trước khi bị xóa hoàn toàn.',
+};
+
+export default function ActionButton({ selectDocumentHandler, contract, status }) {
+	const history = useHistory();
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const open = Boolean(anchorEl);
+	const [showDialogDelete, setShowDialogDelete] = useState(false);
 
 	const handleClick = (event) => {
 		event.stopPropagation();
 		setAnchorEl(event.currentTarget);
+	};
+	const openDialogDelete = () => {
+		setAnchorEl(null);
+		setShowDialogDelete(true);
+	};
+
+	const closeDialogDelete = () => {
+		setShowDialogDelete(false);
 	};
 	const handleClose = () => {
 		setAnchorEl(null);
@@ -39,6 +57,20 @@ export default function ActionButton({ selectDocumentHandler, contract }) {
 					link.parentNode.removeChild(link);
 				});
 		});
+		setAnchorEl(null);
+	};
+
+	const handleReStore = () => {
+
+	}
+
+	const handleSignContract = () => {
+		const r = JSON.parse(localStorage.getItem('user')).id;
+		const userContract = contract.user_contracts.find((uc) => uc.user.id === r);
+		const uc = userContract.id;
+		const c = contract.id;
+		const url = `/signDocument?r=${r}&c=${c}&uc=${uc}`;
+		history.push(url);
 	};
 
 	return (
@@ -65,10 +97,18 @@ export default function ActionButton({ selectDocumentHandler, contract }) {
 					'aria-labelledby': 'basic-button',
 				}}
 			>
+				{status === "DELETED" && (<MenuItem onClick={handleReStore}>Hoàn tác</MenuItem>)}
+				{status === "ACTION_REQUIRE" && (<MenuItem onClick={handleSignContract}>Ký ngay</MenuItem>)}
 				<MenuItem onClick={handleDetail}>Chi tiết</MenuItem>
-				<MenuItem onClick={handleClose}>Xóa</MenuItem>
+				<MenuItem onClick={openDialogDelete}>Xóa</MenuItem>
 				<MenuItem onClick={handleDownload}>Tải xuống</MenuItem>
 			</Menu>
+			<DialogCommon
+				open={showDialogDelete}
+				closeDialogKey={closeDialogDelete}
+				title={contentDialogDelete.title}
+				content={contentDialogDelete.content}
+			/>
 		</Fragment>
 	);
 }

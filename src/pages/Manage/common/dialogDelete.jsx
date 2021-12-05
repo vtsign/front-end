@@ -15,7 +15,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const DialogCommon = ({ open, closeDialogKey, title, content }) => {
 
-	
+
 	return ReactDOM.createPortal(
 		<Dialog
 			open={open}
@@ -25,21 +25,21 @@ const DialogCommon = ({ open, closeDialogKey, title, content }) => {
 			aria-describedby="alert-dialog-slide-description"
 			className="dialog-key"
 		>
-            <DialogTitle>{ title}</DialogTitle>
+			<DialogTitle>{title}</DialogTitle>
 			<DialogContent>
-                <DialogContentText>{ content }</DialogContentText>
+				<DialogContentText>{content}</DialogContentText>
 			</DialogContent>
 			<DialogActions>
-                <Button
-                    variant="contained" color="error">
+				<Button
+					variant="contained" color="error">
 					Xoá
 				</Button>
 				<Button onClick={closeDialogKey} color="primary" variant="contained">
 					Hủy
 				</Button>
 			</DialogActions>
-        </Dialog>,
-        	document.getElementsByTagName("body")[0]
+		</Dialog>,
+		document.getElementsByTagName("body")[0]
 	);
 }
 export default DialogCommon;
