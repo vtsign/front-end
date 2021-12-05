@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import {
 	Box,
 	Button,
@@ -10,16 +11,15 @@ import {
 	TextField,
 	Typography,
 } from '@mui/material';
+import './AddReceivers.scss';
+import { REG_EMAIL, REG_PHONE } from '../../constants/global.js';
+import { useToast } from '../../toast/useToast.js';
 import randomstring from 'randomstring';
-import React, { useState, useEffect } from 'react';
 import { Controller } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import userApi from '../../../api/userApi';
 import { addReceiver } from '../../../redux/actions/receiverActions.js';
 import ReceiverAvatar from '../../ReceiverAvatar/ReceiverAvatar';
-import './AddReceivers.scss';
-import { REG_EMAIL, REG_PHONE } from '../../constants/global.js';
-import { useToast } from '../../toast/useToast.js';
 
 const permissions = [
 	{
@@ -49,14 +49,13 @@ const AddReceivers = ({ register, handleSubmit, errors, control, getValues, setV
 	const { error } = useToast();
 
 	const addReceivers = (formData) => {
-		console.log(formData)
 		const receiverEmails = receivers.map((receiver) => {
 			return receiver.email;
 		});
-		// if (receiverEmails.includes(formData.email)) {
-		// 	error('Người nhận đã tồn tại');
-		// 	return;
-		// }
+		if (receiverEmails.includes(formData.email)) {
+			error('Người nhận đã tồn tại');
+			return;
+		}
 		if (!showPhone) {
 			formData.phone = null;
 		}
@@ -178,7 +177,7 @@ const AddReceivers = ({ register, handleSubmit, errors, control, getValues, setV
 										style={{ width: '25vw' }}
 										{...inputProps}
 										inputRef={ref}
-										value={value}
+										value={getValues('permission')}
 										defaultValue={getValues('permission')}
 										// SelectProps={{ displayEmpty: true }}
 										onChange={(e) => setValue('permission', e.target.value)}

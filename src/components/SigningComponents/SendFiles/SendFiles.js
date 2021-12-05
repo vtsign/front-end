@@ -1,21 +1,20 @@
 import {
 	Box,
+	Button,
 	Card,
 	CardContent,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogTitle,
 	Grid,
+	IconButton,
 	InputLabel,
+	MenuItem,
 	TextField,
 	Typography,
-	Dialog,
-	DialogTitle,
-	DialogContent,
-	DialogActions,
-	IconButton,
-	MenuItem,
-	Button,
-	CircularProgress,
 } from '@mui/material';
-import { useForm, Controller } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import { Close } from '@mui/icons-material';
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -31,30 +30,14 @@ const SendFiles = ({ register, errors, control, handleSubmit, loading }) => {
 	const [currentAssignee, setCurrentAssignee] = useState(null);
 
 	const dispatch = useDispatch();
-	// const {
-	// 	register,
-	// 	handleSubmit,
-	// 	formState: { errors },
-	// 	getValues
-	// } = useForm();
 	const receivers = useSelector((state) => state.receivers.receivers);
-	// const loading = useSelector((state) => state.addDocList.loading);
 
 	const { success } = useToast();
-
-	// const [currentPrivateMessage, setCurrentPrivateMessage] = useState(receivers[0].private_message);
-
-	// useEffect(() => {
-	// 	console.log(getValues());
-	// }, [getValues, getValues()])
-
-	const handleOpenModal = () => {};
 
 	useEffect(() => {
 		receivers.forEach((receiver, index) => {
 			if (receiver.email === currentAssignee) setCurrentIndex(index);
 		});
-		// console.log(currentPrivateMessage)
 	}, [currentAssignee, receivers]);
 
 	const handleUpdatePrivateMessage = () => {
