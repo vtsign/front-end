@@ -22,6 +22,17 @@ const manageDocumentsApi = {
 		const url = `/document/contract?c=${id}`;
 		return axiosClient.get(url);
 	},
+	deleteContract: (body) => {
+		return axiosClient.delete("/document/delete", {
+			data: body
+		});
+	},
+	deleteContractCompletely: (body) => {
+		return axiosClient.delete("/document/hidden", body);
+	},
+	restoreDocument: (body) => {
+		return axiosClient.post("/document/restore", body);
+	}
 };
 
 export default manageDocumentsApi;

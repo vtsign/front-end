@@ -5,15 +5,22 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
 import './actionButton.scss';
-import DialogCommon from '../dialogDelete';
+import DialogCommon from '../dialog/dialogDelete';
+import manageDocumentsApi from '../../../../api/manageApi';
 
 const contentDialogDelete = {
 	title: 'Xoá hợp đồng?',
-	content:
-		'Hơp đồng đã xóa sẽ có sẵn trong thùng Đã xóa của bạn trong một thời gian ngắn (tối đa 24 giờ) trước khi bị xóa hoàn toàn.',
+	message:
+		'Hơp đồng đã xóa sẽ có sẵn trong thùng Đã xóa của bạn.',
 };
 
-export default function ActionButton({ selectDocumentHandler, contract, status }) {
+const contentDialogDeleteCompletely = {
+	title: 'Xoá hợp đồng?',
+	message:
+		'Hơp đồng đã xóa sẽ không thể hoàn tác.',
+};
+
+export default function ActionButton({ selectDocumentHandler, contract, status, pathReturn }) {
 	const history = useHistory();
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const open = Boolean(anchorEl);
@@ -60,8 +67,11 @@ export default function ActionButton({ selectDocumentHandler, contract, status }
 		setAnchorEl(null);
 	};
 
-	const handleReStore = () => {
-
+	const handleReStore = async () => {
+		const userId = JSON.parse(localStorage.getItem('user')).id;
+		const userContract = contract.user_contracts.find((uc) => uc.user.id === userId);
+		await manageDocumentsApi.restoreDocument({ contractId: contract.id, userContractId: userContract.id })
+		history.replace(pathReturn);
 	}
 
 	const handleSignContract = () => {
@@ -106,8 +116,9 @@ export default function ActionButton({ selectDocumentHandler, contract, status }
 			<DialogCommon
 				open={showDialogDelete}
 				closeDialogKey={closeDialogDelete}
-				title={contentDialogDelete.title}
-				content={contentDialogDelete.content}
+				content={status === "DELETED" ? contentDialogDeleteCompletely : contentDialogDelete}
+				contract={contract}
+				pathReturn={pathReturn}
 			/>
 		</Fragment>
 	);

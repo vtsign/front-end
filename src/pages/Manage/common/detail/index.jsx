@@ -8,27 +8,42 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router';
 import { getContractById } from '../../../../redux/actions/manageAction';
 import { convertTime } from '../../../../utils/time';
-import DialogCommon from '../dialogDelete';
+import DialogDelete from '../dialog/dialogDelete';
+import DialogRestore from '../dialog/dialogRestore';
 import { pdfTronContext } from '../../../../redux/constants/contexts/pdfTronContext';
 import './style.scss';
+import manageDocumentsApi from '../../../../api/manageApi';
 
 const contentDialogDelete = {
     title: 'Xoá hợp đồng?',
-    content:
-        'Hơp đồng đã xóa sẽ có sẵn trong thùng Đã xóa của bạn trong một thời gian ngắn (tối đa 24 giờ) trước khi bị xóa hoàn toàn.',
+    message:
+        'Hơp đồng đã xóa sẽ có sẵn trong thư mục Đã xóa của bạn.',
 };
 
-const Detail = ({ status, title }) => {
+const contentDialogDeleteCompletely = {
+    title: 'Xoá hợp đồng?',
+    message:
+        'Hơp đồng đã xóa sẽ không thể hoàn tác.',
+};
+
+const contentDialogResotre = {
+    title: 'Hoàn tác hợp đồng?',
+    message:
+        'Hợp đồng hoàn tác sẽ ...',
+};
+
+const Detail = ({ status, title, pathReturn }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const params = useParams();
     const [sender, setSender] = useState({});
     const [receivers, setReceivers] = useState([]);
     const [showDialogDelete, setShowDialogDelete] = useState(false);
+    const [showDialogRestore, setShowDialogRestore] = useState(false);
     const { contract } = useSelector((state) => state.manageDocDetail);
-    const [documents, setDocuments] = useState([]);
-    const { instance, setInstance } = useContext(pdfTronContext);
-    const viewer = useRef(null);
+    // const [documents, setDocuments] = useState([]);
+    // const { instance, setInstance } = useContext(pdfTronContext);
+    // const viewer = useRef(null);
 
 
     // useEffect(() => {
@@ -84,7 +99,12 @@ const Detail = ({ status, title }) => {
     //     });
     // };
 
-
+    const handleReStore = async () => {
+        const userId = JSON.parse(localStorage.getItem('user')).id;
+        const userContract = contract.user_contracts.find((uc) => uc.user.id === userId);
+        await manageDocumentsApi.restoreDocument({ contractId: contract.id, userContractId: userContract.id })
+        history.replace(pathReturn);
+    }
 
     const openDialogDelete = () => {
         setShowDialogDelete(true);
@@ -92,6 +112,14 @@ const Detail = ({ status, title }) => {
 
     const closeDialogDelete = () => {
         setShowDialogDelete(false);
+    };
+
+    const openDialogRestore = () => {
+        setShowDialogRestore(true);
+    };
+
+    const closeDialogRestore = () => {
+        setShowDialogRestore(false);
     };
 
     //redirect to sign document
@@ -162,18 +190,31 @@ const Detail = ({ status, title }) => {
                                 {status === "ACTION_REQUIRE" && (<Button variant="contained" onClick={handleSignContract}>
                                     Kí tài liệu
                                 </Button>)}
+                                {status === "DELETED" && (<Button variant="contained" onClick={openDialogRestore}>
+                                    Hoàn tác
+                                </Button>)}
+                                <DialogRestore
+                                    open={showDialogRestore}
+                                    closeDialogKey={closeDialogRestore}
+                                    content={contentDialogResotre}
+                                    contract={contract}
+                                    pathReturn={pathReturn}
+                                />
                                 <Button onClick={openDialogDelete} variant="outlined" color="error">
                                     Xóa
                                 </Button>
-                                <DialogCommon
+                                <DialogDelete
                                     open={showDialogDelete}
                                     closeDialogKey={closeDialogDelete}
-                                    title={contentDialogDelete.title}
-                                    content={contentDialogDelete.content}
+                                    content={status === "DELETED" ? contentDialogDeleteCompletely : contentDialogDelete}
+                                    contract={contract}
+                                    pathReturn={pathReturn}
                                 />
-                                <Button variant="outlined" onClick={handleDownloadFile}>
+
+                                {status !== "DELETED" && <Button variant="outlined" onClick={handleDownloadFile}>
                                     Tải xuống
-                                </Button>
+                                </Button>}
+
                             </div>
                         </div>
                         <div className="content-receivers">

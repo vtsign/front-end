@@ -74,7 +74,6 @@ const ManageDocument = ({ status, path, cxtHeader }) => {
 		if (sortField === field && sortType === 'asc') {
 			type = 'desc';
 		}
-		console.log("tsdf...................................... ", type, field)
 		history.replace(`${path}?sortField=${field}&sortType=${type}`)
 	}
 
@@ -152,7 +151,7 @@ const ManageDocument = ({ status, path, cxtHeader }) => {
 												}
 											</TableCell>
 											<TableCell>
-												{moment(row.complete_date).format('DD/MM/YYYY LT')}
+												{moment(row.sent_date).format('DD/MM/YYYY LT')}
 											</TableCell>
 											{status !== "COMPLETED" && (<TableCell>
 												<div>
@@ -167,7 +166,7 @@ const ManageDocument = ({ status, path, cxtHeader }) => {
 												</div>
 											</TableCell>)}
 											{status === "COMPLETED" && (<TableCell>
-												{moment(row.sent_date).format('DD/MM/YYYY LT')}
+												{moment(row.complete_date).format('DD/MM/YYYY LT')}
 											</TableCell>)}
 											<TableCell onClick={(e) => e.stopPropagation()}>
 												<ActionButton
