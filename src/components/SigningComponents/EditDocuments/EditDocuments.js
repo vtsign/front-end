@@ -23,9 +23,10 @@ import { Controller, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentDocument, setDropPoint } from '../../../redux/actions/webviewerActions';
 import { pdfTronContext } from '../../../redux/constants/contexts/pdfTronContext';
+import Loading from '../../Loading/Loading.jsx';
 import './EditDocuments.scss';
 
-const EditDocuments = () => {
+const EditDocuments = ({ loading, setLoading }) => {
 	const viewer = useRef(null);
 
 	const { control } = useForm();
@@ -100,6 +101,7 @@ const EditDocuments = () => {
 		});
 	}, []);
 	useEffect(() => {
+		setLoading(true);
 		(async () => {
 			if (instance && documents.documentList.length > -1) {
 				const { docViewer } = instance;
@@ -112,6 +114,7 @@ const EditDocuments = () => {
 						? documents.documentList[webviewerInstances.currentDocument].data
 						: null
 				);
+				setLoading(false);
 					const listAnnotInitials = annotManager.getAnnotationsList();
 					const xfdf = documentXFDFs2[webviewerInstances.currentDocument];
 					const annotations = documentFields[webviewerInstances.currentDocument];
@@ -581,6 +584,7 @@ const EditDocuments = () => {
 						</Box>
 					</Stack>
 				</Grid>
+
 				<Grid
 					item
 					xl={6}
@@ -590,7 +594,9 @@ const EditDocuments = () => {
 					mr="2rem"
 					ref={viewer}
 					className="webviewer"
-				></Grid>
+				>
+					{loading && <Loading />}
+				</Grid>
 				<Grid item xl={3} lg={3} md={12} xs={12}>
 					{documents.documentList.length > 0 && (
 						<Grid className="preview-file">

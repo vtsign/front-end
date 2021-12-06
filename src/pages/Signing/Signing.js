@@ -1,15 +1,6 @@
-import {
-	Button,
-	Checkbox,
-	Container,
-	FormControlLabel,
-	Grid,
-	Step,
-	StepLabel,
-	Stepper,
-} from '@mui/material';
-import '@pdftron/webviewer/public/core/CoreControls';
 import React, { useContext, useState } from 'react';
+import { Button, Container, Grid, Step, StepLabel, Stepper } from '@mui/material';
+import '@pdftron/webviewer/public/core/CoreControls';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
@@ -32,12 +23,13 @@ const steps = [
 const Signing = () => {
 	const [activeStep, setActiveStep] = React.useState(0);
 	const [files, setFiles] = useState(null);
+	const [loading, setLoading] = useState(false);
 
 	const history = useHistory();
 
 	const { handleSendDocuments } = useContext(pdfTronContext);
 
-	const { error } = useToast();
+	const { success, error } = useToast();
 
 	const {
 		register,
@@ -47,8 +39,12 @@ const Signing = () => {
 		getValues,
 		setValue,
 		reset,
+		watch,
 	} = useForm({
 		defaultValues: {
+			name: '',
+			email: '',
+			phone: '',
 			permission: 'sign',
 		},
 	});
@@ -73,47 +69,44 @@ const Signing = () => {
 	};
 
 	const completeSigning = async (formData) => {
+		setLoading(true);
 		const json = {
 			receivers: receivers,
 			mail_title: formData.title,
 			mail_message: formData.message,
 		};
 
-		dispatch({
-			type: 'SHOW_LOADING',
-			payload: true,
-		});
-
-		const response = await documentApi.postSigning(json, files);
-		if (response.status >= 200 && response.status < 300) {
-			dispatch({
-				type: 'RESET_RECEIVERS',
-			});
-			dispatch({
-				type: 'RESET_DOC_LIST',
-			});
-			dispatch({
-				type: 'SHOW_LOADING',
-				payload: false,
-			});
-			history.push('/');
-		} else {
-			error(response?.data?.message || 'Có lỗi xảy ra');
+		try {
+			const response = await documentApi.postSigning(json, files);
+			if (response.status >= 200 && response.status < 300) {
+				setLoading(false);
+				success('Gửi tài liệu thành công');
+				dispatch({
+					type: 'RESET_RECEIVERS',
+				});
+				dispatch({
+					type: 'RESET_DOC_LIST',
+				});
+				history.push('/');
+			} else {
+				setLoading(false);
+				error(response?.data?.message || 'Có lỗi xảy ra');
+			}
+		} catch (err) {
+			error('Đã có lỗi xảy ra');
 		}
-
-		// dispatch(addDocumentToSign(json, files));
 	};
 
 	const handlePrev = () => {
 		setActiveStep((prevActiveStep) => prevActiveStep - 1);
 	};
 
-	const handleExportFiles = () => {
-		(async () => {
-			const files = await handleSendDocuments();
-			setFiles(files);
-			setActiveStep((prevActiveStep) => prevActiveStep + 1);
-		})();
+	const handleExportFiles = async () => {
+		setLoading(true);
+		const files = await handleSendDocuments();
+		setLoading(false);
+		setFiles(files);
+		setActiveStep((prevActiveStep) => prevActiveStep + 1);
 	};
 	return (
 		<Container maxWidth={false}>
@@ -134,7 +127,9 @@ const Signing = () => {
 						</Stepper>
 					</Grid>
 					<Grid item xl={10} lg={10} md={9} xs={12}>
-						{activeStep === 0 && <UploadDocuments />}
+						{activeStep === 0 && (
+							<UploadDocuments loading={loading} setLoading={setLoading} />
+						)}
 						{activeStep === 1 && (
 							<AddReceivers
 								register={register}
@@ -144,12 +139,26 @@ const Signing = () => {
 								getValues={getValues}
 								setValue={setValue}
 								reset={reset}
+								watch={watch}
 							/>
 						)}
 						{activeStep === 2 && (
-							<EditDocuments register={register} control={control} />
+							<EditDocuments
+								register={register}
+								control={control}
+								loading={loading}
+								setLoading={setLoading}
+							/>
 						)}
-						{activeStep === 3 && <SendFiles register={register} errors={errors} />}
+						{activeStep === 3 && (
+							<SendFiles
+								register={register}
+								errors={errors}
+								control={control}
+								handleSubmit={handleSubmit}
+								loading={loading}
+							/>
+						)}
 					</Grid>
 				</Grid>
 				<Grid
@@ -187,6 +196,7 @@ const Signing = () => {
 							variant="contained"
 							style={{ marginLeft: '14px' }}
 							onClick={handleNext}
+							disabled={loading}
 						>
 							{activeStep === steps.length - 1 ? 'Gửi' : 'Tiếp tục'}
 						</Button>

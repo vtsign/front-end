@@ -11,13 +11,15 @@ $height: calc(100vh - (65px + 50px));
 	// height: 95vh;
 	// height: -webkit-calc(100% - 88px);
 	// height: -moz-calc(100% - 88px);
-	 min-height: $content-height;
+	 height: $content-height;
+	 max-height: $content-height;
 	// background-color: #007fff;
 	// flex: 1 1 auto;
 
-	// .sign__content {
-	// 	min-height: $sign-content-height;
-	// }
+	.sign__content {
+		height: $sign-content-height;
+		max-height: $sign-content-height;
+	}
 }
 .edit-form__btn {
 	background-color: #007fff;

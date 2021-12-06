@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import {
 	Box,
 	Button,
@@ -10,25 +11,24 @@ import {
 	TextField,
 	Typography,
 } from '@mui/material';
+import './AddReceivers.scss';
+import { REG_EMAIL, REG_PHONE } from '../../constants/global.js';
+import { useToast } from '../../toast/useToast.js';
 import randomstring from 'randomstring';
-import React, { useState, useEffect } from 'react';
 import { Controller } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import userApi from '../../../api/userApi';
 import { addReceiver } from '../../../redux/actions/receiverActions.js';
 import ReceiverAvatar from '../../ReceiverAvatar/ReceiverAvatar';
-import './AddReceivers.scss';
-import { REG_EMAIL, REG_PHONE } from '../../constants/global.js';
-import { useToast } from '../../toast/useToast.js';
 
 const permissions = [
 	{
-		key: 'sign',
-		value: 'Đọc và ký',
+		label: 'Đọc và ký',
+		value: 'sign',
 	},
 	{
-		key: 'read',
-		value: 'Chỉ đọc',
+		label: 'Chỉ đọc',
+		value: 'read',
 	},
 ];
 
@@ -40,7 +40,7 @@ const defaultValues = {
 	permission: 'sign',
 };
 
-const AddReceivers = ({ register, handleSubmit, errors, control, getValues, setValue, reset }) => {
+const AddReceivers = ({ register, handleSubmit, errors, control, getValues, setValue, reset, watch }) => {
 	// const [receivers, setReceivers] = useState([]);
 	const [showPhone, setShowPhone] = useState(false);
 	const [email, setEmail] = useState('');
@@ -83,13 +83,13 @@ const AddReceivers = ({ register, handleSubmit, errors, control, getValues, setV
 	}, [email]);
 
 	return (
-		<Container maxWidth={false} >
+		<Container maxWidth={false}>
 			<Grid>
 				<Typography variant="h6" my="1rem">
 					Thông tin người nhận
 				</Typography>
 			</Grid>
-			<Grid container >
+			<Grid container>
 				<Grid item lg={8} md={12} xl={8} xs={12}>
 					<Box className="add-receivers__container">
 						<Grid
@@ -177,15 +177,22 @@ const AddReceivers = ({ register, handleSubmit, errors, control, getValues, setV
 										style={{ width: '25vw' }}
 										{...inputProps}
 										inputRef={ref}
-										value={value}
-										defaultValue={permissions[0].key}
-										SelectProps={{ displayEmpty: true }}
+										value={getValues('permission')}
+										defaultValue={getValues('permission')}
+										// SelectProps={{ displayEmpty: true }}
 										onChange={(e) => setValue('permission', e.target.value)}
 									>
 										{/* <MenuItem value="">Lựa chọn quyền hạn</MenuItem> */}
 										{permissions.map((permission) => (
-											<MenuItem key={permission.key} value={permission.key}>
-												{permission.value}
+											<MenuItem
+												key={permission.value}
+												value={permission.value}
+												// selected={
+												// 	watch('permission') ===
+												// 	permission.value
+												// }
+											>
+												{permission.label}
 											</MenuItem>
 										))}
 									</TextField>

@@ -6,6 +6,7 @@ import {
 	UPDATE_DOCUMENT_TO_SIGN_FAIL,
 	RESET_DOC_LIST,
 	SHOW_LOADING,
+	REMOVE_DOCUMENT,
 } from '../constants/documentConstants.js';
 
 const initialState = {
@@ -31,6 +32,13 @@ export const addDocListReducer = (state = initialState, action) => {
 				...state,
 				SHOW_LOADING: payload,
 			};
+			case REMOVE_DOCUMENT:
+				const currentDocumentList = [...state.documentList];
+				currentDocumentList.splice(action.payload, 1);
+				return {
+					...state,
+					documentList: [...currentDocumentList]
+				}
 		default:
 			return state;
 	}

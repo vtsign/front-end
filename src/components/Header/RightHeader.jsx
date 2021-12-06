@@ -30,6 +30,10 @@ const LeftHeader = () => {
 		history.push("/login");
 
 	}
+
+	const profileRoute = () => {
+		history.push("/profile");
+	}
 	return (
 		<Fragment>
 			<Box sx={{ display: 'flex' }}>
@@ -77,7 +81,7 @@ const LeftHeader = () => {
 				transformOrigin={{ horizontal: 'right', vertical: 'top' }}
 				anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
 			>
-				<MenuItem>
+				<MenuItem onClick={profileRoute}>
 					<Avatar /> Profile
 				</MenuItem>
 				<MenuItem>
