@@ -8,7 +8,7 @@ const cxtHeader = {
 
 const documentDeleted = () => {
 	return (
-		<ManageDocument status='Deleted' path="/manage/deleted" cxtHeader={cxtHeader} />
+		<ManageDocument status='DELETED' path="/manage/deleted" cxtHeader={cxtHeader} />
 	)
 }
 export default documentDeleted

@@ -6,6 +6,7 @@ import MenuItem from '@mui/material/MenuItem';
 import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
 import './actionButton.scss';
 import DialogCommon from '../dialog/dialogDelete';
+import DialogRestore from '../dialog/dialogRestore'
 import manageDocumentsApi from '../../../../api/manageApi';
 
 const contentDialogDelete = {
@@ -19,12 +20,18 @@ const contentDialogDeleteCompletely = {
 	message:
 		'Hơp đồng đã xóa sẽ không thể hoàn tác.',
 };
+const contentDialogResotre = {
+	title: 'Hoàn tác hợp đồng?',
+	message:
+		'Hợp đồng hoàn tác sẽ ...',
+};
 
-export default function ActionButton({ selectDocumentHandler, contract, status, pathReturn }) {
+export default function ActionButton({ selectDocumentHandler, contract, status, path }) {
 	const history = useHistory();
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const open = Boolean(anchorEl);
 	const [showDialogDelete, setShowDialogDelete] = useState(false);
+	const [showDialogRestore, setShowDialogRestore] = useState(false);
 
 	const handleClick = (event) => {
 		event.stopPropagation();
@@ -38,12 +45,23 @@ export default function ActionButton({ selectDocumentHandler, contract, status, 
 	const closeDialogDelete = () => {
 		setShowDialogDelete(false);
 	};
+
+	const handleOpenDialogRestore = () => {
+		setAnchorEl(null);
+		setShowDialogRestore(true);
+	};
+
+	const handleCloseDialogRestore = () => {
+		setShowDialogRestore(false);
+	};
+
 	const handleClose = () => {
 		setAnchorEl(null);
 	};
 
 	const handleDetail = () => {
-		selectDocumentHandler(contract.id);
+		const url = `${path}/${contract.id}`;
+		history.push(url);
 	};
 
 	const handleDownload = () => {
@@ -66,13 +84,6 @@ export default function ActionButton({ selectDocumentHandler, contract, status, 
 		});
 		setAnchorEl(null);
 	};
-
-	const handleReStore = async () => {
-		const userId = JSON.parse(localStorage.getItem('user')).id;
-		const userContract = contract.user_contracts.find((uc) => uc.user.id === userId);
-		await manageDocumentsApi.restoreDocument({ contractId: contract.id, userContractId: userContract.id })
-		history.replace(pathReturn);
-	}
 
 	const handleSignContract = () => {
 		const r = JSON.parse(localStorage.getItem('user')).id;
@@ -107,19 +118,27 @@ export default function ActionButton({ selectDocumentHandler, contract, status, 
 					'aria-labelledby': 'basic-button',
 				}}
 			>
-				{status === "DELETED" && (<MenuItem onClick={handleReStore}>Hoàn tác</MenuItem>)}
+				{status === "DELETED" && (<MenuItem onClick={handleOpenDialogRestore}>Hoàn tác</MenuItem>)}
 				{status === "ACTION_REQUIRE" && (<MenuItem onClick={handleSignContract}>Ký ngay</MenuItem>)}
 				<MenuItem onClick={handleDetail}>Chi tiết</MenuItem>
 				<MenuItem onClick={openDialogDelete}>Xóa</MenuItem>
-				<MenuItem onClick={handleDownload}>Tải xuống</MenuItem>
+				{status !== "DELETED" && (<MenuItem onClick={handleDownload}>Tải xuống</MenuItem>)}
 			</Menu>
 			<DialogCommon
+				selectDocumentHandler={selectDocumentHandler}
 				open={showDialogDelete}
 				closeDialogKey={closeDialogDelete}
 				content={status === "DELETED" ? contentDialogDeleteCompletely : contentDialogDelete}
 				contract={contract}
-				pathReturn={pathReturn}
+				pathReturn={path}
 			/>
+			<DialogRestore
+				selectDocumentHandler={selectDocumentHandler}
+				open={showDialogRestore}
+				closeDialogRestore={handleCloseDialogRestore}
+				content={contentDialogResotre}
+				contract={contract}
+				pathReturn={path} />
 		</Fragment>
 	);
 }

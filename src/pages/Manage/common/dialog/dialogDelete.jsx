@@ -7,7 +7,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
-import './dialog.scss';
+import './dialogDelete.scss';
 import manageDocumentsApi from '../../../../api/manageApi';
 import { useHistory } from 'react-router';
 
@@ -15,7 +15,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const DialogCommon = ({ open, closeDialogKey, content, contract, pathReturn }) => {
+const DialogCommon = ({ selectDocumentHandler, open, closeDialogKey, content, contract, pathReturn }) => {
 	const history = useHistory();
 	const handleOnDelete = async () => {
 		const userId = JSON.parse(localStorage.getItem('user')).id;
@@ -26,6 +26,11 @@ const DialogCommon = ({ open, closeDialogKey, content, contract, pathReturn }) =
 			await manageDocumentsApi.deleteContract({ c: contract.id, uc: userContract.id })
 		}
 
+		//if selectDocumentHandler != null => delete on page manage => notification to dispatch get new data
+		if (selectDocumentHandler) {
+			selectDocumentHandler();
+		}
+		closeDialogKey();
 		history.replace(pathReturn);
 	}
 	return ReactDOM.createPortal(
@@ -35,7 +40,7 @@ const DialogCommon = ({ open, closeDialogKey, content, contract, pathReturn }) =
 			keepMounted
 			onClose={closeDialogKey}
 			aria-describedby="alert-dialog-slide-description"
-			className="dialog-key"
+			className="dialog-delete"
 		>
 			<DialogTitle>{content.title}</DialogTitle>
 			<DialogContent>

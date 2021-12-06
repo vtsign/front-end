@@ -47,6 +47,7 @@ const ManageDocument = ({ status, path, cxtHeader }) => {
 	const location = useLocation();
 	const manageDoc = useSelector((state) => state.manageDoc);
 	const { total_pages, contracts, isLoading } = manageDoc;
+	const [hasOnChange, setHasOnChange] = useState(false);
 	const [page, setPage] = useState(1);
 	const dispatch = useDispatch();
 
@@ -56,10 +57,15 @@ const ManageDocument = ({ status, path, cxtHeader }) => {
 
 	useEffect(() => {
 		dispatch(getAllContracts({ status, page: 1, sortField, sortType }));
-	}, [dispatch, sortField, sortType, status]);
+	}, [hasOnChange, dispatch, sortField, sortType, status]);
 
 
-	const selectDocumentHandler = (id) => {
+	const selectDocumentHandler = () => {
+		setHasOnChange(preState => !preState);
+	};
+
+
+	const handleDetail = (id) => {
 		const url = `${path}/${id}`;
 		history.push(url);
 	};
@@ -139,7 +145,7 @@ const ManageDocument = ({ status, path, cxtHeader }) => {
 									return (
 										<TableRow
 											key={row.id}
-											onClick={() => selectDocumentHandler(row.id)}
+											onClick={() => handleDetail(row.id)}
 										>
 											<TableCell style={{ color: '#2F80ED', fontSize: 14 }}>
 												{row.title}
@@ -173,6 +179,7 @@ const ManageDocument = ({ status, path, cxtHeader }) => {
 													selectDocumentHandler={selectDocumentHandler}
 													contract={row}
 													status={status}
+													path={path}
 												/>
 											</TableCell>
 										</TableRow>

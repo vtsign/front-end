@@ -99,13 +99,6 @@ const Detail = ({ status, title, pathReturn }) => {
     //     });
     // };
 
-    const handleReStore = async () => {
-        const userId = JSON.parse(localStorage.getItem('user')).id;
-        const userContract = contract.user_contracts.find((uc) => uc.user.id === userId);
-        await manageDocumentsApi.restoreDocument({ contractId: contract.id, userContractId: userContract.id })
-        history.replace(pathReturn);
-    }
-
     const openDialogDelete = () => {
         setShowDialogDelete(true);
     };
@@ -114,13 +107,14 @@ const Detail = ({ status, title, pathReturn }) => {
         setShowDialogDelete(false);
     };
 
-    const openDialogRestore = () => {
+    const handleOpenDialogRestore = () => {
         setShowDialogRestore(true);
     };
 
-    const closeDialogRestore = () => {
+    const handleCloseDialogRestore = () => {
         setShowDialogRestore(false);
     };
+
 
     //redirect to sign document
     const handleSignContract = () => {
@@ -190,16 +184,14 @@ const Detail = ({ status, title, pathReturn }) => {
                                 {status === "ACTION_REQUIRE" && (<Button variant="contained" onClick={handleSignContract}>
                                     Kí tài liệu
                                 </Button>)}
-                                {status === "DELETED" && (<Button variant="contained" onClick={openDialogRestore}>
+                                {status === "DELETED" && (<Button variant="contained" onClick={handleOpenDialogRestore}>
                                     Hoàn tác
                                 </Button>)}
-                                <DialogRestore
-                                    open={showDialogRestore}
-                                    closeDialogKey={closeDialogRestore}
+                                <DialogRestore open={showDialogRestore}
+                                    closeDialogRestore={handleCloseDialogRestore}
                                     content={contentDialogResotre}
                                     contract={contract}
-                                    pathReturn={pathReturn}
-                                />
+                                    pathReturn={pathReturn} />
                                 <Button onClick={openDialogDelete} variant="outlined" color="error">
                                     Xóa
                                 </Button>

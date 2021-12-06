@@ -28,7 +28,9 @@ const manageDocumentsApi = {
 		});
 	},
 	deleteContractCompletely: (body) => {
-		return axiosClient.delete("/document/hidden", body);
+		return axiosClient.delete("/document/hidden", {
+			data: body
+		});
 	},
 	restoreDocument: (body) => {
 		return axiosClient.post("/document/restore", body);

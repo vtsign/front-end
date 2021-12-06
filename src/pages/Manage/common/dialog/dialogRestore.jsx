@@ -7,7 +7,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
-import './dialog.scss';
+import './dialogRestore.scss';
 import manageDocumentsApi from '../../../../api/manageApi';
 import { useHistory } from 'react-router';
 
@@ -15,12 +15,16 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const DialogRestore = ({ open, closeDialogRestore, content, contract, pathReturn }) => {
+const DialogRestore = ({ selectDocumentHandler, open, closeDialogRestore, content, contract, pathReturn }) => {
     const history = useHistory();
     const handleOnRestore = async () => {
         const userId = JSON.parse(localStorage.getItem('user')).id;
         const userContract = contract.user_contracts.find((uc) => uc.user.id === userId);
-        await manageDocumentsApi.restoreDocument({ contractId: contract.id, userContractId: userContract.id })
+        await manageDocumentsApi.restoreDocument({ c: contract.id, uc: userContract.id })
+        if (selectDocumentHandler) {
+            selectDocumentHandler();
+        }
+        closeDialogRestore();
         history.replace(pathReturn);
     }
     return ReactDOM.createPortal(
@@ -30,7 +34,7 @@ const DialogRestore = ({ open, closeDialogRestore, content, contract, pathReturn
             keepMounted
             onClose={closeDialogRestore}
             aria-describedby="alert-dialog-slide-description"
-            className="dialog-key"
+            className="dialog-restore"
         >
             <DialogTitle>{content.title}</DialogTitle>
             <DialogContent>
