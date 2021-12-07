@@ -48,16 +48,15 @@ const ManageDocument = ({ status, path, cxtHeader }) => {
 	const manageDoc = useSelector((state) => state.manageDoc);
 	const { total_pages, contracts, isLoading } = manageDoc;
 	const [hasOnChange, setHasOnChange] = useState(false);
-	const [page, setPage] = useState(1);
 	const dispatch = useDispatch();
-
 	const queryParam = new URLSearchParams(location.search);
+	const page = queryParam.get('page') || '1';
 	const sortField = queryParam.get('sortField') || 'title';
 	const sortType = queryParam.get('sortType') || 'asc';
 
 	useEffect(() => {
-		dispatch(getAllContracts({ status, page: 1, sortField, sortType }));
-	}, [hasOnChange, dispatch, sortField, sortType, status]);
+		dispatch(getAllContracts({ status, page, sortField, sortType }));
+	}, [hasOnChange, dispatch]);
 
 
 	const selectDocumentHandler = () => {
@@ -71,8 +70,7 @@ const ManageDocument = ({ status, path, cxtHeader }) => {
 	};
 
 	const handleOnPageChange = (event, page) => {
-		dispatch(getAllContracts({ status, page }));
-		setPage(page);
+		history.replace(`${path}?sortField=${sortField}&sortType=${sortType}&status=${status}&page=${page}`)
 	};
 
 	const handleSort = (field) => {
@@ -80,7 +78,7 @@ const ManageDocument = ({ status, path, cxtHeader }) => {
 		if (sortField === field && sortType === 'asc') {
 			type = 'desc';
 		}
-		history.replace(`${path}?sortField=${field}&sortType=${type}`)
+		history.replace(`${path}?sortField=${field}&sortType=${type}&status=${status}&page=${page}`)
 	}
 
 	const showIconSort = (sortType === 'desc' ? <ArrowDropUpOutlinedIcon /> : <ArrowDropDownOutlinedIcon />
@@ -189,7 +187,7 @@ const ManageDocument = ({ status, path, cxtHeader }) => {
 					</Table>
 				</div>
 			)}
-			{contracts.length > 0 && (
+			{contracts && contracts.length > 0 && (
 				<Pagination
 					className="content-pagination"
 					count={total_pages}

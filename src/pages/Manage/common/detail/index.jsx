@@ -306,44 +306,37 @@ const Detail = ({ status, title, pathReturn }) => {
                         </div>
                     </Grid>
                     <Grid item md={3} className="detail-waiting-thumbnail">
-                        {documents.map((document, index) => (
-                            <Grid
-                                className="preview-file__item"
-                                key={index}
-                                onClick={() => handleClickThumbnail(document)}
-                            >
-                                <Grid className="preview-file__thumbnail">
-                                    <img
-                                        alt=""
-                                        src={document.thumbnailData}
-                                        style={{
-                                            height: '100%',
-                                            width: '100%',
-                                            objectFit: 'contain',
-                                        }}
-                                    />
-                                </Grid>
-                                <Grid className="info">
-                                    <span
-                                        style={{ fontWeight: 'bold', wordWrap: 'break-word' }}
-                                    >
-                                        {document.origin_name}
-                                    </span>
-                                </Grid>
-                            </Grid>
-                        ))}
+                        <div className="preview-file">
+                            {documents.map((document, index) => (
+                                <div
+                                    className="preview-file__item"
+                                    key={index}
+                                    onClick={() => handleClickThumbnail(document)}
+                                >
+                                    <div className="preview-file__thumbnail">
+                                        <img
+                                            alt=""
+                                            src={document.thumbnailData}
+                                            style={{
+                                                height: '100%',
+                                                width: '100%',
+                                                objectFit: 'contain',
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="preview-file__info">
+                                        <span
+                                            style={{ fontWeight: 'bold', wordWrap: 'break-word' }}
+                                        >
+                                            {document.origin_name}
+                                        </span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     </Grid>
-                    {/* <div className="webviewer" style={{ display: 'none' }} ref={viewer}></div> */}
                 </Grid>
             )}
-            {/* <Dialog
-                open={openDocument}
-                keepMounted
-                onClose={handleCloseDocument}
-                aria-describedby="alert-dialog-slide-description"
-            >
-                <div className="webviewer" ref={viewer}></div>
-            </Dialog> */}
             <Dialog
                 fullScreen
                 keepMounted

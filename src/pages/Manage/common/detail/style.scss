@@ -115,27 +115,23 @@
 		height: 100%;
 		padding: 20px;
 
-		div {
+		.preview-file {
 			height: 100%;
 			border: 0.5px solid #eeeeee;
-		}
+			padding: 20px 20px 0 20px;
 
-		.preview-file {
-			// display: flex;
-			// flex-direction: row;
-			// align-items: stretch;
-			height: 100%;
-			// max-height: $sign-preview-items;
-			padding: 1rem;
-			overflow-y: auto;
+			.preview-file__item {
+				padding-bottom: 20px;
 
-			&__thumbnail {
-				width: 100%;
-				height: 15rem;
+				.preview-file__thumbnail {
+					border: 0.5px solid #ebebeb;
+					margin-bottom: 10px;
+				}
+
+				.preview-file__info {
+					text-align: center;
+				}
 			}
 		}
 	}
-}
-.dialog-document {
-	
 }
