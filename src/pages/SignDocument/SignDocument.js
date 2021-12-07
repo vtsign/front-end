@@ -178,7 +178,7 @@ const SignDocument2 = () => {
 				},
 				files
 			);
-	
+
 			history.push('/');
 
 		} catch (error) {
@@ -218,40 +218,14 @@ const SignDocument2 = () => {
 				<DialogKey setUserDocument={setUserDocument} setKey={setKey} />
 			)}
 			{userDocument != null && (
-				<Grid container>
+				<Grid container spacing={3}>
 					{/* <Grid lg={3}>
 						<h1 size="md">Sign Document</h1>
 					</Grid> */}
-					<Grid lg={9}>
+					<Grid item lg={9}>
 						<div className="webviewer" ref={viewer}></div>
 					</Grid>
-					<Grid lg={3}>
-						<Stack>
-							{/* <Button
-								onClick={nextField}
-								accessibilityLabel="next field"
-								iconEnd="arrow-forward"
-								variant="outlined"
-							>
-								Next field
-							</Button>
-							<Button
-								onClick={prevField}
-								accessibilityLabel="Previous field"
-								iconEnd="arrow-back"
-								variant="outlined"
-							>
-								Previous field
-							</Button> */}
-							<Button
-								onClick={completeSigning}
-								accessibilityLabel="complete signing"
-								iconEnd="compose"
-								variant="outlined"
-							>
-								Complete signing
-							</Button>
-						</Stack>
+					<Grid item lg={3}>
 						{documents.map((document) => (
 							<Grid key={document.id} onClick={() => handleDocumentChange(document)}>
 								<Grid>
@@ -266,6 +240,23 @@ const SignDocument2 = () => {
 								</Grid>
 							</Grid>
 						))}
+					</Grid>
+					<Grid style={{
+							width: "100%",
+							display: "flex",
+							justifyContent: "flex-end",
+							alignItems: "flex-end"
+						}}>
+
+					<Button
+						style={{marginTop: "1rem"}}
+						onClick={completeSigning}
+						accessibilityLabel="complete signing"
+						iconEnd="compose"
+						variant="contained"
+					>
+						Complete signing
+					</Button>
 					</Grid>
 				</Grid>
 			)}
