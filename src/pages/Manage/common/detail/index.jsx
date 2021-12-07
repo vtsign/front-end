@@ -1,18 +1,24 @@
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import DoneIcon from '@mui/icons-material/Done';
+import CloseIcon from '@mui/icons-material/Close';
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
+import DoneIcon from '@mui/icons-material/Done';
 import { Button, Grid } from '@mui/material';
+import AppBar from '@mui/material/AppBar';
+import Dialog from '@mui/material/Dialog';
+import IconButton from '@mui/material/IconButton';
+import Slide from '@mui/material/Slide';
+import Toolbar from '@mui/material/Toolbar';
 import WebViewer from '@pdftron/webviewer';
-import React, { Fragment, useEffect, useState, useRef, useContext } from 'react';
+import React, { Fragment, useContext, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams, useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
+import manageDocumentsApi from '../../../../api/manageApi';
 import { getContractById } from '../../../../redux/actions/manageAction';
+import { pdfTronContext } from '../../../../redux/constants/contexts/pdfTronContext';
 import { convertTime } from '../../../../utils/time';
 import DialogDelete from '../dialog/dialogDelete';
 import DialogRestore from '../dialog/dialogRestore';
-import { pdfTronContext } from '../../../../redux/constants/contexts/pdfTronContext';
 import './style.scss';
-import manageDocumentsApi from '../../../../api/manageApi';
 
 const contentDialogDelete = {
     title: 'Xoá hợp đồng?',
@@ -32,6 +38,10 @@ const contentDialogResotre = {
         'Hợp đồng hoàn tác sẽ ...',
 };
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
+
 const Detail = ({ status, title, pathReturn }) => {
     const dispatch = useDispatch();
     const history = useHistory();
@@ -40,64 +50,87 @@ const Detail = ({ status, title, pathReturn }) => {
     const [receivers, setReceivers] = useState([]);
     const [showDialogDelete, setShowDialogDelete] = useState(false);
     const [showDialogRestore, setShowDialogRestore] = useState(false);
-    const { contract } = useSelector((state) => state.manageDocDetail);
-    // const [documents, setDocuments] = useState([]);
-    // const { instance, setInstance } = useContext(pdfTronContext);
-    // const viewer = useRef(null);
+    const [contract, setContract] = useState(null);
+    const [documents, setDocuments] = useState([]);
+    const [instance, setInstance] = useState();
+    const viewer = useRef(null);
+    const [openDocument, setOpenDocument] = React.useState(false);
 
+    const handleClickOpenDocument = () => {
+        setOpenDocument(true);
+    };
 
-    // useEffect(() => {
-    //     if (contract != null) {
-    //         WebViewer(
-    //             {
-    //                 path: 'webviewer',
-    //                 disabledElements: [
-    //                     'viewControlsButton',
-    //                     'selectToolButton',
-    //                     'leftPanelButton',
-    //                     'ribbons',
-    //                     'toggleNotesButton',
-    //                     'searchButton',
-    //                     'menuButton',
-    //                     'rubberStampToolGroupButton',
-    //                     'stampToolGroupButton',
-    //                     'fileAttachmentToolGroupButton',
-    //                     'calloutToolGroupButton',
-    //                     'undo',
-    //                     'redo',
-    //                     'eraserToolButton',
-    //                     'toolsHeader',
-    //                 ],
-    //                 fullAPI: true,
-    //             },
-    //             viewer.current
-    //         ).then(async (instance) => {
-    //             setInstance(instance);
+    const handleCloseDocument = () => {
+        setOpenDocument(false);
+    };
 
-    //             contract.documents.forEach((document) => setThumbnail(instance, document));
-    //             // const currentDocument = userDocument.documents[0];
-    //             // setCurrentDocument(currentDocument);
-    //             // setPreviousDocument(currentDocument);
-    //         });
-    //     }
-    // }, [contract, setInstance]);
+    //dispatch get contract to show
+    const idDoc = params.id;
+    useEffect(() => {
+        (async () => {
+            const res = await manageDocumentsApi.getContractById(idDoc);
+            setContract(res.data);
+        })();
+    }, [dispatch, idDoc]);
 
-    // const setThumbnail = async (instance, document) => {
-    //     const coreControls = instance.CoreControls;
-    //     coreControls.setWorkerPath('/webviewer/core');
-    //     const doc = await coreControls.createDocument(document.url, {
-    //         extension: 'pdf',
-    //     });
+    // set sender and list receiver every contract change
+    useEffect(() => {
+        if (contract) {
+            const userContracts = contract.user_contracts;
+            setSender(userContracts.find((uc) => uc.owner).user);
+            setReceivers(userContracts.filter((uc) => !uc.owner));
+        }
+    }, [contract]);
 
-    //     document.pageCount = doc.getPageCount();
-    //     doc.loadCanvasAsync({
-    //         pageNumber: 1,
-    //         drawComplete: (canvas) => {
-    //             document.thumbnailData = canvas.toDataURL();
-    //             setDocuments((prev) => [...prev, document]);
-    //         },
-    //     });
-    // };
+    useEffect(() => {
+        if (contract != null) {
+            WebViewer(
+                {
+
+                    path: '/webviewer',
+                    disabledElements: [
+                        'viewControlsButton',
+                        'selectToolButton',
+                        'leftPanelButton',
+                        'ribbons',
+                        'toggleNotesButton',
+                        'searchButton',
+                        'menuButton',
+                        'rubberStampToolGroupButton',
+                        'stampToolGroupButton',
+                        'fileAttachmentToolGroupButton',
+                        'calloutToolGroupButton',
+                        'undo',
+                        'redo',
+                        'eraserToolButton',
+                        'toolsHeader',
+                    ],
+                    isReadOnly: "true"
+                },
+                viewer.current
+            ).then(async (instance) => {
+                setInstance(instance);
+                contract.documents.forEach((document) => setThumbnail(instance, document));
+            });
+        }
+    }, [contract]);
+
+    const setThumbnail = async (instance, document) => {
+        const coreControls = instance.CoreControls;
+        coreControls.setWorkerPath('/webviewer/core');
+        const doc = await coreControls.createDocument(document.url, {
+            extension: 'pdf',
+        });
+
+        document.pageCount = doc.getPageCount();
+        doc.loadCanvasAsync({
+            pageNumber: 1,
+            drawComplete: (canvas) => {
+                document.thumbnailData = canvas.toDataURL();
+                setDocuments((prev) => [...prev, document]);
+            },
+        });
+    };
 
     const openDialogDelete = () => {
         setShowDialogDelete(true);
@@ -132,21 +165,6 @@ const Detail = ({ status, title, pathReturn }) => {
         return (sender.id === idUser || receiver.user.id === idUser) && receiver.private_message
     }
 
-    //dispatch get contract to show
-    const idDoc = params.id;
-    useEffect(() => {
-        dispatch(getContractById(idDoc));
-    }, [dispatch, idDoc]);
-
-    // set sender and list receiver every contract change
-    useEffect(() => {
-        if (contract) {
-            const userContracts = contract.user_contracts;
-            setSender(userContracts.find((uc) => uc.owner).user);
-            setReceivers(userContracts.filter((uc) => !uc.owner));
-        }
-    }, [contract]);
-
     const handleDownloadFile = () => {
         contract.documents.forEach((doc) => {
             fetch(doc.url)
@@ -166,6 +184,23 @@ const Detail = ({ status, title, pathReturn }) => {
                 });
         });
     };
+
+    const handleClickThumbnail = async (document) => {
+        handleClickOpenDocument();
+        const { docViewer, annotManager, Annotations } = instance;
+        await docViewer.loadDocument(document.url);
+
+        annotManager.on('annotationChanged', (annotations, action, { imported }) => {
+            if (imported && action === 'add') {
+                annotations.forEach(function (annot) {
+                    if (annot instanceof Annotations.WidgetAnnotation) {
+                        annot.Hidden = true;
+                        annot.Listable = false;
+                    }
+                });
+            }
+        });
+    }
 
     return (
         <Fragment>
@@ -271,11 +306,68 @@ const Detail = ({ status, title, pathReturn }) => {
                         </div>
                     </Grid>
                     <Grid item md={3} className="detail-waiting-thumbnail">
-                        <div></div>
+                        {documents.map((document, index) => (
+                            <Grid
+                                className="preview-file__item"
+                                key={index}
+                                onClick={() => handleClickThumbnail(document)}
+                            >
+                                <Grid className="preview-file__thumbnail">
+                                    <img
+                                        alt=""
+                                        src={document.thumbnailData}
+                                        style={{
+                                            height: '100%',
+                                            width: '100%',
+                                            objectFit: 'contain',
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid className="info">
+                                    <span
+                                        style={{ fontWeight: 'bold', wordWrap: 'break-word' }}
+                                    >
+                                        {document.origin_name}
+                                    </span>
+                                </Grid>
+                            </Grid>
+                        ))}
                     </Grid>
-                    {/* <div className="webviewer" ref={viewer}></div> */}
+                    {/* <div className="webviewer" style={{ display: 'none' }} ref={viewer}></div> */}
                 </Grid>
             )}
+            {/* <Dialog
+                open={openDocument}
+                keepMounted
+                onClose={handleCloseDocument}
+                aria-describedby="alert-dialog-slide-description"
+            >
+                <div className="webviewer" ref={viewer}></div>
+            </Dialog> */}
+            <Dialog
+                fullScreen
+                keepMounted
+                open={openDocument}
+                onClose={handleCloseDocument}
+                TransitionComponent={Transition}
+            >
+                <AppBar sx={{ position: 'relative' }}>
+                    <Toolbar>
+                        <IconButton
+                            edge="start"
+                            color="inherit"
+                            onClick={handleCloseDocument}
+                            aria-label="close"
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                        <Button autoFocus color="inherit" onClick={handleCloseDocument}>
+                            Close
+                        </Button>
+                    </Toolbar>
+                </AppBar>
+                <div className="webviewer" style={{ height: "100%" }} ref={viewer}></div>
+            </Dialog>
         </Fragment>
     );
 };
