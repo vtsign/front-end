@@ -34,17 +34,17 @@ const SendFiles = ({ register, errors, control, handleSubmit, loading }) => {
 
 	const { success } = useToast();
 
-	useEffect(() => {
-		receivers.forEach((receiver, index) => {
-			if (receiver.email === currentAssignee) setCurrentIndex(index);
-		});
-	}, [currentAssignee, receivers]);
+	// useEffect(() => {
+	// 	receivers.forEach((receiver, index) => {
+	// 		if (receiver.email === currentAssignee) setCurrentIndex(index);
+	// 	});
+	// }, [currentAssignee, receivers]);
 
-	const handleUpdatePrivateMessage = () => {
-		dispatch(updatePrivateMessage(privateMessage, currentIndex));
-		success('Thêm tin nhắn riêng tư thành công');
-		setOpenModal(false);
-	};
+	// const handleUpdatePrivateMessage = () => {
+	// 	dispatch(updatePrivateMessage(privateMessage, currentIndex));
+	// 	success('Thêm tin nhắn riêng tư thành công');
+	// 	setOpenModal(false);
+	// };
 
 	return (
 		<>
@@ -67,12 +67,12 @@ const SendFiles = ({ register, errors, control, handleSubmit, loading }) => {
 							margin: '0 2rem',
 						}}
 					>
-						<Typography
+						{/* <Typography
 							style={{ alignSelf: 'flex-end' }}
 							onClick={() => setOpenModal(true)}
 						>
 							Thêm tin nhắn riêng tư
-						</Typography>
+						</Typography> */}
 						<Grid
 							display="flex"
 							justifyContent="space-between"
@@ -135,7 +135,7 @@ const SendFiles = ({ register, errors, control, handleSubmit, loading }) => {
 						</CardContent>
 					</Card>
 				</Grid>
-				<Dialog open={openModal} fullWidth={true} onClose={() => setOpenModal(false)}>
+				{/* <Dialog open={openModal} fullWidth={true} onClose={() => setOpenModal(false)}>
 					<DialogTitle id={'modal' + '-dialog-title'} onClose={() => setOpenModal(false)}>
 						{`Thêm tin nhắn riêng tư`}
 						<IconButton
@@ -215,7 +215,7 @@ const SendFiles = ({ register, errors, control, handleSubmit, loading }) => {
 							Trở lại
 						</Button>
 					</DialogActions>
-				</Dialog>
+				</Dialog> */}
 			</Grid>
 		</>
 	);
