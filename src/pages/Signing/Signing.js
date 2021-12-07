@@ -126,7 +126,7 @@ const Signing = () => {
 							})}
 						</Stepper>
 					</Grid>
-					<Grid item xl={10} lg={10} md={9} xs={12}>
+					<Grid item xl={10} lg={10} md={9} xs={12} sx={{ maxHeight: '80vh'}}>
 						{activeStep === 0 && (
 							<UploadDocuments loading={loading} setLoading={setLoading} />
 						)}

@@ -48,7 +48,14 @@ const AddReceivers = ({ register, handleSubmit, errors, control, getValues, setV
 	const receivers = useSelector((state) => state.receivers.receivers);
 	const { error } = useToast();
 
+	const myInfo = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
+
+
 	const addReceivers = (formData) => {
+		if(formData.email === myInfo.email) {
+			error('Không được tự gửi đến chính mình');
+			return;
+		}
 		const receiverEmails = receivers.map((receiver) => {
 			return receiver.email;
 		});
@@ -214,6 +221,21 @@ const AddReceivers = ({ register, handleSubmit, errors, control, getValues, setV
 								error={!!errors.key}
 								helperText={errors?.key?.message}
 								defaultValue={'VT' + randomstring.generate(6)}
+							/>
+						</Grid>
+						<Grid
+							display="flex"
+							justifyContent="space-between"
+							alignItems="center"
+							my="1rem"
+						>
+							<InputLabel>Tin nhắn riêng tư</InputLabel>
+							<TextField
+								id="private_message"
+								sx={{ minWidth: '25vw' }}
+								rows={5}
+								rowsMax={10}
+								{...register('private_message')}
 							/>
 						</Grid>
 						<Grid
