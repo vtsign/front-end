@@ -111,7 +111,7 @@ const AddReceivers = ({
 							display="flex"
 							justifyContent="space-between"
 							alignItems="center"
-							my="1rem"
+							my=".5rem"
 						>
 							<InputLabel>
 								Tên người nhận <span style={{ color: 'red' }}>*</span>
@@ -131,7 +131,7 @@ const AddReceivers = ({
 							display="flex"
 							justifyContent="space-between"
 							alignItems="center"
-							my="1rem"
+							my=".5rem"
 						>
 							<InputLabel>
 								Địa chỉ Email <span style={{ color: 'red' }}>*</span>
@@ -157,7 +157,7 @@ const AddReceivers = ({
 								display="flex"
 								justifyContent="space-between"
 								alignItems="center"
-								my="1rem"
+								my=".5rem"
 							>
 								<InputLabel>Số điện thoại</InputLabel>
 								<TextField
@@ -181,7 +181,7 @@ const AddReceivers = ({
 							display="flex"
 							justifyContent="space-between"
 							alignItems="center"
-							my="1rem"
+							my=".5rem"
 						>
 							<InputLabel>
 								Quyền hạn <span style={{ color: 'red' }}>*</span>
@@ -224,7 +224,7 @@ const AddReceivers = ({
 							display="flex"
 							justifyContent="space-between"
 							alignItems="center"
-							my="1rem"
+							my=".5rem"
 						>
 							<InputLabel>Sử dụng khóa</InputLabel>
 							<TextField
@@ -241,7 +241,7 @@ const AddReceivers = ({
 							display="flex"
 							justifyContent="space-between"
 							alignItems="center"
-							my="1rem"
+							my=".5rem"
 						>
 							<InputLabel>Tin nhắn riêng tư</InputLabel>
 							<TextField
@@ -252,12 +252,12 @@ const AddReceivers = ({
 								{...register('private_message')}
 							/>
 						</Grid>
-					</Box>
-					<Grid display="flex" justifyContent="flex-end" alignItems="center" my="1rem" mr="2rem">
+					<Grid display="flex" justifyContent="flex-end" alignItems="center" my="1rem" >
 						<Button variant="contained" onClick={handleSubmit(addReceivers)}>
 							Tạo mới
 						</Button>
 					</Grid>
+					</Box>
 				</Grid>
 				<Grid item lg={4} md={6} xl={4} xs={12}>
 					<Card className="receiver__list">
