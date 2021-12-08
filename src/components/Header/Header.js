@@ -18,8 +18,8 @@ const Header = () => {
 
 	const checkActive = (match, location) => {
 		//some additional logic to verify you are in the home URI
-		if(!location) return false;
-		const {pathname} = location;
+		if (!location) return false;
+		const { pathname } = location;
 		return pathname === "/";
 	}
 
@@ -29,7 +29,7 @@ const Header = () => {
 				<Toolbar className="header-toolbar">
 					<div className="header-right">
 						<MenuMobile />
-						<Link to="/" style={{margin: 'auto'}}>
+						<Link to="/" style={{ margin: 'auto' }}>
 							<img
 								src={Logo}
 								alt="logo"
@@ -49,10 +49,6 @@ const Header = () => {
 							<NavLink to="/manage" activeClassName="active">
 								<ManageSearchIcon style={{ verticalAlign: 'middle' }} />
 								Quản lý
-							</NavLink>
-							<NavLink to="/template" activeClassName="active">
-								<Description style={{ verticalAlign: 'middle' }} />
-								Bản mẫu
 							</NavLink>
 						</div>
 					</div>

@@ -20,10 +20,6 @@ const Home = () => {
 			<div className="home__manage">
 				<div className="home__manage__signature">
 					<Avatar src="/user-man.png" alt="avatar-user" className="avatar" />
-					<fieldset className="signature">
-						<legend className="signature__title">Chữ kí</legend>
-						<img src="/thiep.png" alt="signature" className="signature__image" />
-					</fieldset>
 				</div>
 				<Link to="/manage/completed">
 					<div className="home__manage__action">
