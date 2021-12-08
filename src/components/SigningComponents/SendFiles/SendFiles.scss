@@ -1,0 +1,9 @@
+@import '/src/sass/variables';
+@import '/src/sass/mixins';
+@import '/src/sass/base';
+
+.receivers {
+	height: 90%;
+	max-height: $sign-preview-items;
+	overflow-y: auto;
+}

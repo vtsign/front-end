@@ -362,7 +362,7 @@ const EditDocuments = ({ loading, setLoading }) => {
 			</Grid>
 			<Grid container style={{ height: '100%' }}>
 				<Grid item lg={2} md={6} xl={2} xs={12}>
-					<Stack my={2} style={{ height: "60%", overflow: "auto"}}>
+					<Stack my={2} style={{ height: "100%", overflow: "auto"}}>
 						<Box padding={1}>
 							<Typography gutterBottom>
 								<b>Người nhận</b>

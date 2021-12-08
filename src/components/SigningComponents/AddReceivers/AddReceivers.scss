@@ -12,16 +12,16 @@
 	display: flex;
 	flex-direction: column;
 	max-height: $sign-preview-items;
-	height: 60%;
+	height: 90%;
 	color: #2F80ED;
 	margin: 0 2rem;
-	overflow: auto;
-	-ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+// 	overflow: auto;
+// 	-ms-overflow-style: none;  /* IE and Edge */
+//   scrollbar-width: none;  /* Firefox */
 }
 
 .receiver__list {
-	height: 70%;
+	height: 90%;
 	max-height: $sign-preview-items;
 	// padding: 1rem;
 	overflow-y: auto;
