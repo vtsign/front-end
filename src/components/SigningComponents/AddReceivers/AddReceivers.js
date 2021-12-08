@@ -38,6 +38,7 @@ const defaultValues = {
 	email: '',
 	phone: '',
 	permission: 'sign',
+	private_message: ''
 };
 
 const AddReceivers = ({ register, handleSubmit, errors, control, getValues, setValue, reset, watch }) => {
