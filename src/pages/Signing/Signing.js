@@ -46,6 +46,7 @@ const Signing = () => {
 			email: '',
 			phone: '',
 			permission: 'sign',
+			private_message: '',
 		},
 	});
 
