@@ -10,7 +10,7 @@ import {
 	Typography,
 } from '@mui/material';
 
-const UserAvatar = () => {
+const UserAvatar = ({ userInfo }) => {
 	return (
 		<Card>
 			<CardContent>
@@ -30,20 +30,17 @@ const UserAvatar = () => {
 						}}
 					/>
 					<Typography color="textPrimary" gutterBottom variant="h5">
-						user.name
+						{userInfo.first_name} {userInfo.last_name}
 					</Typography>
 					<Typography color="textSecondary" variant="body2">
-						user.city user.country
-					</Typography>
-					<Typography color="textSecondary" variant="body2">
-						user.timezone
+						{userInfo.email}
 					</Typography>
 				</Box>
 			</CardContent>
 			<Divider />
 			<CardActions>
 				<Button color="primary" fullWidth variant="text">
-					Upload picture
+					Thay đổi hình đại diện
 				</Button>
 			</CardActions>
 		</Card>
