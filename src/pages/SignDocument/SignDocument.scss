@@ -7,5 +7,14 @@
 }
 
 .webviewer {
-	height: 80vh;
+	height: $content-height;
+}
+
+.document_list {
+	display: flex;
+	flex-direction: column;
+	// justify-content: center;
+	align-items: center;
+	max-height: $content-height;
+	overflow-y: auto;
 }
