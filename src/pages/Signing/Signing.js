@@ -94,6 +94,7 @@ const Signing = () => {
 				error(response?.data?.message || 'Có lỗi xảy ra');
 			}
 		} catch (err) {
+			setLoading(false);
 			error('Đã có lỗi xảy ra');
 		}
 	};
