@@ -26,6 +26,11 @@ const userApi = {
 		const response = await axiosClient.get(url);
 		return response;
 	},
+	payment: (method, amount) => {
+		return axiosClient.post("/user/deposit", {
+			method, amount
+		});
+	}
 };
 
 export default userApi;

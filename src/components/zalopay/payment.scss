@@ -1,0 +1,8 @@
+@import '/src/sass/variables';
+@import '/src/sass/mixins';
+@import '/src/sass/base';
+
+.payment {
+	@include flex(center, center);
+	min-height: $content-height;
+}

@@ -87,6 +87,9 @@ const LeftHeader = () => {
 				<MenuItem>
 					<Avatar /> My account
 				</MenuItem>
+				<MenuItem onClick={() => history.push("/payment")}>
+					<Avatar /> Nạp tiền
+				</MenuItem>
 				<Divider />
 				<MenuItem>
 					<ListItemIcon>
@@ -99,7 +102,7 @@ const LeftHeader = () => {
 						<Settings fontSize="small" />
 					</ListItemIcon>
 					Settings
-                </MenuItem>
+				</MenuItem>
 				<MenuItem onClick={logoutHandler}>
 					<ListItemIcon>
 						<Logout fontSize="small" />
