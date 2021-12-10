@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router';
 import { getAllContracts } from '../../../redux/actions/manageAction';
+import Loading from '../../../components/Loading/Loading';
 import ActionButton from './button/ActionButton';
 import ContentHeader from './contentHeader';
 import NoData from "./NoData";
@@ -91,6 +92,7 @@ const ManageDocument = ({ status, path, cxtHeader }) => {
 				description={cxtHeader.description}
 				status={status}
 			/>
+			{isLoading && <Loading />}
 			{contracts && contracts.length <= 0 && !isLoading && <NoData />}
 			{contracts && contracts.length > 0 && (
 				<div>

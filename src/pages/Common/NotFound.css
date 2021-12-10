@@ -1,22 +1,9 @@
-* {
-	-webkit-box-sizing: border-box;
-	box-sizing: border-box;
+#notfound {
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
-
-body {
-	padding: 0;
-	margin: 0;
-}
-
-#notfound .notfound {
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	-webkit-transform: translate(-50%, -50%);
-	-ms-transform: translate(-50%, -50%);
-	transform: translate(-50%, -50%);
-}
-
 .notfound {
 	max-width: 560px;
 	width: 100%;
@@ -25,9 +12,7 @@ body {
 }
 
 .notfound .notfound-404 {
-	position: absolute;
-	left: 0;
-	top: 0;
+	position: relative;
 	display: inline-block;
 	width: 140px;
 	height: 140px;

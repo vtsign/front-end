@@ -8,12 +8,11 @@ const NotFound = () => {
 			<div class="notfound">
 				<div class="notfound-404"></div>
 				<h1>404</h1>
-				<h2>Oops! Page Not Be Found</h2>
+				<h2>Oop! Không tìm thấy trang</h2>
 				<p>
-					Sorry but the page you are looking for does not exist, have been removed. name
-					changed or is temporarily unavailable
+					Trang bạn tìm kiếm không tồn tại hoặc đã bị xóa
 				</p>
-				<Link to="/" >Back to homepage</Link>
+				<Link to="/" >Trở vể trang chủ</Link>
 			</div>
 		</div>
 	);

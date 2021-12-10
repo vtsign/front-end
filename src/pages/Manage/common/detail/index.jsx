@@ -18,6 +18,7 @@ import { pdfTronContext } from '../../../../redux/constants/contexts/pdfTronCont
 import { convertTime } from '../../../../utils/time';
 import DialogDelete from '../dialog/dialogDelete';
 import DialogRestore from '../dialog/dialogRestore';
+import Loading from '../../../../components/Loading/Loading';
 import './style.scss';
 
 const contentDialogDelete = {
@@ -53,6 +54,7 @@ const Detail = ({ status, title, pathReturn }) => {
     const [contract, setContract] = useState(null);
     const [documents, setDocuments] = useState([]);
     const [instance, setInstance] = useState();
+    const [loading, setLoading] = useState(true);
     const viewer = useRef(null);
     const [openDocument, setOpenDocument] = React.useState(false);
 
@@ -84,6 +86,7 @@ const Detail = ({ status, title, pathReturn }) => {
 
     useEffect(() => {
         if (contract != null) {
+            setLoading(true);
             WebViewer(
                 {
 
@@ -110,7 +113,11 @@ const Detail = ({ status, title, pathReturn }) => {
                 viewer.current
             ).then(async (instance) => {
                 setInstance(instance);
-                contract.documents.forEach((document) => setThumbnail(instance, document));
+                for (const document of contract.documents) {
+                    await setThumbnail(instance, document)
+                }
+                setLoading(false);
+                //contract.documents.forEach((document) => setThumbnail(instance, document));
             });
         }
     }, [contract]);
@@ -186,9 +193,11 @@ const Detail = ({ status, title, pathReturn }) => {
     };
 
     const handleClickThumbnail = async (document) => {
+        setLoading(true);
         handleClickOpenDocument();
         const { docViewer, annotManager, Annotations } = instance;
         await docViewer.loadDocument(document.url);
+        setLoading(false);
 
         annotManager.on('annotationChanged', (annotations, action, { imported }) => {
             if (imported && action === 'add') {
@@ -204,6 +213,7 @@ const Detail = ({ status, title, pathReturn }) => {
 
     return (
         <Fragment>
+            {loading && <Loading />}
             {contract && (
                 <Grid container className="detail-waiting">
                     <Grid item md={9} className="detail-waiting-main">

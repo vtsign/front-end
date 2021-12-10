@@ -1,7 +1,7 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { userLoginReducer, userRegisterReducer } from './reducers/userReducers.js';
+import { userLoginReducer, userRegisterReducer, paymentReducer } from './reducers/userReducers.js';
 import { addDocListReducer, editDocReducer } from './reducers/documentReducers.js';
 import { receiverReducer } from './reducers/receiverReducers.js';
 import { webviewerReducer } from './reducers/webviewerReducers.js';
@@ -25,6 +25,7 @@ const reducer = combineReducers({
 	receivers: receiverReducer,
 	webviewer: webviewerReducer,
 	manageDocDetail: manageDocumentDetailReducer,
+	payment: paymentReducer
 });
 
 const store = createStore(
