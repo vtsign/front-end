@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
 	Box,
 	Button,
@@ -11,13 +11,38 @@ import {
 	InputLabel
 } from '@mui/material';
 import { useForm } from 'react-hook-form';
+import userApi from '../../api/userApi';
+import { useToast } from '../toast/useToast';
+import { useHistory } from 'react-router-dom';
+import Loading from '../Loading/Loading';
+import { REG_PHONE } from '../../components/constants/global.js';
 
-const UserProfileDetails = () => {
+
+const UserProfileDetails = ({ userInfo }) => {
+	const [loading, setLoading] = useState(false);
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
 	} = useForm();
+
+	const { success, error } = useToast();
+	const history = useHistory();
+
+	const onSubmitChange = async formData => {
+		setLoading(true);
+		try {
+			const updateProfileResponse = await userApi.updateUserProfile(formData);
+			if(updateProfileResponse.status === 200)
+				success("Cập nhật thông tin tài khoản thành công");
+				setLoading(false);
+				history.go(0);
+
+		} catch (err) {
+			setLoading(false);
+		}
+
+	}
 	return (
 		<Card>
 			<CardHeader
@@ -26,6 +51,7 @@ const UserProfileDetails = () => {
 			/>
 			<Divider />
 			<CardContent>
+				{loading && <Loading />}
 				<Grid container spacing={3}>
 					<Grid item md={6} xs={12}>
 						<InputLabel>
@@ -35,7 +61,8 @@ const UserProfileDetails = () => {
 							id="lastName"
 							fullWidth
 							placeholder="Nhập họ và tên đệm"
-							{...register('lastName', {
+							defaultValue={userInfo.last_name}
+							{...register('last_name', {
 								required: 'Vui lòng nhập họ và tên đệm',
 							})}
 							error={!!errors.lastName}
@@ -50,7 +77,8 @@ const UserProfileDetails = () => {
 							name="firstName"
 							fullWidth
 							placeholder="Nhập tên"
-							{...register('firstName', {
+							defaultValue={userInfo.first_name}
+							{...register('first_name', {
 								required: 'Vui lòng nhập tên',
 							})}
 							error={!!errors.firstName}
@@ -65,8 +93,10 @@ const UserProfileDetails = () => {
 							name="email"
 							fullWidth
 							placeholder="Nhập địa chỉ email"
-							error={!!errors.email}
-							helperText={errors?.email?.message}
+							defaultValue={userInfo.email}
+							InputProps={{
+								readOnly: true,
+							}}
 						/>
 					</Grid>
 					<Grid item md={6} xs={12}>
@@ -77,12 +107,13 @@ const UserProfileDetails = () => {
 							name="phone"
 							fullWidth
 							placeholder="Nhập số điện thoại"
+							defaultValue={userInfo.phone}
 							{...register('phone', {
 								required: 'Vui lòng nhập số điện thoại',
-								// pattern: {
-								// 	value: REG_PHONE,
-								// 	message: 'Số điện thoại phải là số và bắt đầu là 0 hoặc +',
-								// },
+								pattern: {
+									value: REG_PHONE,
+									message: 'Số điện thoại phải là số và bắt đầu là 0 hoặc +',
+								},
 							})}
 							error={!!errors.phone}
 							helperText={errors?.phone?.message}
@@ -96,6 +127,7 @@ const UserProfileDetails = () => {
 							name="organization"
 							fullWidth
 							placeholder="Nhập cơ quan"
+							defaultValue={userInfo.organization}
 							{...register('organization', {
 								required: 'Vui lòng nhập cơ quan',
 							})}
@@ -111,6 +143,7 @@ const UserProfileDetails = () => {
 							name="address"
 							fullWidth
 							placeholder="Nhập địa chỉ"
+							defaultValue={userInfo.address}
 							{...register('address', {
 								required: 'Vui lòng nhập địa chỉ',
 							})}
@@ -128,7 +161,12 @@ const UserProfileDetails = () => {
 					p: 2,
 				}}
 			>
-				<Button color="primary" variant="contained">
+				<Button
+					color="primary"
+					variant="contained"
+					type="submit"
+					onClick={handleSubmit(onSubmitChange)}
+				>
 					Lưu
 				</Button>
 			</Box>

@@ -231,38 +231,50 @@ const SignDocument2 = () => {
 					<Grid item lg={10}>
 						<div className="webviewer" ref={viewer}></div>
 					</Grid>
-					<Grid item lg={2} className="document_list">
-						{documents.map((document) => (
-							<Grid key={document.id} onClick={() => handleDocumentChange(document)}>
-								<Grid style={{ display: "flex", justifyContent: "center", cursor: "pointer"}}>
-									<img
-										width="50%"
-										alt={document.origin_name}
-										src={document.thumbnailData}
-									/>
+					<Grid item lg={2}>
+						<Grid className="document_list">
+							{documents.map((document) => (
+								<Grid
+									key={document.id}
+									onClick={() => handleDocumentChange(document)}
+								>
+									<Grid
+										style={{
+											display: 'flex',
+											justifyContent: 'center',
+											cursor: 'pointer',
+										}}
+									>
+										<img
+											width="50%"
+											alt={document.origin_name}
+											src={document.thumbnailData}
+										/>
+									</Grid>
+									<Grid>
+										<b>{document.origin_name}</b>
+									</Grid>
 								</Grid>
-								<Grid>
-									<b>{document.origin_name}</b>
-								</Grid>
-							</Grid>
-						))}
-					</Grid>
-					<Grid style={{
-							width: "100%",
-							display: "flex",
-							justifyContent: "flex-end",
-							alignItems: "flex-end"
-						}}>
-
-					<Button
-						style={{marginTop: "1rem"}}
-						onClick={completeSigning}
-						accessibilityLabel="complete signing"
-						iconEnd="compose"
-						variant="contained"
-					>
-						Hoàn tất
-					</Button>
+							))}
+						</Grid>
+						<Grid
+							style={{
+								width: '100%',
+								display: 'flex',
+								justifyContent: 'flex-end',
+								alignItems: 'flex-end',
+							}}
+						>
+							<Button
+								style={{ marginTop: '1rem' }}
+								onClick={completeSigning}
+								accessibilityLabel="complete signing"
+								iconEnd="compose"
+								variant="contained"
+							>
+								Hoàn tất
+							</Button>
+						</Grid>
 					</Grid>
 				</Grid>
 			)}
