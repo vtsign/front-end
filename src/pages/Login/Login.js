@@ -62,7 +62,6 @@ const Login = () => {
 			<Paper
 				variant="outlined"
 				className="login-form"
-				style={{ maxHeight: '95vh', overflow: 'auto' }}
 			>
 			<p className="login-logo-temp">
 					VTSIGN
@@ -160,6 +159,7 @@ const Login = () => {
 								fullWidth
 								size="large"
 								onClick={handleSubmit(doLogin)}
+								type="submit"
 							>
 								Đăng nhập
 							</Button>

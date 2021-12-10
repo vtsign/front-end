@@ -73,6 +73,7 @@ const EditDocuments = ({ loading, setLoading }) => {
 			},
 			viewer.current
 		).then(async (instance) => {
+			instance.setZoomLevel("75%")
 			setInstance(instance);
 			const { PDFNet, CoreControls } = instance;
 			await PDFNet.initialize();
@@ -360,8 +361,8 @@ const EditDocuments = ({ loading, setLoading }) => {
 				</Typography>
 			</Grid>
 			<Grid container style={{ height: '100%' }}>
-				<Grid item lg={2} md={6} xl={2} xs={12} mr="2rem">
-					<Stack my={2}>
+				<Grid item lg={2} md={6} xl={2} xs={12}>
+					<Stack my={2} style={{ height: "100%", overflow: "auto"}}>
 						<Box padding={1}>
 							<Typography gutterBottom>
 								<b>Người nhận</b>
@@ -587,8 +588,8 @@ const EditDocuments = ({ loading, setLoading }) => {
 
 				<Grid
 					item
-					xl={6}
-					lg={6}
+					xl={8}
+					lg={8}
 					md={6}
 					xs={12}
 					mr="2rem"
@@ -597,7 +598,7 @@ const EditDocuments = ({ loading, setLoading }) => {
 				>
 					{loading && <Loading />}
 				</Grid>
-				<Grid item xl={3} lg={3} md={12} xs={12}>
+				<Grid item xl={1.5} lg={1.5} md={12} xs={12}>
 					{documents.documentList.length > 0 && (
 						<Grid className="preview-file">
 							{documents.documentList.map((document, index) => (
