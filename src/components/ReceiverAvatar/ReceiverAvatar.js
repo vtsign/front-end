@@ -11,7 +11,6 @@ const ReceiverAvatar = ({ receiver, hideButton=false, index }) => {
 
 	const handleDeleteReceiver = () => {
 		dispatch(removeReceiver(index));
-		console.log(index);
 	}
 
 	return (

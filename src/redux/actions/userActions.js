@@ -21,7 +21,6 @@ export const loginAction = (email, password) => async (dispatch) => {
 			payload: res.data,
 		});
 	} catch (error) {
-		console.log(error);
 		dispatch({
 			type: USER_LOGIN_FAIL,
 			payload: error,

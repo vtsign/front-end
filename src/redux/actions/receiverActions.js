@@ -20,7 +20,6 @@ export const removeReceiver = (receiverIndex) => {
 }
 
 export const updatePrivateMessage = (private_message, index) => {
-	// console.log('object')
 	return {
 		type: UPDATE_PRIVATE_MESSAGE,
 		payload: {

@@ -46,7 +46,6 @@ const Login = () => {
 	} = useForm();
 
 	const doLogin = (formData) => {
-		// console.log(formData);
 		dispatch(loginAction(formData.email, formData.password));
 	};
 

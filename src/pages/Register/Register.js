@@ -40,7 +40,6 @@ const Register = () => {
 	const history = useHistory();
 
 	useEffect(() => {
-		console.log('errorRegistry', errorRegister);
 		if (user) {
 			history.push('/login');
 		}

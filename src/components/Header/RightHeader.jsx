@@ -7,15 +7,17 @@ import Divider from '@mui/material/Divider';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import userApi from '../../api/userApi';
 import { USER_LOGOUT } from '../../redux/constants/userConstants';
 
 const LeftHeader = () => {
 	const history = useHistory();
 	const dispatch = useDispatch();
 	const [anchorEl, setAnchorEl] = React.useState(null);
+	const [userInfo, setUserInfo] = useState();
 	const open = Boolean(anchorEl);
 	const handleClick = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -25,11 +27,17 @@ const LeftHeader = () => {
 	};
 
 	const logoutHandler = () => {
-		console.log('logout');
 		dispatch({ type: USER_LOGOUT });
 		history.push("/login");
 
 	}
+
+	useEffect(() => {
+		(async () => {
+			const response = await userApi.getUserProfile();
+			setUserInfo(response.data);
+		})()
+	}, [])
 
 	const profileRoute = () => {
 		history.push("/profile");
@@ -37,12 +45,14 @@ const LeftHeader = () => {
 	return (
 		<Fragment>
 			<Box sx={{ display: 'flex' }}>
-				<IconButton size="large" aria-label="show 4 new mails" color="inherit">
+				{/* <IconButton size="large" aria-label="show 4 new mails" color="inherit">
 					<Language />
 				</IconButton>
 				<IconButton size="large" color="inherit">
 					<Settings />
-				</IconButton>
+				</IconButton> */}
+
+				<p style={{ display: 'flex', alignItems: 'center' }}>{userInfo?.balance} VND</p>
 				<IconButton onClick={handleClick} size="large" edge="end" color="inherit">
 					<AccountCircle />
 				</IconButton>
