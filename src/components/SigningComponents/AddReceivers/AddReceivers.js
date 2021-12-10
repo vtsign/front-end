@@ -33,14 +33,23 @@ const permissions = [
 ];
 
 const defaultValues = {
-
 	name: '',
 	email: '',
 	phone: '',
 	permission: 'sign',
+	private_message: ''
 };
 
-const AddReceivers = ({ register, handleSubmit, errors, control, getValues, setValue, reset, watch }) => {
+const AddReceivers = ({
+	register,
+	handleSubmit,
+	errors,
+	control,
+	getValues,
+	setValue,
+	reset,
+	watch,
+}) => {
 	// const [receivers, setReceivers] = useState([]);
 	const [showPhone, setShowPhone] = useState(false);
 	const [email, setEmail] = useState('');
@@ -48,7 +57,13 @@ const AddReceivers = ({ register, handleSubmit, errors, control, getValues, setV
 	const receivers = useSelector((state) => state.receivers.receivers);
 	const { error } = useToast();
 
+	const myInfo = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
+
 	const addReceivers = (formData) => {
+		if (formData.email === myInfo.email) {
+			error('Không được tự gửi đến chính mình');
+			return;
+		}
 		const receiverEmails = receivers.map((receiver) => {
 			return receiver.email;
 		});
@@ -96,9 +111,11 @@ const AddReceivers = ({ register, handleSubmit, errors, control, getValues, setV
 							display="flex"
 							justifyContent="space-between"
 							alignItems="center"
-							my="1rem"
+							my=".5rem"
 						>
-							<InputLabel>Tên người nhận</InputLabel>
+							<InputLabel>
+								Tên người nhận <span style={{ color: 'red' }}>*</span>
+							</InputLabel>
 							<TextField
 								id="name"
 								placeholder="Nguyễn Văn A"
@@ -114,9 +131,11 @@ const AddReceivers = ({ register, handleSubmit, errors, control, getValues, setV
 							display="flex"
 							justifyContent="space-between"
 							alignItems="center"
-							my="1rem"
+							my=".5rem"
 						>
-							<InputLabel>Địa chỉ Email</InputLabel>
+							<InputLabel>
+								Địa chỉ Email <span style={{ color: 'red' }}>*</span>
+							</InputLabel>
 							<TextField
 								id="email"
 								placeholder="nguyenvana@email.com"
@@ -138,7 +157,7 @@ const AddReceivers = ({ register, handleSubmit, errors, control, getValues, setV
 								display="flex"
 								justifyContent="space-between"
 								alignItems="center"
-								my="1rem"
+								my=".5rem"
 							>
 								<InputLabel>Số điện thoại</InputLabel>
 								<TextField
@@ -162,9 +181,11 @@ const AddReceivers = ({ register, handleSubmit, errors, control, getValues, setV
 							display="flex"
 							justifyContent="space-between"
 							alignItems="center"
-							my="1rem"
+							my=".5rem"
 						>
-							<InputLabel>Quyền hạn</InputLabel>
+							<InputLabel>
+								Quyền hạn <span style={{ color: 'red' }}>*</span>
+							</InputLabel>
 							<Controller
 								name="permission"
 								control={control}
@@ -203,7 +224,7 @@ const AddReceivers = ({ register, handleSubmit, errors, control, getValues, setV
 							display="flex"
 							justifyContent="space-between"
 							alignItems="center"
-							my="1rem"
+							my=".5rem"
 						>
 							<InputLabel>Sử dụng khóa</InputLabel>
 							<TextField
@@ -218,14 +239,24 @@ const AddReceivers = ({ register, handleSubmit, errors, control, getValues, setV
 						</Grid>
 						<Grid
 							display="flex"
-							justifyContent="flex-end"
+							justifyContent="space-between"
 							alignItems="center"
-							my="1rem"
+							my=".5rem"
 						>
-							<Button variant="contained" onClick={handleSubmit(addReceivers)}>
-								Tạo mới
-							</Button>
+							<InputLabel>Tin nhắn riêng tư</InputLabel>
+							<TextField
+								id="private_message"
+								sx={{ minWidth: '25vw' }}
+								rows={5}
+								rowsMax={10}
+								{...register('private_message')}
+							/>
 						</Grid>
+					<Grid display="flex" justifyContent="flex-end" alignItems="center" my="1rem" >
+						<Button variant="contained" onClick={handleSubmit(addReceivers)}>
+							Tạo mới
+						</Button>
+					</Grid>
 					</Box>
 				</Grid>
 				<Grid item lg={4} md={6} xl={4} xs={12}>

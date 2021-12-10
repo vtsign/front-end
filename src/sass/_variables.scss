@@ -13,7 +13,7 @@ $header-tablet-height: 50px;
 $header-mobile-height: 50px;
 $header-shrink-height: 70px;
 
-$footer-height: 50px;
+$footer-height: 3rem;
 $footer-tablet-height: 40px;
 $footer-mobile-height: 40px;
 
@@ -24,7 +24,7 @@ $content-mobile-height: calc(100vh - #{$header-mobile-height} - #{$footer-mobile
 $content-height-no-header: calc(100vh - #{$footer-height});
 
 $sign-content-height: calc(100% - 5rem);
-$sign-preview-items: calc(#{$content-height} - 15vh);
+$sign-preview-items: calc(#{$content-height} - 17vh);
 
 
 $box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;

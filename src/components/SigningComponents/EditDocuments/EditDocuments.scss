@@ -3,7 +3,9 @@
 @import '/src/sass/base';
 
 .webviewer {
-	height: 90%;
+	height: 100%;
+	max-height: $sign-preview-items;
+
 }
 
 .preview-file {

@@ -284,6 +284,7 @@ const Register = () => {
 								fullWidth
 								size="large"
 								onClick={handleSubmit(doLogin)}
+								type="submit"
 							>
 								Đăng ký
 							</Button>

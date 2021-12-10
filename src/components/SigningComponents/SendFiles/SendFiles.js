@@ -14,37 +14,17 @@ import {
 	TextField,
 	Typography,
 } from '@mui/material';
-import { Controller } from 'react-hook-form';
-import { Close } from '@mui/icons-material';
+import './SendFiles.scss';
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ReceiverAvatar from '../../ReceiverAvatar/ReceiverAvatar';
-import { updatePrivateMessage } from '../../../redux/actions/receiverActions';
 import { useToast } from '../../toast/useToast';
 import Loading from '../../Loading/Loading';
 
 const SendFiles = ({ register, errors, control, handleSubmit, loading }) => {
-	const [openModal, setOpenModal] = useState(false);
-	const [currentIndex, setCurrentIndex] = useState(0);
-	const [privateMessage, setPrivateMessage] = useState('');
-	const [currentAssignee, setCurrentAssignee] = useState(null);
-
-	const dispatch = useDispatch();
 	const receivers = useSelector((state) => state.receivers.receivers);
 
 	const { success } = useToast();
-
-	useEffect(() => {
-		receivers.forEach((receiver, index) => {
-			if (receiver.email === currentAssignee) setCurrentIndex(index);
-		});
-	}, [currentAssignee, receivers]);
-
-	const handleUpdatePrivateMessage = () => {
-		dispatch(updatePrivateMessage(privateMessage, currentIndex));
-		success('Thêm tin nhắn riêng tư thành công');
-		setOpenModal(false);
-	};
 
 	return (
 		<>
@@ -67,12 +47,6 @@ const SendFiles = ({ register, errors, control, handleSubmit, loading }) => {
 							margin: '0 2rem',
 						}}
 					>
-						<Typography
-							style={{ alignSelf: 'flex-end' }}
-							onClick={() => setOpenModal(true)}
-						>
-							Thêm tin nhắn riêng tư
-						</Typography>
 						<Grid
 							display="flex"
 							justifyContent="space-between"
@@ -111,7 +85,7 @@ const SendFiles = ({ register, errors, control, handleSubmit, loading }) => {
 				</Grid>
 				<Grid item lg={4} md={6} xl={5} xs={12}>
 					<Card>
-						<CardContent>
+						<CardContent className="receivers">
 							{receivers.length > 0 ? (
 								receivers.map((partner, index) => (
 									<ReceiverAvatar
@@ -135,87 +109,6 @@ const SendFiles = ({ register, errors, control, handleSubmit, loading }) => {
 						</CardContent>
 					</Card>
 				</Grid>
-				<Dialog open={openModal} fullWidth={true} onClose={() => setOpenModal(false)}>
-					<DialogTitle id={'modal' + '-dialog-title'} onClose={() => setOpenModal(false)}>
-						{`Thêm tin nhắn riêng tư`}
-						<IconButton
-							aria-label="close"
-							onClick={() => setOpenModal(false)}
-							style={{ position: 'absolute', top: '1px', right: '1px' }}
-						>
-							<Close />
-						</IconButton>
-					</DialogTitle>
-					<DialogContent dividers>
-						<Grid item xs={12} sm={6} marginBottom="1rem">
-							<Typography
-								style={{ fontWeight: 'bold' }}
-								color="textPrimary"
-								gutterBottom
-							>
-								Đến:
-							</Typography>
-							<Controller
-								name="receiver"
-								control={control}
-								render={({ ref, value, ...inputProps }) => (
-									<TextField
-										select
-										fullWidth
-										variant="outlined"
-										size="small"
-										{...inputProps}
-										inputRef={ref}
-										value={value}
-										defaultValue={receivers[0].email ?? ''}
-										SelectProps={{ displayEmpty: true }}
-										onChange={(e) => {
-											setCurrentAssignee(e.target.value);
-											// setCurrentPrivateMessage(receivers[currentIndex].private_message)
-										}}
-									>
-										{receivers.map((receiver, index) => (
-											<MenuItem
-												name={index}
-												key={index}
-												value={receiver.email}
-											>
-												{receiver.name}
-											</MenuItem>
-										))}
-									</TextField>
-								)}
-							/>
-						</Grid>
-						<TextField
-							name="private_message"
-							fullWidth={true}
-							multiline
-							rows={5}
-							rowsMax={10}
-							// value={currentPrivateMessage}
-							// {...register('private_message', {
-							// 	required: 'Vui lòng nhập tin nhắn riêng tư',
-							// })}
-							// error={!!errors.message}
-							// helperText={errors?.message?.message}
-							onChange={(e) => setPrivateMessage(e.target.value)}
-						/>
-					</DialogContent>
-					<DialogActions>
-						<Button
-							autoFocus
-							color="primary"
-							variant={'contained'}
-							onClick={handleUpdatePrivateMessage}
-						>
-							Xác nhận
-						</Button>
-						<Button onClick={() => setOpenModal(false)} variant={'outlined'}>
-							Trở lại
-						</Button>
-					</DialogActions>
-				</Dialog>
 			</Grid>
 		</>
 	);

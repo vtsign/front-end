@@ -46,6 +46,7 @@ const Signing = () => {
 			email: '',
 			phone: '',
 			permission: 'sign',
+			private_message: '',
 		},
 	});
 
@@ -93,6 +94,7 @@ const Signing = () => {
 				error(response?.data?.message || 'Có lỗi xảy ra');
 			}
 		} catch (err) {
+			setLoading(false);
 			error('Đã có lỗi xảy ra');
 		}
 	};
@@ -126,7 +128,7 @@ const Signing = () => {
 							})}
 						</Stepper>
 					</Grid>
-					<Grid item xl={10} lg={10} md={9} xs={12}>
+					<Grid item xl={10} lg={10} md={9} xs={12} sx={{ maxHeight: '80vh'}}>
 						{activeStep === 0 && (
 							<UploadDocuments loading={loading} setLoading={setLoading} />
 						)}

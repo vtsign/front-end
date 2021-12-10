@@ -15,13 +15,14 @@
 	max-height: $sign-preview-items;
 	height: 90%;
 	cursor: pointer;
+	overflow-y: auto;
 }
 
 .preview-file {
 	// display: flex;
 	// flex-direction: row;
 	// align-items: stretch;
-	height: 100%;
+	height: 90%;
 	max-height: $sign-preview-items;
 	// max-height: $sign-preview-items;
 	padding: 1rem;

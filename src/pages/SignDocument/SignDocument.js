@@ -1,6 +1,7 @@
 import React, { useContext, useRef, useEffect, useState } from 'react';
 import { Box, Stack, Button, Grid, Container } from '@mui/material';
 // import { Box, Column, Heading, Row, Stack, Button } from 'gestalt';
+import Loading from '../../components/Loading/Loading';
 import WebViewer from '@pdftron/webviewer';
 // import 'gestalt/dist/gestalt.css';
 import './SignDocument.scss';
@@ -10,12 +11,14 @@ import documentApi from '../../api/documentApi';
 import { mergeAnnotations } from '../../components/MergeAnnotations/MergeAnnotations';
 import DialogKey from './DialogKey';
 import { pdfTronContext } from '../../redux/constants/contexts/pdfTronContext';
+import { useToast } from '../../components/toast/useToast';
 
 const SignDocument2 = () => {
 	const { instance, setInstance, documentXFDFs, updateDocumentXFDFs } =
 		useContext(pdfTronContext);
 	const [annotManager, setAnnotatManager] = useState(null);
 	const [annotPosition, setAnnotPosition] = useState(0);
+	const [loading, setLoading] = useState(false);
 	const [key, setKey] = useState();
 	const history = useHistory();
 
@@ -25,6 +28,8 @@ const SignDocument2 = () => {
 	const [previousDocument, setPreviousDocument] = useState(null);
 
 	const viewer = useRef(null);
+
+	const { error } = useToast();
 
 	const location = useLocation();
 	const queryParam = new URLSearchParams(location.search);
@@ -70,6 +75,7 @@ const SignDocument2 = () => {
 	}, [userDocument]);
 
 	useEffect(() => {
+		setLoading(true);
 		(async () => {
 			if (currentDocument != null) {
 				try {
@@ -78,6 +84,7 @@ const SignDocument2 = () => {
 					instance.setToolbarGroup('toolbarGroup-Insert');
 
 					await docViewer.loadDocument(currentDocument.url);
+					setLoading(false);
 
 					const normalStyles = (widget) => {
 						if (widget instanceof Annotations.TextWidgetAnnotation) {
@@ -145,6 +152,7 @@ const SignDocument2 = () => {
 	};
 
 	const completeSigning = async () => {
+		setLoading(true);
 		const xfdf = await annotManager.exportAnnotations();
 		documentXFDFs[currentDocument.id] = xfdf;
 
@@ -178,12 +186,12 @@ const SignDocument2 = () => {
 				},
 				files
 			);
-	
+			setLoading(false);
 			history.push('/');
 
 		} catch (error) {
-			alert(error.message);
-			console.error(error);
+			setLoading(false);
+			error(error.message);
 		}
 	};
 
@@ -217,44 +225,16 @@ const SignDocument2 = () => {
 			{userDocument == null && (
 				<DialogKey setUserDocument={setUserDocument} setKey={setKey} />
 			)}
+			{loading && <Loading />}
 			{userDocument != null && (
-				<Grid container>
-					{/* <Grid lg={3}>
-						<h1 size="md">Sign Document</h1>
-					</Grid> */}
-					<Grid lg={9}>
+				<Grid container spacing={3}>
+					<Grid item lg={10}>
 						<div className="webviewer" ref={viewer}></div>
 					</Grid>
-					<Grid lg={3}>
-						<Stack>
-							{/* <Button
-								onClick={nextField}
-								accessibilityLabel="next field"
-								iconEnd="arrow-forward"
-								variant="outlined"
-							>
-								Next field
-							</Button>
-							<Button
-								onClick={prevField}
-								accessibilityLabel="Previous field"
-								iconEnd="arrow-back"
-								variant="outlined"
-							>
-								Previous field
-							</Button> */}
-							<Button
-								onClick={completeSigning}
-								accessibilityLabel="complete signing"
-								iconEnd="compose"
-								variant="outlined"
-							>
-								Complete signing
-							</Button>
-						</Stack>
+					<Grid item lg={2} className="document_list">
 						{documents.map((document) => (
 							<Grid key={document.id} onClick={() => handleDocumentChange(document)}>
-								<Grid>
+								<Grid style={{ display: "flex", justifyContent: "center", cursor: "pointer"}}>
 									<img
 										width="50%"
 										alt={document.origin_name}
@@ -262,10 +242,27 @@ const SignDocument2 = () => {
 									/>
 								</Grid>
 								<Grid>
-									<span>{document.origin_name}</span>
+									<b>{document.origin_name}</b>
 								</Grid>
 							</Grid>
 						))}
+					</Grid>
+					<Grid style={{
+							width: "100%",
+							display: "flex",
+							justifyContent: "flex-end",
+							alignItems: "flex-end"
+						}}>
+
+					<Button
+						style={{marginTop: "1rem"}}
+						onClick={completeSigning}
+						accessibilityLabel="complete signing"
+						iconEnd="compose"
+						variant="contained"
+					>
+						Hoàn tất
+					</Button>
 					</Grid>
 				</Grid>
 			)}
