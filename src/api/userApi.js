@@ -14,6 +14,12 @@ const userApi = {
 		const url = "/user/profile";
 		const response = await axiosClient.post(url, data);
 		return response;
+	},
+	payment: (method, amount) => {
+		return axiosClient.post('/user/deposit', {
+			method,
+			amount
+		})
 	}
 };
 

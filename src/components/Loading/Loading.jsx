@@ -1,16 +1,17 @@
 import Backdrop from '@mui/material/Backdrop';
-import CircularProgress, { circularProgressClasses } from '@mui/material/CircularProgress';
-import LinearProgress from '@mui/material/LinearProgress';
+import CircularProgress from '@mui/material/CircularProgress';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
 const LoadingBackdrop = () => {
 	return (
 		<Backdrop
-			sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+			sx={{ backgroundColor: 'rgb(255 255 255 /60%);', zIndex: (theme) => theme.zIndex.drawer + 1 }}
 			open={true}
 		>
-			<CircularProgress />
+			<CircularProgress sx={{
+				animationDuration: '550ms'
+			}}/>
 		</Backdrop>
 	);
 }

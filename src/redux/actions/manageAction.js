@@ -16,20 +16,6 @@ export const getAllContracts = (query) => async (dispatch) => {
 		});
 
 		let res = await manageApi.getContracts(query);
-		// switch (type) {
-		// 	case 'COMPLETED':
-		// 		res = await manageApi.getContractsCompleted(query);
-		// 		break;
-		// 	case 'ACTION_REQUIRE':
-		// 		res = await manageApi.getContractsNeedSign(query);
-		// 		break;
-		// 	case 'WAITING':
-		// 		res = await manageApi.getContractsWaiting(query);
-		// 		break;
-		// 	default:
-		// 		res = await manageApi.getContractsDeleted(query);
-		// 		break;
-		// }
 
 		dispatch({
 			type: DOCUMENT_GET_PAGE_SUCCESS,

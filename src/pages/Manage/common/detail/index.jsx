@@ -19,6 +19,7 @@ import { convertTime } from '../../../../utils/time';
 import DialogDelete from '../dialog/dialogDelete';
 import DialogRestore from '../dialog/dialogRestore';
 import Loading from '../../../../components/Loading/Loading';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import './style.scss';
 
 const contentDialogDelete = {
@@ -267,7 +268,10 @@ const Detail = ({ status, title, pathReturn }) => {
                                                 />
                                             )}
                                             {receiver.status === 'ACTION_REQUIRE' && (
-                                                <AccessTimeIcon style={{ marginRight: 10 }} />
+                                                <AccessTimeIcon style={{ marginRight: 10, opacity: 0.6 }} />
+                                            )}
+                                            {receiver.status === 'READ' && (
+                                                <VisibilityOutlinedIcon style={{ marginRight: 10, opacity: 0.6 }} />
                                             )}
                                             <div>
                                                 <p>{receiver.user.full_name}</p>

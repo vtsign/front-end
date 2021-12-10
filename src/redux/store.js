@@ -25,7 +25,6 @@ const reducer = combineReducers({
 	receivers: receiverReducer,
 	webviewer: webviewerReducer,
 	manageDocDetail: manageDocumentDetailReducer,
-	payment: paymentReducer
 });
 
 const store = createStore(

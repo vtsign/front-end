@@ -5,12 +5,8 @@ import {
 	USER_REGISTER_REQUEST,
 	USER_REGISTER_SUCCESS,
 	USER_REGISTER_FAIL,
-	PAYMENT_REQUEST,
-	PAYMENT_SUCCESS,
-	PAYMENT_FAIL,
 } from '../constants/userConstants.js';
 import authenApi from '../../api/authenApi';
-import userApi from '../../api/userApi';
 
 export const loginAction = (email, password) => async (dispatch) => {
 	try {
@@ -64,23 +60,3 @@ export const registerAction =
 		}
 	};
 
-export const payment = (query) => async (dispatch) => {
-	try {
-		dispatch({
-			type: PAYMENT_REQUEST,
-		});
-
-		const res = await userApi.payment(query);
-
-		dispatch({
-			type: PAYMENT_SUCCESS,
-			payload: res.data,
-		});
-	} catch (error) {
-		console.log(error);
-		dispatch({
-			type: PAYMENT_FAIL,
-			payload: error,
-		});
-	}
-};
