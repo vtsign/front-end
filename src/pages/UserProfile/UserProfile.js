@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
 	Button,
 	Checkbox,
@@ -23,15 +23,24 @@ import { useToast } from '../../components/toast/useToast.js';
 import './UserProfile.scss';
 import UserAvatar from '../../components/Profiles/UserAvatar';
 import UserProfileDetails from '../../components/Profiles/UserProfileDetails';
+import userApi from '../../api/userApi';
 
 const UserProfile = () => {
-	const { success, error } = useToast();
+	const [userInfo, setUserInfo] = useState(null);
+	const [loading, setLoading] = useState(false);
 
-	const {
-		register,
-		handleSubmit,
-		formState: { errors },
-	} = useForm();
+	useEffect(() => {
+		setLoading(true);
+		(async () => {
+			try {
+				const response = await userApi.getUserProfile();
+				setUserInfo(response.data);
+				setLoading(false);
+			} catch(err) {
+				console.log(err);
+			}
+		})();
+	}, [])
 
 	return (
 		<Box
@@ -41,14 +50,15 @@ const UserProfile = () => {
 				py: 8,
 			}}
 		>
+			{loading && <Loading />}
 			<Container maxWidth={false}>
 				<Grid container className="profile__container">
 					<Grid container spacing={3}>
 						<Grid item lg={4} md={6} xs={12}>
-							<UserAvatar />
+							{userInfo && <UserAvatar userInfo={userInfo} />}
 						</Grid>
 						<Grid item lg={8} md={6} xs={12}>
-							<UserProfileDetails />
+							{userInfo && <UserProfileDetails userInfo={userInfo} />}
 						</Grid>
 					</Grid>
 				</Grid>
