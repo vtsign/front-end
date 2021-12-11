@@ -20,6 +20,11 @@ const userApi = {
 			method,
 			amount
 		})
+	},
+	async changePassword(data) {
+		const url = "/user/change-password";
+		const response = await axiosClient.post(url, data);
+		return response;
 	}
 };
 

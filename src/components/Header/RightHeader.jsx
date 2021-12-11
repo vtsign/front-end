@@ -1,4 +1,4 @@
-import { AccountCircle, Language, Settings } from '@mui/icons-material';
+import { AccountCircle, Language, Settings, Password } from '@mui/icons-material';
 import Logout from '@mui/icons-material/Logout';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import { Box, IconButton } from '@mui/material';
@@ -93,10 +93,10 @@ const LeftHeader = () => {
 				anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
 			>
 				<MenuItem onClick={profileRoute}>
-					<Avatar /> Profile
+					<Avatar /> Thông tin tài khoản
 				</MenuItem>
-				<MenuItem>
-					<Avatar /> My account
+				<MenuItem onClick={() => history.push("change-password")}>
+					<Avatar /> Đổi mật khẩu
 				</MenuItem>
 				<MenuItem onClick={() => history.push("/payment")}>
 					<Avatar /> Nạp tiền

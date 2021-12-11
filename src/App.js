@@ -20,6 +20,7 @@ const PrivateRoute = React.lazy(() => import('./components/Layout/PrivateRoute')
 const Activation = React.lazy(() => import('./pages/Activation/Activation'));
 const UserProfile = React.lazy(() => import('./pages/UserProfile/UserProfile'));
 const Payment = React.lazy(() => import('./components/zalopay/payment'));
+const ChangePassword = React.lazy(() => import('./pages/ChangePassword/ChangePassword'));
 
 const App = ({ location }) => {
 	// const headerExclusionArray = ['/home', '/', '/signing',
@@ -50,6 +51,7 @@ const App = ({ location }) => {
 					<Route path="/register" component={Register} />
 					<Route path="/activation/:id" component={Activation} />
 					<PrivateRoute path="/" exact component={Home} />
+					<PrivateRoute path="/change-password" component={ChangePassword} />
 					<Route path="/home" exact>
 						<Redirect to="/" />
 					</Route>
