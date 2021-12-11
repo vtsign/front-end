@@ -2,7 +2,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import CloseIcon from '@mui/icons-material/Close';
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
 import DoneIcon from '@mui/icons-material/Done';
-import { Button, Grid } from '@mui/material';
+import { Button, CircularProgress, Grid } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Dialog from '@mui/material/Dialog';
 import IconButton from '@mui/material/IconButton';
@@ -214,7 +214,6 @@ const Detail = ({ status, title, pathReturn }) => {
 
     return (
         <Fragment>
-            {loading && <Loading />}
             {contract && (
                 <Grid container className="detail-waiting">
                     <Grid item md={9} className="detail-waiting-main">
@@ -321,6 +320,9 @@ const Detail = ({ status, title, pathReturn }) => {
                     </Grid>
                     <Grid item md={3} className="detail-waiting-thumbnail">
                         <div className="preview-file">
+                            {loading && <CircularProgress sx={{
+                                animationDuration: '550ms', margin: 'auto'
+                            }} />}
                             {documents.map((document, index) => (
                                 <div
                                     className="preview-file__item"
@@ -373,7 +375,7 @@ const Detail = ({ status, title, pathReturn }) => {
                         </Button>
                     </Toolbar>
                 </AppBar>
-                <div className="webviewer" style={{ height: "100%" }} ref={viewer}></div>
+                <div style={{ height: "100%" }} ref={viewer}></div>
             </Dialog>
         </Fragment>
     );

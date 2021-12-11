@@ -42,6 +42,7 @@ const LeftHeader = () => {
 	const profileRoute = () => {
 		history.push("/profile");
 	}
+	
 	return (
 		<Fragment>
 			<Box sx={{ display: 'flex' }}>

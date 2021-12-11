@@ -51,13 +51,13 @@ const ManageDocument = ({ status, path, cxtHeader }) => {
 	const [hasOnChange, setHasOnChange] = useState(false);
 	const dispatch = useDispatch();
 	const queryParam = new URLSearchParams(location.search);
-	const page = queryParam.get('page') || '1';
+	const page = queryParam.get('page') || 1;
 	const sortField = queryParam.get('sortField') || 'title';
 	const sortType = queryParam.get('sortType') || 'asc';
 
 	useEffect(() => {
 		dispatch(getAllContracts({ status, page, sortField, sortType }));
-	}, [hasOnChange, dispatch]);
+	}, [hasOnChange, dispatch, page, sortField, status]);
 
 
 	const selectDocumentHandler = () => {
@@ -71,6 +71,7 @@ const ManageDocument = ({ status, path, cxtHeader }) => {
 	};
 
 	const handleOnPageChange = (event, page) => {
+		console.log("page....", page)
 		history.replace(`${path}?sortField=${sortField}&sortType=${sortType}&status=${status}&page=${page}`)
 	};
 
@@ -193,7 +194,7 @@ const ManageDocument = ({ status, path, cxtHeader }) => {
 				<Pagination
 					className="content-pagination"
 					count={total_pages}
-					defaultPage={page}
+					page={typeof page === "string" ? parseInt(page) : page}
 					onChange={handleOnPageChange}
 					color="primary"
 				/>

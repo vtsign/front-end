@@ -1,5 +1,7 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useState } from 'react';
+import { useEffect } from 'react';
 import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
+import userApi from './api/userApi';
 import './App.scss';
 import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
@@ -25,10 +27,20 @@ const App = ({ location }) => {
 	const headerExclusionArray = [
 		'/login',
 		'/register',
-		'/activation/:id',
+		'/activation',
 		'/notfound',
 		'/signDocument',
 	];
+	const [userInfo, setUserInfo] = useState(null);
+
+	useEffect(() => {
+		(async () => {
+			const response = await userApi.getUserProfile();
+			setUserInfo(response.data);
+			localStorage.setItem("user", JSON.stringify(response.data));
+		})()
+	}, [])
+
 	return (
 		<div className="app__container">
 			<Suspense fallback={<Loading />}>
@@ -42,9 +54,14 @@ const App = ({ location }) => {
 						<Redirect to="/" />
 					</Route>
 					<PrivateRoute path="/signing">
-						<PdfTronProvider>
+						{userInfo && userInfo.balance < 5000 && <Redirect
+							to={{
+								pathname: '/',
+							}}
+						/>}
+						{userInfo && userInfo.balance > 5000 && (<PdfTronProvider>
 							<Signing />
-						</PdfTronProvider>
+						</PdfTronProvider>)}
 					</PrivateRoute>
 					<PrivateRoute path={'/manage'} component={Manage} />
 					<PrivateRoute path="/template" component={Sample} />

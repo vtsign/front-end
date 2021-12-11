@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
-import { Button } from '@mui/material';
+import { Button, Alert } from '@mui/material';
 import './home.scss';
 import { Link } from 'react-router-dom';
 import manageApi from '../../api/manageApi';
 
-const Home = () => {
+const Home = (props) => {
 	const [quickDoc, setQuickDoc] = useState({});
 	useEffect(() => {
 		const getQuickViewDocument = async () => {
 			const res = await manageApi.getQuickViewContracts();
 			setQuickDoc(res.data);
 		};
-
 		getQuickViewDocument();
 	}, []);
 	return (
 		<div className="home">
+			{props?.message && <Alert severity="error">{props.message}</Alert>}
 			<div className="home__manage">
 				<div className="home__manage__signature">
 					<Avatar src="/user-man.png" alt="avatar-user" className="avatar" />

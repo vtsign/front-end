@@ -39,7 +39,8 @@ const Header = () => {
 							/>
 						</Link>
 
-						{location.pathname !== '/payment' && location.pathname !== '/profile' && (< div className="header-right-menu">
+						{/* {location.pathname !== '/payment' && location.pathname !== '/profile' && ( */}
+						<div className="header-right-menu">
 							<NavLink to="/" activeClassName="active" exact >
 								<Home style={{ verticalAlign: 'middle', marginRight: '5px' }} />
 								Trang chủ
@@ -52,7 +53,7 @@ const Header = () => {
 								<ManageSearchIcon style={{ verticalAlign: 'middle' }} />
 								Quản lý
 							</NavLink>
-						</div>)}
+						</div>
 					</div>
 					<RightHeader />
 				</Toolbar>
