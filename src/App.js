@@ -32,15 +32,15 @@ const App = ({ location }) => {
 		'/notfound',
 		'/signDocument',
 	];
-	const [userInfo, setUserInfo] = useState(null);
+	// const [userInfo, setUserInfo] = useState(null);
 
-	useEffect(() => {
-		(async () => {
-			const response = await userApi.getUserProfile();
-			setUserInfo(response.data);
-			localStorage.setItem("user", JSON.stringify(response.data));
-		})()
-	}, [])
+	// useEffect(() => {
+	// 	(async () => {
+	// 		const response = await userApi.getUserProfile();
+	// 		setUserInfo(response.data);
+	// 		localStorage.setItem("user", JSON.stringify(response.data));
+	// 	})()
+	// }, [])
 
 	return (
 		<div className="app__container">
@@ -56,14 +56,17 @@ const App = ({ location }) => {
 						<Redirect to="/" />
 					</Route>
 					<PrivateRoute path="/signing">
-						{userInfo && userInfo.balance < 5000 && <Redirect
+						{/* {userInfo && userInfo.balance < 5000 && <Redirect
 							to={{
 								pathname: '/',
 							}}
 						/>}
 						{userInfo && userInfo.balance > 5000 && (<PdfTronProvider>
 							<Signing />
-						</PdfTronProvider>)}
+						</PdfTronProvider>)} */}
+						<PdfTronProvider>
+							<Signing />
+						</PdfTronProvider>
 					</PrivateRoute>
 					<PrivateRoute path={'/manage'} component={Manage} />
 					<PrivateRoute path="/template" component={Sample} />
