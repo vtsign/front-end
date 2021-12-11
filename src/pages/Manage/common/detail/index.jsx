@@ -319,7 +319,7 @@ const Detail = ({ status, title, pathReturn }) => {
                         </div>
                     </Grid>
                     <Grid item md={3} className="detail-waiting-thumbnail">
-                        <div className="preview-file">
+                        <div className="preview-file-detail">
                             {loading && <CircularProgress sx={{
                                 animationDuration: '550ms', margin: 'auto'
                             }} />}

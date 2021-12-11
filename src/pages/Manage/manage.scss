@@ -2,11 +2,11 @@
 @import '/src/sass/mixins';
 @import '/src/sass/base';
 
-.manage{
-
+.manage {
 	min-height: $content-height;
-	
-	&-sidebar{
+	margin-bottom: 3rem;
+
+	&-sidebar {
 		border-right: 0.5px solid #eeeeee;
 	}
 

@@ -66,8 +66,8 @@ const ContentHeader = ({ title, description, status }) => {
 				<div>
 					{contracts != null && contracts.length > 0 && (
 						<Fragment>
-							<p>Danh sách tài liệu</p>
-							<FormControl sx={{ mt: 3, mb: 3 }}>
+							<p style={{ marginBottom: '15px' }}>Danh sách tài liệu</p>
+							{/* <FormControl sx={{ mt: 3, mb: 3 }}>
 								<InputLabel id="demo-simple-select-label">Sắp xếp</InputLabel>
 								<Select
 									labelId="demo-simple-select-label"
@@ -80,7 +80,7 @@ const ContentHeader = ({ title, description, status }) => {
 									<MenuItem value={10}>Tất cả</MenuItem>
 									<MenuItem value={20}>Gần nhất</MenuItem>
 								</Select>
-							</FormControl>
+							</FormControl> */}
 						</Fragment>
 					)}
 				</div>

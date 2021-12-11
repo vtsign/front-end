@@ -101,7 +101,7 @@ const ManageDocument = ({ status, path, cxtHeader }) => {
 						<TableHead>
 							<TableRow>
 								<TableCell style={{ width: '30%', fontSize: 14, fontWeight: 600 }}>
-									<div onClick={() => handleSort("title")} style={{ display: 'inline' }}>
+									<div onClick={() => handleSort("title")} style={{ display: 'inline', cursor: 'pointer' }}>
 										Tên tài liệu
 										{
 											(sortField === null || sortField === "title") && showIconSort
@@ -112,7 +112,7 @@ const ManageDocument = ({ status, path, cxtHeader }) => {
 									Người tạo
 								</TableCell>
 								<TableCell style={{ width: '17%', fontSize: 14, fontWeight: 600 }}>
-									<div onClick={() => handleSort("createdDate")} style={{ display: 'inline' }}>
+									<div onClick={() => handleSort("createdDate")} style={{ display: 'inline', cursor: 'pointer' }}>
 										Ngày tạo
 										{
 											(sortField === "createdDate") && showIconSort
@@ -123,7 +123,7 @@ const ManageDocument = ({ status, path, cxtHeader }) => {
 									Trạng thái
 								</TableCell>)}
 								{status === "COMPLETED" && (<TableCell style={{ width: '17%', fontSize: 14, fontWeight: 600 }}>
-									<div onClick={() => handleSort("completeDate")} style={{ display: 'inline' }}>
+									<div onClick={() => handleSort("completeDate")} style={{ display: 'inline', cursor: 'pointer' }}>
 										Ngày hoàn thành
 										{
 											(sortField === "completeDate") && showIconSort

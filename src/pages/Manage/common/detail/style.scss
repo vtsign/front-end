@@ -1,5 +1,6 @@
 .detail-waiting {
 	height: 100%;
+	margin-bottom: 3rem;
 
 	&-main {
 		height: 100%;
@@ -115,10 +116,10 @@
 		height: 100%;
 		padding: 20px;
 
-		.preview-file {
+		.preview-file-detail {
 			height: 100%;
 			border: 0.5px solid #eeeeee;
-			padding: 20px 20px 0 20px;
+			padding: 20px 20px 20px 20px;
 			text-align: center;
 
 			.preview-file__item {
