@@ -57,7 +57,7 @@ const ManageDocument = ({ status, path, cxtHeader }) => {
 
 	useEffect(() => {
 		dispatch(getAllContracts({ status, page, sortField, sortType }));
-	}, [hasOnChange, dispatch, page, sortField, status]);
+	}, [hasOnChange, dispatch, page, sortField, status, sortType]);
 
 
 	const selectDocumentHandler = () => {
@@ -71,7 +71,6 @@ const ManageDocument = ({ status, path, cxtHeader }) => {
 	};
 
 	const handleOnPageChange = (event, page) => {
-		console.log("page....", page)
 		history.replace(`${path}?sortField=${sortField}&sortType=${sortType}&status=${status}&page=${page}`)
 	};
 

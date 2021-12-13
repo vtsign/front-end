@@ -13,11 +13,11 @@ import { useHistory } from 'react-router-dom';
 import userApi from '../../api/userApi';
 import { USER_LOGOUT } from '../../redux/constants/userConstants';
 
-const LeftHeader = () => {
+const LeftHeader = ({ userInfo }) => {
 	const history = useHistory();
 	const dispatch = useDispatch();
 	const [anchorEl, setAnchorEl] = React.useState(null);
-	const [userInfo, setUserInfo] = useState();
+
 	const open = Boolean(anchorEl);
 	const handleClick = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -28,19 +28,23 @@ const LeftHeader = () => {
 
 	const logoutHandler = () => {
 		dispatch({ type: USER_LOGOUT });
+		localStorage.removeItem('user');
+		localStorage.removeItem('accessToken');
+		localStorage.removeItem('refreshToken');
+		localStorage.removeItem('accessTokenExpired');
+		localStorage.removeItem('refreshTokenExpired');
+		localStorage.setItem('isLogin', 'false');
 		history.push("/login");
 
 	}
 
-	useEffect(() => {
-		(async () => {
-			const response = await userApi.getUserProfile();
-			setUserInfo(response.data);
-		})()
-	}, [])
 
 	const profileRoute = () => {
 		history.push("/profile");
+	}
+
+	function numberWithCommas(x) {
+		return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 	}
 
 	return (
@@ -53,7 +57,7 @@ const LeftHeader = () => {
 					<Settings />
 				</IconButton> */}
 
-				<p style={{ display: 'flex', alignItems: 'center' }}>{userInfo?.balance} VND</p>
+				{userInfo && (<p style={{ display: 'flex', alignItems: 'center' }}>{numberWithCommas(userInfo.balance)} VND</p>)}
 				<IconButton onClick={handleClick} size="large" edge="end" color="inherit">
 					<AccountCircle />
 				</IconButton>
@@ -102,12 +106,12 @@ const LeftHeader = () => {
 					<Avatar /> Nạp tiền
 				</MenuItem>
 				<Divider />
-				<MenuItem>
+				{/* <MenuItem>
 					<ListItemIcon>
 						<PersonAdd fontSize="small" />
 					</ListItemIcon>
 					Add another account
-				</MenuItem>
+				</MenuItem> */}
 				<MenuItem>
 					<ListItemIcon>
 						<Settings fontSize="small" />

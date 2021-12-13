@@ -23,8 +23,6 @@ const Payment = React.lazy(() => import('./components/zalopay/payment'));
 const ChangePassword = React.lazy(() => import('./pages/ChangePassword/ChangePassword'));
 
 const App = ({ location }) => {
-	// const headerExclusionArray = ['/home', '/', '/signing',
-	// 	'/manage', '/manage/completed/', '/manage/waiting', '/manage/deleted', '/manage/need-sign', '/template', '/signDocument'];
 	const headerExclusionArray = [
 		'/login',
 		'/register',
@@ -32,22 +30,17 @@ const App = ({ location }) => {
 		'/notfound',
 		'/signDocument',
 	];
-	// const [userInfo, setUserInfo] = useState(null);
 
-	// useEffect(() => {
-	// 	(async () => {
-	// 		const response = await userApi.getUserProfile();
-	// 		setUserInfo(response.data);
-	// 		localStorage.setItem("user", JSON.stringify(response.data));
-	// 	})()
-	// }, [])
+	const isLoggedIn = localStorage.getItem("isLogin") === 'true';
 
 	return (
 		<div className="app__container">
 			<Suspense fallback={<Loading />}>
 				{headerExclusionArray.indexOf(location.pathname) < 0 && <Header />}
 				<Switch>
-					<Route path="/login" component={Login} />
+					<Route path="/login">
+						{!isLoggedIn ? <Login /> : <Redirect to="/" />}
+					</Route>
 					<Route path="/register" component={Register} />
 					<Route path="/activation/:id" component={Activation} />
 					<PrivateRoute path="/" exact component={Home} />
@@ -56,14 +49,6 @@ const App = ({ location }) => {
 						<Redirect to="/" />
 					</Route>
 					<PrivateRoute path="/signing">
-						{/* {userInfo && userInfo.balance < 5000 && <Redirect
-							to={{
-								pathname: '/',
-							}}
-						/>}
-						{userInfo && userInfo.balance > 5000 && (<PdfTronProvider>
-							<Signing />
-						</PdfTronProvider>)} */}
 						<PdfTronProvider>
 							<Signing />
 						</PdfTronProvider>
@@ -84,7 +69,7 @@ const App = ({ location }) => {
 				</Switch>
 				<Footer />
 			</Suspense>
-		</div>
+		</div >
 	);
 };
 

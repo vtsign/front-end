@@ -51,9 +51,18 @@ export default function Payment() {
         <Fragment>
             {loading && <Loading />}
             <div className='payment'>
-                <Card sx={{ width: '30%' }}>
-                    <CardContent style={{ textAlign: "center" }}>
-                        <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
+                <div className='payment__header'>
+                    <div className='payment__header__content'>
+                        <h2>Nạp tiền vào tài khoản</h2>
+                        <p>Với mỗi hợp đồng gửi đi, chúng tôi sẽ trừ 5.000đ/người nhận/tài liệu vào tài khoản của bạn</p>
+                        <p className='payment__header__policy'>1. Với ví zalopay, bạn cần có tài khoản zalopay</p>
+                        <p className='payment__header__policy'>2. Với phương thức ATM, bạn cần sử dụng Internet Banking của ngân hàng</p>
+                        <p><i>Chúng tôi</i> sẽ không lưu bất cứ thông tin nào của bạn, mọi giao dịch sẽ được thực hiện qua cổng Zalopay.</p>
+                    </div>
+                </div>
+                <div className='payment__content'>
+                    <div className='payment__card'>
+                        <FormControl variant="outlined" className="payment__card__input">
                             <FormLabel component="legend">Nhập số tiền</FormLabel>
                             <TextField
                                 error={error != null}
@@ -66,7 +75,7 @@ export default function Payment() {
                                 required
                             />
                         </FormControl>
-                        <FormControl component="fieldset">
+                        <FormControl component="fieldset" className="payment__card__select">
                             <FormLabel component="legend">Vui lòng chọn phương thức thanh toán</FormLabel>
                             <RadioGroup
                                 aria-label="gender"
@@ -75,13 +84,13 @@ export default function Payment() {
                                 onChange={handleRadioChange}
                             >
                                 <FormControlLabel value="zalopayapp" control={<Radio />} label="Ví Zalopay" />
-                                <FormControlLabel value="CC" control={<Radio />} label="Visa, Mastercard, JCB (qua cổng ZaloPay)" />
-                                <FormControlLabel value="ATM" control={<Radio />} label="Thẻ ATM (qua cổng ZaloPay)" />
+                                <FormControlLabel value="ATM" control={<Radio />} label="Thẻ ATM" />
+                                <FormControlLabel value="CC" control={<Radio />} label="Visa, Mastercard, JCB" />
                             </RadioGroup>
                         </FormControl>
                         <Button variant="contained" onClick={handleOnPayment}>Thanh toán</Button>
-                    </CardContent>
-                </Card>
+                    </div>
+                </div>
             </div>
         </Fragment>
     );

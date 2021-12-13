@@ -3,6 +3,51 @@
 @import '/src/sass/base';
 
 .payment {
-	@include flex(center, center);
 	min-height: $content-height;
+
+	&__header {
+		padding: 40px;
+		border-bottom: 0.5px solid #b1b1b1;
+		text-align: center;
+
+		h2 {
+			margin-bottom: 20px;
+		}
+		p {
+			margin-top: 10px;
+		}
+
+		&__content {
+			display: inline-block;
+			text-align: left;
+		}
+
+		&__policy {
+			opacity: 0.8;
+			margin-left: 10px;
+		}
+	}
+
+	&__content {
+		@include flex(center, center);
+		min-height: 60vh;
+		background-color: #f5f5f5;
+
+		.payment__card {
+			background-color: #fff;
+			display: flex;
+			flex-direction: column;
+			padding: 20px 40px;
+			border: 1px solid #eeeeee;
+			border-radius: 3px;
+
+			&__input {
+				margin-bottom: 25px;
+			}
+
+			&__select {
+				margin-bottom: 20px;
+			}
+		}
+	}
 }

@@ -88,7 +88,7 @@ const Signing = () => {
 				dispatch({
 					type: 'RESET_DOC_LIST',
 				});
-				history.push('/');
+				history.replace('/');
 			} else {
 				setLoading(false);
 				error(response?.data?.message || 'Có lỗi xảy ra');
@@ -128,7 +128,7 @@ const Signing = () => {
 							})}
 						</Stepper>
 					</Grid>
-					<Grid item xl={10} lg={10} md={9} xs={12} sx={{ maxHeight: '80vh'}}>
+					<Grid item xl={10} lg={10} md={9} xs={12} sx={{ maxHeight: '80vh' }}>
 						{activeStep === 0 && (
 							<UploadDocuments loading={loading} setLoading={setLoading} />
 						)}

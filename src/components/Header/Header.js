@@ -5,14 +5,16 @@ import {
 	Box, Toolbar
 } from '@mui/material';
 import { useLocation } from 'react-router'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import Logo from '../../assets/images/logo-white.png';
 import './Header.scss';
 import MenuMobile from './MenuMobile';
 import RightHeader from './RightHeader';
+import userApi from '../../api/userApi';
 const Header = () => {
 	const location = useLocation();
+	// const location = useLocation();
 	// const [value, setValue] = useState(0);
 	// const handleChange = (event, newValue) => {
 	// 	setValue(newValue);
@@ -24,6 +26,14 @@ const Header = () => {
 	// 	const { pathname } = location;
 	// 	return pathname === "/";
 	// }
+	const [userInfo, setUserInfo] = useState();
+	useEffect(() => {
+		(async () => {
+			const response = await userApi.getUserProfile();
+			setUserInfo(response.data);
+		})()
+	}, [])
+
 
 	return (
 		<Box>
@@ -39,23 +49,24 @@ const Header = () => {
 							/>
 						</Link>
 
-						{/* {location.pathname !== '/payment' && location.pathname !== '/profile' && ( */}
-						<div className="header-right-menu">
-							<NavLink to="/" activeClassName="active" exact >
-								<Home style={{ verticalAlign: 'middle', marginRight: '5px' }} />
-								Trang chủ
-							</NavLink>
-							<NavLink to="/signing" activeClassName="active">
-								<Create style={{ verticalAlign: 'middle' }} />
-								Ký kết
-							</NavLink>
-							<NavLink to="/manage" activeClassName="active">
-								<ManageSearchIcon style={{ verticalAlign: 'middle' }} />
-								Quản lý
-							</NavLink>
-						</div>
+						{location.pathname !== '/payment' && (
+							<div className="header-right-menu">
+								<NavLink to="/" activeClassName="active" exact >
+									<Home style={{ verticalAlign: 'middle', marginRight: '5px' }} />
+									Trang chủ
+								</NavLink>
+								<NavLink to="/signing" activeClassName="active">
+									<Create style={{ verticalAlign: 'middle' }} />
+									Ký kết
+								</NavLink>
+								<NavLink to="/manage" activeClassName="active">
+									<ManageSearchIcon style={{ verticalAlign: 'middle' }} />
+									Quản lý
+								</NavLink>
+							</div>
+						)}
 					</div>
-					<RightHeader />
+					<RightHeader userInfo={userInfo} />
 				</Toolbar>
 			</AppBar>
 		</Box >
