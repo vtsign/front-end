@@ -4,7 +4,8 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import { Card, CardContent, TextField, Button, InputAdornment } from '@mui/material'
+import { Card, CardContent, TextField, Button, InputAdornment, InputLabel, Select, MenuItem } from '@mui/material'
+import CurrencyTextField from '@unicef/material-ui-currency-textfield/dist/CurrencyTextField'
 import './payment.scss'
 import userApi from '../../api/userApi';
 import Loading from '../Loading/Loading';
@@ -14,13 +15,14 @@ export default function Payment() {
     const [amount, setAmount] = useState();
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState();
+    const [showInputCurrency, setShowInputCurrency] = useState(false)
     const handleRadioChange = (event) => {
         setType(event.target.value);
     }
 
-    const handleChangeAmount = (event) => {
+    const handleChangeAmount = (value) => {
         setError(null);
-        setAmount(event.target.value);
+        setAmount(value);
     }
 
     const handleOnPayment = async () => {
@@ -47,6 +49,16 @@ export default function Payment() {
         return result;
     }
 
+    const handleChangeSelectCurrency = (event) => {
+        const amount = event.target.value;
+        if (amount === -1) {
+            setAmount();
+            setShowInputCurrency(true)
+        } else {
+            setAmount(event.target.value);
+        }
+    }
+
     return (
         <Fragment>
             {loading && <Loading />}
@@ -62,19 +74,35 @@ export default function Payment() {
                 </div>
                 <div className='payment__content'>
                     <div className='payment__card'>
-                        <FormControl variant="outlined" className="payment__card__input">
-                            <FormLabel component="legend">Nhập số tiền</FormLabel>
-                            <TextField
-                                error={error != null}
-                                type="number"
-                                onChange={handleChangeAmount}
-                                InputProps={{
-                                    endAdornment: <InputAdornment position="end">VND</InputAdornment>,
-                                }}
-                                helperText={error}
-                                required
-                            />
-                        </FormControl>
+                        {!showInputCurrency && (
+                            <FormControl fullWidth className="payment__card__input">
+                                <FormLabel component="legend">Nhập số tiền</FormLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    onChange={handleChangeSelectCurrency}
+                                    required
+                                >
+                                    <MenuItem value={20000}>20.000</MenuItem>
+                                    <MenuItem value={50000}>50.000</MenuItem>
+                                    <MenuItem value={100000}>100.000</MenuItem>
+                                    <MenuItem value={200000}>200.000</MenuItem>
+                                    <MenuItem value={500000}>500.000</MenuItem>
+                                    <MenuItem value={1000000}>1.000.000</MenuItem>
+                                    <MenuItem value={-1}>Nhập số khác...</MenuItem>
+
+                                </Select>
+                            </FormControl>)}
+                        {showInputCurrency && (
+                            <FormControl variant="outlined" className="payment__card__input">
+                                <FormLabel component="legend">Nhập số tiền</FormLabel>
+                                <CurrencyTextField
+                                    variant="outlined"
+                                    value={amount}
+                                    currencySymbol="VND"
+                                    onChange={(event, value) => handleChangeAmount(value)}
+                                />
+                            </FormControl>)}
                         <FormControl component="fieldset" className="payment__card__select">
                             <FormLabel component="legend">Vui lòng chọn phương thức thanh toán</FormLabel>
                             <RadioGroup
@@ -88,7 +116,7 @@ export default function Payment() {
                                 <FormControlLabel value="CC" control={<Radio />} label="Visa, Mastercard, JCB" />
                             </RadioGroup>
                         </FormControl>
-                        <Button variant="contained" onClick={handleOnPayment}>Thanh toán</Button>
+                        <Button variant="contained" onClick={handleOnPayment} disabled={amount == null}>Thanh toán</Button>
                     </div>
                 </div>
             </div>
