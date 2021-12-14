@@ -50,7 +50,6 @@ const ChangePassword = () => {
 		} catch(err) {
 			setLoading(false);
 			error("Đã có lỗi xảy ra")
-			// console.log(err);
 		}
 	}
 	return (

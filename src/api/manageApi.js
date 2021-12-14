@@ -12,7 +12,6 @@ const manageDocumentsApi = {
 		}, '');
 		params = params.slice(1);
 		const url = `/document/filter?${params}`;
-		console.log("uel", url)
 		return axiosClient.get(url);
 	},
 	getQuickViewContracts: () => {

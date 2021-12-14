@@ -8,7 +8,12 @@ import Loading from '../../components/Loading/Loading';
 
 const Home = (props) => {
 	const [quickDoc, setQuickDoc] = useState({});
-	const [loading, setLoading] = useState(false)
+	const [loading, setLoading] = useState(false);
+
+	const jsonUser = localStorage.getItem("user");
+	const user = JSON.parse(jsonUser);
+
+	console.log("user...", user);
 	useEffect(() => {
 		const getQuickViewDocument = async () => {
 			setLoading(true);
@@ -25,7 +30,7 @@ const Home = (props) => {
 				{props?.message && <Alert severity="error">{props.message}</Alert>}
 				<div className="home__manage">
 					<div className="home__manage__signature">
-						<Avatar src={"/user-man.png"} alt="avatar-user" className="avatar" />
+						<Avatar src={user.avatar ? user.avatar : "/user-man.png"} alt="avatar-user" className="avatar" />
 					</div>
 					<Link to="/manage/completed">
 						<div className="home__manage__action">

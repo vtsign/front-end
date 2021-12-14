@@ -26,14 +26,16 @@ const Header = () => {
 	// 	const { pathname } = location;
 	// 	return pathname === "/";
 	// }
+
 	const [userInfo, setUserInfo] = useState();
+
 	useEffect(() => {
 		(async () => {
 			const response = await userApi.getUserProfile();
 			setUserInfo(response.data);
+			localStorage.setItem('user', JSON.stringify(response.data));
 		})()
 	}, [])
-
 
 	return (
 		<Box>
