@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Button, Container, Grid, Step, StepLabel, Stepper } from '@mui/material';
 import '@pdftron/webviewer/public/core/CoreControls';
 import { useForm } from 'react-hook-form';
@@ -50,9 +50,19 @@ const Signing = () => {
 		},
 	});
 
+	const userInfo = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
+	console.log(userInfo?.balance / 5000);
+
 	const dispatch = useDispatch();
 	const documents = useSelector((state) => state.addDocList.documentList);
 	const receivers = useSelector((state) => state.receivers.receivers);
+	const [enoughBalance, setEnoughBalance] = useState(parseInt(userInfo?.balance / 5000) > 0);
+
+	useEffect(() => {
+		if(receivers.length > 0) {
+			setEnoughBalance(parseInt(userInfo.balance / 5000*receivers.length) > 0);
+		}
+	}, [userInfo.balance, receivers.length])
 
 	const handleNext = () => {
 		if (activeStep === 0) {
@@ -60,6 +70,10 @@ const Signing = () => {
 				error('Vui lòng tải tài liệu để sử dụng dịch vụ');
 				return;
 			}
+			// if (!enoughBalance) {
+			// 	error('Tài khoản của quý khách không đủ để sử dụng dịch vụ. Vui lòng nạp thêm tiền!');
+			// 	return;
+			// }
 		} else if (activeStep === 1) {
 			if (receivers.length === 0) {
 				error('Vui lòng thêm người nhận tài liệu');
@@ -130,7 +144,7 @@ const Signing = () => {
 					</Grid>
 					<Grid item xl={10} lg={10} md={9} xs={12} sx={{ maxHeight: '80vh' }}>
 						{activeStep === 0 && (
-							<UploadDocuments loading={loading} setLoading={setLoading} />
+							<UploadDocuments loading={loading} setLoading={setLoading} enoughBalance={enoughBalance} />
 						)}
 						{activeStep === 1 && (
 							<AddReceivers
@@ -142,6 +156,7 @@ const Signing = () => {
 								setValue={setValue}
 								reset={reset}
 								watch={watch}
+								enoughBalance={enoughBalance}
 							/>
 						)}
 						{activeStep === 2 && (

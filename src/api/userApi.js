@@ -1,3 +1,4 @@
+import axios from 'axios';
 import axiosClient from './axiosClients';
 const userApi = {
 	async checkUserExists(email) {
@@ -15,6 +16,11 @@ const userApi = {
 		const response = await axiosClient.post(url, data);
 		return response;
 	},
+	async updateAvatar(data) {
+		const url = "/user/update-avatar";
+		const response = await axiosClient.post(url, data);
+		return response;
+	},
 	payment: (method, amount) => {
 		return axiosClient.post('/user/deposit', {
 			method,
@@ -24,6 +30,11 @@ const userApi = {
 	async changePassword(data) {
 		const url = "/user/change-password";
 		const response = await axiosClient.post(url, data);
+		return response;
+	},
+	async getTransactions() {
+		const url = '/user/transactions';
+		const response = await axiosClient.get(url);
 		return response;
 	}
 };

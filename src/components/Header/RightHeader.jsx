@@ -105,6 +105,9 @@ const LeftHeader = ({ userInfo }) => {
 				<MenuItem onClick={() => history.push("/payment")}>
 					<Avatar /> Nạp tiền
 				</MenuItem>
+				<MenuItem onClick={() => history.push("/transaction-history")}>
+					<Avatar /> Lịch sử giao dịch
+				</MenuItem>
 				<Divider />
 				{/* <MenuItem>
 					<ListItemIcon>
