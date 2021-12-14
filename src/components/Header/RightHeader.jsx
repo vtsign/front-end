@@ -1,16 +1,14 @@
-import { AccountCircle, Language, Settings, Password } from '@mui/icons-material';
+import { AccountCircle, Settings } from '@mui/icons-material';
 import Logout from '@mui/icons-material/Logout';
-import PersonAdd from '@mui/icons-material/PersonAdd';
-import { Box, IconButton } from '@mui/material';
+import { Box, Button, IconButton } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment } from 'react';
 import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import userApi from '../../api/userApi';
+import { useHistory, Link } from 'react-router-dom';
 import { USER_LOGOUT } from '../../redux/constants/userConstants';
 
 const LeftHeader = ({ userInfo }) => {
@@ -49,15 +47,17 @@ const LeftHeader = ({ userInfo }) => {
 
 	return (
 		<Fragment>
-			<Box sx={{ display: 'flex' }}>
+			<Box sx={{ display: 'flex', alignItems: 'center' }}>
 				{/* <IconButton size="large" aria-label="show 4 new mails" color="inherit">
 					<Language />
 				</IconButton>
 				<IconButton size="large" color="inherit">
 					<Settings />
 				</IconButton> */}
-
 				{userInfo && (<p style={{ display: 'flex', alignItems: 'center' }}>{numberWithCommas(userInfo.balance)} VND</p>)}
+				<Link to="/payment">
+					<Button variant="outlined" style={{ color: 'white', borderColor: '#fff', marginLeft: '20px', height: '30px', }}>Nạp tiền</Button>
+				</Link>
 				<IconButton onClick={handleClick} size="large" edge="end" color="inherit">
 					<AccountCircle />
 				</IconButton>
@@ -99,19 +99,10 @@ const LeftHeader = ({ userInfo }) => {
 				<MenuItem onClick={profileRoute}>
 					<Avatar /> Thông tin tài khoản
 				</MenuItem>
-				<MenuItem onClick={() => history.push("change-password")}>
+				<MenuItem onClick={() => history.push("/change-password")}>
 					<Avatar /> Đổi mật khẩu
 				</MenuItem>
-				<MenuItem onClick={() => history.push("/payment")}>
-					<Avatar /> Nạp tiền
-				</MenuItem>
 				<Divider />
-				{/* <MenuItem>
-					<ListItemIcon>
-						<PersonAdd fontSize="small" />
-					</ListItemIcon>
-					Add another account
-				</MenuItem> */}
 				<MenuItem>
 					<ListItemIcon>
 						<Settings fontSize="small" />
