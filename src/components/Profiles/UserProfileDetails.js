@@ -18,7 +18,7 @@ import Loading from '../Loading/Loading';
 import { REG_PHONE } from '../../components/constants/global.js';
 
 
-const UserProfileDetails = ({ userInfo }) => {
+const UserProfileDetails = ({ userInfo, selectedImage }) => {
 	const [loading, setLoading] = useState(false);
 	const {
 		register,
@@ -32,14 +32,21 @@ const UserProfileDetails = ({ userInfo }) => {
 	const onSubmitChange = async formData => {
 		setLoading(true);
 		try {
-			const updateProfileResponse = await userApi.updateUserProfile(formData);
-			if(updateProfileResponse.status === 200)
-				success("Cập nhật thông tin tài khoản thành công");
-				setLoading(false);
-				history.go(0);
+			if(selectedImage) {
+				const data = new FormData();
+				data.append("avatar", selectedImage)
+				await userApi.updateAvatar(data);
+			}
+			await userApi.updateUserProfile(formData);
+
 
 		} catch (err) {
 			setLoading(false);
+			error("Đã có lỗi xảy ra! Vui lòng thử lại");
+		} finally {
+			setLoading(false);
+			success("Cập nhật thông tin cá nhân thành công");
+			history.go(0);
 		}
 
 	}

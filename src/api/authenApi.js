@@ -1,6 +1,11 @@
 import axios from './axiosClientNoToken';
 
 const authenApi = {
+	async activation(userId) {
+		const url = `/user/apt/activation/${userId}`;
+		const response = await axios.get(url);
+		return response;
+	},
 	register(data) {
 		return axios.post('/auth/register', {
 			...data,

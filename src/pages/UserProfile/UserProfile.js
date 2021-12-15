@@ -28,6 +28,7 @@ import userApi from '../../api/userApi';
 const UserProfile = () => {
 	const [userInfo, setUserInfo] = useState(null);
 	const [loading, setLoading] = useState(false);
+	const [selectedImage, setSelectedImage] = useState(null);
 
 	useEffect(() => {
 		setLoading(true);
@@ -55,10 +56,10 @@ const UserProfile = () => {
 				<Grid container className="profile__container">
 					<Grid container spacing={3}>
 						<Grid item lg={4} md={6} xs={12}>
-							{userInfo && <UserAvatar userInfo={userInfo} />}
+							{userInfo && <UserAvatar userInfo={userInfo} selectedImage={selectedImage} setSelectedImage={setSelectedImage} />}
 						</Grid>
 						<Grid item lg={8} md={6} xs={12}>
-							{userInfo && <UserProfileDetails userInfo={userInfo} />}
+							{userInfo && <UserProfileDetails userInfo={userInfo} selectedImage={selectedImage} />}
 						</Grid>
 					</Grid>
 				</Grid>

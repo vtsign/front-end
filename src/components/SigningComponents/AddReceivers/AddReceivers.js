@@ -37,7 +37,7 @@ const defaultValues = {
 	email: '',
 	phone: '',
 	permission: 'sign',
-	private_message: ''
+	private_message: '',
 };
 
 const AddReceivers = ({
@@ -48,7 +48,7 @@ const AddReceivers = ({
 	getValues,
 	setValue,
 	reset,
-	watch,
+	enoughBalance,
 }) => {
 	// const [receivers, setReceivers] = useState([]);
 	const [showPhone, setShowPhone] = useState(false);
@@ -67,6 +67,12 @@ const AddReceivers = ({
 		const receiverEmails = receivers.map((receiver) => {
 			return receiver.email;
 		});
+		if (!enoughBalance) {
+			error(
+				`Số tiền trong tài khoản chỉ được thêm tối đa ${receiverEmails.length} người nhận, vui lòng nạp thêm tiền`
+			);
+			return;
+		}
 		if (receiverEmails.includes(formData.email)) {
 			error('Người nhận đã tồn tại');
 			return;
@@ -252,11 +258,16 @@ const AddReceivers = ({
 								{...register('private_message')}
 							/>
 						</Grid>
-					<Grid display="flex" justifyContent="flex-end" alignItems="center" my="1rem" >
-						<Button variant="contained" onClick={handleSubmit(addReceivers)}>
-							Tạo mới
-						</Button>
-					</Grid>
+						<Grid
+							display="flex"
+							justifyContent="flex-end"
+							alignItems="center"
+							my="1rem"
+						>
+							<Button variant="contained" onClick={handleSubmit(addReceivers)}>
+								Tạo mới
+							</Button>
+						</Grid>
 					</Box>
 				</Grid>
 				<Grid item lg={4} md={6} xl={4} xs={12}>

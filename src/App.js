@@ -13,7 +13,6 @@ const Home = React.lazy(() => import('./pages/Home/Home'));
 const Login = React.lazy(() => import('./pages/Login/Login'));
 const Manage = React.lazy(() => import('./pages/Manage/Manage'));
 const Register = React.lazy(() => import('./pages/Register/Register'));
-const Sample = React.lazy(() => import('./pages/Sample/Sample'));
 const SignDocument = React.lazy(() => import('./pages/SignDocument/SignDocument'));
 const Signing = React.lazy(() => import('./pages/Signing/Signing'));
 const PrivateRoute = React.lazy(() => import('./components/Layout/PrivateRoute'));
@@ -21,6 +20,7 @@ const Activation = React.lazy(() => import('./pages/Activation/Activation'));
 const UserProfile = React.lazy(() => import('./pages/UserProfile/UserProfile'));
 const Payment = React.lazy(() => import('./components/zalopay/payment'));
 const ChangePassword = React.lazy(() => import('./pages/ChangePassword/ChangePassword'));
+const TransactionHistory = React.lazy(() => import('./pages/TransactionHistory/TransactionHistory'));
 
 const App = ({ location }) => {
 	const headerExclusionArray = [
@@ -45,6 +45,7 @@ const App = ({ location }) => {
 					<Route path="/activation/:id" component={Activation} />
 					<PrivateRoute path="/" exact component={Home} />
 					<PrivateRoute path="/change-password" component={ChangePassword} />
+					<PrivateRoute path="/transaction-history" component={TransactionHistory} />
 					<Route path="/home" exact>
 						<Redirect to="/" />
 					</Route>
@@ -54,7 +55,6 @@ const App = ({ location }) => {
 						</PdfTronProvider>
 					</PrivateRoute>
 					<PrivateRoute path={'/manage'} component={Manage} />
-					<PrivateRoute path="/template" component={Sample} />
 					<PrivateRoute path="/payment" component={Payment} />
 					<PrivateRoute path="/profile" component={UserProfile} />
 					<Route path="/signDocument">

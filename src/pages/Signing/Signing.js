@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Button, Container, Grid, Step, StepLabel, Stepper } from '@mui/material';
 import '@pdftron/webviewer/public/core/CoreControls';
 import { useForm } from 'react-hook-form';
@@ -12,6 +12,7 @@ import { pdfTronContext } from '../../redux/constants/contexts/pdfTronContext';
 import './signing.scss';
 import { useToast } from '../../components/toast/useToast.js';
 import documentApi from '../../api/documentApi';
+import userApi from '../../api/userApi';
 
 const steps = [
 	'Thêm tài liệu',
@@ -53,11 +54,32 @@ const Signing = () => {
 	const dispatch = useDispatch();
 	const documents = useSelector((state) => state.addDocList.documentList);
 	const receivers = useSelector((state) => state.receivers.receivers);
+	const [maxReceivers, setMaxReceivers] = useState(0);
+	const [enoughBalance, setEnoughBalance] = useState(true);
 
-	const handleNext = () => {
+	const getMaxReceivers = async () => {
+		const response = await userApi.getMaxReceivers();
+		return response.data;
+	};
+
+	useEffect(() => {
+		if (receivers.length > 0) {
+			setEnoughBalance(receivers.length < maxReceivers);
+		}
+	}, [maxReceivers, receivers.length]);
+
+	const handleNext = async () => {
 		if (activeStep === 0) {
 			if (documents.length === 0) {
 				error('Vui lòng tải tài liệu để sử dụng dịch vụ');
+				return;
+			}
+			const max = await getMaxReceivers();
+			setMaxReceivers(max);
+			if (max < 1) {
+				error(
+					'Tài khoản của quý khách không đủ để sử dụng dịch vụ. Vui lòng nạp thêm tiền!'
+				);
 				return;
 			}
 		} else if (activeStep === 1) {
@@ -130,7 +152,11 @@ const Signing = () => {
 					</Grid>
 					<Grid item xl={10} lg={10} md={9} xs={12} sx={{ maxHeight: '80vh' }}>
 						{activeStep === 0 && (
-							<UploadDocuments loading={loading} setLoading={setLoading} />
+							<UploadDocuments
+								loading={loading}
+								setLoading={setLoading}
+								enoughBalance={enoughBalance}
+							/>
 						)}
 						{activeStep === 1 && (
 							<AddReceivers
@@ -142,6 +168,7 @@ const Signing = () => {
 								setValue={setValue}
 								reset={reset}
 								watch={watch}
+								enoughBalance={enoughBalance}
 							/>
 						)}
 						{activeStep === 2 && (
