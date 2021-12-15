@@ -1,17 +1,17 @@
-import { Create, Description, Home } from '@mui/icons-material';
+import { Create, Home } from '@mui/icons-material';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import {
 	AppBar,
 	Box, Toolbar
 } from '@mui/material';
-import { useLocation } from 'react-router'
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router';
 import { Link, NavLink } from 'react-router-dom';
+import userApi from '../../api/userApi';
 import Logo from '../../assets/images/logo-white.png';
 import './Header.scss';
 import MenuMobile from './MenuMobile';
 import RightHeader from './RightHeader';
-import userApi from '../../api/userApi';
 const Header = () => {
 	const location = useLocation();
 	// const location = useLocation();
