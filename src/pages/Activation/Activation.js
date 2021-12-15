@@ -2,8 +2,8 @@ import React from 'react'
 import { Typography, Button, Paper, Box } from '@mui/material'
 import SuccessIcon from '../../assets/images/success.svg';
 import './Activation.scss';
-import axios from 'axios';
 import { useHistory } from 'react-router-dom'
+import authenApi from '../../api/authenApi';
 
 const Activation = ({ match }) => {
 	const userId = match.params.id;
@@ -12,9 +12,7 @@ const Activation = ({ match }) => {
 
 
 	const handleActivateAccount = async () => {
-		const { data } = await axios.get(
-			`https://api.vtsign.tech/user/apt/activation/${userId}`
-		);
+		const { data } = await authenApi.activation(userId);
 		if (data === true)
 			history.push('/')
 		else
