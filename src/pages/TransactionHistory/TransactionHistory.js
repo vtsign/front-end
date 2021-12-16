@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './TransactionHistory.scss';
-import { Container, Card, Grid, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, TablePagination } from '@mui/material';
+import { Container, Card, Grid, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, TablePagination, Pagination } from '@mui/material';
 import { useHistory } from 'react-router';
 import userApi from '../../api/userApi';
 import PageHeader from './PageHeader'
@@ -29,6 +29,11 @@ const TransactionHistory = () => {
 	const [data, setData] = useState(null);
 	const [loading, setLoading] = useState(true);
 	const [rowsPerPage, setRowsPerPage] = useState(5);
+	const formatNumber = (num) => {
+		num = Math.round((num ?? 0) * 10 + Number.EPSILON) / 10;
+		return num?.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+	}
+
 
 	const history = useHistory();
 
@@ -37,7 +42,7 @@ const TransactionHistory = () => {
 		(async () => {
 			try {
 				const transactionResponse = await userApi.getTransactions();
-				console.log(transactionResponse);
+
 				if(transactionResponse.status === 200)
 					setData(transactionResponse.data);
 				setLoading(false);
@@ -47,9 +52,6 @@ const TransactionHistory = () => {
 			}
 		})();
 	}, []);
-	useEffect(() => {
-		console.log(data)
-	}, [data])
 	const handleChangePage = () => {
 		history.replace(
 			`/transaction-history?page=${data.current_page + 1}`
@@ -67,7 +69,7 @@ const TransactionHistory = () => {
 					<TableContainer sx={{ minWidth: 800 }}>
 						<Table>
 							<TableHead>
-								<TableRow>
+								<TableRow style={{ backgroundColor: '#F4F6F8' }}>
 									<TableCell style={{ fontSize: 14, fontWeight: 600 }}>
 										Mã giao dịch
 									</TableCell>
@@ -93,14 +95,27 @@ const TransactionHistory = () => {
 									<TableBody>
 										{data?.transaction_monies?.map((transaction, index) => (
 											<TableRow hover>
-												<TableCell>{transaction.id}</TableCell>
-												<TableCell align='right'>{transaction.amount}</TableCell>
-												<TableCell>
+												<TableCell style={{ lineHeight: '24px' }}>
+													{transaction.id}
+												</TableCell>
+												<TableCell
+													style={{ lineHeight: '24px' }}
+													align="right"
+												>
+													{`${formatNumber(transaction.amount)} đ`}
+												</TableCell>
+												<TableCell style={{ lineHeight: '24px' }}>
 													{transaction.createdTime ?? ''}
 												</TableCell>
-												<TableCell>{transaction.status}</TableCell>
-												<TableCell>{transaction.method}</TableCell>
-												<TableCell>{transaction.description}</TableCell>
+												<TableCell style={{ lineHeight: '24px' }}>
+													{transaction.status}
+												</TableCell>
+												<TableCell style={{ lineHeight: '24px' }}>
+													{transaction.method}
+												</TableCell>
+												<TableCell style={{ lineHeight: '24px' }}>
+													{transaction.description}
+												</TableCell>
 											</TableRow>
 										))}
 									</TableBody>

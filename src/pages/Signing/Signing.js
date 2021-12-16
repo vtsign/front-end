@@ -51,7 +51,7 @@ const Signing = () => {
 	});
 
 	const userInfo = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
-	console.log(userInfo?.balance / 5000);
+
 
 	const dispatch = useDispatch();
 	const documents = useSelector((state) => state.addDocList.documentList);

@@ -13,7 +13,6 @@ const Home = (props) => {
 	const jsonUser = localStorage.getItem("user");
 	const user = JSON.parse(jsonUser);
 
-	console.log("user...", user);
 	useEffect(() => {
 		const getQuickViewDocument = async () => {
 			setLoading(true);

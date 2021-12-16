@@ -24,19 +24,21 @@ const TransactionHistory = React.lazy(() => import('./pages/TransactionHistory/T
 
 const App = ({ location }) => {
 	const headerExclusionArray = [
-		'/login',
-		'/register',
-		'/activation',
-		'/notfound',
-		'/signDocument',
+		'login',
+		'register',
+		'activation',
+		'notfound',
+		'signDocument',
 	];
 
 	const isLoggedIn = localStorage.getItem("isLogin") === 'true';
 
+	let splitPathName = location.pathname.split('/');
+
 	return (
 		<div className="app__container">
 			<Suspense fallback={<Loading />}>
-				{headerExclusionArray.indexOf(location.pathname) < 0 && <Header />}
+				{headerExclusionArray.indexOf(splitPathName[1]) < 0 && <Header />}
 				<Switch>
 					<Route path="/login">
 						{!isLoggedIn ? <Login /> : <Redirect to="/" />}
