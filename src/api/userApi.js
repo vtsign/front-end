@@ -36,6 +36,11 @@ const userApi = {
 		const url = '/user/transactions';
 		const response = await axiosClient.get(url);
 		return response;
+	},
+	async getMaxReceivers() {
+		const url = '/user/max-receivers';
+		const response = await axiosClient.get(url);
+		return response;
 	}
 };
 

@@ -12,6 +12,7 @@ import { pdfTronContext } from '../../redux/constants/contexts/pdfTronContext';
 import './signing.scss';
 import { useToast } from '../../components/toast/useToast.js';
 import documentApi from '../../api/documentApi';
+import userApi from '../../api/userApi';
 
 const steps = [
 	'Thêm tài liệu',
@@ -50,30 +51,38 @@ const Signing = () => {
 		},
 	});
 
-	const userInfo = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
-
 
 	const dispatch = useDispatch();
 	const documents = useSelector((state) => state.addDocList.documentList);
 	const receivers = useSelector((state) => state.receivers.receivers);
-	const [enoughBalance, setEnoughBalance] = useState(parseInt(userInfo?.balance / 5000) > 0);
+	const [maxReceivers, setMaxReceivers] = useState(0);
+	const [enoughBalance, setEnoughBalance] = useState(true);
+
+	const getMaxReceivers = async () => {
+		const response = await userApi.getMaxReceivers();
+		return response.data;
+	};
 
 	useEffect(() => {
-		if(receivers.length > 0) {
-			setEnoughBalance(parseInt(userInfo.balance / 5000*receivers.length) > 0);
+		if (receivers.length > 0) {
+			setEnoughBalance(receivers.length < maxReceivers);
 		}
-	}, [userInfo.balance, receivers.length])
+	}, [maxReceivers, receivers.length]);
 
-	const handleNext = () => {
+	const handleNext = async () => {
 		if (activeStep === 0) {
 			if (documents.length === 0) {
 				error('Vui lòng tải tài liệu để sử dụng dịch vụ');
 				return;
 			}
-			// if (!enoughBalance) {
-			// 	error('Tài khoản của quý khách không đủ để sử dụng dịch vụ. Vui lòng nạp thêm tiền!');
-			// 	return;
-			// }
+			const max = await getMaxReceivers();
+			setMaxReceivers(max);
+			if (max < 1) {
+				error(
+					'Tài khoản của quý khách không đủ để sử dụng dịch vụ. Vui lòng nạp thêm tiền!'
+				);
+				return;
+			}
 		} else if (activeStep === 1) {
 			if (receivers.length === 0) {
 				error('Vui lòng thêm người nhận tài liệu');
@@ -144,7 +153,11 @@ const Signing = () => {
 					</Grid>
 					<Grid item xl={10} lg={10} md={9} xs={12} sx={{ maxHeight: '80vh' }}>
 						{activeStep === 0 && (
-							<UploadDocuments loading={loading} setLoading={setLoading} enoughBalance={enoughBalance} />
+							<UploadDocuments
+								loading={loading}
+								setLoading={setLoading}
+								enoughBalance={enoughBalance}
+							/>
 						)}
 						{activeStep === 1 && (
 							<AddReceivers
