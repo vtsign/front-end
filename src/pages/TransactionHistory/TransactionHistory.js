@@ -1,29 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import './TransactionHistory.scss';
-import { Container, Card, Grid, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, TablePagination, Pagination } from '@mui/material';
+import {
+	Container,
+	Card,
+	Grid,
+	TableContainer,
+	Table,
+	TableHead,
+	TableBody,
+	TableRow,
+	TableCell,
+	TablePagination,
+} from '@mui/material';
 import { useHistory, useLocation } from 'react-router';
 import userApi from '../../api/userApi';
-import PageHeader from './PageHeader'
+import PageHeader from './PageHeader';
 import Loading from '../../components/Loading/Loading';
+import { convertTime } from '../../utils/time';
 
-const paymentMethods = [
-	{
-		label: "deposit",
-		value: "Nạp tiền",
-	},
-	{
-		label: "payment",
-		value: "Thanh toán",
-	},
-	{
-		label: "",
-		value: "",
-	},
-	{
-		label: "",
-		value: "",
-	},
-]
+const payments = {
+	deposit: 'Nạp tiền vào tài khoản',
+	payment: 'Thanh toán dịch vụ',
+	refund: 'Hoàn tiền',
+	init_balance: 'Đăng ký tài khoản',
+};
 
 const TransactionHistory = () => {
 	const [data, setData] = useState(null);
@@ -38,8 +38,7 @@ const TransactionHistory = () => {
 	const formatNumber = (num) => {
 		num = Math.round((num ?? 0) * 10 + Number.EPSILON) / 10;
 		return num?.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
-	}
-
+	};
 
 	const history = useHistory();
 
@@ -49,8 +48,9 @@ const TransactionHistory = () => {
 			try {
 				const transactionResponse = await userApi.getTransactions(page, size);
 
-				if(transactionResponse.status === 200)
+				if (transactionResponse.status === 200){
 					setData(transactionResponse.data);
+				}
 				setLoading(false);
 			} catch (err) {
 				setLoading(false);
@@ -65,7 +65,7 @@ const TransactionHistory = () => {
 
 	const handleChangeRowsPerPage = async (e, rows) => {
 		history.replace(`/transaction-history?page=1&size=${rows.props.value}`);
-	}
+	};
 
 	return (
 		<Container>
@@ -106,29 +106,33 @@ const TransactionHistory = () => {
 												<TableCell style={{ lineHeight: '24px' }}>
 													{transaction.id}
 												</TableCell>
-												{transaction.status === "deposit" || transaction.status === "init_balance" ? (
+												{transaction.status === 'deposit' ||
+												transaction.status === 'init_balance' ? (
 													<TableCell
-													style={{ lineHeight: '24px', color: "green" }}
-													align="right"
-												>
-													{`+ ${formatNumber(transaction.amount)} đ`}
-												</TableCell>
-												):
-												<TableCell
-													style={{ lineHeight: '24px', color: "red" }}
-													align="right"
-												>
-													{`- ${formatNumber(transaction.amount)} đ`}
-												</TableCell>
-												}
+														style={{
+															lineHeight: '24px',
+															color: 'green',
+														}}
+														align="right"
+													>
+														{`+ ${formatNumber(transaction.amount)} đ`}
+													</TableCell>
+												) : (
+													<TableCell
+														style={{ lineHeight: '24px', color: 'red' }}
+														align="right"
+													>
+														{`- ${formatNumber(transaction.amount)} đ`}
+													</TableCell>
+												)}
 												<TableCell style={{ lineHeight: '24px' }}>
-													{transaction.createdTime ?? ''}
+													{convertTime(transaction.created_date) ?? ''}
 												</TableCell>
 												<TableCell style={{ lineHeight: '24px' }}>
-													{transaction.status}
+													{payments[transaction.status]}
 												</TableCell>
 												<TableCell style={{ lineHeight: '24px' }}>
-													{transaction.method}
+													{transaction.method || 'VTSign - Thanh toán dịch vụ'}
 												</TableCell>
 												<TableCell style={{ lineHeight: '24px' }}>
 													{transaction.description}
