@@ -18,11 +18,21 @@ import PageHeader from './PageHeader';
 import Loading from '../../components/Loading/Loading';
 import { convertTime } from '../../utils/time';
 
-const payments = {
-	deposit: 'Nạp tiền vào tài khoản',
-	payment: 'Thanh toán dịch vụ',
-	refund: 'Hoàn tiền',
-	init_balance: 'Đăng ký tài khoản',
+const payment = {
+	status: {
+		deposit: 'Nạp tiền vào tài khoản',
+		payment: 'Thanh toán dịch vụ',
+		refund: 'Hoàn tiền',
+		init_balance: 'Đăng ký tài khoản',
+	},
+	method: {
+		zalopayapp: "ZaloPay App",
+		ATM: "Thẻ ATM",
+		CC: "Thẻ tín dụng",
+		INIT: "VTSign - Đăng ký tài khoản",
+		PAYMENT: "VTSign - Thanh toán dịch vụ",
+		REFUND: "VTSign - Hoàn tiền",
+	}
 };
 
 const TransactionHistory = () => {
@@ -129,10 +139,10 @@ const TransactionHistory = () => {
 													{convertTime(transaction.created_date) ?? ''}
 												</TableCell>
 												<TableCell style={{ lineHeight: '24px' }}>
-													{payments[transaction.status]}
+													{payment.status[transaction.status]}
 												</TableCell>
 												<TableCell style={{ lineHeight: '24px' }}>
-													{transaction.method || 'VTSign - Thanh toán dịch vụ'}
+													{payment.method[transaction.method]}
 												</TableCell>
 												<TableCell style={{ lineHeight: '24px' }}>
 													{transaction.description}
