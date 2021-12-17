@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './TransactionHistory.scss';
 import { Container, Card, Grid, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, TablePagination, Pagination } from '@mui/material';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import userApi from '../../api/userApi';
 import PageHeader from './PageHeader'
 import Loading from '../../components/Loading/Loading';
@@ -28,7 +28,13 @@ const paymentMethods = [
 const TransactionHistory = () => {
 	const [data, setData] = useState(null);
 	const [loading, setLoading] = useState(true);
-	const [rowsPerPage, setRowsPerPage] = useState(5);
+	// const [rowsPerPage, setRowsPerPage] = useState(5);
+
+	// const history = useHistory();
+	const location = useLocation();
+	const query = new URLSearchParams(location.search);
+	const page = parseInt(query.get('page')) || 1;
+	const size = parseInt(query.get('size')) || 5;
 	const formatNumber = (num) => {
 		num = Math.round((num ?? 0) * 10 + Number.EPSILON) / 10;
 		return num?.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
@@ -41,7 +47,7 @@ const TransactionHistory = () => {
 		setLoading(true);
 		(async () => {
 			try {
-				const transactionResponse = await userApi.getTransactions();
+				const transactionResponse = await userApi.getTransactions(page, size);
 
 				if(transactionResponse.status === 200)
 					setData(transactionResponse.data);
@@ -51,13 +57,15 @@ const TransactionHistory = () => {
 				console.log(err);
 			}
 		})();
-	}, []);
-	const handleChangePage = () => {
-		history.replace(
-			`/transaction-history?page=${data.current_page + 1}`
-		);
+	}, [page, size]);
 
+	const handleChangePage = async (e, page) => {
+		history.replace(`/transaction-history?page=${page + 1}&size=${size}`);
 	};
+
+	const handleChangeRowsPerPage = async (e, rows) => {
+		history.replace(`/transaction-history?page=1&size=${rows.props.value}`);
+	}
 
 	return (
 		<Container>
@@ -98,12 +106,21 @@ const TransactionHistory = () => {
 												<TableCell style={{ lineHeight: '24px' }}>
 													{transaction.id}
 												</TableCell>
-												<TableCell
-													style={{ lineHeight: '24px' }}
+												{transaction.status === "deposit" || transaction.status === "init_balance" ? (
+													<TableCell
+													style={{ lineHeight: '24px', color: "green" }}
 													align="right"
 												>
-													{`${formatNumber(transaction.amount)} đ`}
+													{`+ ${formatNumber(transaction.amount)} đ`}
 												</TableCell>
+												):
+												<TableCell
+													style={{ lineHeight: '24px', color: "red" }}
+													align="right"
+												>
+													{`- ${formatNumber(transaction.amount)} đ`}
+												</TableCell>
+												}
 												<TableCell style={{ lineHeight: '24px' }}>
 													{transaction.createdTime ?? ''}
 												</TableCell>
@@ -122,10 +139,10 @@ const TransactionHistory = () => {
 									<TablePagination
 										rowsPerPageOptions={[5, 10, 25]}
 										count={data.total_items}
-										rowsPerPage={rowsPerPage}
-										page={data.current_page - 1}
+										rowsPerPage={size}
+										page={page - 1}
 										onPageChange={handleChangePage}
-										// onRowsPerPageChange={handleChangeRowsPerPage}
+										onRowsPerPageChange={handleChangeRowsPerPage}
 									/>
 								</>
 							) : (
