@@ -1,5 +1,16 @@
-.activationContainer {
+@import '/src/sass/variables';
+@import '/src/sass/mixins';
+@import '/src/sass/base';
+
+.container {
+	height: $content-height-no-header;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.activation__wrapper {
+	// height: $content-height;
 	padding: 3em;
 	width: 50em;
-	margin: 1.5em auto auto;
+	margin: auto auto;
 }

@@ -53,155 +53,160 @@ const ChangePassword = () => {
 		}
 	}
 	return (
-		<div className="form">
-			<Paper variant="outlined" className="change-password__form">
-				<Typography variant="h5" textAlign="center" fontWeight="bold" my="1rem">
-					Đổi mật khẩu
-				</Typography>
-				{loading && <Loading />}
-				<form>
-					<Grid container spacing={3} style={{ marginBottom: '2rem' }}>
-						<Grid item xs={12}>
-							<InputLabel>
-								Mật khẩu cũ<span style={{ color: 'red' }}>*</span>
-							</InputLabel>
-							<TextField
-								name="oldPassword"
-								fullWidth
-								type={oldPasswordHidden ? 'password' : 'text'}
-								placeholder="Nhập mật khẩu"
-								{...register('oldPassword', {
-									required: 'Nhập mật khẩu',
-									pattern: {
-										value: REG_PASSWORD,
-										message:
-											'Mật khẩu phải tối thiểu 8 ký tự bao gồm chữ hoa, chữ thường, số',
-									},
-								})}
-								error={!!errors.oldPassword}
-								helperText={errors?.oldPassword?.message}
-								InputProps={{
-									endAdornment: (
-										<InputAdornment position="end">
-											<IconButton
-												aria-label="toggle password visibility"
-												onClick={() => {
-													setOldPasswordHidden(!oldPasswordHidden);
-												}}
-												onMouseDown={(event) => {
-													event.preventDefault();
-												}}
-												edge="end"
-											>
-												{oldPasswordHidden ? (
-													<Visibility />
-												) : (
-													<VisibilityOff />
-												)}
-											</IconButton>
-										</InputAdornment>
-									),
-								}}
-							/>
+		<div className="container">
+			<div className="form">
+				<Paper variant="outlined" className="change-password__form">
+					<Typography variant="h5" textAlign="center" fontWeight="bold" my="1rem">
+						Đổi mật khẩu
+					</Typography>
+					{loading && <Loading />}
+					<form>
+						<Grid container spacing={3} style={{ marginBottom: '2rem' }}>
+							<Grid item xs={12}>
+								<InputLabel>
+									Mật khẩu cũ<span style={{ color: 'red' }}>*</span>
+								</InputLabel>
+								<TextField
+									name="oldPassword"
+									fullWidth
+									type={oldPasswordHidden ? 'password' : 'text'}
+									placeholder="Nhập mật khẩu"
+									{...register('oldPassword', {
+										required: 'Nhập mật khẩu',
+										pattern: {
+											value: REG_PASSWORD,
+											message:
+												'Mật khẩu phải tối thiểu 8 ký tự bao gồm chữ hoa, chữ thường, số',
+										},
+									})}
+									error={!!errors.oldPassword}
+									helperText={errors?.oldPassword?.message}
+									InputProps={{
+										endAdornment: (
+											<InputAdornment position="end">
+												<IconButton
+													aria-label="toggle password visibility"
+													onClick={() => {
+														setOldPasswordHidden(!oldPasswordHidden);
+													}}
+													onMouseDown={(event) => {
+														event.preventDefault();
+													}}
+													edge="end"
+												>
+													{oldPasswordHidden ? (
+														<Visibility />
+													) : (
+														<VisibilityOff />
+													)}
+												</IconButton>
+											</InputAdornment>
+										),
+									}}
+								/>
+							</Grid>
+							<Grid item xs={12}>
+								<InputLabel>
+									Mật khẩu mới<span style={{ color: 'red' }}>*</span>
+								</InputLabel>
+								<TextField
+									name="password"
+									fullWidth
+									type={hiddenPassword ? 'password' : 'text'}
+									placeholder="Nhập mật khẩu"
+									{...register('password', {
+										required: 'Nhập mật khẩu',
+										pattern: {
+											value: REG_PASSWORD,
+											message:
+												'Mật khẩu phải tối thiểu 8 ký tự bao gồm chữ hoa, chữ thường, số',
+										},
+									})}
+									error={!!errors.password}
+									helperText={errors?.password?.message}
+									InputProps={{
+										endAdornment: (
+											<InputAdornment position="end">
+												<IconButton
+													aria-label="toggle password visibility"
+													onClick={() => {
+														setHiddenPassword(!hiddenPassword);
+													}}
+													onMouseDown={(event) => {
+														event.preventDefault();
+													}}
+													edge="end"
+												>
+													{hiddenPassword ? (
+														<Visibility />
+													) : (
+														<VisibilityOff />
+													)}
+												</IconButton>
+											</InputAdornment>
+										),
+									}}
+								/>
+							</Grid>
+							<Grid item xs={12}>
+								<InputLabel>
+									Xác thực mật khẩu mới<span style={{ color: 'red' }}>*</span>
+								</InputLabel>
+								<TextField
+									name="verifyPassword"
+									fullWidth
+									type={hiddenVerifyPassword ? 'password' : 'text'}
+									placeholder="Nhập xác thực mật khẩu"
+									{...register('verifyPassword', {
+										required: 'Vui lòng xác nhận mật khẩu',
+										validate: (value) =>
+											value === currentPassword.current ||
+											'Mật khẩu chưa khớp',
+									})}
+									error={!!errors.verifyPassword}
+									helperText={errors?.verifyPassword?.message}
+									InputProps={{
+										endAdornment: (
+											<InputAdornment position="end">
+												<IconButton
+													aria-label="toggle password visibility"
+													onClick={() => {
+														setHiddenVerifyPassword(
+															!hiddenVerifyPassword
+														);
+													}}
+													onMouseDown={(event) => {
+														event.preventDefault();
+													}}
+													edge="end"
+												>
+													{hiddenVerifyPassword ? (
+														<Visibility />
+													) : (
+														<VisibilityOff />
+													)}
+												</IconButton>
+											</InputAdornment>
+										),
+									}}
+								/>
+							</Grid>
 						</Grid>
-						<Grid item xs={12}>
-							<InputLabel>
-								Mật khẩu mới<span style={{ color: 'red' }}>*</span>
-							</InputLabel>
-							<TextField
-								name="password"
+						<Box mb="1.5rem" style={{ textAlign: 'center' }}>
+							<Button
+								variant="contained"
+								color="primary"
 								fullWidth
-								type={hiddenPassword ? 'password' : 'text'}
-								placeholder="Nhập mật khẩu"
-								{...register('password', {
-									required: 'Nhập mật khẩu',
-									pattern: {
-										value: REG_PASSWORD,
-										message:
-											'Mật khẩu phải tối thiểu 8 ký tự bao gồm chữ hoa, chữ thường, số',
-									},
-								})}
-								error={!!errors.password}
-								helperText={errors?.password?.message}
-								InputProps={{
-									endAdornment: (
-										<InputAdornment position="end">
-											<IconButton
-												aria-label="toggle password visibility"
-												onClick={() => {
-													setHiddenPassword(!hiddenPassword);
-												}}
-												onMouseDown={(event) => {
-													event.preventDefault();
-												}}
-												edge="end"
-											>
-												{hiddenPassword ? (
-													<Visibility />
-												) : (
-													<VisibilityOff />
-												)}
-											</IconButton>
-										</InputAdornment>
-									),
-								}}
-							/>
-						</Grid>
-						<Grid item xs={12}>
-							<InputLabel>
-								Xác thực mật khẩu mới<span style={{ color: 'red' }}>*</span>
-							</InputLabel>
-							<TextField
-								name="verifyPassword"
-								fullWidth
-								type={hiddenVerifyPassword ? 'password' : 'text'}
-								placeholder="Nhập xác thực mật khẩu"
-								{...register('verifyPassword', {
-									required: 'Vui lòng xác nhận mật khẩu',
-									validate: (value) =>
-										value === currentPassword.current || 'Mật khẩu chưa khớp',
-								})}
-								error={!!errors.verifyPassword}
-								helperText={errors?.verifyPassword?.message}
-								InputProps={{
-									endAdornment: (
-										<InputAdornment position="end">
-											<IconButton
-												aria-label="toggle password visibility"
-												onClick={() => {
-													setHiddenVerifyPassword(!hiddenVerifyPassword);
-												}}
-												onMouseDown={(event) => {
-													event.preventDefault();
-												}}
-												edge="end"
-											>
-												{hiddenVerifyPassword ? (
-													<Visibility />
-												) : (
-													<VisibilityOff />
-												)}
-											</IconButton>
-										</InputAdornment>
-									),
-								}}
-							/>
-						</Grid>
-					</Grid>
-					<Box mb="1.5rem" style={{ textAlign: 'center' }}>
-						<Button
-							variant="contained"
-							color="primary"
-							fullWidth
-							size="large"
-							onClick={handleSubmit(changePassword)}
-							type="submit"
-						>
-							Đổi mật khẩu
-						</Button>
-					</Box>
-				</form>
-			</Paper>
+								size="large"
+								onClick={handleSubmit(changePassword)}
+								type="submit"
+							>
+								Đổi mật khẩu
+							</Button>
+						</Box>
+					</form>
+				</Paper>
+			</div>
 		</div>
 	);
 };

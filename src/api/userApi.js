@@ -32,8 +32,8 @@ const userApi = {
 		const response = await axiosClient.post(url, data);
 		return response;
 	},
-	async getTransactions() {
-		const url = '/user/transactions';
+	async getTransactions(page, size) {
+		const url = `/user/transactions?page=${page}&size=${size}`;
 		const response = await axiosClient.get(url);
 		return response;
 	},
