@@ -152,7 +152,7 @@ const TransactionHistory = () => {
 									</TableBody>
 									<TablePagination
 										rowsPerPageOptions={[5, 10, 25]}
-										count={data.total_items}
+										count={data.total_elements}
 										rowsPerPage={size}
 										page={page - 1}
 										onPageChange={handleChangePage}
