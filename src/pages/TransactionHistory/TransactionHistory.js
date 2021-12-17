@@ -108,10 +108,10 @@ const TransactionHistory = () => {
 									</TableCell>
 								</TableRow>
 							</TableHead>
-							{data && data?.transaction_monies?.length > 0 ? (
+							{data && data?.list?.length > 0 ? (
 								<>
 									<TableBody>
-										{data?.transaction_monies?.map((transaction, index) => (
+										{data?.list?.map((transaction, index) => (
 											<TableRow hover>
 												<TableCell style={{ lineHeight: '24px' }}>
 													{transaction.id}
