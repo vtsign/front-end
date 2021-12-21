@@ -1,9 +1,6 @@
 import { Create, Home } from '@mui/icons-material';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
-import {
-	AppBar,
-	Box, Toolbar
-} from '@mui/material';
+import { AppBar, Box, Toolbar } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 import { Link, NavLink } from 'react-router-dom';
@@ -34,8 +31,8 @@ const Header = () => {
 			const response = await userApi.getUserProfile();
 			setUserInfo(response.data);
 			localStorage.setItem('user', JSON.stringify(response.data));
-		})()
-	}, [])
+		})();
+	}, []);
 
 	return (
 		<Box>
@@ -44,16 +41,12 @@ const Header = () => {
 					<div className="header-right">
 						<MenuMobile />
 						<Link to="/" style={{ margin: 'auto' }}>
-							<img
-								src={Logo}
-								alt="logo"
-								className="header-right-logo"
-							/>
+							<img src={Logo} alt="logo" className="header-right-logo" />
 						</Link>
 
 						{location.pathname !== '/payment' && (
 							<div className="header-right-menu">
-								<NavLink to="/" activeClassName="active" exact >
+								<NavLink to="/home" activeClassName="active" exact>
 									<Home style={{ verticalAlign: 'middle', marginRight: '5px' }} />
 									Trang chủ
 								</NavLink>
@@ -71,7 +64,7 @@ const Header = () => {
 					<RightHeader userInfo={userInfo} />
 				</Toolbar>
 			</AppBar>
-		</Box >
+		</Box>
 	);
 };
 

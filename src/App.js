@@ -9,6 +9,7 @@ import Loading from './components/Loading/Loading';
 import { PdfTronProvider } from './redux/constants/contexts/pdfTronContext';
 
 const NotFound = React.lazy(() => import('./pages/Common/NotFound'));
+const Intro = React.lazy(() => import('./pages/Intro/Intro'));
 const Home = React.lazy(() => import('./pages/Home/Home'));
 const Login = React.lazy(() => import('./pages/Login/Login'));
 const Manage = React.lazy(() => import('./pages/Manage/Manage'));
@@ -20,18 +21,14 @@ const Activation = React.lazy(() => import('./pages/Activation/Activation'));
 const UserProfile = React.lazy(() => import('./pages/UserProfile/UserProfile'));
 const Payment = React.lazy(() => import('./components/zalopay/payment'));
 const ChangePassword = React.lazy(() => import('./pages/ChangePassword/ChangePassword'));
-const TransactionHistory = React.lazy(() => import('./pages/TransactionHistory/TransactionHistory'));
+const TransactionHistory = React.lazy(() =>
+	import('./pages/TransactionHistory/TransactionHistory')
+);
 
 const App = ({ location }) => {
-	const headerExclusionArray = [
-		'login',
-		'register',
-		'activation',
-		'notfound',
-		'signDocument',
-	];
+	const headerExclusionArray = ['login', 'register', 'activation', 'notfound', 'signDocument'];
 
-	const isLoggedIn = localStorage.getItem("isLogin") === 'true';
+	const isLoggedIn = localStorage.getItem('isLogin') === 'true';
 
 	let splitPathName = location.pathname.split('/');
 
@@ -40,17 +37,16 @@ const App = ({ location }) => {
 			<Suspense fallback={<Loading />}>
 				{headerExclusionArray.indexOf(splitPathName[1]) < 0 && <Header />}
 				<Switch>
-					<Route path="/login">
-						{!isLoggedIn ? <Login /> : <Redirect to="/" />}
-					</Route>
+					<Route path="/login">{!isLoggedIn ? <Login /> : <Redirect to="/" />}</Route>
 					<Route path="/register" component={Register} />
 					<Route path="/activation/:id" component={Activation} />
-					<PrivateRoute path="/" exact component={Home} />
+					<PrivateRoute path="/home" exact component={Home} />
+					<PrivateRoute path="/" exact component={Intro} />
 					<PrivateRoute path="/change-password" component={ChangePassword} />
 					<PrivateRoute path="/transaction-history" component={TransactionHistory} />
-					<Route path="/home" exact>
+					{/* <Route path="/home" exact>
 						<Redirect to="/" />
-					</Route>
+					</Route> */}
 					<PrivateRoute path="/signing">
 						<PdfTronProvider>
 							<Signing />
@@ -71,7 +67,7 @@ const App = ({ location }) => {
 				</Switch>
 				<Footer />
 			</Suspense>
-		</div >
+		</div>
 	);
 };
 
