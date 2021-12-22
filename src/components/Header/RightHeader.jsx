@@ -32,17 +32,15 @@ const LeftHeader = ({ userInfo }) => {
 		localStorage.removeItem('accessTokenExpired');
 		localStorage.removeItem('refreshTokenExpired');
 		localStorage.setItem('isLogin', 'false');
-		history.push("/login");
-
-	}
-
+		history.push('/login');
+	};
 
 	const profileRoute = () => {
-		history.push("/profile");
-	}
+		history.push('/profile');
+	};
 
 	function numberWithCommas(x) {
-		return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 	}
 
 	return (
@@ -54,9 +52,23 @@ const LeftHeader = ({ userInfo }) => {
 				<IconButton size="large" color="inherit">
 					<Settings />
 				</IconButton> */}
-				{userInfo && (<p style={{ display: 'flex', alignItems: 'center' }}>{numberWithCommas(userInfo.balance)} VND</p>)}
+				{userInfo && (
+					<p style={{ display: 'flex', alignItems: 'center' }}>
+						{numberWithCommas(userInfo.balance)} VND
+					</p>
+				)}
 				<Link to="/payment">
-					<Button variant="outlined" style={{ color: 'white', borderColor: '#fff', marginLeft: '20px', height: '30px', }}>Nạp tiền</Button>
+					<Button
+						variant="outlined"
+						style={{
+							color: 'white',
+							borderColor: '#fff',
+							marginLeft: '20px',
+							height: '30px',
+						}}
+					>
+						Nạp tiền
+					</Button>
 				</Link>
 				<IconButton onClick={handleClick} size="large" edge="end" color="inherit">
 					<AccountCircle />
@@ -99,10 +111,10 @@ const LeftHeader = ({ userInfo }) => {
 				<MenuItem onClick={profileRoute}>
 					<Avatar /> Thông tin tài khoản
 				</MenuItem>
-				<MenuItem onClick={() => history.push("/change-password")}>
+				<MenuItem onClick={() => history.push('/change-password')}>
 					<Avatar /> Đổi mật khẩu
 				</MenuItem>
-				<MenuItem onClick={() => history.push("/transaction-history")}>
+				<MenuItem onClick={() => history.push('/transaction-history')}>
 					<Avatar /> Lịch sử giao dịch
 				</MenuItem>
 				<Divider />
@@ -110,13 +122,13 @@ const LeftHeader = ({ userInfo }) => {
 					<ListItemIcon>
 						<Settings fontSize="small" />
 					</ListItemIcon>
-					Settings
+					Cài đặt
 				</MenuItem>
 				<MenuItem onClick={logoutHandler}>
 					<ListItemIcon>
 						<Logout fontSize="small" />
 					</ListItemIcon>
-					Logout
+					Đăng xuất
 				</MenuItem>
 			</Menu>
 		</Fragment>

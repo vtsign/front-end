@@ -27,11 +27,29 @@ export default function BannerIntro() {
 			>
 				Nhanh chóng - Đơn giản - Bảo mật
 			</Typography>
-			<NavLink to="/signing" activeClassName="active">
-				<Button color="secondary" variant="contained" size="large" sx={{ minWidth: 200 }}>
-					Ký kết ngay
-				</Button>
-			</NavLink>
+
+			<Typography sx={{ mb: 4, mt: { sx: 4, sm: 10 } }}>
+				<NavLink to="/register" activeClassName="active">
+					<Button
+						color="secondary"
+						variant="contained"
+						size="large"
+						sx={{ minWidth: 200, mr: 5 }}
+					>
+						Đăng ký
+					</Button>
+				</NavLink>
+				<NavLink to="/login" activeClassName="active">
+					<Button
+						color="secondary"
+						variant="contained"
+						size="large"
+						sx={{ minWidth: 200 }}
+					>
+						Đăng nhập
+					</Button>
+				</NavLink>
+			</Typography>
 
 			<Typography variant="body2" color="inherit" sx={{ mt: 2 }}>
 				Thêm thông tin bên dưới

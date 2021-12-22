@@ -1,7 +1,5 @@
 import React, { Suspense, useState } from 'react';
-import { useEffect } from 'react';
 import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
-import userApi from './api/userApi';
 import './App.scss';
 import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
@@ -11,9 +9,6 @@ import { PdfTronProvider } from './redux/constants/contexts/pdfTronContext';
 const NotFound = React.lazy(() => import('./pages/Common/NotFound'));
 const Intro = React.lazy(() => import('./pages/Intro/Intro'));
 const Home = React.lazy(() => import('./pages/Home/Home'));
-const Privacy = React.lazy(() => import('./pages/Intro/Privacy'));
-const FailedPayment = React.lazy(() => import('./pages/Intro/FailedPayment'));
-const FailedSystem = React.lazy(() => import('./pages/Intro/FailedSystem'));
 const Login = React.lazy(() => import('./pages/Login/Login'));
 const Manage = React.lazy(() => import('./pages/Manage/Manage'));
 const Register = React.lazy(() => import('./pages/Register/Register'));
@@ -40,14 +35,15 @@ const App = ({ location }) => {
 			<Suspense fallback={<Loading />}>
 				{headerExclusionArray.indexOf(splitPathName[1]) < 0 && <Header />}
 				<Switch>
-					<Route path="/login">{!isLoggedIn ? <Login /> : <Redirect to="/" />}</Route>
+					<Route path="/" exact>
+						{!isLoggedIn ? <Intro /> : <Redirect to="/home" />}
+					</Route>
+					<Route path="/login" exact>
+						{!isLoggedIn ? <Login /> : <Redirect to="/home" />}
+					</Route>
 					<Route path="/register" component={Register} />
 					<Route path="/activation/:id" component={Activation} />
 					<PrivateRoute path="/home" exact component={Home} />
-					<PrivateRoute path="/privacy" exact component={Privacy} />
-					<PrivateRoute path="/failedpayment" exact component={FailedPayment} />
-					<PrivateRoute path="/failedsystem" exact component={FailedSystem} />
-					<PrivateRoute path="/" exact component={Intro} />
 					<PrivateRoute path="/change-password" component={ChangePassword} />
 					<PrivateRoute path="/transaction-history" component={TransactionHistory} />
 					{/* <Route path="/home" exact>

@@ -36,23 +36,17 @@ function FAQs() {
 			<Grid container spacing={5}>
 				<Grid item xs={12} md={4}>
 					<Box sx={item}>
-						<Typography variant="h6">
-							<Link to="/privacy">Chính sách</Link>
-						</Typography>
+						<Typography variant="h6">Chính sách</Typography>
 					</Box>
 				</Grid>
 				<Grid item xs={12} md={4}>
 					<Box sx={item}>
-						<Typography variant="h6">
-							<Link to="/failedpayment">Phí dịch vụ</Link>
-						</Typography>
+						<Typography variant="h6">Phí dịch vụ</Typography>
 					</Box>
 				</Grid>
 				<Grid item xs={12} md={4}>
 					<Box sx={item}>
-						<Typography variant="h6">
-							<Link to="/failedsystem">Lỗi hệ thống</Link>
-						</Typography>
+						<Typography variant="h6">Lỗi hệ thống</Typography>
 					</Box>
 				</Grid>
 			</Grid>

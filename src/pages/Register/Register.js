@@ -69,17 +69,11 @@ const Register = () => {
 
 	return (
 		<div className="register">
-			<div className="register-logo"
-			>
+			<div className="register-logo">
 				<img src={Logo} alt="logo" style={{ width: '15vw', margin: '3rem' }} />
 			</div>
-			<Paper
-				variant="outlined"
-				className="register-form"
-			>
-					<p className="register-logo-temp">
-					VTSIGN
-				</p>
+			<Paper variant="outlined" className="register-form">
+				<p className="register-logo-temp">VTSIGN</p>
 				<Typography variant="h5" textAlign="center" fontWeight="bold" my="1rem">
 					Đăng ký
 				</Typography>
@@ -271,7 +265,9 @@ const Register = () => {
 						</Grid>
 					</Grid>
 					{errorRegister && (
-						<p style={{ textAlign: 'center', color: 'red', marginBottom: "2rem" }}>{errorRegister.message}</p>
+						<p style={{ textAlign: 'center', color: 'red', marginBottom: '2rem' }}>
+							{errorRegister.message}
+						</p>
 					)}
 					<Box mb="1.5rem" style={{ textAlign: 'center' }}>
 						{loading ? (
@@ -296,7 +292,7 @@ const Register = () => {
 							Đăng nhập?
 						</Link>
 					</p>
-					<Divider style={{ paddingInline: '2rem', marginBottom: '2rem' }}>
+					{/* <Divider style={{ paddingInline: '2rem', marginBottom: '2rem' }}>
 						Hoặc đăng nhập với
 					</Divider>
 					<Box mb="1.5rem">
@@ -323,7 +319,7 @@ const Register = () => {
 								Facebook
 							</Button>
 						</Stack>
-					</Box>
+					</Box> */}
 				</form>
 			</Paper>
 		</div>

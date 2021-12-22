@@ -25,13 +25,16 @@ const Header = () => {
 	// }
 
 	const [userInfo, setUserInfo] = useState();
+	const isLoggedIn = localStorage.getItem('isLogin') === 'true';
 
 	useEffect(() => {
-		(async () => {
-			const response = await userApi.getUserProfile();
-			setUserInfo(response.data);
-			localStorage.setItem('user', JSON.stringify(response.data));
-		})();
+		if (isLoggedIn) {
+			(async () => {
+				const response = await userApi.getUserProfile();
+				setUserInfo(response.data);
+				localStorage.setItem('user', JSON.stringify(response.data));
+			})();
+		}
 	}, []);
 
 	return (
@@ -44,7 +47,7 @@ const Header = () => {
 							<img src={Logo} alt="logo" className="header-right-logo" />
 						</Link>
 
-						{location.pathname !== '/payment' && (
+						{location.pathname !== '/' && (
 							<div className="header-right-menu">
 								<NavLink to="/home" activeClassName="active" exact>
 									<Home style={{ verticalAlign: 'middle', marginRight: '5px' }} />
@@ -61,7 +64,7 @@ const Header = () => {
 							</div>
 						)}
 					</div>
-					<RightHeader userInfo={userInfo} />
+					{location.pathname !== '/' && <RightHeader userInfo={userInfo} />}
 				</Toolbar>
 			</AppBar>
 		</Box>
