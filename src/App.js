@@ -11,6 +11,9 @@ import { PdfTronProvider } from './redux/constants/contexts/pdfTronContext';
 const NotFound = React.lazy(() => import('./pages/Common/NotFound'));
 const Intro = React.lazy(() => import('./pages/Intro/Intro'));
 const Home = React.lazy(() => import('./pages/Home/Home'));
+const Privacy = React.lazy(() => import('./pages/Intro/Privacy'));
+const FailedPayment = React.lazy(() => import('./pages/Intro/FailedPayment'));
+const FailedSystem = React.lazy(() => import('./pages/Intro/FailedSystem'));
 const Login = React.lazy(() => import('./pages/Login/Login'));
 const Manage = React.lazy(() => import('./pages/Manage/Manage'));
 const Register = React.lazy(() => import('./pages/Register/Register'));
@@ -41,6 +44,9 @@ const App = ({ location }) => {
 					<Route path="/register" component={Register} />
 					<Route path="/activation/:id" component={Activation} />
 					<PrivateRoute path="/home" exact component={Home} />
+					<PrivateRoute path="/privacy" exact component={Privacy} />
+					<PrivateRoute path="/failedpayment" exact component={FailedPayment} />
+					<PrivateRoute path="/failedsystem" exact component={FailedSystem} />
 					<PrivateRoute path="/" exact component={Intro} />
 					<PrivateRoute path="/change-password" component={ChangePassword} />
 					<PrivateRoute path="/transaction-history" component={TransactionHistory} />
