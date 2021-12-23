@@ -33,25 +33,25 @@ const Home = (props) => {
 					</div>
 					<Link to="/manage/completed">
 						<div className="home__manage__action">
-							<p className="action__quantity">{quickDoc.COMPLETED}</p>
+							<p className="action__quantity">{quickDoc.completed}</p>
 							<p className="action__name">Đã hoàn thành</p>
 						</div>
 					</Link>
 					<Link to="/manage/waiting">
 						<div className="home__manage__action">
-							<p className="action__quantity">{quickDoc.WAITING}</p>
+							<p className="action__quantity">{quickDoc.waiting}</p>
 							<p className="action__name">Chờ ký</p>
 						</div>
 					</Link>
 					<Link to="/manage/need-sign">
 						<div className="home__manage__action">
-							<p className="action__quantity">{quickDoc.ACTION_REQUIRE}</p>
+							<p className="action__quantity">{quickDoc.action_require}</p>
 							<p className="action__name">Cần ký</p>
 						</div>
 					</Link>
 					<Link to="/manage/deleted">
 						<div className="home__manage__action">
-							<p className="action__quantity">{quickDoc.DELETED}</p>
+							<p className="action__quantity">{quickDoc.deleted}</p>
 							<p className="action__name">Đã xóa</p>
 						</div>
 					</Link>
