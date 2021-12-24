@@ -1,5 +1,7 @@
 import axios from 'axios';
 import axiosClient from './axiosClients';
+import axiosClientNoToken from './axiosClientNoToken';
+
 const userApi = {
 	async checkUserExists(email) {
 		const url = `/user/check_exists?email=${email}`;
@@ -41,6 +43,9 @@ const userApi = {
 		const url = '/user/max-receivers';
 		const response = await axiosClient.get(url);
 		return response;
+	},
+	requestResetPassword: (email) => {
+		return axiosClientNoToken.get(`/user/apt/reset-password?email=${email}`)
 	}
 };
 
