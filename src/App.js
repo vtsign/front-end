@@ -10,7 +10,11 @@ import { PdfTronProvider } from './redux/constants/contexts/pdfTronContext';
 
 const NotFound = React.lazy(() => import('./pages/Common/NotFound'));
 const Home = React.lazy(() => import('./pages/Home/Home'));
+const RequestResetPassword = React.lazy(() => import('./pages/ResetPassword/RequestResetPassword'));
+const ResetPassword = React.lazy(() => import('./pages/ResetPassword/ResetPassword'));
+const CheckEmail = React.lazy(() => import('./pages/ResetPassword/CheckEmail'));
 const Login = React.lazy(() => import('./pages/Login/Login'));
+const ThankYou = React.lazy(() => import('./pages/ThankYou/ThankYou'));
 const Manage = React.lazy(() => import('./pages/Manage/Manage'));
 const Register = React.lazy(() => import('./pages/Register/Register'));
 const SignDocument = React.lazy(() => import('./pages/SignDocument/SignDocument'));
@@ -29,6 +33,9 @@ const App = ({ location }) => {
 		'activation',
 		'notfound',
 		'signDocument',
+		'check-email',
+		'request-reset-password',
+		'reset-password'
 	];
 
 	const isLoggedIn = localStorage.getItem("isLogin") === 'true';
@@ -41,15 +48,19 @@ const App = ({ location }) => {
 				{headerExclusionArray.indexOf(splitPathName[1]) < 0 && <Header />}
 				<Switch>
 					<Route path="/login">
-						{!isLoggedIn ? <Login /> : <Redirect to="/" />}
+						{!isLoggedIn ? <Login /> : <Redirect to="/home" />}
 					</Route>
+					<Route path="/check-email" component={CheckEmail} />
+					<Route path="/request-reset-password" component={RequestResetPassword} />
+					<Route path="/reset-password" component={ResetPassword} />
 					<Route path="/register" component={Register} />
+					<Route path="/thankyou" component={ThankYou} />
 					<Route path="/activation/:id" component={Activation} />
-					<PrivateRoute path="/" exact component={Home} />
+					<PrivateRoute path="/home" exact component={Home} />
 					<PrivateRoute path="/change-password" component={ChangePassword} />
 					<PrivateRoute path="/transaction-history" component={TransactionHistory} />
-					<Route path="/home" exact>
-						<Redirect to="/" />
+					<Route path="/" exact>
+						<Redirect to="/home" />
 					</Route>
 					<PrivateRoute path="/signing">
 						<PdfTronProvider>

@@ -27,14 +27,20 @@ const Header = () => {
 	// 	return pathname === "/";
 	// }
 
+	const isLoggedIn = localStorage.getItem("isLoggedIn");
+	const listPathShowPayment = ["/", "/thankyou"];
+	const listPathShowTab = ["/", "/thankyou", "/payment"];
+
 	const [userInfo, setUserInfo] = useState();
 
 	useEffect(() => {
-		(async () => {
-			const response = await userApi.getUserProfile();
-			setUserInfo(response.data);
-			localStorage.setItem('user', JSON.stringify(response.data));
-		})()
+		if (listPathShowPayment.indexOf(location.pathname) < 0) {
+			(async () => {
+				const response = await userApi.getUserProfile();
+				setUserInfo(response.data);
+				localStorage.setItem('user', JSON.stringify(response.data));
+			})()
+		}
 	}, [])
 
 	return (
@@ -51,9 +57,9 @@ const Header = () => {
 							/>
 						</Link>
 
-						{location.pathname !== '/payment' && (
+						{listPathShowTab.indexOf(location.pathname) < 0 && (
 							<div className="header-right-menu">
-								<NavLink to="/" activeClassName="active" exact >
+								<NavLink to="/home" activeClassName="active" exact >
 									<Home style={{ verticalAlign: 'middle', marginRight: '5px' }} />
 									Trang chủ
 								</NavLink>
@@ -68,7 +74,9 @@ const Header = () => {
 							</div>
 						)}
 					</div>
-					<RightHeader userInfo={userInfo} />
+					{listPathShowPayment.indexOf(location.pathname) < 0 &&
+						<RightHeader userInfo={userInfo} />
+					}
 				</Toolbar>
 			</AppBar>
 		</Box >

@@ -16,7 +16,7 @@
 		"@unicef/material-ui-currency-textfield": "^0.8.6",
 		"axios": "^0.22.0",
 		"moment": "^2.29.1",
-		"node-sass": "4.14.1",
+		"node-sass": "^6.0.1",
 		"randomstring": "^1.2.1",
 		"react": "^17.0.2",
 		"react-dom": "^17.0.2",

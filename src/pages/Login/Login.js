@@ -32,7 +32,7 @@ const Login = () => {
 	const { user, loading, error: errorRegister, isLogin } = userLogin;
 
 	useEffect(() => {
-		localStorage.setItem("isLogin",false);
+		localStorage.setItem("isLogin", false);
 	}, []);
 
 	useEffect(() => {
@@ -62,7 +62,7 @@ const Login = () => {
 				variant="outlined"
 				className="login-form"
 			>
-			<p className="login-logo-temp">
+				<p className="login-logo-temp">
 					VTSIGN
 				</p>
 				<Typography variant="h5" textAlign="center" fontWeight="bold" my="1rem">
@@ -165,7 +165,7 @@ const Login = () => {
 						)}
 					</Box>
 					<Typography textAlign="center" my="1rem">
-						<Link to="/#" style={{ textDecoration: 'none' }}>
+						<Link to="/request-reset-password" style={{ textDecoration: 'none' }}>
 							Bạn đã quên mật khẩu?
 						</Link>
 					</Typography>
