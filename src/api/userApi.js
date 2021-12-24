@@ -54,6 +54,12 @@ const userApi = {
 	},
 	requestResetPassword: (email) => {
 		return axiosClientNoToken.get(`/user/apt/reset-password?email=${email}`)
+	},
+	checkResetPassword: (code) => {
+		return axiosClientNoToken.get(`/user/apt/check-reset-password?code=${code}`)
+	},
+	resetPassword: (body) => {
+		return axiosClientNoToken.post(`/user/apt/reset-password`, body)
 	}
 };
 

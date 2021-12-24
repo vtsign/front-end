@@ -1,0 +1,8 @@
+@import '/src/sass/variables';
+@import '/src/sass/mixins';
+@import '/src/sass/base';
+
+.link-expired {
+	min-height: $content-height-no-header;
+	@include flex(center, center);
+}

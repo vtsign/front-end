@@ -3,33 +3,76 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Link, useHistory } from 'react-router-dom';
 import "./ResetPassword.scss"
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import userApi from '../../api/userApi';
 import Loading from '../../components/Loading/Loading';
 import { REG_PASSWORD } from '../../components/constants/global.js';
+import { useLocation } from 'react-router';
 import { useForm } from 'react-hook-form';
+import LinkExpire from '../../components/ResetPassword/LinkExpire';
+import NotFound from '../Common/NotFound';
 
 const ResetPassword = () => {
     const history = useHistory();
+    const location = useLocation();
     const [hiddenPassword, setHiddenPassword] = useState(true);
     const [hiddenVerifyPassword, setHiddenVerifyPassword] = useState(true);
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false);
+    const [type, setType] = useState();
+    const queryParam = new URLSearchParams(location.search);
+    const code = queryParam.get('code');
+
+
+    useEffect(() => {
+        if (code == null) {
+            history.replace("/notfound");
+            return;
+        }
+
+        (async () => {
+            setLoading(true)
+            try {
+                await userApi.checkResetPassword(code);
+                setType("SUCCESS");
+            } catch (err) {
+                if (err.status === 404) {
+                    console.log("da vao 404");
+                    setType("NOTFOUND")
+                } else {
+                    setType("EXPIRED");
+                }
+            }
+            setLoading(false)
+        })()
+    }, []);
+
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm();
 
-    const doLogin = (formData) => {
-        // console.log(formData);
-        console.log("formData...", formData)
-        // history.push('/login')
+    const doLogin = async (formData) => {
+        try {
+            const res = await userApi.resetPassword({
+                code,
+                password: formData.password
+            });
+            alert("Thay doi mat khau thanh cong");
+        } catch (err) {
+            if (err.status === 404) {
+                console.log("da vao 404");
+                setType("NOTFOUND")
+            } else {
+                setType("EXPIRED");
+            }
+        }
     };
 
     return (
         <Fragment>
             {loading && <Loading />}
-            <div className='check-email'>
+            {type === "SUCCESS" && !loading && (<div className='check-email'>
                 <div className='check-email__box'>
                     <p className='check-email__box__title'>Lấy lại mật khẩu</p>
                     <form>
@@ -125,7 +168,9 @@ const ResetPassword = () => {
                         </Link>
                     </p>
                 </div>
-            </div>
+            </div>)}
+            {type === "EXPIRED" && <NotFound message="404: Liên kết đã hết hạn" path="/" />}
+            {type === "NOTFOUND" && <NotFound message="404: Liên kết không tồn tại hoặc đã bị gỡ bỏ" path="/" />}
         </Fragment>
     )
 }
