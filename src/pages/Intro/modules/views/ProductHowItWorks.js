@@ -1,10 +1,11 @@
 import * as React from 'react';
-
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
-import Button from '../components/Button';
 import Typography from '../components/Typography';
+import Signing from '../../../../assets/images/signing.svg';
+import Sending from '../../../../assets/images/sending.svg';
+import Verify from '../../../../assets/images/verify.svg';
 
 const item = {
 	display: 'flex',
@@ -21,7 +22,7 @@ const number = {
 };
 
 const image = {
-	height: 55,
+	height: 170,
 	my: 4,
 };
 
@@ -41,7 +42,7 @@ function ProductHowItWorks() {
 					alignItems: 'center',
 				}}
 			>
-				<Typography variant="h4" marked="center" component="h2" sx={{ mb: 14 }}>
+				<Typography variant="h4" marked="center" component="h2" sx={{ mb: 7 }}>
 					Hoạt động
 				</Typography>
 				<div>
@@ -49,27 +50,27 @@ function ProductHowItWorks() {
 						<Grid item xs={12} md={4}>
 							<Box sx={item}>
 								<Box sx={number}>1.</Box>
-								<Box component="img" src="/" alt="Signing" sx={image} />
+								<Box component="img" src={Signing} alt="Signing" sx={image} />
 								<Typography variant="h5" align="center">
-									Tải lên hợp đồng pdf và ký kết
+									Tải lên văn bản hợp đồng và thực hiện ký kết
 								</Typography>
 							</Box>
 						</Grid>
 						<Grid item xs={12} md={4}>
 							<Box sx={item}>
 								<Box sx={number}>2.</Box>
-								<Box component="img" src="/" alt="Sending" sx={image} />
+								<Box component="img" src={Sending} alt="Sending" sx={image} />
 								<Typography variant="h5" align="center">
-									Gửi cho đối tác qua địa chỉ email
+									Gửi cho một hoặc nhiều đối tác qua địa chỉ email
 								</Typography>
 							</Box>
 						</Grid>
 						<Grid item xs={12} md={4}>
 							<Box sx={item}>
 								<Box sx={number}>3.</Box>
-								<Box component="img" src="/" alt="Verify" sx={image} />
+								<Box component="img" src={Verify} alt="Verify" sx={image} />
 								<Typography variant="h5" align="center">
-									Định danh bằng địa chỉ mail và SMS OTP
+									Đối tác đăng nhập email, nhập mã SMS OTP và ký kết
 								</Typography>
 							</Box>
 						</Grid>

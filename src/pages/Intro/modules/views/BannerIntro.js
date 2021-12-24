@@ -3,6 +3,9 @@ import { NavLink } from 'react-router-dom';
 import Button from '../components/Button';
 import Typography from '../components/Typography';
 import BannerIntroLayout from './BannerIntroLayout';
+import Box from '@mui/material/Box';
+import Logo from '../../../../assets/images/logo-white.png';
+
 const backgroundImage =
 	'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80';
 
@@ -16,9 +19,10 @@ export default function BannerIntro() {
 			}}
 		>
 			<img style={{ display: 'none' }} src={backgroundImage} alt="increase priority" />
-			<Typography color="inherit" align="center" variant="h2" marked="center">
+			<Typography color="inherit" align="center" variant="h4" marked="center">
 				Hệ thống ký kết văn bản trực tuyến
 			</Typography>
+			<Box component="img" src={Logo} alt="fast" sx={{ height: 110 }} />
 			<Typography
 				color="inherit"
 				align="center"
