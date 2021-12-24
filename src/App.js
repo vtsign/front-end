@@ -11,6 +11,7 @@ import { PdfTronProvider } from './redux/constants/contexts/pdfTronContext';
 const NotFound = React.lazy(() => import('./pages/Common/NotFound'));
 const Home = React.lazy(() => import('./pages/Home/Home'));
 const Login = React.lazy(() => import('./pages/Login/Login'));
+const ThankYou = React.lazy(() => import('./pages/ThankYou/ThankYou'));
 const Manage = React.lazy(() => import('./pages/Manage/Manage'));
 const Register = React.lazy(() => import('./pages/Register/Register'));
 const SignDocument = React.lazy(() => import('./pages/SignDocument/SignDocument'));
@@ -44,6 +45,7 @@ const App = ({ location }) => {
 						{!isLoggedIn ? <Login /> : <Redirect to="/" />}
 					</Route>
 					<Route path="/register" component={Register} />
+					<Route path="/thankyou" component={ThankYou} />
 					<Route path="/activation/:id" component={Activation} />
 					<PrivateRoute path="/" exact component={Home} />
 					<PrivateRoute path="/change-password" component={ChangePassword} />

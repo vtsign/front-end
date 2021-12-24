@@ -41,7 +41,7 @@ const Register = () => {
 
 	useEffect(() => {
 		if (user) {
-			history.push('/login');
+			history.replace('/thankyou');
 		}
 	}, [user, errorRegister, history]);
 
@@ -77,7 +77,7 @@ const Register = () => {
 				variant="outlined"
 				className="register-form"
 			>
-					<p className="register-logo-temp">
+				<p className="register-logo-temp">
 					VTSIGN
 				</p>
 				<Typography variant="h5" textAlign="center" fontWeight="bold" my="1rem">
