@@ -7,11 +7,8 @@ import Loading from './components/Loading/Loading';
 import { PdfTronProvider } from './redux/constants/contexts/pdfTronContext';
 
 const NotFound = React.lazy(() => import('./pages/Common/NotFound'));
-<<<<<<< HEAD
 const Intro = React.lazy(() => import('./pages/Intro/Intro'));
-=======
 const NotifySuccess = React.lazy(() => import('./pages/Common/NotifySuccess'));
->>>>>>> 4251c002b5694bf4a0f9db448cda95615151f1d5
 const Home = React.lazy(() => import('./pages/Home/Home'));
 const RequestResetPassword = React.lazy(() => import('./pages/ResetPassword/RequestResetPassword'));
 const ResetPassword = React.lazy(() => import('./pages/ResetPassword/ResetPassword'));
@@ -32,9 +29,6 @@ const TransactionHistory = React.lazy(() =>
 );
 
 const App = ({ location }) => {
-<<<<<<< HEAD
-	const headerExclusionArray = ['login', 'register', 'activation', 'notfound', 'signDocument'];
-=======
 	const headerExclusionArray = [
 		'login',
 		'register',
@@ -45,9 +39,9 @@ const App = ({ location }) => {
 		'request-reset-password',
 		'reset-password',
 		'reset-password-success',
-		'thank-you'
+		'thank-you',
+		''
 	];
->>>>>>> 4251c002b5694bf4a0f9db448cda95615151f1d5
 
 	const isLoggedIn = localStorage.getItem('isLogin') === 'true';
 
@@ -58,14 +52,10 @@ const App = ({ location }) => {
 			<Suspense fallback={<Loading />}>
 				{headerExclusionArray.indexOf(splitPathName[1]) < 0 && <Header />}
 				<Switch>
-<<<<<<< HEAD
 					<Route path="/" exact>
 						{!isLoggedIn ? <Intro /> : <Redirect to="/home" />}
 					</Route>
 					<Route path="/login" exact>
-=======
-					<Route path="/login">
->>>>>>> 4251c002b5694bf4a0f9db448cda95615151f1d5
 						{!isLoggedIn ? <Login /> : <Redirect to="/home" />}
 					</Route>
 					<Route path="/check-email" component={CheckEmail} />
@@ -80,15 +70,9 @@ const App = ({ location }) => {
 					<PrivateRoute path="/home" exact component={Home} />
 					<PrivateRoute path="/change-password" component={ChangePassword} />
 					<PrivateRoute path="/transaction-history" component={TransactionHistory} />
-<<<<<<< HEAD
-					{/* <Route path="/home" exact>
-						<Redirect to="/" />
-					</Route> */}
-=======
 					<Route path="/" exact>
 						<Redirect to="/home" />
 					</Route>
->>>>>>> 4251c002b5694bf4a0f9db448cda95615151f1d5
 					<PrivateRoute path="/signing">
 						<PdfTronProvider>
 							<Signing />

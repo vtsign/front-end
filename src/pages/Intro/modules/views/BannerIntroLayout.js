@@ -11,7 +11,7 @@ const BannerIntroRoot = styled('section')(({ theme }) => ({
 	display: 'flex',
 	alignItems: 'center',
 	[theme.breakpoints.up('sm')]: {
-		height: '95vh',
+		height: '100vh',
 		minHeight: 500,
 		maxHeight: 1300,
 	},
