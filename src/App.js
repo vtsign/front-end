@@ -9,6 +9,7 @@ import Loading from './components/Loading/Loading';
 import { PdfTronProvider } from './redux/constants/contexts/pdfTronContext';
 
 const NotFound = React.lazy(() => import('./pages/Common/NotFound'));
+const NotifySuccess = React.lazy(() => import('./pages/Common/NotifySuccess'));
 const Home = React.lazy(() => import('./pages/Home/Home'));
 const RequestResetPassword = React.lazy(() => import('./pages/ResetPassword/RequestResetPassword'));
 const ResetPassword = React.lazy(() => import('./pages/ResetPassword/ResetPassword'));
@@ -31,11 +32,13 @@ const App = ({ location }) => {
 		'login',
 		'register',
 		'activation',
-		'notfound',
+		'NotifySuccess',
 		'signDocument',
 		'check-email',
 		'request-reset-password',
-		'reset-password'
+		'reset-password',
+		'reset-password-success',
+		'thank-you'
 	];
 
 	const isLoggedIn = localStorage.getItem("isLogin") === 'true';
@@ -54,7 +57,10 @@ const App = ({ location }) => {
 					<Route path="/request-reset-password" component={RequestResetPassword} />
 					<Route path="/reset-password" component={ResetPassword} />
 					<Route path="/register" component={Register} />
-					<Route path="/thankyou" component={ThankYou} />
+					<Route path="/thank-you" component={ThankYou} />
+					<Route path="/reset-password-success">
+						<NotifySuccess message="Thay đổi mật khẩu thành công" path="/login" titleButton="Trở về trang đăng nhập" />
+					</Route>
 					<Route path="/activation/:id" component={Activation} />
 					<PrivateRoute path="/home" exact component={Home} />
 					<PrivateRoute path="/change-password" component={ChangePassword} />
@@ -75,9 +81,9 @@ const App = ({ location }) => {
 							<SignDocument />
 						</PdfTronProvider>
 					</Route>
-					<Route path="/notfound" component={NotFound} />
+					<Route path="/not-found" component={NotFound} />
 					<Route path="*">
-						<Redirect to="/notfound" />
+						<Redirect to="/not-found" />
 					</Route>
 				</Switch>
 				<Footer />

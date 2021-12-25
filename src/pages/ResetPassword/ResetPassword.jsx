@@ -11,6 +11,7 @@ import { useLocation } from 'react-router';
 import { useForm } from 'react-hook-form';
 import LinkExpire from '../../components/ResetPassword/LinkExpire';
 import NotFound from '../Common/NotFound';
+import CancelError from '../Common/CancelError';
 
 const ResetPassword = () => {
     const history = useHistory();
@@ -25,7 +26,7 @@ const ResetPassword = () => {
 
     useEffect(() => {
         if (code == null) {
-            history.replace("/notfound");
+            history.replace("/not-found");
             return;
         }
 
@@ -49,19 +50,26 @@ const ResetPassword = () => {
     const {
         register,
         handleSubmit,
+        setError,
         formState: { errors },
     } = useForm();
 
     const doLogin = async (formData) => {
+        if (formData.password !== formData.verifyPassword) {
+            setError("verifyPassword", {
+                type: "manual",
+                message: "Mật khẩu không trùng khớp",
+            });
+            return;
+        }
         try {
-            const res = await userApi.resetPassword({
+            await userApi.resetPassword({
                 code,
                 password: formData.password
             });
-            alert("Thay doi mat khau thanh cong");
+            history.replace("/reset-password-success")
         } catch (err) {
             if (err.status === 404) {
-                console.log("da vao 404");
                 setType("NOTFOUND")
             } else {
                 setType("EXPIRED");
@@ -169,7 +177,7 @@ const ResetPassword = () => {
                     </p>
                 </div>
             </div>)}
-            {type === "EXPIRED" && <NotFound message="404: Liên kết đã hết hạn" path="/" />}
+            {type === "EXPIRED" && <CancelError message="404: Liên kết đã hết hạn" path="/" />}
             {type === "NOTFOUND" && <NotFound message="404: Liên kết không tồn tại hoặc đã bị gỡ bỏ" path="/" />}
         </Fragment>
     )

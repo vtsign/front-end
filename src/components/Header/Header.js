@@ -28,8 +28,8 @@ const Header = () => {
 	// }
 
 	const isLoggedIn = localStorage.getItem("isLoggedIn");
-	const listPathShowPayment = ["/", "/thankyou"];
-	const listPathShowTab = ["/", "/thankyou", "/payment"];
+	const listPathShowPayment = ["/", "/thank-you"];
+	const listPathShowTab = ["/", "/thank-you", "/payment"];
 
 	const [userInfo, setUserInfo] = useState();
 

@@ -41,17 +41,25 @@ const Register = () => {
 
 	useEffect(() => {
 		if (user) {
-			history.replace('/thankyou');
+			history.replace('/thank-you');
 		}
 	}, [user, errorRegister, history]);
 
 	const {
 		register,
 		handleSubmit,
+		setError,
 		formState: { errors },
 	} = useForm();
 
 	const doLogin = (formData) => {
+		if (formData.password !== formData.verifyPassword) {
+			setError("verifyPassword", {
+				type: "manual",
+				message: "Mật khẩu không trùng khớp",
+			});
+			return;
+		}
 		// console.log(formData);
 		dispatch(
 			registerAction(
