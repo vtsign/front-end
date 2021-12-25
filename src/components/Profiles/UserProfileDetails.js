@@ -35,14 +35,20 @@ const UserProfileDetails = ({ userInfo, selectedImage }) => {
 			if(selectedImage) {
 				const data = new FormData();
 				data.append("avatar", selectedImage)
-				await userApi.updateAvatar(data);
+				const avatarRes = await userApi.updateAvatar(data);
+				if(avatarRes.status !== 200) {
+					error(avatarRes.message || "Đã có lỗi xảy ra");
+					return;
+				}
 			}
-			await userApi.updateUserProfile(formData);
-
-
+			const profileRes = await userApi.updateUserProfile(formData);
+			if(profileRes.status !== 200) {
+				error(profileRes.message || "Đã có lỗi xảy ra");
+				return;
+			}
 		} catch (err) {
 			setLoading(false);
-			error("Đã có lỗi xảy ra! Vui lòng thử lại");
+			error(err.toString() || "Đã có lỗi xảy ra! Vui lòng thử lại");
 		} finally {
 			setLoading(false);
 			success("Cập nhật thông tin cá nhân thành công");

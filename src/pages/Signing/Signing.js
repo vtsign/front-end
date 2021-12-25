@@ -118,7 +118,7 @@ const Signing = () => {
 			}
 		} catch (err) {
 			setLoading(false);
-			error('Đã có lỗi xảy ra');
+			error(err.toString() || 'Đã có lỗi xảy ra');
 		}
 	};
 
