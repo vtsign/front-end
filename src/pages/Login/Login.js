@@ -40,7 +40,11 @@ const Login = () => {
 	const { user, loading, error: errorRegister, isLogin } = userLogin;
 
 	useEffect(() => {
+<<<<<<< HEAD
 		localStorage.setItem('isLogin', false);
+=======
+		localStorage.setItem("isLogin", false);
+>>>>>>> 4251c002b5694bf4a0f9db448cda95615151f1d5
 	}, []);
 
 	useEffect(() => {
@@ -65,8 +69,18 @@ const Login = () => {
 				</p> */}
 				<img src={Logo} alt="logo" style={{ width: '15vw', margin: '3rem' }} />
 			</div>
+<<<<<<< HEAD
 			<Paper variant="outlined" className="login-form">
 				<p className="login-logo-temp">VTSIGN</p>
+=======
+			<Paper
+				variant="outlined"
+				className="login-form"
+			>
+				<p className="login-logo-temp">
+					VTSIGN
+				</p>
+>>>>>>> 4251c002b5694bf4a0f9db448cda95615151f1d5
 				<Typography variant="h5" textAlign="center" fontWeight="bold" my="1rem">
 					Đăng nhập
 				</Typography>
@@ -167,7 +181,7 @@ const Login = () => {
 						)}
 					</Box>
 					<Typography textAlign="center" my="1rem">
-						<Link to="/#" style={{ textDecoration: 'none' }}>
+						<Link to="/request-reset-password" style={{ textDecoration: 'none' }}>
 							Bạn đã quên mật khẩu?
 						</Link>
 					</Typography>

@@ -21,7 +21,7 @@ export const manageDocumentReducer = (state = stateDocumentsInitials, action) =>
 		case DOCUMENT_GET_PAGE_REQUEST:
 			return { ...state, isLoading: true, contracts: [] };
 		case DOCUMENT_GET_PAGE_SUCCESS:
-			const { total_pages, current_page, total_items, contracts } = action.payload;
+			const { total_pages, page: current_page, total_element: total_items, list: contracts } = action.payload;
 			return {
 				...state,
 				isLoading: false,

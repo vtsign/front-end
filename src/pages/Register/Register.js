@@ -41,17 +41,25 @@ const Register = () => {
 
 	useEffect(() => {
 		if (user) {
-			history.push('/login');
+			history.replace('/thank-you');
 		}
 	}, [user, errorRegister, history]);
 
 	const {
 		register,
 		handleSubmit,
+		setError,
 		formState: { errors },
 	} = useForm();
 
 	const doLogin = (formData) => {
+		if (formData.password !== formData.verifyPassword) {
+			setError("verifyPassword", {
+				type: "manual",
+				message: "Mật khẩu không trùng khớp",
+			});
+			return;
+		}
 		// console.log(formData);
 		dispatch(
 			registerAction(
@@ -72,8 +80,18 @@ const Register = () => {
 			<div className="register-logo">
 				<img src={Logo} alt="logo" style={{ width: '15vw', margin: '3rem' }} />
 			</div>
+<<<<<<< HEAD
 			<Paper variant="outlined" className="register-form">
 				<p className="register-logo-temp">VTSIGN</p>
+=======
+			<Paper
+				variant="outlined"
+				className="register-form"
+			>
+				<p className="register-logo-temp">
+					VTSIGN
+				</p>
+>>>>>>> 4251c002b5694bf4a0f9db448cda95615151f1d5
 				<Typography variant="h5" textAlign="center" fontWeight="bold" my="1rem">
 					Đăng ký
 				</Typography>

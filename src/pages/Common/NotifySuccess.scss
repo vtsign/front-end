@@ -1,0 +1,7 @@
+@import '/src/sass/variables';
+@import '/src/sass/mixins';
+@import '/src/sass/base';
+
+.notify-success {
+	min-height: $content-height-no-header;
+}

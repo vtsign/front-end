@@ -7,9 +7,17 @@ import Loading from './components/Loading/Loading';
 import { PdfTronProvider } from './redux/constants/contexts/pdfTronContext';
 
 const NotFound = React.lazy(() => import('./pages/Common/NotFound'));
+<<<<<<< HEAD
 const Intro = React.lazy(() => import('./pages/Intro/Intro'));
+=======
+const NotifySuccess = React.lazy(() => import('./pages/Common/NotifySuccess'));
+>>>>>>> 4251c002b5694bf4a0f9db448cda95615151f1d5
 const Home = React.lazy(() => import('./pages/Home/Home'));
+const RequestResetPassword = React.lazy(() => import('./pages/ResetPassword/RequestResetPassword'));
+const ResetPassword = React.lazy(() => import('./pages/ResetPassword/ResetPassword'));
+const CheckEmail = React.lazy(() => import('./pages/ResetPassword/CheckEmail'));
 const Login = React.lazy(() => import('./pages/Login/Login'));
+const ThankYou = React.lazy(() => import('./pages/ThankYou/ThankYou'));
 const Manage = React.lazy(() => import('./pages/Manage/Manage'));
 const Register = React.lazy(() => import('./pages/Register/Register'));
 const SignDocument = React.lazy(() => import('./pages/SignDocument/SignDocument'));
@@ -24,7 +32,22 @@ const TransactionHistory = React.lazy(() =>
 );
 
 const App = ({ location }) => {
+<<<<<<< HEAD
 	const headerExclusionArray = ['login', 'register', 'activation', 'notfound', 'signDocument'];
+=======
+	const headerExclusionArray = [
+		'login',
+		'register',
+		'activation',
+		'NotifySuccess',
+		'signDocument',
+		'check-email',
+		'request-reset-password',
+		'reset-password',
+		'reset-password-success',
+		'thank-you'
+	];
+>>>>>>> 4251c002b5694bf4a0f9db448cda95615151f1d5
 
 	const isLoggedIn = localStorage.getItem('isLogin') === 'true';
 
@@ -35,20 +58,37 @@ const App = ({ location }) => {
 			<Suspense fallback={<Loading />}>
 				{headerExclusionArray.indexOf(splitPathName[1]) < 0 && <Header />}
 				<Switch>
+<<<<<<< HEAD
 					<Route path="/" exact>
 						{!isLoggedIn ? <Intro /> : <Redirect to="/home" />}
 					</Route>
 					<Route path="/login" exact>
+=======
+					<Route path="/login">
+>>>>>>> 4251c002b5694bf4a0f9db448cda95615151f1d5
 						{!isLoggedIn ? <Login /> : <Redirect to="/home" />}
 					</Route>
+					<Route path="/check-email" component={CheckEmail} />
+					<Route path="/request-reset-password" component={RequestResetPassword} />
+					<Route path="/reset-password" component={ResetPassword} />
 					<Route path="/register" component={Register} />
+					<Route path="/thank-you" component={ThankYou} />
+					<Route path="/reset-password-success">
+						<NotifySuccess message="Thay đổi mật khẩu thành công" path="/login" titleButton="Trở về trang đăng nhập" />
+					</Route>
 					<Route path="/activation/:id" component={Activation} />
 					<PrivateRoute path="/home" exact component={Home} />
 					<PrivateRoute path="/change-password" component={ChangePassword} />
 					<PrivateRoute path="/transaction-history" component={TransactionHistory} />
+<<<<<<< HEAD
 					{/* <Route path="/home" exact>
 						<Redirect to="/" />
 					</Route> */}
+=======
+					<Route path="/" exact>
+						<Redirect to="/home" />
+					</Route>
+>>>>>>> 4251c002b5694bf4a0f9db448cda95615151f1d5
 					<PrivateRoute path="/signing">
 						<PdfTronProvider>
 							<Signing />
@@ -62,9 +102,9 @@ const App = ({ location }) => {
 							<SignDocument />
 						</PdfTronProvider>
 					</Route>
-					<Route path="/notfound" component={NotFound} />
+					<Route path="/not-found" component={NotFound} />
 					<Route path="*">
-						<Redirect to="/notfound" />
+						<Redirect to="/not-found" />
 					</Route>
 				</Switch>
 				<Footer />

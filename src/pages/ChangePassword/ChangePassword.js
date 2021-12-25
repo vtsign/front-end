@@ -46,10 +46,13 @@ const ChangePassword = () => {
 			if(response.status === 200) {
 				success("Đổi mật khẩu thành công");
 				history.push("/");
+			} else {
+				error(response.message || "Đã có lỗi xảy ra");
+				return;
 			}
 		} catch(err) {
 			setLoading(false);
-			error("Đã có lỗi xảy ra")
+			error(err.toString() || "Đã có lỗi xảy ra")
 		}
 	}
 	return (

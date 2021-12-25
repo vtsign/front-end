@@ -20,8 +20,6 @@ export default function Payment() {
         setType(event.target.value);
     }
 
-    console.log("amount..", amount);
-
     const handleChangeAmount = (value) => {
         setError(null);
         setAmount(value);

@@ -1,5 +1,7 @@
 import axios from 'axios';
 import axiosClient from './axiosClients';
+import axiosClientNoToken from './axiosClientNoToken';
+
 const userApi = {
 	async checkUserExists(email) {
 		const url = `/user/check_exists?email=${email}`;
@@ -32,8 +34,16 @@ const userApi = {
 		const response = await axiosClient.post(url, data);
 		return response;
 	},
-	async getTransactions(page, size) {
-		const url = `/user/transactions?page=${page}&size=${size}`;
+	async getTransactions(query) {
+		const keys = Object.keys(query);
+		let params = keys.reduce((acc, key) => {
+			const value = query[key];
+			if (value) {
+				return `${acc}&${key}=${value}`;
+			}
+			return acc;
+		}, '');
+		const url = `/user/transactions?${params}`;
 		const response = await axiosClient.get(url);
 		return response;
 	},
@@ -41,6 +51,15 @@ const userApi = {
 		const url = '/user/max-receivers';
 		const response = await axiosClient.get(url);
 		return response;
+	},
+	requestResetPassword: (email) => {
+		return axiosClientNoToken.get(`/user/apt/reset-password?email=${email}`)
+	},
+	checkResetPassword: (code) => {
+		return axiosClientNoToken.get(`/user/apt/check-reset-password?code=${code}`)
+	},
+	resetPassword: (body) => {
+		return axiosClientNoToken.post(`/user/apt/reset-password`, body)
 	}
 };
 
