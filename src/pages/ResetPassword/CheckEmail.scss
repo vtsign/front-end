@@ -2,8 +2,9 @@
 @import '/src/sass/mixins';
 @import '/src/sass/base';
 
-.noitfy-check-mail {
+.check-mail {
 	min-height: $content-height-no-header;
+	padding: 30px;
 	@include flex(center, center);
 
 	@include tablet {
@@ -13,27 +14,25 @@
 
 	&__title {
 		text-align: center;
-		margin-bottom: 50px;
+		margin-bottom: 40px;
 		font-size: 30px;
 		color: rgb(77, 110, 201);
 	}
 
-	&__mail {
-		text-align: center;
+	&__image {
+		margin-bottom: 40px;
+		display: inline-block;
+		max-width: 100%;
+		width: 200px;
 	}
 	&__check {
 		text-align: center;
-		margin-bottom: 15px;
-		font-size: 17px;
+		margin-bottom: 10px;
+		font-size: 18px;
 	}
 
 	&__redirect-login {
-		a {
-			@include flex(center, center);
-			margin-bottom: 50px;
-			font-size: 15px;
-			color: #002da7;
-		}
+		text-align: center;
 	}
 
 	&__question {
