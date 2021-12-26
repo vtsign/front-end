@@ -15,7 +15,7 @@ import {
 import './ChangePassword.scss';
 import { useForm } from 'react-hook-form';
 import { useToast } from '../../components/toast/useToast.js';
-import { REG_PASSWORD } from '../../components/constants/global.js';
+import { REG_PASSWORD, responseMessage } from '../../components/constants/global.js';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import userApi from '../../api/userApi';
 import { useHistory } from 'react-router-dom';
@@ -47,7 +47,7 @@ const ChangePassword = () => {
 				success("Đổi mật khẩu thành công");
 				history.push("/");
 			} else {
-				error(response.message || "Đã có lỗi xảy ra");
+				error(responseMessage[response.status] || "Đã có lỗi xảy ra");
 				return;
 			}
 		} catch(err) {

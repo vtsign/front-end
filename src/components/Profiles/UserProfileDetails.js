@@ -15,7 +15,7 @@ import userApi from '../../api/userApi';
 import { useToast } from '../toast/useToast';
 import { useHistory } from 'react-router-dom';
 import Loading from '../Loading/Loading';
-import { REG_PHONE } from '../../components/constants/global.js';
+import { REG_PHONE, responseMessage } from '../../components/constants/global.js';
 
 
 const UserProfileDetails = ({ userInfo, selectedImage }) => {
@@ -37,13 +37,13 @@ const UserProfileDetails = ({ userInfo, selectedImage }) => {
 				data.append("avatar", selectedImage)
 				const avatarRes = await userApi.updateAvatar(data);
 				if(avatarRes.status !== 200) {
-					error(avatarRes.message || "Đã có lỗi xảy ra");
+					error(responseMessage[avatarRes.status] || "Đã có lỗi xảy ra");
 					return;
 				}
 			}
 			const profileRes = await userApi.updateUserProfile(formData);
 			if(profileRes.status !== 200) {
-				error(profileRes.message || "Đã có lỗi xảy ra");
+				error(responseMessage[profileRes.status] || 'Đã có lỗi xảy ra');
 				return;
 			}
 		} catch (err) {

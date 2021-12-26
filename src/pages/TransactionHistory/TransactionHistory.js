@@ -129,10 +129,10 @@ const TransactionHistory = () => {
 											}}
 										>
 											<p>Mã giao dịch</p>
-											{sort_type === 'asc' ? (
-												<KeyboardArrowDown />
-											) : (
+											{sort_field === 'id' && sort_type === 'asc' ? (
 												<KeyboardArrowUp />
+											) : (
+												<KeyboardArrowDown />
 											)}
 										</Box>{' '}
 									</TableCell>
@@ -148,10 +148,10 @@ const TransactionHistory = () => {
 											}}
 										>
 											<p>Số tiền</p>
-											{sort_type === 'asc' ? (
-												<KeyboardArrowDown />
-											) : (
+											{sort_field === 'amount' && sort_type === 'asc' ? (
 												<KeyboardArrowUp />
+											) : (
+												<KeyboardArrowDown />
 											)}
 										</Box>{' '}
 									</TableCell>
@@ -167,10 +167,10 @@ const TransactionHistory = () => {
 											}}
 										>
 											<p>Thời gian giao dịch</p>
-											{sort_type === 'asc' ? (
-												<KeyboardArrowDown />
-											) : (
+											{sort_field === 'createdDate' && sort_type === 'asc' ? (
 												<KeyboardArrowUp />
+											) : (
+												<KeyboardArrowDown />
 											)}
 										</Box>{' '}
 									</TableCell>
@@ -186,10 +186,10 @@ const TransactionHistory = () => {
 											}}
 										>
 											<p>Loại giao dịch</p>
-											{sort_type === 'asc' ? (
-												<KeyboardArrowDown />
-											) : (
+											{sort_field === 'status' && sort_type === 'asc' ? (
 												<KeyboardArrowUp />
+											) : (
+												<KeyboardArrowDown />
 											)}
 										</Box>{' '}
 									</TableCell>
@@ -205,10 +205,10 @@ const TransactionHistory = () => {
 											}}
 										>
 											<p>Phương thức thanh toán</p>
-											{sort_type === 'asc' ? (
-												<KeyboardArrowDown />
-											) : (
+											{sort_field === 'method' && sort_type === 'asc' ? (
 												<KeyboardArrowUp />
+											) : (
+												<KeyboardArrowDown />
 											)}
 										</Box>{' '}
 									</TableCell>
@@ -224,10 +224,10 @@ const TransactionHistory = () => {
 											}}
 										>
 											<p>Mô tả</p>
-											{sort_type === 'asc' ? (
-												<KeyboardArrowDown />
-											) : (
+											{sort_field === 'description' && sort_type === 'asc' ? (
 												<KeyboardArrowUp />
+											) : (
+												<KeyboardArrowDown />
 											)}
 										</Box>{' '}
 									</TableCell>
