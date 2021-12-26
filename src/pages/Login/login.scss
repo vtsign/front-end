@@ -36,6 +36,9 @@
 	}
 
 	&-form {
+		display: flex;
+		justify-content: center;
+		flex-direction: column;
 		background-color: #ffffff;
 		padding: 3em;
 		width: 35em;

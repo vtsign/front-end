@@ -79,7 +79,7 @@ const Header = () => {
 					}
 				</Toolbar>
 			</AppBar>
-		</Box >
+		</Box>
 	);
 };
 

@@ -1,16 +1,24 @@
 import {
-	AccountCircle, Facebook, Google, Lock, Visibility,
-	VisibilityOff
+	AccountCircle,
+	Facebook,
+	Google,
+	Lock,
+	Visibility,
+	VisibilityOff,
 } from '@mui/icons-material';
 import {
 	Box,
-	Button, CircularProgress, Divider,
+	Button,
+	CircularProgress,
+	Divider,
 	Grid,
 	IconButton,
 	InputAdornment,
 	InputLabel,
-	Paper, Stack, TextField,
-	Typography
+	Paper,
+	Stack,
+	TextField,
+	Typography,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -51,8 +59,7 @@ const Login = () => {
 
 	return (
 		<div className="login">
-			<div className="login-logo"
-			>
+			<div className="login-logo">
 				{/* <p className="login-logo">
 					VTSIGN
 				</p> */}
@@ -173,7 +180,7 @@ const Login = () => {
 					<p style={{ textAlign: 'center', marginBottom: '2rem' }}>
 						Bạn chưa có tài khoản? <Link to="/register">Đăng ký?</Link>
 					</p>
-					<Divider style={{ paddingInline: '2rem', marginBottom: '2rem' }}>
+					{/* <Divider style={{ paddingInline: '2rem', marginBottom: '2rem' }}>
 						Hoặc đăng nhập với
 					</Divider>
 					<Box mb="1.5rem">
@@ -200,7 +207,7 @@ const Login = () => {
 								Facebook
 							</Button>
 						</Stack>
-					</Box>
+					</Box> */}
 				</form>
 			</Paper>
 		</div>

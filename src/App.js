@@ -1,7 +1,5 @@
 import React, { Suspense, useState } from 'react';
-import { useEffect } from 'react';
 import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
-import userApi from './api/userApi';
 import './App.scss';
 import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
@@ -9,6 +7,7 @@ import Loading from './components/Loading/Loading';
 import { PdfTronProvider } from './redux/constants/contexts/pdfTronContext';
 
 const NotFound = React.lazy(() => import('./pages/Common/NotFound'));
+const Intro = React.lazy(() => import('./pages/Intro/Intro'));
 const NotifySuccess = React.lazy(() => import('./pages/Common/NotifySuccess'));
 const Home = React.lazy(() => import('./pages/Home/Home'));
 const RequestResetPassword = React.lazy(() => import('./pages/ResetPassword/RequestResetPassword'));
@@ -25,7 +24,9 @@ const Activation = React.lazy(() => import('./pages/Activation/Activation'));
 const UserProfile = React.lazy(() => import('./pages/UserProfile/UserProfile'));
 const Payment = React.lazy(() => import('./components/zalopay/payment'));
 const ChangePassword = React.lazy(() => import('./pages/ChangePassword/ChangePassword'));
-const TransactionHistory = React.lazy(() => import('./pages/TransactionHistory/TransactionHistory'));
+const TransactionHistory = React.lazy(() =>
+	import('./pages/TransactionHistory/TransactionHistory')
+);
 
 const App = ({ location }) => {
 	const headerExclusionArray = [
@@ -38,10 +39,11 @@ const App = ({ location }) => {
 		'request-reset-password',
 		'reset-password',
 		'reset-password-success',
-		'thank-you'
+		'thank-you',
+		''
 	];
 
-	const isLoggedIn = localStorage.getItem("isLogin") === 'true';
+	const isLoggedIn = localStorage.getItem('isLogin') === 'true';
 
 	let splitPathName = location.pathname.split('/');
 
@@ -50,7 +52,10 @@ const App = ({ location }) => {
 			<Suspense fallback={<Loading />}>
 				{headerExclusionArray.indexOf(splitPathName[1]) < 0 && <Header />}
 				<Switch>
-					<Route path="/login">
+					<Route path="/" exact>
+						{!isLoggedIn ? <Intro /> : <Redirect to="/home" />}
+					</Route>
+					<Route path="/login" exact>
 						{!isLoggedIn ? <Login /> : <Redirect to="/home" />}
 					</Route>
 					<Route path="/check-email" component={CheckEmail} />
@@ -88,7 +93,7 @@ const App = ({ location }) => {
 				</Switch>
 				<Footer />
 			</Suspense>
-		</div >
+		</div>
 	);
 };
 
