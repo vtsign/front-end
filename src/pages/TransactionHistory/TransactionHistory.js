@@ -19,6 +19,7 @@ import userApi from '../../api/userApi';
 import PageHeader from './PageHeader';
 import Loading from '../../components/Loading/Loading';
 import { convertTime } from '../../utils/time';
+import { useToast } from '../../components/toast/useToast';
 
 const payment = {
 	status: {
@@ -56,6 +57,8 @@ const TransactionHistory = () => {
 
 	const history = useHistory();
 
+	const { error } = useToast();
+
 	useEffect(() => {
 		setLoading(true);
 		(async () => {
@@ -69,6 +72,24 @@ const TransactionHistory = () => {
 
 				if (transactionResponse.status === 200){
 					setData(transactionResponse.data);
+				} else {
+					switch (transactionResponse.status) {
+						case 400:
+							error('Thiếu thông tin hoặc access token');
+							break;
+						case 403:
+							error('Người dùng không có quyền truy cập nội dung này');
+							break;
+						case 419:
+							error('Thiếu một số trường thông tin bắt buộc');
+							break;
+						case 500:
+							error('Máy chủ gặp trục trặc');
+							break;
+						default:
+							error('Đã có lỗi xảy ra');
+							break;
+					}
 				}
 				setLoading(false);
 			} catch (err) {

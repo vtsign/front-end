@@ -47,7 +47,27 @@ const ChangePassword = () => {
 				success("Đổi mật khẩu thành công");
 				history.push("/");
 			} else {
-				error(responseMessage[response.status] || "Đã có lỗi xảy ra");
+				switch (response.status) {
+					case 400:
+						error('Thiếu thông tin hoặc access token');
+						break;
+					case 403:
+						error('Mật khẩu cũ không đúng');
+						break;
+					case 404:
+						error('Tài khoản không tồn tại');
+						break;
+					case 419:
+						error('Thiếu một số trường thông tin bắt buộc');
+						break;
+					case 500:
+						error('Máy chủ gặp trục trặc');
+						break;
+					default:
+						error('Đã có lỗi xảy ra');
+						break;
+				}
+				setLoading(false);
 				return;
 			}
 		} catch(err) {

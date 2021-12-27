@@ -16,6 +16,7 @@ import {
 import React, { useState } from 'react';
 import { useLocation } from 'react-router';
 import documentApi from '../../api/documentApi';
+import { useToast } from '../../components/toast/useToast';
 import './dialogKey.scss';
 
 // const Transition = React.forwardRef(function Transition(props, ref) {
@@ -36,12 +37,35 @@ export default function DialogKey({ setUserDocument, setKey }) {
 		setKeyCurrent(event.target.value);
 	};
 
+	const { error } = useToast();
 	const handleSubmit = async () => {
 		try {
 			const response = await documentApi.getSigning(c, r, uc, keyCurrent);
 			setUserDocument(response.data);
 			setKey(keyCurrent);
 			setOpen(false);
+			if(response.status !== 200) {
+				switch (response.status) {
+					case 400:
+						error('Thiếu thông tin hoặc access token');
+						break;
+					case 403:
+						error('Người dùng không có quyền truy cập nội dung này');
+						break;
+					case 404:
+						error('Không tìm thấy tài liệu hoặc đã bị xóa');
+						break;
+					case 423:
+						error('Tài liệu đã được ký kết');
+						break;
+					case 500:
+						error('Máy chủ gặp trục trặc');
+						break;
+					default:
+						error('Đã có lỗi xảy ra');
+						break;
+				}
+			}
 		} catch (error) {
 			setErrorMessage(error.message);
 		}

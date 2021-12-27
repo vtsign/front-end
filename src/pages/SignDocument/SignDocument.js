@@ -165,6 +165,30 @@ const SignDocument2 = () => {
 		const files = [];
 		try {
 			const response = await documentApi.getSigning(c, r, uc, key);
+			if(response.status !== 200) {
+				switch (response.status) {
+					case 400:
+						error('Thiếu thông tin hoặc access token');
+						break;
+					case 403:
+						error('Mật khẩu cũ không đúng');
+						break;
+					case 404:
+						error('Tài khoản không tồn tại');
+						break;
+					case 419:
+						error('Thiếu một số trường thông tin bắt buộc');
+						break;
+					case 500:
+						error('Máy chủ gặp trục trặc');
+						break;
+					default:
+						error('Đã có lỗi xảy ra');
+						break;
+				}
+				setLoading(false);
+				return;
+			}
 			const data = response.data;
 			if (data.last_sign) {
 				for (const doc of data.documents) {
@@ -177,7 +201,7 @@ const SignDocument2 = () => {
 			}
 
 
-			await documentApi.signByReceiver(
+			const signResponse = await documentApi.signByReceiver(
 				{
 					contract_uuid: c,
 					user_uuid: r,
@@ -186,6 +210,25 @@ const SignDocument2 = () => {
 				},
 				files
 			);
+			if(signResponse.status !== 200) {
+				switch (signResponse.status) {
+					case 400:
+						error('Thiếu thông tin hoặc access token');
+						break;
+					case 404:
+						error('Tài khoản không tồn tại');
+						break;
+					case 419:
+						error('Thiếu một số trường thông tin bắt buộc');
+						break;
+					case 500:
+						error('Máy chủ gặp trục trặc');
+						break;
+					default:
+						error('Đã có lỗi xảy ra');
+						break;
+				}
+			}
 			setLoading(false);
 			history.push('/');
 

@@ -29,13 +29,31 @@ const UserProfile = () => {
 	const [userInfo, setUserInfo] = useState(null);
 	const [loading, setLoading] = useState(false);
 	const [selectedImage, setSelectedImage] = useState(null);
+	const { error } = useToast();
 
 	useEffect(() => {
 		setLoading(true);
 		(async () => {
 			try {
 				const response = await userApi.getUserProfile();
-				setUserInfo(response.data);
+				if (response.status === 0)
+					setUserInfo(response.data);
+					else {
+						switch (response.status) {
+							case 400:
+								error('Thiếu thông tin hoặc access token');
+								break;
+							case 404:
+								error('Tài khoản không tồn tại');
+								break;
+							case 500:
+								error('Máy chủ gặp trục trặc');
+								break;
+							default:
+								error('Đã có lỗi xảy ra');
+								break;
+						}
+					}
 				setLoading(false);
 			} catch(err) {
 				console.log(err);

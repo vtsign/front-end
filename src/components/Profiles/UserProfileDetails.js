@@ -37,13 +37,44 @@ const UserProfileDetails = ({ userInfo, selectedImage }) => {
 				data.append("avatar", selectedImage)
 				const avatarRes = await userApi.updateAvatar(data);
 				if(avatarRes.status !== 200) {
-					error(responseMessage[avatarRes.status] || "Đã có lỗi xảy ra");
+					switch (avatarRes.status) {
+						case 400:
+							error('Không có file hoặc file không đúng định dạng ảnh');
+							break;
+						case 404:
+							error('Tài khoản không tồn tại');
+							break;
+						case 500:
+							error('Máy chủ gặp trục trặc');
+							break;
+						default:
+							error('Đã có lỗi xảy ra');
+							break;
+					}
+					setLoading(false);
 					return;
 				}
 			}
 			const profileRes = await userApi.updateUserProfile(formData);
 			if(profileRes.status !== 200) {
-				error(responseMessage[profileRes.status] || 'Đã có lỗi xảy ra');
+				switch (profileRes.status) {
+					case 400:
+						error('Thiếu thông tin hoặc access token');
+						break;
+					case 403:
+						error('Truy cập bị chặn');
+						break;
+					case 404:
+						error('Tài khoản không tồn tại');
+						break;
+					case 500:
+						error('Máy chủ gặp trục trặc');
+						break;
+					default:
+						error('Đã có lỗi xảy ra');
+						break;
+				}
+				setLoading(false);
 				return;
 			}
 		} catch (err) {

@@ -114,7 +114,17 @@ const Signing = () => {
 				history.replace('/');
 			} else {
 				setLoading(false);
-				error(response?.data?.message || 'Có lỗi xảy ra');
+				switch (response.status) {
+					case 400:
+						error('Thiếu thông tin hoặc access token');
+						break;
+					case 500:
+						error('Máy chủ gặp trục trặc');
+						break;
+					default:
+						error('Đã có lỗi xảy ra');
+						break;
+				}
 			}
 		} catch (err) {
 			setLoading(false);
