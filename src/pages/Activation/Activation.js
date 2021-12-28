@@ -4,20 +4,37 @@ import SuccessIcon from '../../assets/images/success.svg';
 import './Activation.scss';
 import { useHistory } from 'react-router-dom'
 import authenApi from '../../api/authenApi';
+import { useToast } from '../../components/toast/useToast';
 
 const Activation = ({ match }) => {
 	const userId = match.params.id;
 
 	const history = useHistory();
 
+	const { error } = useToast();
+
 
 	const handleActivateAccount = async () => {
-		const { data } = await authenApi.activation(userId);
+		const { data, status } = await authenApi.activation(userId);
 		if (data === true)
 			history.push('/')
-		else
-			console.log("error activation ...");
+		else {
+			switch (status) {
+				case 400:
+					error('Đường dẫn không còn tồn tại');
+					break;
+				case 410:
+					error('Đường dẫn hết hạn');
+					break;
+				case 500:
+					error('Máy chủ gặp trục trặc');
+					break;
+				default:
+					error('Đã có lỗi xảy ra');
+					break;
+			}
 			return;
+		}
 	}
 
 	return (
