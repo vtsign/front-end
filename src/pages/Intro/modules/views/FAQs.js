@@ -1,33 +1,24 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Typography from '../components/Typography';
 import { Grid } from '@mui/material';
-import ListSubheader from '@mui/material/ListSubheader';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
-import SendIcon from '@mui/icons-material/Send';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import StarBorder from '@mui/icons-material/StarBorder';
 
 export default function FAQs() {
-	const item = {
-		display: 'flex',
-		flexDirection: 'column',
-		alignItems: 'center',
-		px: 5,
-	};
-	const [open, setOpen] = React.useState(false);
+	const [openedItemId, setOpenedItemId] = React.useState(true);
 
-	const handleClick = () => {
-		setOpen(!open);
+	const handleClick = (orgEvent) => {
+		let clickedItemId = orgEvent.currentTarget.id;
+		if (openedItemId === clickedItemId) {
+			setOpenedItemId();
+		} else {
+			setOpenedItemId(clickedItemId);
+		}
 	};
 	return (
 		<Container
@@ -53,35 +44,99 @@ export default function FAQs() {
 			<Grid container spacing={2} columns={16}>
 				<Grid item xs={8}>
 					<List
-						sx={{ width: '100%', maxWidth: 720, bgcolor: 'background.paper' }}
+						sx={{
+							width: '100%',
+							maxWidth: 720,
+							bgcolor: 'background.paper',
+						}}
 						component="nav"
 						aria-labelledby="nested-list-subheader"
 					>
-						<ListItemButton onClick={handleClick}>
-							<ListItemText primary="Chữ ký số là gì?" />
-							{open ? <ExpandLess /> : <ExpandMore />}
+						<ListItemButton id="ask1" onClick={handleClick}>
+							<Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+								Chữ ký số là gì?
+							</Typography>
+							{openedItemId === 'ask1' ? <ExpandLess /> : <ExpandMore />}
 						</ListItemButton>
-						<Collapse in={open} timeout="auto" unmountOnExit>
+						<Collapse in={openedItemId === 'ask1'} timeout="auto" unmountOnExit>
 							<List component="div" disablePadding>
 								<ListItemButton sx={{ pl: 4 }}>
-									<ListItemText
-										align="justify"
-										secondary="Chữ ký số là một loại của chữ ký điện tử (electronic signatures), một tập hợp các ký tự (characters) được thêm vào cuối tài liệu hoặc phần nội dung của thông điệp (message) bằng cách áp dụng các thuật toán mật hóa (cryptographic algorithms) để xác nhận hoặc thể hiện tính hợp lệ và bảo mật. Được sử dụng để xác định người đưa ra thông điệp và tính xác thực tài liệu không bị sửa đổi so với bản gốc."
-									/>
+									<Typography variant="body1" align="justify">
+										Chữ ký số là một loại của chữ ký điện tử (electronic
+										signatures), một tập hợp các ký tự (characters) được thêm
+										vào cuối tài liệu hoặc phần nội dung của thông điệp
+										(message) bằng cách áp dụng các thuật toán mật hóa
+										(cryptographic algorithms) để xác nhận hoặc thể hiện tính
+										hợp lệ và bảo mật. Được sử dụng để xác định người đưa ra
+										thông điệp và tính xác thực tài liệu không bị sửa đổi so với
+										bản gốc.
+									</Typography>
 								</ListItemButton>
 							</List>
 						</Collapse>
-						<ListItemButton onClick={handleClick}>
-							<ListItemText primary="Chữ ký điện tử là gì?" />
-							{open ? <ExpandLess /> : <ExpandMore />}
+						<ListItemButton id="ask2" onClick={handleClick}>
+							<Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+								Chữ ký điện tử là gì?
+							</Typography>
+							{openedItemId === 'ask2' ? <ExpandLess /> : <ExpandMore />}
 						</ListItemButton>
-						<Collapse in={open} timeout="auto" unmountOnExit>
+						<Collapse in={openedItemId === 'ask2'} timeout="auto" unmountOnExit>
 							<List component="div" disablePadding>
 								<ListItemButton sx={{ pl: 4 }}>
-									<ListItemText
-										align="justify"
-										secondary="Chữ ký điện tử là một phần dữ liệu đề cập đến dữ liệu điện tử khác và được sử dụng để xác minh người ký tài liệu, rằng danh tính của người ký đã được xác minh và tài liệu đó không thay đổi sau khi chữ ký được thêm vào. Các phương pháp khác nhau để ghi lại chữ ký gồm nhập tên của người ký vào khung chỗ ký bằng cách sử dụng máy tính hoặc ứng dụng di động để chụp ảnh chữ ký viết tay, xác minh qua email, bằng ID công ty hoặc mã PIN điện thoại"
-									/>
+									<Typography variant="body1" align="justify">
+										Chữ ký điện tử là chữ ký viết tay của một người có thể được
+										tạo trên nhiều thiết bị khác nhau, từ máy tính để bàn, máy
+										tính bảng đến điện thoại thông minh, với sự trợ giúp của
+										phần mềm thích hợp
+									</Typography>
+								</ListItemButton>
+							</List>
+						</Collapse>
+						<ListItemButton id="ask3" onClick={handleClick}>
+							<Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+								Nạp tiền để sử dụng hệ thống bằng phương thức nào?
+							</Typography>
+							{openedItemId === 'ask3' ? <ExpandLess /> : <ExpandMore />}
+						</ListItemButton>
+						<Collapse in={openedItemId === 'ask3'} timeout="auto" unmountOnExit>
+							<List component="div" disablePadding>
+								<ListItemButton sx={{ pl: 4 }}>
+									<Typography variant="body1" align="justify">
+										Bạn có thể nạp tiền vào tài khoản thông qua Ví Zalopay, thẻ
+										ATM, Visa, Mastercard và JCB
+									</Typography>
+								</ListItemButton>
+							</List>
+						</Collapse>
+						<ListItemButton id="ask4" onClick={handleClick}>
+							<Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+								Mỗi hợp đồng gửi đi tốn phí sử dụng bao nhiêu?
+							</Typography>
+							{openedItemId === 'ask4' ? <ExpandLess /> : <ExpandMore />}
+						</ListItemButton>
+						<Collapse in={openedItemId === 'ask4'} timeout="auto" unmountOnExit>
+							<List component="div" disablePadding>
+								<ListItemButton sx={{ pl: 4 }}>
+									<Typography variant="body1" align="justify">
+										Với mỗi hợp đồng gửi đi, chúng tôi sẽ trừ 5.000/ngườinhận
+										vài tài khoản của bạn
+									</Typography>
+								</ListItemButton>
+							</List>
+						</Collapse>
+						<ListItemButton id="ask5" onClick={handleClick}>
+							<Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+								Tôi có thể quản lý các tài liệu hợp đồng như thế nào?
+							</Typography>
+							{openedItemId === 'ask5' ? <ExpandLess /> : <ExpandMore />}
+						</ListItemButton>
+						<Collapse in={openedItemId === 'ask5'} timeout="auto" unmountOnExit>
+							<List component="div" disablePadding>
+								<ListItemButton sx={{ pl: 4 }}>
+									<Typography variant="body1" align="justify">
+										Bạn có thể quản lí và xem chi tiết các tài liệu hợp đồng bao
+										gồm các trạng thái đã hoàn thành, chờ ký, cần ký và xóa
+									</Typography>
 								</ListItemButton>
 							</List>
 						</Collapse>
@@ -93,31 +148,35 @@ export default function FAQs() {
 						component="nav"
 						aria-labelledby="nested-list-subheader"
 					>
-						<ListItemButton onClick={handleClick}>
-							<ListItemText primary="Nạp tiền để sử dụng hệ thống bằng phương thức nào?" />
-							{open ? <ExpandLess /> : <ExpandMore />}
+						<ListItemButton id="ask6" onClick={handleClick}>
+							<Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+								Tôi có thể cài đặt cho người nhận tài liệu hợp đồng không?
+							</Typography>
+							{openedItemId === 'ask6' ? <ExpandLess /> : <ExpandMore />}
 						</ListItemButton>
-						<Collapse in={open} timeout="auto" unmountOnExit>
+						<Collapse in={openedItemId === 'ask6'} timeout="auto" unmountOnExit>
 							<List component="div" disablePadding>
 								<ListItemButton sx={{ pl: 4 }}>
-									<ListItemText
-										align="justify"
-										secondary="Bạn có thể nạp tiền vào tài khoản thông qua Ví Zalopay, Thẻ ATM, Visa, Mastercard và JCB"
-									/>
+									<Typography variant="body1" align="justify">
+										Bạn có thể thiết lập có người nhận có thể ký hoặc có người
+										nhận chỉ được phép xem tài liệu
+									</Typography>
 								</ListItemButton>
 							</List>
 						</Collapse>
-						<ListItemButton onClick={handleClick}>
-							<ListItemText primary="Mỗi hợp đồng gửi đi tốn phí sử dụng bao nhiêu?" />
-							{open ? <ExpandLess /> : <ExpandMore />}
+						<ListItemButton id="ask7" onClick={handleClick}>
+							<Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+								Người nhận tài liệu cần phải tạo tài khoản VTSign không?
+							</Typography>
+							{openedItemId === 'ask7' ? <ExpandLess /> : <ExpandMore />}
 						</ListItemButton>
-						<Collapse in={open} timeout="auto" unmountOnExit>
+						<Collapse in={openedItemId === 'ask7'} timeout="auto" unmountOnExit>
 							<List component="div" disablePadding>
 								<ListItemButton sx={{ pl: 4 }}>
-									<ListItemText
-										align="justify"
-										secondary="Với mỗi hợp đồng gửi đi, chúng tôi sẽ trừ 5.000đ/người nhận vào tải khoản của bạn"
-									/>
+									<Typography variant="body1" align="justify">
+										Người dùng hoàn toàn không cần tạo tài khoản hệ thống để ký
+										kết, có thể ký kết trực tiếp thông qua link gửi trong email
+									</Typography>
 								</ListItemButton>
 							</List>
 						</Collapse>
