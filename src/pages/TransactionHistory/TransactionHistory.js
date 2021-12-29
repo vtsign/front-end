@@ -72,29 +72,27 @@ const TransactionHistory = () => {
 
 				if (transactionResponse.status === 200){
 					setData(transactionResponse.data);
-				} else {
-					switch (transactionResponse.status) {
-						case 400:
-							error('Thiếu thông tin hoặc access token');
-							break;
-						case 403:
-							error('Người dùng không có quyền truy cập nội dung này');
-							break;
-						case 419:
-							error('Thiếu một số trường thông tin bắt buộc');
-							break;
-						case 500:
-							error('Máy chủ gặp trục trặc');
-							break;
-						default:
-							error('Đã có lỗi xảy ra');
-							break;
-					}
 				}
 				setLoading(false);
 			} catch (err) {
 				setLoading(false);
-				console.log(err);
+				switch (err.status) {
+					case 400:
+						error('Thiếu thông tin hoặc access token');
+						break;
+					case 403:
+						error('Người dùng không có quyền truy cập nội dung này');
+						break;
+					case 419:
+						error('Thiếu một số trường thông tin bắt buộc');
+						break;
+					case 500:
+						error('Máy chủ gặp trục trặc');
+						break;
+					default:
+						error('Đã có lỗi xảy ra');
+						break;
+				}
 			}
 		})();
 	}, [page, size, sort_field, sort_type]);

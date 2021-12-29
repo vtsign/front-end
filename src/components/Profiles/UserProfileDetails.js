@@ -35,51 +35,28 @@ const UserProfileDetails = ({ userInfo, selectedImage }) => {
 			if(selectedImage) {
 				const data = new FormData();
 				data.append("avatar", selectedImage)
-				const avatarRes = await userApi.updateAvatar(data);
-				if(avatarRes.status !== 200) {
-					switch (avatarRes.status) {
-						case 400:
-							error('Không có file hoặc file không đúng định dạng ảnh');
-							break;
-						case 404:
-							error('Tài khoản không tồn tại');
-							break;
-						case 500:
-							error('Máy chủ gặp trục trặc');
-							break;
-						default:
-							error('Đã có lỗi xảy ra');
-							break;
-					}
-					setLoading(false);
-					return;
-				}
+				await userApi.updateAvatar(data);
 			}
-			const profileRes = await userApi.updateUserProfile(formData);
-			if(profileRes.status !== 200) {
-				switch (profileRes.status) {
-					case 400:
-						error('Thiếu thông tin hoặc access token');
-						break;
-					case 403:
-						error('Truy cập bị chặn');
-						break;
-					case 404:
-						error('Tài khoản không tồn tại');
-						break;
-					case 500:
-						error('Máy chủ gặp trục trặc');
-						break;
-					default:
-						error('Đã có lỗi xảy ra');
-						break;
-				}
-				setLoading(false);
-				return;
-			}
+			await userApi.updateUserProfile(formData);
 		} catch (err) {
 			setLoading(false);
-			error(err.toString() || "Đã có lỗi xảy ra! Vui lòng thử lại");
+			switch (err.status) {
+				case 400:
+					error('Thiếu thông tin hoặc access token');
+					break;
+				case 403:
+					error('Truy cập bị chặn');
+					break;
+				case 404:
+					error('Tài khoản không tồn tại');
+					break;
+				case 500:
+					error('Máy chủ gặp trục trặc');
+					break;
+				default:
+					error('Đã có lỗi xảy ra');
+					break;
+			}
 		} finally {
 			setLoading(false);
 			success("Cập nhật thông tin cá nhân thành công");

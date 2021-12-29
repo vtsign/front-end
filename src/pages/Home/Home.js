@@ -32,6 +32,8 @@ const Home = (props) => {
 						error('Đã có lỗi xảy ra');
 						break;
 				}
+				setLoading(false);
+				return;
 			}
 			setLoading(false)
 			setQuickDoc(res.data);
