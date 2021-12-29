@@ -17,7 +17,24 @@ const item = {
 function ProductValues() {
 	return (
 		<Box component="section" sx={{ display: 'flex', overflow: 'hidden' }}>
-			<Container sx={{ mt: 15, mb: 15, display: 'flex', position: 'relative' }}>
+			<Container
+				sx={{
+					mt: 10,
+					mb: 15,
+					position: 'relative',
+					display: 'flex',
+					flexDirection: 'column',
+					alignItems: 'center',
+				}}
+			>
+				<Typography variant="h4" marked="center" component="h2" sx={{ mb: 3 }}>
+					Giá trị
+				</Typography>
+				<Typography align="center" variant="h5" sx={{ mb: 5 }}>
+					{
+						'Hệ thống VTSign cung cấp ký kết vào tài liệu bằng chữ ký điện tử chỉ trong vài phút. Chữ ký này an toàn, bảo mật và có ràng buộc về mặt pháp lý.'
+					}
+				</Typography>
 				<Grid container spacing={5}>
 					<Grid item xs={12} md={4}>
 						<Box sx={item}>
