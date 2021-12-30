@@ -59,11 +59,9 @@ const ManageDocument = ({ status, path, cxtHeader }) => {
 		dispatch(getAllContracts({ status, page, sortField, sortType }));
 	}, [hasOnChange, dispatch, page, sortField, status, sortType]);
 
-
 	const selectDocumentHandler = () => {
 		setHasOnChange(preState => !preState);
 	};
-
 
 	const handleDetail = (id) => {
 		const url = `${path}/${id}`;

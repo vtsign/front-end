@@ -21,6 +21,7 @@ import DialogRestore from '../dialog/dialogRestore';
 import Loading from '../../../../components/Loading/Loading';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import './style.scss';
+import { useToast } from '../../../../components/toast/useToast';
 
 const contentDialogDelete = {
     title: 'Xoá hợp đồng?',
@@ -59,6 +60,8 @@ const Detail = ({ status, title, pathReturn }) => {
     const viewer = useRef(null);
     const [openDocument, setOpenDocument] = React.useState(false);
 
+	const { error } = useToast();
+
     const handleClickOpenDocument = () => {
         setOpenDocument(true);
     };
@@ -72,6 +75,22 @@ const Detail = ({ status, title, pathReturn }) => {
     useEffect(() => {
         (async () => {
             const res = await manageDocumentsApi.getContractById(idDoc);
+			if(res.status !== 200) {
+				switch (res.status) {
+					case 400:
+						error('Thiếu thông tin hoặc access token');
+						break;
+					case 404:
+						error('Tài liệu không tồn tại');
+						break;
+					case 500:
+						error('Máy chủ gặp trục trặc');
+						break;
+					default:
+						error('Đã có lỗi xảy ra');
+						break;
+				}
+			}
             setContract(res.data);
         })();
     }, [dispatch, idDoc]);
