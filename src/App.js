@@ -1,7 +1,7 @@
 import React, { Suspense, useState } from 'react';
 import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 import './App.scss';
-import Footer from './components/Footer/Footer';
+import Footer from './components/Footer/Footer2';
 import Header from './components/Header/Header';
 import Loading from './components/Loading/Loading';
 import { PdfTronProvider } from './redux/constants/contexts/pdfTronContext';
