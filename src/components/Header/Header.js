@@ -12,6 +12,7 @@ import Logo from '../../assets/images/logo-white.png';
 import './Header.scss';
 import MenuMobile from './MenuMobile';
 import RightHeader from './RightHeader';
+import { useToast } from '../../components/toast/useToast'
 const Header = () => {
 	const location = useLocation();
 	// const location = useLocation();
@@ -33,10 +34,29 @@ const Header = () => {
 
 	const [userInfo, setUserInfo] = useState();
 
+	const { error } = useToast();
+
 	useEffect(() => {
 		if (listPathShowPayment.indexOf(location.pathname) < 0) {
 			(async () => {
 				const response = await userApi.getUserProfile();
+				if(response.status !== 200) {
+					switch (response.status) {
+						case 400:
+							error('Thiếu thông tin hoặc access token');
+							break;
+						case 404:
+							error('Tài khoản không tồn tại');
+							break;
+						case 500:
+							error('Máy chủ gặp trục trặc');
+							break;
+						default:
+							error('Đã có lỗi xảy ra');
+							break;
+					}
+					return;
+				}
 				setUserInfo(response.data);
 				localStorage.setItem('user', JSON.stringify(response.data));
 			})()

@@ -5,6 +5,7 @@ import './home.scss';
 import { Link } from 'react-router-dom';
 import manageApi from '../../api/manageApi';
 import Loading from '../../components/Loading/Loading';
+import { useToast } from '../../components/toast/useToast'
 
 const Home = (props) => {
 	const [quickDoc, setQuickDoc] = useState({});
@@ -13,10 +14,27 @@ const Home = (props) => {
 	const jsonUser = localStorage.getItem("user");
 	const user = JSON.parse(jsonUser);
 
+	const { error } = useToast();
+
 	useEffect(() => {
 		const getQuickViewDocument = async () => {
 			setLoading(true);
 			const res = await manageApi.getQuickViewContracts();
+			if(res.status !== 200) {
+				switch (res.status) {
+					case 400:
+						error('Thiếu thông tin hoặc access token');
+						break;
+					case 500:
+						error('Máy chủ gặp trục trặc');
+						break;
+					default:
+						error('Đã có lỗi xảy ra');
+						break;
+				}
+				setLoading(false);
+				return;
+			}
 			setLoading(false)
 			setQuickDoc(res.data);
 		};

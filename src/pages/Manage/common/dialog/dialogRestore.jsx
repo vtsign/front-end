@@ -10,6 +10,7 @@ import Slide from '@mui/material/Slide';
 import './dialogRestore.scss';
 import manageDocumentsApi from '../../../../api/manageApi';
 import { useHistory } from 'react-router';
+import { useToast } from '../../../../components/toast/useToast'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -17,10 +18,32 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const DialogRestore = ({ selectDocumentHandler, open, closeDialogRestore, content, contract, pathReturn }) => {
     const history = useHistory();
+	const { error } = useToast();
+
     const handleOnRestore = async () => {
         const userId = JSON.parse(localStorage.getItem('user')).id;
         const userContract = contract.user_contracts.find((uc) => uc.user.id === userId);
-        await manageDocumentsApi.restoreDocument({ c: contract.id, uc: userContract.id })
+        const restoreRes = await manageDocumentsApi.restoreDocument({ c: contract.id, uc: userContract.id })
+		if(restoreRes.status !== 200) {
+			switch (restoreRes.status) {
+				case 400:
+					error('Thiếu thông tin hoặc access token');
+					break;
+				case 404:
+					error('Tài liệu hoặc người dùng không tồn tại hoặc người dùng không sở hữu tài liệu này');
+					break;
+				case 422:
+					error('Người dùng không thể khôi phục tài liệu này');
+					break;
+				case 500:
+					error('Máy chủ gặp trục trặc');
+					break;
+				default:
+					error('Đã có lỗi xảy ra');
+					break;
+			}
+			return;
+		}
         if (selectDocumentHandler) {
             selectDocumentHandler();
         }

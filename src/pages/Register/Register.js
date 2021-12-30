@@ -27,12 +27,15 @@ import { REG_EMAIL, REG_PHONE, REG_PASSWORD } from '../../components/constants/g
 import { useDispatch, useSelector } from 'react-redux';
 import { registerAction } from '../../redux/actions/userActions.js';
 import { useHistory } from 'react-router-dom';
+import { useToast } from '../../components/toast/useToast';
 
 const Register = () => {
 	const [hiddenPassword, setHiddenPassword] = useState(true);
 	const [hiddenVerifyPassword, setHiddenVerifyPassword] = useState(true);
 
 	const dispatch = useDispatch();
+
+	const { error } = useToast();
 
 	const userRegister = useSelector((state) => state.userRegister);
 	const { user, loading, error: errorRegister } = userRegister;
@@ -44,6 +47,26 @@ const Register = () => {
 			history.replace('/thank-you');
 		}
 	}, [user, errorRegister, history]);
+
+	useEffect(() => {
+		switch (errorRegister.status) {
+			case 409:
+				error('Email dã tồn tại');
+				break;
+			case 419:
+				error('Thiếu thông tin');
+				break;
+			case 423:
+				error('Tài khoản chưa được kích hoạt');
+				break;
+			case 500:
+				error('Máy chủ gặp trục trặc');
+				break;
+			default:
+				error('Đã có lỗi xảy ra');
+				break;
+		}
+	}, [errorRegister.status]);
 
 	const {
 		register,
@@ -277,11 +300,6 @@ const Register = () => {
 							/>
 						</Grid>
 					</Grid>
-					{errorRegister && (
-						<p style={{ textAlign: 'center', color: 'red', marginBottom: '2rem' }}>
-							{errorRegister.message}
-						</p>
-					)}
 					<Box mb="1.5rem" style={{ textAlign: 'center' }}>
 						{loading ? (
 							<CircularProgress />

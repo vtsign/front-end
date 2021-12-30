@@ -28,6 +28,7 @@ import Logo from '../../assets/images/logo-white.png';
 import { REG_EMAIL, REG_PASSWORD } from '../../components/constants/global.js';
 import { loginAction } from '../../redux/actions/userActions.js';
 import './login.scss';
+import { useToast } from '../../components/toast/useToast';
 
 const Login = () => {
 	const [hiddenPassword, setHiddenPassword] = useState(true);
@@ -35,6 +36,8 @@ const Login = () => {
 	const dispatch = useDispatch();
 
 	const history = useHistory();
+
+	const { error } = useToast();
 
 	const userLogin = useSelector((state) => state.userLogin);
 	const { user, loading, error: errorRegister, isLogin } = userLogin;
@@ -46,6 +49,26 @@ const Login = () => {
 	useEffect(() => {
 		if (isLogin) history.push('/');
 	}, [user, history, isLogin]);
+
+	useEffect(() => {
+		switch (errorRegister.status) {
+			case 401:
+				error('Email và mật khẩu không hợp lệ');
+				break;
+			case 419:
+				error('Thiếu email hoặc password');
+				break;
+			case 423:
+				error('Tài khoản chưa được kích hoạt');
+				break;
+			case 500:
+				error('Máy chủ gặp trục trặc');
+				break;
+			default:
+				error('Đã có lỗi xảy ra');
+				break;
+		}
+	}, [errorRegister.status])
 
 	const {
 		register,
@@ -180,34 +203,6 @@ const Login = () => {
 					<p style={{ textAlign: 'center', marginBottom: '2rem' }}>
 						Bạn chưa có tài khoản? <Link to="/register">Đăng ký?</Link>
 					</p>
-					{/* <Divider style={{ paddingInline: '2rem', marginBottom: '2rem' }}>
-						Hoặc đăng nhập với
-					</Divider>
-					<Box mb="1.5rem">
-						<Stack
-							direction="row"
-							spacing={2}
-							display="flex"
-							justifyContent="space-between"
-						>
-							<Button
-								variant="outlined"
-								fullWidth
-								size="large"
-								startIcon={<Google />}
-							>
-								Google
-							</Button>
-							<Button
-								variant="contained"
-								fullWidth
-								size="large"
-								startIcon={<Facebook />}
-							>
-								Facebook
-							</Button>
-						</Stack>
-					</Box> */}
 				</form>
 			</Paper>
 		</div>
