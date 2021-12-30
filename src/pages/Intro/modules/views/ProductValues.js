@@ -35,6 +35,7 @@ function ProductValues() {
 						'Hệ thống VTSign cung cấp ký kết vào tài liệu bằng chữ ký điện tử chỉ trong vài phút. Chữ ký này an toàn, bảo mật và có ràng buộc về mặt pháp lý.'
 					}
 				</Typography>
+
 				<Grid container spacing={5}>
 					<Grid item xs={12} md={4}>
 						<Box sx={item}>
