@@ -52,7 +52,15 @@ export default function FAQs() {
 						component="nav"
 						aria-labelledby="nested-list-subheader"
 					>
-						<ListItemButton id="ask1" onClick={handleClick}>
+						<ListItemButton
+							id="ask1"
+							onClick={handleClick}
+							sx={{
+								'&.MuiButtonBase-root:hover': {
+									bgcolor: 'transparent',
+								},
+							}}
+						>
 							<Typography variant="h6" sx={{ fontWeight: 'bold' }}>
 								Chữ ký số là gì?
 							</Typography>
@@ -60,7 +68,15 @@ export default function FAQs() {
 						</ListItemButton>
 						<Collapse in={openedItemId === 'ask1'} timeout="auto" unmountOnExit>
 							<List component="div" disablePadding>
-								<ListItemButton sx={{ pl: 4 }}>
+								<ListItemButton
+									sx={{
+										pl: 4,
+										cursor: 'default',
+										'&.MuiButtonBase-root:hover': {
+											bgcolor: 'transparent',
+										},
+									}}
+								>
 									<Typography variant="body1" align="justify">
 										Chữ ký số là một loại của chữ ký điện tử (electronic
 										signatures), một tập hợp các ký tự (characters) được thêm
@@ -74,7 +90,15 @@ export default function FAQs() {
 								</ListItemButton>
 							</List>
 						</Collapse>
-						<ListItemButton id="ask2" onClick={handleClick}>
+						<ListItemButton
+							id="ask2"
+							onClick={handleClick}
+							sx={{
+								'&.MuiButtonBase-root:hover': {
+									bgcolor: 'transparent',
+								},
+							}}
+						>
 							<Typography variant="h6" sx={{ fontWeight: 'bold' }}>
 								Chữ ký điện tử là gì?
 							</Typography>
@@ -82,7 +106,15 @@ export default function FAQs() {
 						</ListItemButton>
 						<Collapse in={openedItemId === 'ask2'} timeout="auto" unmountOnExit>
 							<List component="div" disablePadding>
-								<ListItemButton sx={{ pl: 4 }}>
+								<ListItemButton
+									sx={{
+										pl: 4,
+										cursor: 'default',
+										'&.MuiButtonBase-root:hover': {
+											bgcolor: 'transparent',
+										},
+									}}
+								>
 									<Typography variant="body1" align="justify">
 										Chữ ký điện tử là chữ ký viết tay của một người có thể được
 										tạo trên nhiều thiết bị khác nhau, từ máy tính để bàn, máy
@@ -92,7 +124,15 @@ export default function FAQs() {
 								</ListItemButton>
 							</List>
 						</Collapse>
-						<ListItemButton id="ask3" onClick={handleClick}>
+						<ListItemButton
+							id="ask3"
+							onClick={handleClick}
+							sx={{
+								'&.MuiButtonBase-root:hover': {
+									bgcolor: 'transparent',
+								},
+							}}
+						>
 							<Typography variant="h6" sx={{ fontWeight: 'bold' }}>
 								Nạp tiền để sử dụng hệ thống bằng phương thức nào?
 							</Typography>
@@ -100,7 +140,15 @@ export default function FAQs() {
 						</ListItemButton>
 						<Collapse in={openedItemId === 'ask3'} timeout="auto" unmountOnExit>
 							<List component="div" disablePadding>
-								<ListItemButton sx={{ pl: 4 }}>
+								<ListItemButton
+									sx={{
+										pl: 4,
+										cursor: 'default',
+										'&.MuiButtonBase-root:hover': {
+											bgcolor: 'transparent',
+										},
+									}}
+								>
 									<Typography variant="body1" align="justify">
 										Bạn có thể nạp tiền vào tài khoản thông qua Ví Zalopay, thẻ
 										ATM, Visa, Mastercard và JCB
@@ -108,7 +156,15 @@ export default function FAQs() {
 								</ListItemButton>
 							</List>
 						</Collapse>
-						<ListItemButton id="ask4" onClick={handleClick}>
+						<ListItemButton
+							id="ask4"
+							onClick={handleClick}
+							sx={{
+								'&.MuiButtonBase-root:hover': {
+									bgcolor: 'transparent',
+								},
+							}}
+						>
 							<Typography variant="h6" sx={{ fontWeight: 'bold' }}>
 								Mỗi hợp đồng gửi đi tốn phí sử dụng bao nhiêu?
 							</Typography>
@@ -116,7 +172,15 @@ export default function FAQs() {
 						</ListItemButton>
 						<Collapse in={openedItemId === 'ask4'} timeout="auto" unmountOnExit>
 							<List component="div" disablePadding>
-								<ListItemButton sx={{ pl: 4 }}>
+								<ListItemButton
+									sx={{
+										pl: 4,
+										cursor: 'default',
+										'&.MuiButtonBase-root:hover': {
+											bgcolor: 'transparent',
+										},
+									}}
+								>
 									<Typography variant="body1" align="justify">
 										Với mỗi hợp đồng gửi đi, chúng tôi sẽ trừ 5.000/ngườinhận
 										vài tài khoản của bạn
@@ -124,7 +188,15 @@ export default function FAQs() {
 								</ListItemButton>
 							</List>
 						</Collapse>
-						<ListItemButton id="ask5" onClick={handleClick}>
+						<ListItemButton
+							id="ask5"
+							onClick={handleClick}
+							sx={{
+								'&.MuiButtonBase-root:hover': {
+									bgcolor: 'transparent',
+								},
+							}}
+						>
 							<Typography variant="h6" sx={{ fontWeight: 'bold' }}>
 								Tôi có thể quản lý các tài liệu hợp đồng như thế nào?
 							</Typography>
@@ -132,7 +204,15 @@ export default function FAQs() {
 						</ListItemButton>
 						<Collapse in={openedItemId === 'ask5'} timeout="auto" unmountOnExit>
 							<List component="div" disablePadding>
-								<ListItemButton sx={{ pl: 4 }}>
+								<ListItemButton
+									sx={{
+										pl: 4,
+										cursor: 'default',
+										'&.MuiButtonBase-root:hover': {
+											bgcolor: 'transparent',
+										},
+									}}
+								>
 									<Typography variant="body1" align="justify">
 										Bạn có thể quản lí và xem chi tiết các tài liệu hợp đồng bao
 										gồm các trạng thái đã hoàn thành, chờ ký, cần ký và xóa
@@ -148,7 +228,15 @@ export default function FAQs() {
 						component="nav"
 						aria-labelledby="nested-list-subheader"
 					>
-						<ListItemButton id="ask6" onClick={handleClick}>
+						<ListItemButton
+							id="ask6"
+							onClick={handleClick}
+							sx={{
+								'&.MuiButtonBase-root:hover': {
+									bgcolor: 'transparent',
+								},
+							}}
+						>
 							<Typography variant="h6" sx={{ fontWeight: 'bold' }}>
 								Tôi có thể cài đặt cho người nhận tài liệu hợp đồng không?
 							</Typography>
@@ -156,7 +244,15 @@ export default function FAQs() {
 						</ListItemButton>
 						<Collapse in={openedItemId === 'ask6'} timeout="auto" unmountOnExit>
 							<List component="div" disablePadding>
-								<ListItemButton sx={{ pl: 4 }}>
+								<ListItemButton
+									sx={{
+										pl: 4,
+										cursor: 'default',
+										'&.MuiButtonBase-root:hover': {
+											bgcolor: 'transparent',
+										},
+									}}
+								>
 									<Typography variant="body1" align="justify">
 										Bạn có thể thiết lập có người nhận có thể ký hoặc có người
 										nhận chỉ được phép xem tài liệu
@@ -164,7 +260,15 @@ export default function FAQs() {
 								</ListItemButton>
 							</List>
 						</Collapse>
-						<ListItemButton id="ask7" onClick={handleClick}>
+						<ListItemButton
+							id="ask7"
+							onClick={handleClick}
+							sx={{
+								'&.MuiButtonBase-root:hover': {
+									bgcolor: 'transparent',
+								},
+							}}
+						>
 							<Typography variant="h6" sx={{ fontWeight: 'bold' }}>
 								Người nhận tài liệu cần phải tạo tài khoản VTSign không?
 							</Typography>
@@ -172,7 +276,15 @@ export default function FAQs() {
 						</ListItemButton>
 						<Collapse in={openedItemId === 'ask7'} timeout="auto" unmountOnExit>
 							<List component="div" disablePadding>
-								<ListItemButton sx={{ pl: 4 }}>
+								<ListItemButton
+									sx={{
+										pl: 4,
+										cursor: 'default',
+										'&.MuiButtonBase-root:hover': {
+											bgcolor: 'transparent',
+										},
+									}}
+								>
 									<Typography variant="body1" align="justify">
 										Người dùng hoàn toàn không cần tạo tài khoản hệ thống để ký
 										kết, có thể ký kết trực tiếp thông qua link gửi trong email
