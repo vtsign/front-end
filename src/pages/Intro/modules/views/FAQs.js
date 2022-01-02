@@ -3,12 +3,12 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Typography from '../components/Typography';
 import { Grid } from '@mui/material';
-import { makeStyles } from '@material-ui/core';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import Collapse from '@mui/material/Collapse';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
+
 const itemList = {
 	boxSizing: 'border-box',
 	color: 'rgb(44, 44, 44)',
@@ -21,6 +21,7 @@ const itemList = {
 	textAlign: 'left',
 	marginLeft: 1,
 };
+
 const itemBox = {
 	borderBottom: '1px solid rgb(237, 239, 244)',
 	boxSizing: 'border-box',
@@ -29,12 +30,14 @@ const itemBox = {
 	paddingBottom: 9,
 	textAlign: 'left',
 };
+
 const itemContent = {
 	fontSize: 14,
 	paddingTop: 0,
 	paddingLeft: 4,
 	fontFamily: 'Open Sans,Arial,sans-serif',
 };
+
 export default function FAQs() {
 	const [openedItemId, setOpenedItemId] = React.useState(true);
 
@@ -46,10 +49,16 @@ export default function FAQs() {
 			setOpenedItemId(clickedItemId);
 		}
 	};
+
 	return (
 		<Container
 			component="section"
-			sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', my: 9 }}
+			sx={{
+				display: 'flex',
+				flexDirection: 'column',
+				alignItems: 'center',
+				my: 9,
+			}}
 		>
 			<Button
 				sx={{
@@ -68,8 +77,8 @@ export default function FAQs() {
 				Dưới đây là danh sách các câu hỏi phổ biến nhất của khách hàng. Nếu bạn không thể
 				tìm thấy câu trả lời cho câu hỏi của mình, vui lòng liên hệ với chúng tôi.
 			</Typography>
-			<Grid container spacing={2} columns={16}>
-				<Grid item xs={8}>
+			<Grid container spacing={2} columns={12}>
+				<Grid item xs={12} md={6}>
 					<List
 						sx={{
 							width: '100%',
@@ -79,7 +88,15 @@ export default function FAQs() {
 						aria-labelledby="nested-list-subheader"
 					>
 						<div style={itemBox}>
-							<ListItemButton id="ask1" onClick={handleClick}>
+							<ListItemButton
+								id="ask1"
+								sx={{
+									'&.MuiButtonBase-root ': {
+										bgcolor: 'transparent',
+									},
+								}}
+								onClick={handleClick}
+							>
 								{openedItemId === 'ask1' ? <ExpandLess /> : <ExpandMore />}
 								<Typography variant="h6" sx={itemList}>
 									Chữ ký số là gì ?
@@ -87,7 +104,13 @@ export default function FAQs() {
 							</ListItemButton>
 							<Collapse in={openedItemId === 'ask1'} timeout="auto" unmountOnExit>
 								<List component="div" disablePadding>
-									<ListItemButton>
+									<ListItemButton
+										sx={{
+											'&.MuiButtonBase-root': {
+												bgcolor: 'transparent',
+											},
+										}}
+									>
 										<Typography
 											variant="body1"
 											align="justify"
@@ -105,7 +128,15 @@ export default function FAQs() {
 							</Collapse>
 						</div>
 						<div style={itemBox}>
-							<ListItemButton id="ask2" onClick={handleClick}>
+							<ListItemButton
+								id="ask2"
+								onClick={handleClick}
+								sx={{
+									'&.MuiButtonBase-root': {
+										bgcolor: 'transparent',
+									},
+								}}
+							>
 								{openedItemId === 'ask2' ? <ExpandLess /> : <ExpandMore />}
 								<Typography variant="h6" sx={itemList}>
 									Chữ ký điện tử là gì ?
@@ -113,7 +144,13 @@ export default function FAQs() {
 							</ListItemButton>
 							<Collapse in={openedItemId === 'ask2'} timeout="auto" unmountOnExit>
 								<List component="div" disablePadding>
-									<ListItemButton>
+									<ListItemButton
+										sx={{
+											'&.MuiButtonBase-root': {
+												bgcolor: 'transparent',
+											},
+										}}
+									>
 										<Typography
 											variant="body1"
 											align="justify"
@@ -129,7 +166,15 @@ export default function FAQs() {
 							</Collapse>
 						</div>
 						<div style={itemBox}>
-							<ListItemButton id="ask3" onClick={handleClick}>
+							<ListItemButton
+								id="ask3"
+								onClick={handleClick}
+								sx={{
+									'&.MuiButtonBase-root': {
+										bgcolor: 'transparent',
+									},
+								}}
+							>
 								{openedItemId === 'ask3' ? <ExpandLess /> : <ExpandMore />}
 								<Typography variant="h6" sx={itemList}>
 									Nạp tiền để sử dụng hệ thống bằng phương thức nào ?
@@ -137,7 +182,13 @@ export default function FAQs() {
 							</ListItemButton>
 							<Collapse in={openedItemId === 'ask3'} timeout="auto" unmountOnExit>
 								<List component="div" disablePadding>
-									<ListItemButton>
+									<ListItemButton
+										sx={{
+											'&.MuiButtonBase-root ': {
+												bgcolor: 'transparent',
+											},
+										}}
+									>
 										<Typography
 											variant="body1"
 											align="justify"
@@ -151,7 +202,15 @@ export default function FAQs() {
 							</Collapse>
 						</div>
 						<div style={itemBox}>
-							<ListItemButton id="ask4" onClick={handleClick}>
+							<ListItemButton
+								id="ask4"
+								onClick={handleClick}
+								sx={{
+									'&.MuiButtonBase-root': {
+										bgcolor: 'transparent',
+									},
+								}}
+							>
 								{openedItemId === 'ask4' ? <ExpandLess /> : <ExpandMore />}
 								<Typography variant="h6" sx={itemList}>
 									Mỗi hợp đồng gửi đi tốn phí sử dụng bao nhiêu ?
@@ -159,7 +218,13 @@ export default function FAQs() {
 							</ListItemButton>
 							<Collapse in={openedItemId === 'ask4'} timeout="auto" unmountOnExit>
 								<List component="div" disablePadding>
-									<ListItemButton>
+									<ListItemButton
+										sx={{
+											'&.MuiButtonBase-root ': {
+												bgcolor: 'transparent',
+											},
+										}}
+									>
 										<Typography
 											variant="body1"
 											align="justify"
@@ -173,7 +238,15 @@ export default function FAQs() {
 							</Collapse>
 						</div>
 						<div style={itemBox}>
-							<ListItemButton id="ask5" onClick={handleClick}>
+							<ListItemButton
+								id="ask5"
+								onClick={handleClick}
+								sx={{
+									'&.MuiButtonBase-root': {
+										bgcolor: 'transparent',
+									},
+								}}
+							>
 								{openedItemId === 'ask5' ? <ExpandLess /> : <ExpandMore />}
 								<Typography variant="h6" sx={itemList}>
 									Tôi có thể quản lý các tài liệu hợp đồng như thế nào ?
@@ -181,7 +254,13 @@ export default function FAQs() {
 							</ListItemButton>
 							<Collapse in={openedItemId === 'ask5'} timeout="auto" unmountOnExit>
 								<List component="div" disablePadding>
-									<ListItemButton>
+									<ListItemButton
+										sx={{
+											'&.MuiButtonBase-root': {
+												bgcolor: 'transparent',
+											},
+										}}
+									>
 										<Typography
 											variant="body1"
 											align="justify"
@@ -196,7 +275,15 @@ export default function FAQs() {
 							</Collapse>
 						</div>
 						<div style={itemBox}>
-							<ListItemButton id="ask6" onClick={handleClick}>
+							<ListItemButton
+								id="ask6"
+								onClick={handleClick}
+								sx={{
+									'&.MuiButtonBase-root': {
+										bgcolor: 'transparent',
+									},
+								}}
+							>
 								{openedItemId === 'ask6' ? <ExpandLess /> : <ExpandMore />}
 								<Typography variant="h6" sx={itemList}>
 									Tôi có thể cài đặt được gì cho người nhận tài liệu hợp đồng ?
@@ -204,7 +291,13 @@ export default function FAQs() {
 							</ListItemButton>
 							<Collapse in={openedItemId === 'ask6'} timeout="auto" unmountOnExit>
 								<List component="div" disablePadding>
-									<ListItemButton>
+									<ListItemButton
+										sx={{
+											'&.MuiButtonBase-root': {
+												bgcolor: 'transparent',
+											},
+										}}
+									>
 										<Typography
 											variant="body1"
 											align="justify"
@@ -218,7 +311,15 @@ export default function FAQs() {
 							</Collapse>
 						</div>
 						<div style={itemBox}>
-							<ListItemButton id="ask7" onClick={handleClick}>
+							<ListItemButton
+								id="ask7"
+								onClick={handleClick}
+								sx={{
+									'&.MuiButtonBase-root': {
+										bgcolor: 'transparent',
+									},
+								}}
+							>
 								{openedItemId === 'ask7' ? <ExpandLess /> : <ExpandMore />}
 								<Typography variant="h6" sx={itemList}>
 									Người nhận tài liệu cần phải tạo tài khoản VTSign không ?
@@ -226,7 +327,13 @@ export default function FAQs() {
 							</ListItemButton>
 							<Collapse in={openedItemId === 'ask7'} timeout="auto" unmountOnExit>
 								<List component="div" disablePadding>
-									<ListItemButton>
+									<ListItemButton
+										sx={{
+											'&.MuiButtonBase-root': {
+												bgcolor: 'transparent',
+											},
+										}}
+									>
 										<Typography
 											variant="body1"
 											align="justify"
@@ -241,7 +348,15 @@ export default function FAQs() {
 							</Collapse>
 						</div>
 						<div style={itemBox}>
-							<ListItemButton id="ask8" onClick={handleClick}>
+							<ListItemButton
+								id="ask8"
+								onClick={handleClick}
+								sx={{
+									'&.MuiButtonBase-root': {
+										bgcolor: 'transparent',
+									},
+								}}
+							>
 								{openedItemId === 'ask8' ? <ExpandLess /> : <ExpandMore />}
 								<Typography variant="h6" sx={itemList}>
 									Định dạng tài liệu nào mà hệ thống VTSign hỗ trợ ?
@@ -249,7 +364,13 @@ export default function FAQs() {
 							</ListItemButton>
 							<Collapse in={openedItemId === 'ask8'} timeout="auto" unmountOnExit>
 								<List component="div" disablePadding>
-									<ListItemButton>
+									<ListItemButton
+										sx={{
+											'&.MuiButtonBase-root': {
+												bgcolor: 'transparent',
+											},
+										}}
+									>
 										<Typography
 											variant="body1"
 											align="justify"
@@ -266,14 +387,22 @@ export default function FAQs() {
 						</div>
 					</List>
 				</Grid>
-				<Grid item xs={8}>
+				<Grid item xs={12} md={6}>
 					<List
 						sx={{ width: '100%', maxWidth: 720, bgcolor: 'background.paper' }}
 						component="nav"
 						aria-labelledby="nested-list-subheader"
 					>
 						<div style={itemBox}>
-							<ListItemButton id="ask9" onClick={handleClick}>
+							<ListItemButton
+								id="ask9"
+								onClick={handleClick}
+								sx={{
+									'&.MuiButtonBase-root': {
+										bgcolor: 'transparent',
+									},
+								}}
+							>
 								{openedItemId === 'ask9' ? <ExpandLess /> : <ExpandMore />}
 								<Typography variant="h6" sx={itemList}>
 									Tôi có thể chỉnh sửa được tài liệu gốc không ?
@@ -281,7 +410,13 @@ export default function FAQs() {
 							</ListItemButton>
 							<Collapse in={openedItemId === 'ask9'} timeout="auto" unmountOnExit>
 								<List component="div" disablePadding>
-									<ListItemButton>
+									<ListItemButton
+										sx={{
+											'&.MuiButtonBase-root': {
+												bgcolor: 'transparent',
+											},
+										}}
+									>
 										<Typography
 											variant="body1"
 											align="justify"
@@ -299,7 +434,15 @@ export default function FAQs() {
 							</Collapse>
 						</div>
 						<div style={itemBox}>
-							<ListItemButton id="ask10" onClick={handleClick}>
+							<ListItemButton
+								id="ask10"
+								onClick={handleClick}
+								sx={{
+									'&.MuiButtonBase-root': {
+										bgcolor: 'transparent',
+									},
+								}}
+							>
 								{openedItemId === 'ask10' ? <ExpandLess /> : <ExpandMore />}
 								<Typography variant="h6" sx={itemList}>
 									Tôi liên lạc hỏi đáp trực tiếp VTSign qua hình thức nào ?
@@ -307,7 +450,13 @@ export default function FAQs() {
 							</ListItemButton>
 							<Collapse in={openedItemId === 'ask10'} timeout="auto" unmountOnExit>
 								<List component="div" disablePadding>
-									<ListItemButton>
+									<ListItemButton
+										sx={{
+											'&.MuiButtonBase-root': {
+												bgcolor: 'transparent',
+											},
+										}}
+									>
 										<Typography
 											variant="body1"
 											align="justify"
@@ -322,7 +471,15 @@ export default function FAQs() {
 							</Collapse>
 						</div>
 						<div style={itemBox}>
-							<ListItemButton id="ask11" onClick={handleClick}>
+							<ListItemButton
+								id="ask11"
+								onClick={handleClick}
+								sx={{
+									'&.MuiButtonBase-root': {
+										bgcolor: 'transparent',
+									},
+								}}
+							>
 								{openedItemId === 'ask11' ? <ExpandLess /> : <ExpandMore />}
 								<Typography variant="h6" sx={itemList}>
 									Tôi chỉ có thể sử dụng VTSign để gửi thư mời hay tôi cũng có thể
@@ -331,7 +488,13 @@ export default function FAQs() {
 							</ListItemButton>
 							<Collapse in={openedItemId === 'ask11'} timeout="auto" unmountOnExit>
 								<List component="div" disablePadding>
-									<ListItemButton>
+									<ListItemButton
+										sx={{
+											'&.MuiButtonBase-root': {
+												bgcolor: 'transparent',
+											},
+										}}
+									>
 										<Typography
 											variant="body1"
 											align="justify"
@@ -347,7 +510,15 @@ export default function FAQs() {
 							</Collapse>
 						</div>
 						<div style={itemBox}>
-							<ListItemButton id="ask12" onClick={handleClick}>
+							<ListItemButton
+								id="ask12"
+								onClick={handleClick}
+								sx={{
+									'&.MuiButtonBase-root': {
+										bgcolor: 'transparent',
+									},
+								}}
+							>
 								{openedItemId === 'ask12' ? <ExpandLess /> : <ExpandMore />}
 								<Typography variant="h6" sx={itemList}>
 									Người nhận của tôi có yêu cầu phải trả phí gì khi thực hiện ký
@@ -356,7 +527,13 @@ export default function FAQs() {
 							</ListItemButton>
 							<Collapse in={openedItemId === 'ask12'} timeout="auto" unmountOnExit>
 								<List component="div" disablePadding>
-									<ListItemButton>
+									<ListItemButton
+										sx={{
+											'&.MuiButtonBase-root': {
+												bgcolor: 'transparent',
+											},
+										}}
+									>
 										<Typography
 											variant="body1"
 											align="justify"
@@ -371,7 +548,15 @@ export default function FAQs() {
 							</Collapse>
 						</div>
 						<div style={itemBox}>
-							<ListItemButton id="ask13" onClick={handleClick}>
+							<ListItemButton
+								id="ask13"
+								onClick={handleClick}
+								sx={{
+									'&.MuiButtonBase-root': {
+										bgcolor: 'transparent',
+									},
+								}}
+							>
 								{openedItemId === 'ask13' ? <ExpandLess /> : <ExpandMore />}
 								<Typography variant="h6" sx={itemList}>
 									Tôi có thể tủy chỉnh tải lên chữ ký cá nhân hay thương hiệu logo
@@ -380,7 +565,13 @@ export default function FAQs() {
 							</ListItemButton>
 							<Collapse in={openedItemId === 'ask13'} timeout="auto" unmountOnExit>
 								<List component="div" disablePadding>
-									<ListItemButton>
+									<ListItemButton
+										sx={{
+											'&.MuiButtonBase-root': {
+												bgcolor: 'transparent',
+											},
+										}}
+									>
 										<Typography
 											variant="body1"
 											align="justify"

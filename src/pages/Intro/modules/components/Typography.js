@@ -1,6 +1,5 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-
 import { withStyles } from '@mui/styles';
 import MuiTypography from '@mui/material/Typography';
 
@@ -89,19 +88,9 @@ function Typography(props) {
 }
 
 Typography.propTypes = {
-	/**
-	 * The content of the component.
-	 */
 	children: PropTypes.node,
-	/**
-	 * Override or extend the styles applied to the component.
-	 */
 	classes: PropTypes.object.isRequired,
 	marked: PropTypes.oneOf(['center', 'left', 'none']),
-	/**
-	 * Applies the theme typography styles.
-	 * @default 'body1'
-	 */
 	variant: PropTypes.oneOf([
 		'body1',
 		'body2',
