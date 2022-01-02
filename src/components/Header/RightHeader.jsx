@@ -9,6 +9,8 @@ import MenuItem from '@mui/material/MenuItem';
 import React, { Fragment } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
+import { RESET_DOC_LIST } from '../../redux/constants/documentConstants';
+import { RESET_RECEIVERS } from '../../redux/constants/receiverConstants';
 import { USER_LOGOUT } from '../../redux/constants/userConstants';
 
 const LeftHeader = ({ userInfo }) => {
@@ -25,6 +27,8 @@ const LeftHeader = ({ userInfo }) => {
 	};
 
 	const logoutHandler = () => {
+		dispatch({ type: RESET_RECEIVERS });
+		dispatch({ type: RESET_DOC_LIST });
 		dispatch({ type: USER_LOGOUT });
 		localStorage.removeItem('user');
 		localStorage.removeItem('accessToken');

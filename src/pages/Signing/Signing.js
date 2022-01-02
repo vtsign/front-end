@@ -13,6 +13,8 @@ import './signing.scss';
 import { useToast } from '../../components/toast/useToast.js';
 import documentApi from '../../api/documentApi';
 import userApi from '../../api/userApi';
+import { RESET_RECEIVERS } from '../../redux/constants/receiverConstants';
+import { RESET_DOC_LIST } from '../../redux/constants/documentConstants';
 
 const steps = [
 	'Thêm tài liệu',
@@ -51,7 +53,6 @@ const Signing = () => {
 		},
 	});
 
-
 	const dispatch = useDispatch();
 	const documents = useSelector((state) => state.addDocList.documentList);
 	const receivers = useSelector((state) => state.receivers.receivers);
@@ -60,7 +61,7 @@ const Signing = () => {
 
 	const getMaxReceivers = async () => {
 		const response = await userApi.getMaxReceivers();
-		if(response.status !== 200) {
+		if (response.status !== 200) {
 			switch (response.status) {
 				case 400:
 					error('Thiếu thông tin hoặc access token');
@@ -122,30 +123,23 @@ const Signing = () => {
 			if (response.status >= 200 && response.status < 300) {
 				setLoading(false);
 				success('Gửi tài liệu thành công');
-				dispatch({
-					type: 'RESET_RECEIVERS',
-				});
-				dispatch({
-					type: 'RESET_DOC_LIST',
-				});
+				dispatch({ type: RESET_RECEIVERS });
+				dispatch({ type: RESET_DOC_LIST });
 				history.replace('/');
-			} else {
-				setLoading(false);
-				switch (response.status) {
-					case 400:
-						error('Thiếu thông tin hoặc access token');
-						break;
-					case 500:
-						error('Máy chủ gặp trục trặc');
-						break;
-					default:
-						error('Đã có lỗi xảy ra');
-						break;
-				}
 			}
 		} catch (err) {
+			switch (err.status) {
+				case 400:
+					error('Thiếu thông tin hoặc access token');
+					break;
+				case 500:
+					error('Máy chủ gặp trục trặc');
+					break;
+				default:
+					error('Đã có lỗi xảy ra');
+					break;
+			}
 			setLoading(false);
-			error(err.toString() || 'Đã có lỗi xảy ra');
 		}
 	};
 

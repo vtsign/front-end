@@ -43,7 +43,7 @@ const Login = () => {
 	const { user, loading, error: errorRegister, isLogin } = userLogin;
 
 	useEffect(() => {
-		localStorage.setItem("isLogin", false);
+		localStorage.setItem('isLogin', false);
 	}, []);
 
 	useEffect(() => {
@@ -106,7 +106,7 @@ const Login = () => {
 				</p>
 			);
 		return <></>;
-	}
+	};
 
 	return (
 		<div className="login">
@@ -116,13 +116,8 @@ const Login = () => {
 				</p> */}
 				<img src={Logo} alt="logo" style={{ width: '15vw', margin: '3rem' }} />
 			</div>
-			<Paper
-				variant="outlined"
-				className="login-form"
-			>
-				<p className="login-logo-temp">
-					VTSIGN
-				</p>
+			<Paper variant="outlined" className="login-form">
+				<p className="login-logo-temp">VTSIGN</p>
 				<Typography variant="h5" textAlign="center" fontWeight="bold" my="1rem">
 					Đăng nhập
 				</Typography>
@@ -225,7 +220,13 @@ const Login = () => {
 					</Typography>
 					<Divider style={{ marginTop: '2rem', marginBottom: '2rem' }} />
 					<p style={{ textAlign: 'center', marginBottom: '2rem' }}>
-						Bạn chưa có tài khoản? <Link to="/register">Đăng ký?</Link>
+						Bạn chưa có tài khoản?{' '}
+						<Link
+							to="/register"
+							style={{ color: '#1876D1', textDecoration: 'underline' }}
+						>
+							Đăng ký?
+						</Link>
 					</p>
 				</form>
 			</Paper>

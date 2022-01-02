@@ -3,7 +3,7 @@
 @import '/src/sass/base';
 
 .login {
-	height: $content-height-no-header;
+	height: 100vh;
 	background-image: url('../../assets/images/background1-large.jpg');
 	background-position: -30vh 10%;
 	background-size: cover;
@@ -42,8 +42,8 @@
 		background-color: #ffffff;
 		padding: 3em;
 		width: 35em;
-		height: $content-height-no-header;
-		max-height: $content-height-no-header;
+		height: 100vh;
+		max-height: 100vh;
 		overflow-y: auto;
 
 		@include tablet {

@@ -3,7 +3,7 @@
 @import '/src/sass/base';
 
 .register {
-	height: $content-height-no-header;
+	height: 100vh;
 	background-image: url('../../assets/images/background2-large.jpg');
 	background-position: -40vh 50%;
 	background-size: 100%;
@@ -45,4 +45,3 @@
 		}
 	}
 }
-
