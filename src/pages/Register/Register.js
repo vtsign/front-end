@@ -48,26 +48,6 @@ const Register = () => {
 		}
 	}, [user, errorRegister, history]);
 
-	useEffect(() => {
-		switch (errorRegister.status) {
-			case 409:
-				error('Email dã tồn tại');
-				break;
-			case 419:
-				error('Thiếu thông tin');
-				break;
-			case 423:
-				error('Tài khoản chưa được kích hoạt');
-				break;
-			case 500:
-				error('Máy chủ gặp trục trặc');
-				break;
-			default:
-				error('Đã có lỗi xảy ra');
-				break;
-		}
-	}, [errorRegister.status]);
-
 	const {
 		register,
 		handleSubmit,
@@ -98,18 +78,35 @@ const Register = () => {
 		// history.push('/login')
 	};
 
+	const showError = (errorRegister) => {
+		if (errorRegister.status === 409)
+			return (
+				<p style={{ textAlign: 'center', color: 'red', marginBottom: '2rem' }}>
+					Email đã được sử dụng
+				</p>
+			);
+		if (errorRegister.status === 419)
+			return (
+				<p style={{ textAlign: 'center', color: 'red', marginBottom: '2rem' }}>
+					Thiếu trường thông tin
+				</p>
+			);
+		if (errorRegister.status === 500)
+			return (
+				<p style={{ textAlign: 'center', color: 'red', marginBottom: '2rem' }}>
+					Máy chủ gặp trục trặc
+				</p>
+			);
+		return <></>;
+	};
+
 	return (
 		<div className="register">
 			<div className="register-logo">
 				<img src={Logo} alt="logo" style={{ width: '15vw', margin: '3rem' }} />
 			</div>
-			<Paper
-				variant="outlined"
-				className="register-form"
-			>
-				<p className="register-logo-temp">
-					VTSIGN
-				</p>
+			<Paper variant="outlined" className="register-form">
+				<p className="register-logo-temp">VTSIGN</p>
 				<Typography variant="h5" textAlign="center" fontWeight="bold" my="1rem">
 					Đăng ký
 				</Typography>
@@ -300,6 +297,7 @@ const Register = () => {
 							/>
 						</Grid>
 					</Grid>
+					{errorRegister && showError(errorRegister)}
 					<Box mb="1.5rem" style={{ textAlign: 'center' }}>
 						{loading ? (
 							<CircularProgress />

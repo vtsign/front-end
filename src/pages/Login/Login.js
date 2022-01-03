@@ -50,25 +50,25 @@ const Login = () => {
 		if (isLogin) history.push('/');
 	}, [user, history, isLogin]);
 
-	useEffect(() => {
-		switch (errorRegister.status) {
-			case 401:
-				error('Email và mật khẩu không hợp lệ');
-				break;
-			case 419:
-				error('Thiếu email hoặc password');
-				break;
-			case 423:
-				error('Tài khoản chưa được kích hoạt');
-				break;
-			case 500:
-				error('Máy chủ gặp trục trặc');
-				break;
-			default:
-				error('Đã có lỗi xảy ra');
-				break;
-		}
-	}, [errorRegister.status])
+	// useEffect(() => {
+	// 	switch (errorRegister.status) {
+	// 		case 401:
+	// 			error('Email và mật khẩu không hợp lệ');
+	// 			break;
+	// 		case 419:
+	// 			error('Thiếu email hoặc password');
+	// 			break;
+	// 		case 423:
+	// 			error('Tài khoản chưa được kích hoạt');
+	// 			break;
+	// 		case 500:
+	// 			error('Máy chủ gặp trục trặc');
+	// 			break;
+	// 		default:
+	// 			error('Đã có lỗi xảy ra');
+	// 			break;
+	// 	}
+	// }, [errorRegister.status])
 
 	const {
 		register,
@@ -79,6 +79,34 @@ const Login = () => {
 	const doLogin = (formData) => {
 		dispatch(loginAction(formData.email, formData.password));
 	};
+
+	const showError = (errorRegister) => {
+		if (errorRegister.status === 403)
+			return (
+				<p style={{ textAlign: 'center', color: 'red', marginBottom: '2rem' }}>
+					Email hoặc mật khẩu không hợp lệ
+				</p>
+			);
+		if (errorRegister.status === 419)
+			return (
+				<p style={{ textAlign: 'center', color: 'red', marginBottom: '2rem' }}>
+					Thiếu thông tin Email hoặc mật khẩu
+				</p>
+			);
+		if (errorRegister.status === 423)
+			return (
+				<p style={{ textAlign: 'center', color: 'red', marginBottom: '2rem' }}>
+					Tài khoản chưa được kích hoạt
+				</p>
+			);
+		if (errorRegister.status === 500)
+			return (
+				<p style={{ textAlign: 'center', color: 'red', marginBottom: '2rem' }}>
+					Máy chủ gặp trục trặc
+				</p>
+			);
+		return <></>;
+	}
 
 	return (
 		<div className="login">
@@ -173,11 +201,7 @@ const Login = () => {
 							/>
 						</Grid>
 					</Grid>
-					{errorRegister && (
-						<p style={{ textAlign: 'center', color: 'red', marginBottom: '2rem' }}>
-							{errorRegister.message}
-						</p>
-					)}
+					{errorRegister && showError(errorRegister)}
 					<Box mb="1.5rem" style={{ textAlign: 'center' }}>
 						{loading ? (
 							<CircularProgress />
