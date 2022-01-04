@@ -42,8 +42,13 @@ function ProductHowItWorks() {
 					alignItems: 'center',
 				}}
 			>
-				<Typography variant="h4" marked="center" component="h2" sx={{ mb: 7 }}>
+				<Typography variant="h4" marked="center" component="h2" sx={{ mb: 3 }}>
 					Hoạt động
+				</Typography>
+				<Typography align="center" variant="h5" sx={{ mb: 5 }}>
+					VTSign cung cấp giải pháp đáng tin cậy chuyên nghiệp cho bạn. Bất kể bạn đang ở
+					trong văn phòng hay tại nhà, chỉ 3 bước đơn giản bạn đã có thể ký kết trực
+					tuyến.
 				</Typography>
 				<div>
 					<Grid container spacing={5}>

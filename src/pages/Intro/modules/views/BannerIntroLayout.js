@@ -1,7 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 
@@ -56,13 +55,6 @@ function BannerIntroLayout(props) {
 					}}
 				/>
 				<Background sx={sxBackground} />
-				<Box
-					component={ArrowDownwardIcon}
-					height="16"
-					width="12"
-					alt="arrow down"
-					sx={{ position: 'absolute', bottom: 65 }}
-				/>
 			</Container>
 		</BannerIntroRoot>
 	);

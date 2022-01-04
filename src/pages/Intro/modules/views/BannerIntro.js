@@ -1,44 +1,45 @@
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
+import Box from '@mui/material/Box';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import Button from '../components/Button';
 import Typography from '../components/Typography';
 import BannerIntroLayout from './BannerIntroLayout';
-import Box from '@mui/material/Box';
 import Logo from '../../../../assets/images/logo-white.png';
+import backgroundBanner from '../../../../assets/images/background1-large.jpg';
 
-const backgroundImage =
-	'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80';
+const item = {
+	display: 'flex',
+	flexDirection: 'row',
+	alignItems: 'center',
+	marginTop: 15,
+	marginBottom: 4,
+};
 
 export default function BannerIntro() {
 	return (
 		<BannerIntroLayout
 			sxBackground={{
-				backgroundImage: `url(${backgroundImage})`,
+				backgroundImage: `url(${backgroundBanner})`,
 				backgroundColor: '#7fc7d9',
 				backgroundPosition: 'center',
 			}}
 		>
-			<img style={{ display: 'none' }} src={backgroundImage} alt="increase priority" />
+			<img style={{ display: 'none' }} src={backgroundBanner} alt="increase priority" />
 			<Typography color="inherit" align="center" variant="h4" marked="center">
 				Hệ thống ký kết văn bản trực tuyến
 			</Typography>
 			<Box component="img" src={Logo} alt="fast" sx={{ height: 110 }} />
-			<Typography
-				color="inherit"
-				align="center"
-				variant="h5"
-				sx={{ mb: 4, mt: { sx: 4, sm: 10 } }}
-			>
+			<Typography color="inherit" align="center" variant="h5" sx={{ mb: 4, mt: 10 }}>
 				Nhanh chóng - Đơn giản - Bảo mật
 			</Typography>
-
-			<Typography sx={{ mb: 4, mt: { sx: 4, sm: 10 } }}>
+			<Typography sx={item}>
 				<NavLink to="/register" activeClassName="active">
 					<Button
 						color="secondary"
 						variant="contained"
 						size="large"
-						sx={{ minWidth: 200, mr: 5 }}
+						sx={{ minWidth: 170, maxWidth: 200, margin: 2 }}
 					>
 						Đăng ký
 					</Button>
@@ -48,16 +49,26 @@ export default function BannerIntro() {
 						color="secondary"
 						variant="contained"
 						size="large"
-						sx={{ minWidth: 200 }}
+						sx={{ minWidth: 170, maxWidth: 200, margin: 2 }}
 					>
 						Đăng nhập
 					</Button>
 				</NavLink>
 			</Typography>
-
 			<Typography variant="body2" color="inherit" sx={{ mt: 2 }}>
 				Thêm thông tin bên dưới
-			</Typography>
+			</Typography>{' '}
+			<Box
+				component={ArrowDownwardIcon}
+				height="16"
+				width="12"
+				alt="arrow down"
+				sx={{ position: 'absolute', bottom: 65 }}
+				onClick={() => {
+					window.scrollTo({ top: 750, behavior: 'smooth' });
+				}}
+				cursor="pointer"
+			/>
 		</BannerIntroLayout>
 	);
 }
