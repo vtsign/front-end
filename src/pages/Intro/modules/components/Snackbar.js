@@ -1,6 +1,5 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-
 import { withStyles } from '@mui/styles';
 import MuiSnackbar from '@mui/material/Snackbar';
 import Slide from '@mui/material/Slide';
@@ -79,14 +78,8 @@ function Snackbar(props) {
 }
 
 Snackbar.propTypes = {
-	/**
-	 * Override or extend the styles applied to the component.
-	 */
 	classes: PropTypes.object.isRequired,
 	closeFunc: PropTypes.func,
-	/**
-	 * The message to display.
-	 */
 	message: PropTypes.node,
 };
 

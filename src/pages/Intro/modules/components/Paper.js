@@ -29,9 +29,6 @@ function Paper(props) {
 
 Paper.propTypes = {
 	background: PropTypes.oneOf(['dark', 'light', 'main']).isRequired,
-	/**
-	 * Override or extend the styles applied to the component.
-	 */
 	classes: PropTypes.object,
 	className: PropTypes.string,
 	padding: PropTypes.bool,

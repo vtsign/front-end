@@ -22,11 +22,11 @@ const Footer2 = () => {
 							</li>
 							<li>
 								<AccountBalanceIcon sx={{ marginRight: '10px' }} />
-								255 Nguyễn Văn Cừ Q5 TPHCM
+								227 Nguyễn Văn Cừ Quận 5 TPHCM
 							</li>
 						</ul>
 					</Grid>
-					<Grid item md={4} xs={12} className="footer-clean__intro">
+					<Grid item xs={12} md={7} className="footer-clean__intro">
 						<h3>VTSign</h3>
 						<p>
 							Tổ chức của bạn hoạt động dựa trên hợp đồng và các loại thỏa thuận khác.
@@ -34,7 +34,7 @@ const Footer2 = () => {
 							phẩm của chúng tôi.
 						</p>
 					</Grid>
-					<Grid item md={2} xs={12}>
+					<Grid item xs={12} md={2}>
 						<h3>Theo dõi</h3>
 						<div className="group-icon">
 							<a href="#">
