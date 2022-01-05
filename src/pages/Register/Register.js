@@ -102,9 +102,11 @@ const Register = () => {
 
 	return (
 		<div className="register">
-			<div className="register-logo">
-				<img src={Logo} alt="logo" style={{ width: '15vw', margin: '3rem' }} />
-			</div>
+			<Link to="/">
+				<div className="register-logo">
+					<img src={Logo} alt="logo" style={{ width: '15vw', margin: '3rem' }} />
+				</div>
+			</Link>
 			<Paper variant="outlined" className="register-form">
 				<p className="register-logo-temp">VTSIGN</p>
 				<Typography variant="h5" textAlign="center" fontWeight="bold" my="1rem">

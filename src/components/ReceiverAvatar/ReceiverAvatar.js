@@ -4,20 +4,20 @@ import { Avatar, AvatarContainer, AvatarLabel, Typography } from '@mui/material'
 import { Edit, MenuBook } from '@mui/icons-material';
 import './ReceiverAvatar.scss';
 import { useDispatch } from 'react-redux';
-import { removeReceiver } from '../../redux/actions/receiverActions'
+import { removeReceiver } from '../../redux/actions/receiverActions';
 
-const ReceiverAvatar = ({ receiver, hideButton=false, index }) => {
+const ReceiverAvatar = ({ receiver, hideButton = false, index }) => {
 	const dispatch = useDispatch();
 
 	const handleDeleteReceiver = () => {
 		dispatch(removeReceiver(index));
-	}
+	};
 
 	return (
 		<div className="receiver">
 			<div>
 				<Avatar className="receiver__avatar" size={48} gap={1}>
-					{receiver.permission === "sign" ? <Edit /> : <MenuBook />}
+					{receiver.permission === 'sign' ? <Edit /> : <MenuBook />}
 				</Avatar>
 			</div>
 			<div className="receiver__info">
@@ -37,6 +37,6 @@ const ReceiverAvatar = ({ receiver, hideButton=false, index }) => {
 			)}
 		</div>
 	);
-}
+};
 
-export default ReceiverAvatar
+export default ReceiverAvatar;

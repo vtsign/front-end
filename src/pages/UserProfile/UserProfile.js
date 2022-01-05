@@ -12,7 +12,7 @@ import {
 	Card,
 	InputLabel,
 	TextField,
-	Box
+	Box,
 } from '@mui/material';
 import '@pdftron/webviewer/public/core/CoreControls';
 import Loading from '../../components/Loading/Loading';
@@ -36,10 +36,9 @@ const UserProfile = () => {
 		(async () => {
 			try {
 				const response = await userApi.getUserProfile();
-				if (response.status === 200)
-					setUserInfo(response.data);
+				if (response.status === 200) setUserInfo(response.data);
 				setLoading(false);
-			} catch(err) {
+			} catch (err) {
 				switch (err.status) {
 					case 400:
 						error('Thiếu thông tin hoặc access token');
@@ -56,7 +55,7 @@ const UserProfile = () => {
 				}
 			}
 		})();
-	}, [])
+	}, []);
 
 	return (
 		<Box
@@ -71,16 +70,27 @@ const UserProfile = () => {
 				<Grid container className="profile__container">
 					<Grid container spacing={3}>
 						<Grid item lg={4} md={6} xs={12}>
-							{userInfo && <UserAvatar userInfo={userInfo} selectedImage={selectedImage} setSelectedImage={setSelectedImage} />}
+							{userInfo && (
+								<UserAvatar
+									userInfo={userInfo}
+									selectedImage={selectedImage}
+									setSelectedImage={setSelectedImage}
+								/>
+							)}
 						</Grid>
 						<Grid item lg={8} md={6} xs={12}>
-							{userInfo && <UserProfileDetails userInfo={userInfo} selectedImage={selectedImage} />}
+							{userInfo && (
+								<UserProfileDetails
+									userInfo={userInfo}
+									selectedImage={selectedImage}
+								/>
+							)}
 						</Grid>
 					</Grid>
 				</Grid>
 			</Container>
 		</Box>
 	);
-}
+};
 
-export default UserProfile
+export default UserProfile;

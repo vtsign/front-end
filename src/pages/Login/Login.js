@@ -110,12 +110,14 @@ const Login = () => {
 
 	return (
 		<div className="login">
-			<div className="login-logo">
-				{/* <p className="login-logo">
+			<Link to="/">
+				<div className="login-logo">
+					{/* <p className="login-logo">
 					VTSIGN
 				</p> */}
-				<img src={Logo} alt="logo" style={{ width: '15vw', margin: '3rem' }} />
-			</div>
+					<img src={Logo} alt="logo" style={{ width: '15vw', margin: '3rem' }} />
+				</div>
+			</Link>
 			<Paper variant="outlined" className="login-form">
 				<p className="login-logo-temp">VTSIGN</p>
 				<Typography variant="h5" textAlign="center" fontWeight="bold" my="1rem">
