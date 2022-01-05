@@ -3,5 +3,5 @@
 @import '/src/sass/base';
 
 .profile__container {
-	height: $content-height;
+	min-height: $content-height;
 }

@@ -40,7 +40,7 @@ const App = ({ location }) => {
 		'reset-password',
 		'reset-password-success',
 		'thank-you',
-		''
+		'',
 	];
 
 	const isLoggedIn = localStorage.getItem('isLogin') === 'true';
@@ -64,7 +64,11 @@ const App = ({ location }) => {
 					<Route path="/register" component={Register} />
 					<Route path="/thank-you" component={ThankYou} />
 					<Route path="/reset-password-success">
-						<NotifySuccess message="Thay đổi mật khẩu thành công" path="/login" titleButton="Trở về trang đăng nhập" />
+						<NotifySuccess
+							message="Thay đổi mật khẩu thành công"
+							path="/login"
+							titleButton="Trở về trang đăng nhập"
+						/>
 					</Route>
 					<Route path="/activation/:id" component={Activation} />
 					<PrivateRoute path="/home" exact component={Home} />
@@ -91,6 +95,7 @@ const App = ({ location }) => {
 						<Redirect to="/not-found" />
 					</Route>
 				</Switch>
+				<div style={{ clear: 'both' }}></div>
 				<Footer />
 			</Suspense>
 		</div>

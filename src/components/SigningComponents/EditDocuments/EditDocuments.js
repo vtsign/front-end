@@ -9,6 +9,7 @@ import {
 } from '@mui/icons-material';
 import {
 	Box,
+	Container,
 	Divider,
 	Grid,
 	IconButton,
@@ -73,7 +74,7 @@ const EditDocuments = ({ loading, setLoading }) => {
 			},
 			viewer.current
 		).then(async (instance) => {
-			instance.setZoomLevel("75%")
+			instance.setZoomLevel('75%');
 			setInstance(instance);
 			const { PDFNet, CoreControls } = instance;
 			await PDFNet.initialize();
@@ -116,23 +117,22 @@ const EditDocuments = ({ loading, setLoading }) => {
 						: null
 				);
 				setLoading(false);
-					const listAnnotInitials = annotManager.getAnnotationsList();
-					const xfdf = documentXFDFs2[webviewerInstances.currentDocument];
-					const annotations = documentFields[webviewerInstances.currentDocument];
+				const listAnnotInitials = annotManager.getAnnotationsList();
+				const xfdf = documentXFDFs2[webviewerInstances.currentDocument];
+				const annotations = documentFields[webviewerInstances.currentDocument];
 
-					if (annotations != null || !!xfdf) {
-						annotManager.deleteAnnotations(listAnnotInitials, true);
-						annotManager.deselectAllAnnotations();
+				if (annotations != null || !!xfdf) {
+					annotManager.deleteAnnotations(listAnnotInitials, true);
+					annotManager.deselectAllAnnotations();
 
-						if (!!xfdf) {
-							annotManager.importAnnotations(xfdf);
-						}
-
-						if (annotations.length > 0) {
-							annotManager.addAnnotations(annotations);
-						}
+					if (!!xfdf) {
+						annotManager.importAnnotations(xfdf);
 					}
 
+					if (annotations.length > 0) {
+						annotManager.addAnnotations(annotations);
+					}
+				}
 			}
 		})();
 	}, [instance, documents, webviewerInstances.currentDocument]);
@@ -354,15 +354,15 @@ const EditDocuments = ({ loading, setLoading }) => {
 	};
 
 	return (
-		<>
+		<Container maxWidth={false} style={{ height: '100%' }}>
 			<Grid>
 				<Typography variant="h6" my="1rem">
 					Ký tên và các thông tin khác
 				</Typography>
 			</Grid>
-			<Grid container style={{ height: '100%' }}>
+			<Grid container style={{ minHeight: '100vh' }}>
 				<Grid item lg={2} md={6} xl={2} xs={12}>
-					<Stack my={2} style={{ height: "100%", overflow: "auto"}}>
+					<Stack my={2} style={{ height: '100%', overflow: 'auto' }}>
 						<Box padding={1}>
 							<Typography gutterBottom>
 								<b>Người nhận</b>
@@ -451,112 +451,6 @@ const EditDocuments = ({ loading, setLoading }) => {
 								<span>Ngày ký</span>
 							</div>
 						</Box>
-						<Divider />
-						<Box padding={1}>
-							<div
-								draggable
-								onDragStart={(e) => dragStart(e)}
-								onDragEnd={(e) => dragEnd(e, 'TEXT')}
-							>
-								<IconButton
-									style={{
-										backgroundColor: '#007fff',
-										borderRadius: '6px',
-										color: '#fff',
-										fontWeight: '600',
-										fontSize: '24px',
-										cursor: 'pointer',
-										marginRight: '7px',
-									}}
-									className="edit-form__btn"
-									accessibilityLabel="add text"
-									text="Add text"
-									iconEnd="text-sentence-case"
-								>
-									<MailOutline fontSize="inherit" />
-								</IconButton>
-								<span>Email</span>
-							</div>
-						</Box>
-						<Box padding={1}>
-							<div
-								draggable
-								onDragStart={(e) => dragStart(e)}
-								onDragEnd={(e) => dragEnd(e, 'TEXT')}
-							>
-								<IconButton
-									style={{
-										backgroundColor: '#007fff',
-										borderRadius: '6px',
-										color: '#fff',
-										fontWeight: '600',
-										fontSize: '24px',
-										cursor: 'pointer',
-										marginRight: '7px',
-									}}
-									className="edit-form__btn"
-									accessibilityLabel="add text"
-									text="Add text"
-									iconEnd="text-sentence-case"
-								>
-									<PersonOutline fontSize="inherit" />
-								</IconButton>
-								<span>Họ tên</span>
-							</div>
-						</Box>
-						<Box padding={1}>
-							<div
-								draggable
-								onDragStart={(e) => dragStart(e)}
-								onDragEnd={(e) => dragEnd(e, 'TEXT')}
-							>
-								<IconButton
-									style={{
-										backgroundColor: '#007fff',
-										borderRadius: '6px',
-										color: '#fff',
-										fontWeight: '600',
-										fontSize: '24px',
-										cursor: 'pointer',
-										marginRight: '7px',
-									}}
-									className="edit-form__btn"
-									accessibilityLabel="add text"
-									text="Add text"
-									iconEnd="text-sentence-case"
-								>
-									<Computer fontSize="inherit" />
-								</IconButton>
-								<span>Công ty</span>
-							</div>
-						</Box>
-						<Divider />
-						<Box padding={1}>
-							<div
-								draggable
-								onDragStart={(e) => dragStart(e)}
-								onDragEnd={(e) => dragEnd(e, 'TEXT')}
-							>
-								<IconButton
-									style={{
-										backgroundColor: '#007fff',
-										borderRadius: '6px',
-										color: '#fff',
-										fontWeight: '600',
-										fontSize: '24px',
-										cursor: 'pointer',
-										marginRight: '7px',
-									}}
-									className="edit-form__btn"
-									accessibilityLabel="add text"
-									text="Add text"
-									iconEnd="text-sentence-case"
-								>
-									<Brush fontSize="inherit" />
-								</IconButton>
-								<span>Vẽ</span>
-							</div>
-						</Box>
 						<Box padding={1}>
 							<div
 								draggable
@@ -632,7 +526,7 @@ const EditDocuments = ({ loading, setLoading }) => {
 					)}
 				</Grid>
 			</Grid>
-		</>
+		</Container>
 	);
 };
 

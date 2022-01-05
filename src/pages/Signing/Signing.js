@@ -13,6 +13,8 @@ import './signing.scss';
 import { useToast } from '../../components/toast/useToast.js';
 import documentApi from '../../api/documentApi';
 import userApi from '../../api/userApi';
+import { RESET_RECEIVERS } from '../../redux/constants/receiverConstants';
+import { RESET_DOC_LIST } from '../../redux/constants/documentConstants';
 
 const steps = [
 	'Thêm tài liệu',
@@ -51,7 +53,6 @@ const Signing = () => {
 		},
 	});
 
-
 	const dispatch = useDispatch();
 	const documents = useSelector((state) => state.addDocList.documentList);
 	const receivers = useSelector((state) => state.receivers.receivers);
@@ -60,7 +61,7 @@ const Signing = () => {
 
 	const getMaxReceivers = async () => {
 		const response = await userApi.getMaxReceivers();
-		if(response.status !== 200) {
+		if (response.status !== 200) {
 			switch (response.status) {
 				case 400:
 					error('Thiếu thông tin hoặc access token');
@@ -122,30 +123,23 @@ const Signing = () => {
 			if (response.status >= 200 && response.status < 300) {
 				setLoading(false);
 				success('Gửi tài liệu thành công');
-				dispatch({
-					type: 'RESET_RECEIVERS',
-				});
-				dispatch({
-					type: 'RESET_DOC_LIST',
-				});
+				dispatch({ type: RESET_RECEIVERS });
+				dispatch({ type: RESET_DOC_LIST });
 				history.replace('/');
-			} else {
-				setLoading(false);
-				switch (response.status) {
-					case 400:
-						error('Thiếu thông tin hoặc access token');
-						break;
-					case 500:
-						error('Máy chủ gặp trục trặc');
-						break;
-					default:
-						error('Đã có lỗi xảy ra');
-						break;
-				}
 			}
 		} catch (err) {
+			switch (err.status) {
+				case 400:
+					error('Thiếu thông tin hoặc access token');
+					break;
+				case 500:
+					error('Máy chủ gặp trục trặc');
+					break;
+				default:
+					error('Đã có lỗi xảy ra');
+					break;
+			}
 			setLoading(false);
-			error(err.toString() || 'Đã có lỗi xảy ra');
 		}
 	};
 
@@ -164,7 +158,15 @@ const Signing = () => {
 		<Container maxWidth={false}>
 			<Grid container className="sign__container">
 				<Grid container className="sign__content">
-					<Grid item xl={2} lg={2} md={3} xs={12} alignSelf="center">
+					<Grid
+						item
+						xl={2}
+						lg={2}
+						md={3}
+						xs={12}
+						sx={{ display: { xs: 'none', md: 'block' } }}
+						alignSelf="center"
+					>
 						<Stepper activeStep={activeStep} orientation="vertical" alignSelf="center">
 							{steps.map((label, index) => {
 								const stepProps = {};
@@ -216,48 +218,48 @@ const Signing = () => {
 								loading={loading}
 							/>
 						)}
+						<Grid
+							item
+							xl={12}
+							lg={12}
+							md={12}
+							display="flex"
+							justifyContent="flex-end"
+							style={{ height: '3rem' }}
+						>
+							{activeStep > 0 && (
+								<Button variant="outlined" onClick={handlePrev}>
+									Quay lại
+								</Button>
+							)}
+							{activeStep === 2 ? (
+								<Button
+									variant="contained"
+									style={{ marginLeft: '14px' }}
+									onClick={handleExportFiles}
+								>
+									Tiếp tục
+								</Button>
+							) : activeStep === 3 ? (
+								<Button
+									variant="contained"
+									style={{ marginLeft: '14px' }}
+									onClick={handleSubmit(completeSigning)}
+								>
+									{activeStep === steps.length - 1 ? 'Gửi' : 'Tiếp tục'}
+								</Button>
+							) : (
+								<Button
+									variant="contained"
+									style={{ marginLeft: '14px' }}
+									onClick={handleNext}
+									disabled={loading}
+								>
+									{activeStep === steps.length - 1 ? 'Gửi' : 'Tiếp tục'}
+								</Button>
+							)}
+						</Grid>
 					</Grid>
-				</Grid>
-				<Grid
-					item
-					xl={12}
-					lg={12}
-					md={12}
-					display="flex"
-					justifyContent="flex-end"
-					style={{ height: '3rem' }}
-				>
-					{activeStep > 0 && (
-						<Button variant="outlined" onClick={handlePrev}>
-							Quay lại
-						</Button>
-					)}
-					{activeStep === 2 ? (
-						<Button
-							variant="contained"
-							style={{ marginLeft: '14px' }}
-							onClick={handleExportFiles}
-						>
-							Tiếp tục
-						</Button>
-					) : activeStep === 3 ? (
-						<Button
-							variant="contained"
-							style={{ marginLeft: '14px' }}
-							onClick={handleSubmit(completeSigning)}
-						>
-							{activeStep === steps.length - 1 ? 'Gửi' : 'Tiếp tục'}
-						</Button>
-					) : (
-						<Button
-							variant="contained"
-							style={{ marginLeft: '14px' }}
-							onClick={handleNext}
-							disabled={loading}
-						>
-							{activeStep === steps.length - 1 ? 'Gửi' : 'Tiếp tục'}
-						</Button>
-					)}
 				</Grid>
 			</Grid>
 		</Container>

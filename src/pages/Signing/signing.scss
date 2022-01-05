@@ -2,17 +2,17 @@
 @import '/src/sass/mixins';
 @import '/src/sass/base';
 
-$height: calc(100vh - (65px + 50px));
+$height: calc(100vh - 65px);
 
 .sign__container {
-	display: "flex";
+	display: 'flex';
 	align-items: stretch;
 	// height: calc(100% - 65px);
 	// height: 95vh;
 	// height: -webkit-calc(100% - 88px);
 	// height: -moz-calc(100% - 88px);
-	 height: $content-height;
-	 max-height: $content-height;
+	height: $content-height;
+	max-height: $content-height;
 	// background-color: #007fff;
 	// flex: 1 1 auto;
 

@@ -11,9 +11,9 @@ import {
 	TableRow,
 	TableCell,
 	TablePagination,
-	Box
+	Box,
 } from '@mui/material';
-import { KeyboardArrowDown, KeyboardArrowUp} from "@mui/icons-material"
+import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
 import { useHistory, useLocation } from 'react-router';
 import userApi from '../../api/userApi';
 import PageHeader from './PageHeader';
@@ -29,13 +29,13 @@ const payment = {
 		init_balance: 'Đăng ký tài khoản',
 	},
 	method: {
-		zalopayapp: "ZaloPay App",
-		ATM: "Thẻ ATM",
-		CC: "Thẻ tín dụng",
-		INIT: "VTSign - Đăng ký tài khoản",
-		PAYMENT: "VTSign - Thanh toán dịch vụ",
-		REFUND: "VTSign - Hoàn tiền",
-	}
+		zalopayapp: 'ZaloPay App',
+		ATM: 'Thẻ ATM',
+		CC: 'Thẻ tín dụng',
+		INIT: 'VTSign - Đăng ký tài khoản',
+		PAYMENT: 'VTSign - Thanh toán dịch vụ',
+		REFUND: 'VTSign - Hoàn tiền',
+	},
 };
 
 const TransactionHistory = () => {
@@ -48,8 +48,8 @@ const TransactionHistory = () => {
 	const query = new URLSearchParams(location.search);
 	const page = parseInt(query.get('page')) || 1;
 	const size = parseInt(query.get('size')) || 5;
-	const sort_field = query.get('sort_field') || "";
-	const sort_type = query.get('sort_type') || "";
+	const sort_field = query.get('sort_field') || '';
+	const sort_type = query.get('sort_type') || '';
 	const formatNumber = (num) => {
 		num = Math.round((num ?? 0) * 10 + Number.EPSILON) / 10;
 		return num?.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
@@ -67,10 +67,10 @@ const TransactionHistory = () => {
 					page,
 					size,
 					sort_field,
-					sort_type
+					sort_type,
 				});
 
-				if (transactionResponse.status === 200){
+				if (transactionResponse.status === 200) {
 					setData(transactionResponse.data);
 				}
 				setLoading(false);
@@ -110,7 +110,9 @@ const TransactionHistory = () => {
 		if (sort_type === 'asc') type = 'desc';
 		let query = '';
 		if (size) query += `&size=${size}`;
-		history.push(`/transaction-history?page=${1}${query}&sort_field=${field}&sort_type=${type}`);
+		history.push(
+			`/transaction-history?page=${1}${query}&sort_field=${field}&sort_type=${type}`
+		);
 	};
 
 	function displayLabel(data) {
@@ -126,199 +128,217 @@ const TransactionHistory = () => {
 	}
 
 	return (
-		<Container>
-			<Grid className="table__container">
-				{loading && <Loading />}
-				<PageHeader title="Lịch sử giao dịch" />
+		<Box
+			component="main"
+			sx={{
+				flexGrow: 1,
+				py: 8,
+			}}
+		>
+			<Container>
+				<Grid className="table__container">
+					{loading && <Loading />}
+					<PageHeader title="Lịch sử giao dịch" />
 
-				<Card>
-					<TableContainer sx={{ minWidth: 800 }}>
-						<Table>
-							<TableHead>
-								<TableRow style={{ backgroundColor: '#F4F6F8' }}>
-									<TableCell
-										style={{ fontSize: 14, fontWeight: 600 }}
-										onClick={() => handleSort('id')}
-									>
-										<Box
-											style={{
-												display: 'flex',
-												alignItems: 'center',
-												cursor: 'pointer',
-											}}
+					<Card>
+						<TableContainer>
+							<Table>
+								<TableHead>
+									<TableRow style={{ backgroundColor: '#F4F6F8' }}>
+										<TableCell
+											style={{ fontSize: 14, fontWeight: 600 }}
+											onClick={() => handleSort('id')}
 										>
-											<p>Mã giao dịch</p>
-											{sort_field === 'id' && sort_type === 'asc' ? (
-												<KeyboardArrowUp />
-											) : (
-												<KeyboardArrowDown />
-											)}
-										</Box>{' '}
-									</TableCell>
-									<TableCell
-										style={{ fontSize: 14, fontWeight: 600 }}
-										onClick={() => handleSort('amount')}
-									>
-										<Box
-											style={{
-												display: 'flex',
-												alignItems: 'center',
-												cursor: 'pointer',
-											}}
-										>
-											<p>Số tiền</p>
-											{sort_field === 'amount' && sort_type === 'asc' ? (
-												<KeyboardArrowUp />
-											) : (
-												<KeyboardArrowDown />
-											)}
-										</Box>{' '}
-									</TableCell>
-									<TableCell
-										style={{ fontSize: 14, fontWeight: 600 }}
-										onClick={() => handleSort('createdDate')}
-									>
-										<Box
-											style={{
-												display: 'flex',
-												alignItems: 'center',
-												cursor: 'pointer',
-											}}
-										>
-											<p>Thời gian giao dịch</p>
-											{sort_field === 'createdDate' && sort_type === 'asc' ? (
-												<KeyboardArrowUp />
-											) : (
-												<KeyboardArrowDown />
-											)}
-										</Box>{' '}
-									</TableCell>
-									<TableCell
-										style={{ fontSize: 14, fontWeight: 600 }}
-										onClick={() => handleSort('status')}
-									>
-										<Box
-											style={{
-												display: 'flex',
-												alignItems: 'center',
-												cursor: 'pointer',
-											}}
-										>
-											<p>Loại giao dịch</p>
-											{sort_field === 'status' && sort_type === 'asc' ? (
-												<KeyboardArrowUp />
-											) : (
-												<KeyboardArrowDown />
-											)}
-										</Box>{' '}
-									</TableCell>
-									<TableCell
-										style={{ fontSize: 14, fontWeight: 600 }}
-										onClick={() => handleSort('method')}
-									>
-										<Box
-											style={{
-												display: 'flex',
-												alignItems: 'center',
-												cursor: 'pointer',
-											}}
-										>
-											<p>Phương thức thanh toán</p>
-											{sort_field === 'method' && sort_type === 'asc' ? (
-												<KeyboardArrowUp />
-											) : (
-												<KeyboardArrowDown />
-											)}
-										</Box>{' '}
-									</TableCell>
-									<TableCell
-										style={{ fontSize: 14, fontWeight: 600 }}
-										onClick={() => handleSort('description')}
-									>
-										<Box
-											style={{
-												display: 'flex',
-												alignItems: 'center',
-												cursor: 'pointer',
-											}}
-										>
-											<p>Mô tả</p>
-											{sort_field === 'description' && sort_type === 'asc' ? (
-												<KeyboardArrowUp />
-											) : (
-												<KeyboardArrowDown />
-											)}
-										</Box>{' '}
-									</TableCell>
-								</TableRow>
-							</TableHead>
-							{data && data?.list?.length > 0 ? (
-								<>
-									<TableBody>
-										{data?.list?.map((transaction, index) => (
-											<TableRow hover>
-												<TableCell style={{ lineHeight: '24px' }}>
-													{transaction.id}
-												</TableCell>
-												{transaction.status === 'deposit' ||
-												transaction.status === 'init_balance' ? (
-													<TableCell
-														style={{
-															lineHeight: '24px',
-															color: 'green',
-														}}
-														align="right"
-													>
-														{`+ ${formatNumber(transaction.amount)} đ`}
-													</TableCell>
+											<Box
+												style={{
+													display: 'flex',
+													alignItems: 'center',
+													cursor: 'pointer',
+												}}
+											>
+												<p>Mã giao dịch</p>
+												{sort_field === 'id' && sort_type === 'asc' ? (
+													<KeyboardArrowUp />
 												) : (
-													<TableCell
-														style={{ lineHeight: '24px', color: 'red' }}
-														align="right"
-													>
-														{`- ${formatNumber(transaction.amount)} đ`}
-													</TableCell>
+													<KeyboardArrowDown />
 												)}
-												<TableCell style={{ lineHeight: '24px' }}>
-													{convertTime(transaction.created_date) ?? ''}
-												</TableCell>
-												<TableCell style={{ lineHeight: '24px' }}>
-													{payment.status[transaction.status]}
-												</TableCell>
-												<TableCell style={{ lineHeight: '24px' }}>
-													{payment.method[transaction.method]}
-												</TableCell>
-												<TableCell style={{ lineHeight: '24px' }}>
-													{transaction.description}
-												</TableCell>
-											</TableRow>
-										))}
-									</TableBody>
-									<TablePagination
-										rowsPerPageOptions={[5, 10, 25]}
-										labelRowsPerPage="Hiển thị mỗi trang"
-										labelDisplayedRows={displayLabel}
-										count={data.total_elements}
-										rowsPerPage={size}
-										page={page - 1}
-										onPageChange={handleChangePage}
-										onRowsPerPageChange={handleChangeRowsPerPage}
-									/>
-								</>
-							) : (
-								<TableBody>
-									<TableRow>
-										<TableCell colSpan={3}>
-											Không tìm thấy dữ liệu phù hợp
+											</Box>{' '}
+										</TableCell>
+										<TableCell
+											style={{ fontSize: 14, fontWeight: 600 }}
+											onClick={() => handleSort('amount')}
+										>
+											<Box
+												style={{
+													display: 'flex',
+													alignItems: 'center',
+													cursor: 'pointer',
+												}}
+											>
+												<p>Số tiền</p>
+												{sort_field === 'amount' && sort_type === 'asc' ? (
+													<KeyboardArrowUp />
+												) : (
+													<KeyboardArrowDown />
+												)}
+											</Box>{' '}
+										</TableCell>
+										<TableCell
+											style={{ fontSize: 14, fontWeight: 600 }}
+											onClick={() => handleSort('createdDate')}
+										>
+											<Box
+												style={{
+													display: 'flex',
+													alignItems: 'center',
+													cursor: 'pointer',
+												}}
+											>
+												<p>Thời gian giao dịch</p>
+												{sort_field === 'createdDate' &&
+												sort_type === 'asc' ? (
+													<KeyboardArrowUp />
+												) : (
+													<KeyboardArrowDown />
+												)}
+											</Box>{' '}
+										</TableCell>
+										<TableCell
+											style={{ fontSize: 14, fontWeight: 600 }}
+											onClick={() => handleSort('status')}
+										>
+											<Box
+												style={{
+													display: 'flex',
+													alignItems: 'center',
+													cursor: 'pointer',
+												}}
+											>
+												<p>Loại giao dịch</p>
+												{sort_field === 'status' && sort_type === 'asc' ? (
+													<KeyboardArrowUp />
+												) : (
+													<KeyboardArrowDown />
+												)}
+											</Box>{' '}
+										</TableCell>
+										<TableCell
+											style={{ fontSize: 14, fontWeight: 600 }}
+											onClick={() => handleSort('method')}
+										>
+											<Box
+												style={{
+													display: 'flex',
+													alignItems: 'center',
+													cursor: 'pointer',
+												}}
+											>
+												<p>Phương thức thanh toán</p>
+												{sort_field === 'method' && sort_type === 'asc' ? (
+													<KeyboardArrowUp />
+												) : (
+													<KeyboardArrowDown />
+												)}
+											</Box>{' '}
+										</TableCell>
+										<TableCell
+											style={{ fontSize: 14, fontWeight: 600 }}
+											onClick={() => handleSort('description')}
+										>
+											<Box
+												style={{
+													display: 'flex',
+													alignItems: 'center',
+													cursor: 'pointer',
+												}}
+											>
+												<p>Mô tả</p>
+												{sort_field === 'description' &&
+												sort_type === 'asc' ? (
+													<KeyboardArrowUp />
+												) : (
+													<KeyboardArrowDown />
+												)}
+											</Box>{' '}
 										</TableCell>
 									</TableRow>
-								</TableBody>
-							)}
-						</Table>
-					</TableContainer>
-				</Card>
-			</Grid>
-		</Container>
+								</TableHead>
+								{data && data?.list?.length > 0 ? (
+									<>
+										<TableBody>
+											{data?.list?.map((transaction, index) => (
+												<TableRow hover>
+													<TableCell style={{ lineHeight: '24px' }}>
+														{transaction.id}
+													</TableCell>
+													{transaction.status === 'deposit' ||
+													transaction.status === 'init_balance' ? (
+														<TableCell
+															style={{
+																lineHeight: '24px',
+																color: 'green',
+															}}
+															align="right"
+														>
+															{`+ ${formatNumber(
+																transaction.amount
+															)} đ`}
+														</TableCell>
+													) : (
+														<TableCell
+															style={{
+																lineHeight: '24px',
+																color: 'red',
+															}}
+															align="right"
+														>
+															{`- ${formatNumber(
+																transaction.amount
+															)} đ`}
+														</TableCell>
+													)}
+													<TableCell style={{ lineHeight: '24px' }}>
+														{convertTime(transaction.created_date) ??
+															''}
+													</TableCell>
+													<TableCell style={{ lineHeight: '24px' }}>
+														{payment.status[transaction.status]}
+													</TableCell>
+													<TableCell style={{ lineHeight: '24px' }}>
+														{payment.method[transaction.method]}
+													</TableCell>
+													<TableCell style={{ lineHeight: '24px' }}>
+														{transaction.description}
+													</TableCell>
+												</TableRow>
+											))}
+										</TableBody>
+										<TablePagination
+											rowsPerPageOptions={[5, 10, 25]}
+											labelRowsPerPage="Hiển thị mỗi trang"
+											labelDisplayedRows={displayLabel}
+											count={data.total_elements}
+											rowsPerPage={size}
+											page={page - 1}
+											onPageChange={handleChangePage}
+											onRowsPerPageChange={handleChangeRowsPerPage}
+										/>
+									</>
+								) : (
+									<TableBody>
+										<TableRow>
+											<TableCell colSpan={3}>
+												Không tìm thấy dữ liệu phù hợp
+											</TableCell>
+										</TableRow>
+									</TableBody>
+								)}
+							</Table>
+						</TableContainer>
+					</Card>
+				</Grid>
+			</Container>
+		</Box>
 	);
 };
 

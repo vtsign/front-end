@@ -34,8 +34,8 @@ const SendFiles = ({ register, errors, control, handleSubmit, loading }) => {
 				</Typography>
 			</Grid>
 
-			<Grid display="flex" my="1rem">
-				<Grid item lg={8} md={12} xl={7} xs={12} mr="2rem">
+			<Grid container my="1rem">
+				<Grid item md={7} xs={12} mr="2rem">
 					{loading && <Loading />}
 					<Box
 						sx={{
@@ -83,7 +83,7 @@ const SendFiles = ({ register, errors, control, handleSubmit, loading }) => {
 						</Grid>
 					</Box>
 				</Grid>
-				<Grid item lg={4} md={6} xl={5} xs={12}>
+				<Grid item md={4} xs={12}>
 					<Card>
 						<CardContent className="receivers">
 							{receivers.length > 0 ? (

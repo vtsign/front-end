@@ -10,7 +10,7 @@ const Footer2 = () => {
 		<div className="footer-clean">
 			<footer>
 				<Grid container justifyContent="center" spacing={4}>
-					<Grid item xs={12} md={3} sx={{ marginLeft: '0px' }}>
+					<Grid item md={3} xs={12}>
 						<h3>Liên lạc</h3>
 						<ul>
 							<li>

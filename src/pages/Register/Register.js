@@ -57,9 +57,9 @@ const Register = () => {
 
 	const doLogin = (formData) => {
 		if (formData.password !== formData.verifyPassword) {
-			setError("verifyPassword", {
-				type: "manual",
-				message: "Mật khẩu không trùng khớp",
+			setError('verifyPassword', {
+				type: 'manual',
+				message: 'Mật khẩu không trùng khớp',
 			});
 			return;
 		}
@@ -102,9 +102,11 @@ const Register = () => {
 
 	return (
 		<div className="register">
-			<div className="register-logo">
-				<img src={Logo} alt="logo" style={{ width: '15vw', margin: '3rem' }} />
-			</div>
+			<Link to="/">
+				<div className="register-logo">
+					<img src={Logo} alt="logo" style={{ width: '15vw', margin: '3rem' }} />
+				</div>
+			</Link>
 			<Paper variant="outlined" className="register-form">
 				<p className="register-logo-temp">VTSIGN</p>
 				<Typography variant="h5" textAlign="center" fontWeight="bold" my="1rem">
@@ -317,38 +319,14 @@ const Register = () => {
 					<Divider style={{ marginTop: '2rem', marginBottom: '2rem' }} />
 					<p style={{ textAlign: 'center', marginBottom: '2rem' }}>
 						Bạn đã có tài khoản?{' '}
-						<Link exact to="/login">
+						<Link
+							exact
+							to="/login"
+							style={{ color: '#1876D1', textDecoration: 'underline' }}
+						>
 							Đăng nhập?
 						</Link>
 					</p>
-					{/* <Divider style={{ paddingInline: '2rem', marginBottom: '2rem' }}>
-						Hoặc đăng nhập với
-					</Divider>
-					<Box mb="1.5rem">
-						<Stack
-							direction="row"
-							spacing={2}
-							display="flex"
-							justifyContent="space-between"
-						>
-							<Button
-								variant="outlined"
-								fullWidth
-								size="large"
-								startIcon={<Google />}
-							>
-								Google
-							</Button>
-							<Button
-								variant="contained"
-								fullWidth
-								size="large"
-								startIcon={<Facebook />}
-							>
-								Facebook
-							</Button>
-						</Stack>
-					</Box> */}
 				</form>
 			</Paper>
 		</div>
