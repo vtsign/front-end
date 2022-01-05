@@ -27,27 +27,31 @@ const ChangePassword = () => {
 	const [hiddenVerifyPassword, setHiddenVerifyPassword] = useState(true);
 	const [loading, setLoading] = useState(false);
 
-
-	const { register, handleSubmit, formState: { errors }, watch } = useForm();
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+		watch,
+	} = useForm();
 	const history = useHistory();
 	const currentPassword = useRef({});
-	currentPassword.current = watch("password", "");
+	currentPassword.current = watch('password', '');
 
 	const { success, error } = useToast();
 
-	const changePassword = async formData => {
+	const changePassword = async (formData) => {
 		setLoading(true);
 		try {
 			const response = await userApi.changePassword({
 				old_password: formData.oldPassword,
-				new_password: formData.password
+				new_password: formData.password,
 			});
 			setLoading(false);
-			if(response.status === 200) {
-				success("Đổi mật khẩu thành công");
-				history.push("/");
+			if (response.status === 200) {
+				success('Đổi mật khẩu thành công');
+				history.push('/');
 			}
-		} catch(err) {
+		} catch (err) {
 			setLoading(false);
 			switch (err.status) {
 				case 400:
@@ -70,10 +74,10 @@ const ChangePassword = () => {
 					break;
 			}
 		}
-	}
+	};
 	return (
-		<div className="container">
-			<div className="form">
+		<Grid className="container">
+			<Grid className="form">
 				<Paper variant="outlined" className="change-password__form">
 					<Typography variant="h5" textAlign="center" fontWeight="bold" my="1rem">
 						Đổi mật khẩu
@@ -225,8 +229,8 @@ const ChangePassword = () => {
 						</Box>
 					</form>
 				</Paper>
-			</div>
-		</div>
+			</Grid>
+		</Grid>
 	);
 };
 

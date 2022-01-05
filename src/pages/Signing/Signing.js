@@ -158,7 +158,15 @@ const Signing = () => {
 		<Container maxWidth={false}>
 			<Grid container className="sign__container">
 				<Grid container className="sign__content">
-					<Grid item xl={2} lg={2} md={3} xs={12} alignSelf="center">
+					<Grid
+						item
+						xl={2}
+						lg={2}
+						md={3}
+						xs={12}
+						sx={{ display: { xs: 'none', md: 'block' } }}
+						alignSelf="center"
+					>
 						<Stepper activeStep={activeStep} orientation="vertical" alignSelf="center">
 							{steps.map((label, index) => {
 								const stepProps = {};
@@ -210,48 +218,48 @@ const Signing = () => {
 								loading={loading}
 							/>
 						)}
+						<Grid
+							item
+							xl={12}
+							lg={12}
+							md={12}
+							display="flex"
+							justifyContent="flex-end"
+							style={{ height: '3rem' }}
+						>
+							{activeStep > 0 && (
+								<Button variant="outlined" onClick={handlePrev}>
+									Quay lại
+								</Button>
+							)}
+							{activeStep === 2 ? (
+								<Button
+									variant="contained"
+									style={{ marginLeft: '14px' }}
+									onClick={handleExportFiles}
+								>
+									Tiếp tục
+								</Button>
+							) : activeStep === 3 ? (
+								<Button
+									variant="contained"
+									style={{ marginLeft: '14px' }}
+									onClick={handleSubmit(completeSigning)}
+								>
+									{activeStep === steps.length - 1 ? 'Gửi' : 'Tiếp tục'}
+								</Button>
+							) : (
+								<Button
+									variant="contained"
+									style={{ marginLeft: '14px' }}
+									onClick={handleNext}
+									disabled={loading}
+								>
+									{activeStep === steps.length - 1 ? 'Gửi' : 'Tiếp tục'}
+								</Button>
+							)}
+						</Grid>
 					</Grid>
-				</Grid>
-				<Grid
-					item
-					xl={12}
-					lg={12}
-					md={12}
-					display="flex"
-					justifyContent="flex-end"
-					style={{ height: '3rem' }}
-				>
-					{activeStep > 0 && (
-						<Button variant="outlined" onClick={handlePrev}>
-							Quay lại
-						</Button>
-					)}
-					{activeStep === 2 ? (
-						<Button
-							variant="contained"
-							style={{ marginLeft: '14px' }}
-							onClick={handleExportFiles}
-						>
-							Tiếp tục
-						</Button>
-					) : activeStep === 3 ? (
-						<Button
-							variant="contained"
-							style={{ marginLeft: '14px' }}
-							onClick={handleSubmit(completeSigning)}
-						>
-							{activeStep === steps.length - 1 ? 'Gửi' : 'Tiếp tục'}
-						</Button>
-					) : (
-						<Button
-							variant="contained"
-							style={{ marginLeft: '14px' }}
-							onClick={handleNext}
-							disabled={loading}
-						>
-							{activeStep === steps.length - 1 ? 'Gửi' : 'Tiếp tục'}
-						</Button>
-					)}
 				</Grid>
 			</Grid>
 		</Container>
