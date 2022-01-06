@@ -21,3 +21,10 @@
 		height: 15rem;
 	}
 }
+
+@media (max-width: 600px) {
+	.webviewer {
+		min-height: 50vh;
+		max-height: $sign-preview-items;
+	}
+}

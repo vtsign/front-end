@@ -8,6 +8,7 @@ import {
 	Grid,
 	InputLabel,
 	MenuItem,
+	Stack,
 	TextField,
 	Typography,
 } from '@mui/material';
@@ -111,152 +112,146 @@ const AddReceivers = ({
 				</Typography>
 			</Grid>
 			<Grid container>
-				<Grid item lg={8} md={12} xl={8} xs={12}>
+				<Grid item md={7} xs={12}>
 					<Box className="add-receivers__container">
-						<Grid
-							display="flex"
-							justifyContent="space-between"
-							alignItems="center"
-							my=".5rem"
-						>
-							<InputLabel>
-								Tên người nhận <span style={{ color: 'red' }}>*</span>
-							</InputLabel>
-							<TextField
-								id="name"
-								placeholder="Nguyễn Văn A"
-								sx={{ minWidth: '25vw' }}
-								{...register('name', {
-									required: 'Vui lòng nhập họ và tên người nhận',
-								})}
-								error={!!errors.name}
-								helperText={errors?.name?.message}
-							/>
-						</Grid>
-						<Grid
-							display="flex"
-							justifyContent="space-between"
-							alignItems="center"
-							my=".5rem"
-						>
-							<InputLabel>
-								Địa chỉ Email <span style={{ color: 'red' }}>*</span>
-							</InputLabel>
-							<TextField
-								id="email"
-								placeholder="nguyenvana@email.com"
-								sx={{ minWidth: '25vw' }}
-								{...register('email', {
-									required: 'Vui lòng nhập địa chỉ Email',
-									pattern: {
-										value: REG_EMAIL,
-										message: 'Email sai định dạng',
-									},
-								})}
-								error={!!errors.email}
-								helperText={errors?.email?.message}
-								onChange={(e) => setEmail(e.target.value)}
-							/>
-						</Grid>
-						{showPhone && (
-							<Grid
-								display="flex"
-								justifyContent="space-between"
-								alignItems="center"
-								my=".5rem"
-							>
-								<InputLabel>Số điện thoại</InputLabel>
+						<Grid container display={'flex'} alignItems={'center'} my=".5rem">
+							<Grid item xs={12} sm={4}>
+								<InputLabel>
+									Tên người nhận <span style={{ color: 'red' }}>*</span>
+								</InputLabel>
+							</Grid>
+							<Grid item xs={12} sm={8}>
 								<TextField
-									id="phone"
-									placeholder="+84999111222"
-									sx={{ minWidth: '25vw' }}
-									{...register('phone', {
-										required: 'Vui lòng nhập SĐT',
-										pattern: {
-											value: REG_PHONE,
-											message: 'SĐT sai định dạng',
-										},
+									id="name"
+									placeholder="Nguyễn Văn A"
+									fullWidth
+									{...register('name', {
+										required: 'Vui lòng nhập họ và tên người nhận',
 									})}
-									error={!!errors.phone}
-									// helperText={errors?.phone?.message}
-									helperText="Người nhận chưa có tài khoản hệ thống cần nhập SĐT"
+									error={!!errors.name}
+									helperText={errors?.name?.message}
 								/>
 							</Grid>
-						)}
-						<Grid
-							display="flex"
-							justifyContent="space-between"
-							alignItems="center"
-							my=".5rem"
-						>
-							<InputLabel>
-								Quyền hạn <span style={{ color: 'red' }}>*</span>
-							</InputLabel>
-							<Controller
-								name="permission"
-								control={control}
-								render={({ ref, value, ...inputProps }) => (
+						</Grid>
+						<Grid container display="flex" alignItems="center" my=".5rem">
+							<Grid item xs={12} sm={4}>
+								<InputLabel>
+									Địa chỉ Email <span style={{ color: 'red' }}>*</span>
+								</InputLabel>
+							</Grid>
+							<Grid item xs={12} sm={8}>
+								<TextField
+									id="email"
+									placeholder="nguyenvana@email.com"
+									fullWidth
+									{...register('email', {
+										required: 'Vui lòng nhập địa chỉ Email',
+										pattern: {
+											value: REG_EMAIL,
+											message: 'Email sai định dạng',
+										},
+									})}
+									error={!!errors.email}
+									helperText={errors?.email?.message}
+									onChange={(e) => setEmail(e.target.value)}
+								/>
+							</Grid>
+						</Grid>
+						{showPhone && (
+							<Grid container display="flex" alignItems="center" my=".5rem">
+								<Grid item xs={12} sm={4}>
+									<InputLabel>Số điện thoại</InputLabel>
+								</Grid>
+								<Grid item xs={12} sm={8}>
 									<TextField
-										select
+										id="phone"
+										placeholder="+84999111222"
 										fullWidth
-										variant="outlined"
-										size="small"
-										style={{ width: '25vw' }}
-										{...inputProps}
-										inputRef={ref}
-										value={getValues('permission')}
-										defaultValue={getValues('permission')}
-										// SelectProps={{ displayEmpty: true }}
-										onChange={(e) => setValue('permission', e.target.value)}
-									>
-										{/* <MenuItem value="">Lựa chọn quyền hạn</MenuItem> */}
-										{permissions.map((permission) => (
-											<MenuItem
-												key={permission.value}
-												value={permission.value}
-												// selected={
-												// 	watch('permission') ===
-												// 	permission.value
-												// }
-											>
-												{permission.label}
-											</MenuItem>
-										))}
-									</TextField>
-								)}
-							/>
+										{...register('phone', {
+											required: 'Vui lòng nhập SĐT',
+											pattern: {
+												value: REG_PHONE,
+												message: 'SĐT sai định dạng',
+											},
+										})}
+										error={!!errors.phone}
+										// helperText={errors?.phone?.message}
+										helperText="Người nhận chưa có tài khoản hệ thống cần nhập SĐT"
+									/>
+								</Grid>
+							</Grid>
+						)}
+						<Grid container display="flex" alignItems="center" my=".5rem">
+							<Grid item xs={12} sm={4}>
+								<InputLabel>
+									Quyền hạn <span style={{ color: 'red' }}>*</span>
+								</InputLabel>
+							</Grid>
+							<Grid item xs={12} sm={8}>
+								<Controller
+									name="permission"
+									control={control}
+									render={({ ref, value, ...inputProps }) => (
+										<TextField
+											select
+											fullWidth
+											variant="outlined"
+											size="large"
+											fullWidth
+											{...inputProps}
+											inputRef={ref}
+											value={getValues('permission')}
+											defaultValue={getValues('permission')}
+											// SelectProps={{ displayEmpty: true }}
+											onChange={(e) => setValue('permission', e.target.value)}
+										>
+											{/* <MenuItem value="">Lựa chọn quyền hạn</MenuItem> */}
+											{permissions.map((permission) => (
+												<MenuItem
+													key={permission.value}
+													value={permission.value}
+													// selected={
+													// 	watch('permission') ===
+													// 	permission.value
+													// }
+												>
+													{permission.label}
+												</MenuItem>
+											))}
+										</TextField>
+									)}
+								/>
+							</Grid>
 						</Grid>
-						<Grid
-							display="flex"
-							justifyContent="space-between"
-							alignItems="center"
-							my=".5rem"
-						>
-							<InputLabel>Sử dụng khóa</InputLabel>
-							<TextField
-								id="key"
-								placeholder="Khóa sẽ gửi qua SĐT người nhận"
-								sx={{ minWidth: '25vw' }}
-								{...register('key')}
-								error={!!errors.key}
-								helperText={errors?.key?.message}
-								defaultValue={'VT' + randomstring.generate(6)}
-							/>
+						<Grid container display="flex" alignItems="center" my=".5rem">
+							<Grid item xs={12} sm={4}>
+								<InputLabel>Sử dụng khóa</InputLabel>
+							</Grid>
+							<Grid item xs={12} sm={8}>
+								<TextField
+									id="key"
+									placeholder="Khóa sẽ gửi qua SĐT người nhận"
+									fullWidth
+									{...register('key')}
+									error={!!errors.key}
+									helperText={errors?.key?.message}
+									defaultValue={'VT' + randomstring.generate(6)}
+								/>
+							</Grid>
 						</Grid>
-						<Grid
-							display="flex"
-							justifyContent="space-between"
-							alignItems="center"
-							my=".5rem"
-						>
-							<InputLabel>Tin nhắn riêng tư</InputLabel>
-							<TextField
-								id="private_message"
-								sx={{ minWidth: '25vw' }}
-								rows={5}
-								rowsMax={10}
-								{...register('private_message')}
-							/>
+						<Grid container display="flex" alignItems="center" my=".5rem">
+							<Grid item xs={12} sm={4}>
+								<InputLabel>Tin nhắn riêng tư</InputLabel>
+							</Grid>
+							<Grid item xs={12} sm={8}>
+								<TextField
+									id="private_message"
+									fullWidth
+									rows={5}
+									rowsMax={10}
+									{...register('private_message')}
+								/>
+							</Grid>
 						</Grid>
 						<Grid
 							display="flex"
@@ -270,7 +265,7 @@ const AddReceivers = ({
 						</Grid>
 					</Box>
 				</Grid>
-				<Grid item lg={4} md={6} xl={4} xs={12}>
+				<Grid item md={5} xs={12}>
 					<Card className="receiver__list">
 						<CardContent>
 							{receivers.length > 0 ? (

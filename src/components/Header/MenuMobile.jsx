@@ -24,7 +24,7 @@ const MenuMobile = () => {
 			sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
 			role="presentation"
 			onClick={toggleDrawer(false)}
-            onKeyDown={toggleDrawer(false)}
+			onKeyDown={toggleDrawer(false)}
 		>
 			<List class="menu-mobile">
 				<NavLink to="/home" activeClassName="active">
@@ -51,20 +51,12 @@ const MenuMobile = () => {
 						<ListItemText primary="Quản lý" />
 					</ListItem>
 				</NavLink>
-				<NavLink to="/template" activeClassName="active">
-					<ListItem button key="Bản mẫu">
-						<ListItemIcon>
-							<NoteIcon />
-						</ListItemIcon>
-						<ListItemText primary="Bản mẫu" />
-					</ListItem>
-				</NavLink>
 			</List>
 		</Box>
 	);
 	return (
 		<Fragment>
-            <SwipeableDrawer
+			<SwipeableDrawer
 				anchor="left"
 				open={state}
 				onClose={toggleDrawer(false)}
@@ -72,10 +64,10 @@ const MenuMobile = () => {
 			>
 				{list()}
 			</SwipeableDrawer>
-            <MenuIcon
-                fontSize="large"
-                onClick={toggleDrawer(true)}
-                className = "menu-icon"
+			<MenuIcon
+				fontSize="large"
+				onClick={toggleDrawer(true)}
+				className="menu-icon"
 				sx={{
 					display: { sm: 'inline', md: 'none' },
 					mr: 2,
