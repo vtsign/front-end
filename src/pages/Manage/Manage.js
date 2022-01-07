@@ -16,10 +16,10 @@ const Manage = () => {
 	const match = useRouteMatch();
 	return (
 		<Grid container className="manage">
-			<Grid item md={2} className="manage-sidebar">
+			<Grid item md={2} xs={12} className="manage-sidebar">
 				<SideBar />
 			</Grid>
-			<Grid item md={10} className="manage-content">
+			<Grid item md={10} xs={12} className="manage-content">
 				<Route path={`${match.url}`} exact>
 					<Redirect to="/manage/completed" />
 				</Route>
