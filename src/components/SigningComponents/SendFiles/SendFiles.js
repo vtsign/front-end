@@ -35,7 +35,7 @@ const SendFiles = ({ register, errors, control, handleSubmit, loading }) => {
 			</Grid>
 
 			<Grid container my="1rem">
-				<Grid item md={7} xs={12}>
+				<Grid item md={7} sm={12} xs={12}>
 					{loading && <Loading />}
 					<Box
 						sx={{
@@ -86,7 +86,7 @@ const SendFiles = ({ register, errors, control, handleSubmit, loading }) => {
 						</Grid>
 					</Box>
 				</Grid>
-				<Grid item sm={5} xs={12}>
+				<Grid item md={5} sm={12} xs={12}>
 					<Card>
 						<CardContent className="receivers">
 							{receivers.length > 0 ? (

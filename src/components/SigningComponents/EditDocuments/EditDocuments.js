@@ -361,7 +361,7 @@ const EditDocuments = ({ loading, setLoading }) => {
 				</Typography>
 			</Grid>
 			<Grid container style={{ minHeight: '80vh' }}>
-				<Grid item sm={2} xs={12}>
+				<Grid item md={2} sm={12} xs={12}>
 					<Box padding={1}>
 						<Typography gutterBottom>
 							<b>Người nhận</b>
@@ -399,8 +399,8 @@ const EditDocuments = ({ loading, setLoading }) => {
 					<Stack
 						my={2}
 						style={{ height: '100%', overflow: 'auto' }}
-						direction={{ xs: 'row', sm: 'column' }}
-						justifyContent={{ xs: 'space-between', sm: 'flex-start' }}
+						direction={{ xs: 'row', md: 'column' }}
+						justifyContent={{ xs: 'space-between', md: 'flex-start' }}
 					>
 						<Box padding={1}>
 							<div
@@ -482,10 +482,10 @@ const EditDocuments = ({ loading, setLoading }) => {
 					</Stack>
 				</Grid>
 
-				<Grid item sm={8} xs={12} ref={viewer} className="webviewer">
+				<Grid item md={8} sm={12} xs={12} ref={viewer} className="webviewer">
 					{loading && <Loading />}
 				</Grid>
-				<Grid item sm={2} xs={12}>
+				<Grid item md={2} sm={12} xs={12}>
 					{documents.documentList.length > 0 && (
 						<Grid className="preview-file">
 							{documents.documentList.map((document, index) => (

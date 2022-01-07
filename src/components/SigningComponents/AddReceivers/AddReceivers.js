@@ -61,7 +61,7 @@ const AddReceivers = ({
 	const myInfo = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
 
 	const addReceivers = (formData) => {
-		if (formData.email === myInfo.email) {
+		if (formData.email.toLowerCase() === myInfo.email) {
 			error('Không được tự gửi đến chính mình');
 			return;
 		}

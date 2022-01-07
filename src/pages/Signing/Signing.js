@@ -156,7 +156,7 @@ const Signing = () => {
 	};
 	return (
 		<Box sx={{ display: 'flex' }}>
-			<Grid px={5} alignSelf="center" sx={{ display: { xs: 'none', sm: 'block' } }}>
+			<Grid px={5} alignSelf="center" sx={{ display: { xs: 'none', md: 'block' } }}>
 				<Stepper activeStep={activeStep} orientation="vertical" alignSelf="center">
 					{steps.map((label, index) => {
 						const stepProps = {};
@@ -212,10 +212,6 @@ const Signing = () => {
 								/>
 							)}
 							<Grid
-								item
-								xl={12}
-								lg={12}
-								md={12}
 								display="flex"
 								justifyContent="flex-end"
 								style={{ height: '3rem' }}
