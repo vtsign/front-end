@@ -1,6 +1,14 @@
 import React, { useRef, useState } from 'react';
 import { CloudUpload } from '@mui/icons-material';
-import { Box, Card, CardContent, Container, Grid, Typography, CircularProgress } from '@mui/material';
+import {
+	Box,
+	Card,
+	CardContent,
+	Container,
+	Grid,
+	Typography,
+	CircularProgress,
+} from '@mui/material';
 import '@pdftron/webviewer/public/core/CoreControls';
 import { useDispatch, useSelector } from 'react-redux';
 import { addDocumentList, removeDocument } from '../../../redux/actions/documentActions';
@@ -35,7 +43,6 @@ const UploadDocuments = ({ loading, setLoading }) => {
 				}
 			},
 		});
-
 	};
 
 	const handleSelectFile = (e) => {
@@ -55,11 +62,11 @@ const UploadDocuments = ({ loading, setLoading }) => {
 		}
 	};
 
-	const handleRemoveFile = e => {
-		dispatch(removeDocument(e.target.getAttribute('data-id')))
-	}
+	const handleRemoveFile = (e) => {
+		dispatch(removeDocument(e.target.getAttribute('data-id')));
+	};
 	return (
-		<Container maxWidth={false} style={{ height: '100%' }}>
+		<Container maxWidth={false} style={{ height: '80vh' }}>
 			<Grid>
 				<Typography variant="h6" my="1rem">
 					Thêm tài liệu
@@ -127,7 +134,11 @@ const UploadDocuments = ({ loading, setLoading }) => {
 										</span>
 									</Grid>
 									<Typography
-										style={{ color: 'red', textDecoration: 'underline', cursor: "pointer" }}
+										style={{
+											color: 'red',
+											textDecoration: 'underline',
+											cursor: 'pointer',
+										}}
 										data-id={index}
 										onClick={handleRemoveFile}
 									>

@@ -1,4 +1,4 @@
-import { AccountCircle, Settings } from '@mui/icons-material';
+import { AccountCircle, Password, AccountBalanceWallet } from '@mui/icons-material';
 import Logout from '@mui/icons-material/Logout';
 import { Box, Button, IconButton } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
@@ -116,21 +116,21 @@ const LeftHeader = ({ userInfo }) => {
 					<Avatar /> Thông tin tài khoản
 				</MenuItem>
 				<MenuItem onClick={() => history.push('/change-password')}>
-					<Avatar /> Đổi mật khẩu
+					<Avatar>
+						<Password />
+					</Avatar>{' '}
+					Đổi mật khẩu
 				</MenuItem>
 				<MenuItem onClick={() => history.push('/transaction-history')}>
-					<Avatar /> Lịch sử giao dịch
+					<Avatar>
+						<AccountBalanceWallet fontSize="medium" />
+					</Avatar>
+					Lịch sử giao dịch
 				</MenuItem>
 				<Divider />
-				<MenuItem>
-					<ListItemIcon>
-						<Settings fontSize="small" />
-					</ListItemIcon>
-					Cài đặt
-				</MenuItem>
 				<MenuItem onClick={logoutHandler}>
 					<ListItemIcon>
-						<Logout fontSize="small" />
+						<Logout fontSize="medium" />
 					</ListItemIcon>
 					Đăng xuất
 				</MenuItem>

@@ -35,7 +35,7 @@ const SendFiles = ({ register, errors, control, handleSubmit, loading }) => {
 			</Grid>
 
 			<Grid container my="1rem">
-				<Grid item md={7} xs={12} mr="2rem">
+				<Grid item md={7} sm={12} xs={12}>
 					{loading && <Loading />}
 					<Box
 						sx={{
@@ -47,43 +47,46 @@ const SendFiles = ({ register, errors, control, handleSubmit, loading }) => {
 							margin: '0 2rem',
 						}}
 					>
-						<Grid
-							display="flex"
-							justifyContent="space-between"
-							alignItems="center"
-							my="1rem"
-						>
-							<InputLabel>Chủ đề Email</InputLabel>
-							<TextField
-								id="title"
-								placeholder="Chủ để Email"
-								sx={{ minWidth: '25vw' }}
-								{...register('title', {
-									required: 'Vui lòng nhập chủ đề Email',
-								})}
-								error={!!errors.title}
-								helperText={errors?.title?.message}
-							/>
+						<Grid container display="flex" alignItems="center" my="1rem">
+							<Grid item xs={12} sm={4}>
+								<InputLabel>Chủ đề Email</InputLabel>
+							</Grid>
+							<Grid item xs={12} sm={8}>
+								<TextField
+									id="title"
+									placeholder="Chủ để Email"
+									fullWidth
+									{...register('title', {
+										required: 'Vui lòng nhập chủ đề Email',
+									})}
+									error={!!errors.title}
+									helperText={errors?.title?.message}
+								/>
+							</Grid>
 						</Grid>
-						<Grid display="flex" justifyContent="space-between" my="1rem">
-							<InputLabel>Thông điệp Email</InputLabel>
-							<TextField
-								id="message"
-								placeholder="Thông điệp"
-								sx={{ minWidth: '25vw' }}
-								multiline
-								rows={5}
-								rowsMax={10}
-								{...register('message', {
-									required: 'Vui lòng nhập thông điệp Email',
-								})}
-								error={!!errors.message}
-								helperText={errors?.message?.message}
-							/>
+						<Grid container display="flex" alignItems="center" my="1rem">
+							<Grid item xs={12} sm={4}>
+								<InputLabel>Thông điệp Email</InputLabel>
+							</Grid>
+							<Grid item xs={12} sm={8}>
+								<TextField
+									id="message"
+									placeholder="Thông điệp"
+									fullWidth
+									multiline
+									rows={5}
+									rowsMax={10}
+									{...register('message', {
+										required: 'Vui lòng nhập thông điệp Email',
+									})}
+									error={!!errors.message}
+									helperText={errors?.message?.message}
+								/>
+							</Grid>
 						</Grid>
 					</Box>
 				</Grid>
-				<Grid item md={4} xs={12}>
+				<Grid item md={5} sm={12} xs={12}>
 					<Card>
 						<CardContent className="receivers">
 							{receivers.length > 0 ? (

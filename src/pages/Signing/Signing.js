@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Button, Container, Grid, Step, StepLabel, Stepper } from '@mui/material';
+import { Button, Box, Container, Grid, Step, StepLabel, Stepper } from '@mui/material';
 import '@pdftron/webviewer/public/core/CoreControls';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
@@ -155,114 +155,104 @@ const Signing = () => {
 		setActiveStep((prevActiveStep) => prevActiveStep + 1);
 	};
 	return (
-		<Container maxWidth={false}>
-			<Grid container className="sign__container">
-				<Grid container className="sign__content">
-					<Grid
-						item
-						xl={2}
-						lg={2}
-						md={3}
-						xs={12}
-						sx={{ display: { xs: 'none', md: 'block' } }}
-						alignSelf="center"
-					>
-						<Stepper activeStep={activeStep} orientation="vertical" alignSelf="center">
-							{steps.map((label, index) => {
-								const stepProps = {};
-								const labelProps = {};
+		<Box sx={{ display: 'flex' }}>
+			<Grid px={5} alignSelf="center" sx={{ display: { xs: 'none', md: 'block' } }}>
+				<Stepper activeStep={activeStep} orientation="vertical" alignSelf="center">
+					{steps.map((label, index) => {
+						const stepProps = {};
+						const labelProps = {};
 
-								return (
-									<Step key={index} {...stepProps}>
-										<StepLabel {...labelProps}>{label}</StepLabel>
-									</Step>
-								);
-							})}
-						</Stepper>
-					</Grid>
-					<Grid item xl={10} lg={10} md={9} xs={12} sx={{ maxHeight: '80vh' }}>
-						{activeStep === 0 && (
-							<UploadDocuments
-								loading={loading}
-								setLoading={setLoading}
-								enoughBalance={enoughBalance}
-							/>
-						)}
-						{activeStep === 1 && (
-							<AddReceivers
-								register={register}
-								handleSubmit={handleSubmit}
-								errors={errors}
-								control={control}
-								getValues={getValues}
-								setValue={setValue}
-								reset={reset}
-								watch={watch}
-								enoughBalance={enoughBalance}
-							/>
-						)}
-						{activeStep === 2 && (
-							<EditDocuments
-								register={register}
-								control={control}
-								loading={loading}
-								setLoading={setLoading}
-							/>
-						)}
-						{activeStep === 3 && (
-							<SendFiles
-								register={register}
-								errors={errors}
-								control={control}
-								handleSubmit={handleSubmit}
-								loading={loading}
-							/>
-						)}
-						<Grid
-							item
-							xl={12}
-							lg={12}
-							md={12}
-							display="flex"
-							justifyContent="flex-end"
-							style={{ height: '3rem' }}
-						>
-							{activeStep > 0 && (
-								<Button variant="outlined" onClick={handlePrev}>
-									Quay lại
-								</Button>
+						return (
+							<Step key={index} {...stepProps}>
+								<StepLabel {...labelProps}>{label}</StepLabel>
+							</Step>
+						);
+					})}
+				</Stepper>
+			</Grid>
+			<Container maxWidth={false}>
+				<Grid container className="sign__container">
+					<Grid container className="sign__content">
+						<Grid item xs={12}>
+							{activeStep === 0 && (
+								<UploadDocuments
+									loading={loading}
+									setLoading={setLoading}
+									enoughBalance={enoughBalance}
+								/>
 							)}
-							{activeStep === 2 ? (
-								<Button
-									variant="contained"
-									style={{ marginLeft: '14px' }}
-									onClick={handleExportFiles}
-								>
-									Tiếp tục
-								</Button>
-							) : activeStep === 3 ? (
-								<Button
-									variant="contained"
-									style={{ marginLeft: '14px' }}
-									onClick={handleSubmit(completeSigning)}
-								>
-									{activeStep === steps.length - 1 ? 'Gửi' : 'Tiếp tục'}
-								</Button>
-							) : (
-								<Button
-									variant="contained"
-									style={{ marginLeft: '14px' }}
-									onClick={handleNext}
-									disabled={loading}
-								>
-									{activeStep === steps.length - 1 ? 'Gửi' : 'Tiếp tục'}
-								</Button>
+							{activeStep === 1 && (
+								<AddReceivers
+									register={register}
+									handleSubmit={handleSubmit}
+									errors={errors}
+									control={control}
+									getValues={getValues}
+									setValue={setValue}
+									reset={reset}
+									watch={watch}
+									enoughBalance={enoughBalance}
+								/>
 							)}
+							{activeStep === 2 && (
+								<EditDocuments
+									register={register}
+									control={control}
+									loading={loading}
+									setLoading={setLoading}
+								/>
+							)}
+							{activeStep === 3 && (
+								<SendFiles
+									register={register}
+									errors={errors}
+									control={control}
+									handleSubmit={handleSubmit}
+									loading={loading}
+								/>
+							)}
+							<Grid
+								display="flex"
+								justifyContent="flex-end"
+								style={{ height: '3rem' }}
+							>
+								{activeStep > 0 && (
+									<Button variant="outlined" onClick={handlePrev}>
+										Quay lại
+									</Button>
+								)}
+								{activeStep === 2 ? (
+									<Button
+										variant="contained"
+										style={{ marginLeft: '14px' }}
+										onClick={handleExportFiles}
+									>
+										Tiếp tục
+									</Button>
+								) : activeStep === 3 ? (
+									<Button
+										variant="contained"
+										style={{ marginLeft: '14px' }}
+										onClick={handleSubmit(completeSigning)}
+									>
+										{activeStep === steps.length - 1 ? 'Gửi' : 'Tiếp tục'}
+									</Button>
+								) : (
+									<Button
+										variant="contained"
+										style={{ marginLeft: '14px' }}
+										onClick={handleNext}
+										disabled={loading}
+									>
+										{activeStep === steps.length - 1 ? 'Gửi' : 'Tiếp tục'}
+									</Button>
+								)}
+							</Grid>
 						</Grid>
 					</Grid>
 				</Grid>
-			</Grid>
-		</Container>
+			</Container>
+		</Box>
 	);
 };
 

@@ -354,52 +354,54 @@ const EditDocuments = ({ loading, setLoading }) => {
 	};
 
 	return (
-		<Container maxWidth={false} style={{ height: '100%' }}>
+		<Container maxWidth={false}>
 			<Grid>
 				<Typography variant="h6" my="1rem">
 					Ký tên và các thông tin khác
 				</Typography>
 			</Grid>
-			<Grid container style={{ minHeight: '100vh' }}>
-				<Grid item lg={2} md={6} xl={2} xs={12}>
-					<Stack my={2} style={{ height: '100%', overflow: 'auto' }}>
-						<Box padding={1}>
-							<Typography gutterBottom>
-								<b>Người nhận</b>
-							</Typography>
-							<Controller
-								name="receiver"
-								control={control}
-								render={({ ref, value, ...inputProps }) => (
-									<TextField
-										select
-										fullWidth
-										variant="outlined"
-										size="small"
-										{...inputProps}
-										inputRef={ref}
-										value={value}
-										defaultValue={myInfo.email ?? ''}
-										SelectProps={{ displayEmpty: true }}
-										onChange={(e) => setCurrentAssignee(e.target.value)}
-									>
-										<MenuItem key="me" value={myInfo.email}>
-											Tôi
-										</MenuItem>
-										{receivers.receivers
-											.filter((r) => r.permission !== 'read')
-											.map((receiver) => (
-												<MenuItem
-													key={receiver.email}
-													value={receiver.email}
-												>
-													{receiver.name}
-												</MenuItem>
-											))}
-									</TextField>
-								)}
-							/>
-						</Box>
+			<Grid container style={{ minHeight: '80vh' }}>
+				<Grid item md={2} sm={12} xs={12}>
+					<Box padding={1}>
+						<Typography gutterBottom>
+							<b>Người nhận</b>
+						</Typography>
+						<Controller
+							name="receiver"
+							control={control}
+							render={({ ref, value, ...inputProps }) => (
+								<TextField
+									select
+									fullWidth
+									variant="outlined"
+									size="small"
+									{...inputProps}
+									inputRef={ref}
+									value={value}
+									defaultValue={myInfo.email ?? ''}
+									SelectProps={{ displayEmpty: true }}
+									onChange={(e) => setCurrentAssignee(e.target.value)}
+								>
+									<MenuItem key="me" value={myInfo.email}>
+										Tôi
+									</MenuItem>
+									{receivers.receivers
+										.filter((r) => r.permission !== 'read')
+										.map((receiver) => (
+											<MenuItem key={receiver.email} value={receiver.email}>
+												{receiver.name}
+											</MenuItem>
+										))}
+								</TextField>
+							)}
+						/>
+					</Box>
+					<Stack
+						my={2}
+						style={{ height: '100%', overflow: 'auto' }}
+						direction={{ xs: 'row', md: 'column' }}
+						justifyContent={{ xs: 'space-between', md: 'flex-start' }}
+					>
 						<Box padding={1}>
 							<div
 								draggable
@@ -480,19 +482,10 @@ const EditDocuments = ({ loading, setLoading }) => {
 					</Stack>
 				</Grid>
 
-				<Grid
-					item
-					xl={8}
-					lg={8}
-					md={6}
-					xs={12}
-					mr="2rem"
-					ref={viewer}
-					className="webviewer"
-				>
+				<Grid item md={8} sm={12} xs={12} ref={viewer} className="webviewer">
 					{loading && <Loading />}
 				</Grid>
-				<Grid item xl={1.5} lg={1.5} md={12} xs={12}>
+				<Grid item md={2} sm={12} xs={12}>
 					{documents.documentList.length > 0 && (
 						<Grid className="preview-file">
 							{documents.documentList.map((document, index) => (
