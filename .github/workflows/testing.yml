@@ -87,6 +87,6 @@ jobs:
           docker tag ${{ env.IMAGE_NAME }} ${{ env.IMAGE_NAME }}-temp
           docker rmi ${{ env.IMAGE_NAME }}
           docker pull ${{ env.IMAGE_NAME }}
-          docker rmi --force ${{ env.IMAGE_NAME }}-temp
+          docker rmi ${{ env.IMAGE_NAME }}-temp
           echo IMAGE=${{ env.IMAGE_NAME }} > .env
           docker-compose up -d
