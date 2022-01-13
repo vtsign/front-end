@@ -8,7 +8,7 @@ import {
 	Divider,
 	Grid,
 	TextField,
-	InputLabel
+	InputLabel,
 } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import userApi from '../../api/userApi';
@@ -16,7 +16,6 @@ import { useToast } from '../toast/useToast';
 import { useHistory } from 'react-router-dom';
 import Loading from '../Loading/Loading';
 import { REG_PHONE, responseMessage } from '../../components/constants/global.js';
-
 
 const UserProfileDetails = ({ userInfo, selectedImage }) => {
 	const [loading, setLoading] = useState(false);
@@ -29,18 +28,20 @@ const UserProfileDetails = ({ userInfo, selectedImage }) => {
 	const { success, error } = useToast();
 	const history = useHistory();
 
-	const onSubmitChange = async formData => {
+	const onSubmitChange = async (formData) => {
 		setLoading(true);
 		try {
-			if(selectedImage) {
+			if (selectedImage) {
 				const data = new FormData();
-				data.append("avatar", selectedImage)
+				data.append('avatar', selectedImage);
 				await userApi.updateAvatar(data);
 			}
 			await userApi.updateUserProfile(formData);
+			success('Cập nhật thông tin tài khoản thành công');
+			history.go(0);
 		} catch (err) {
 			setLoading(false);
-			switch (err.status) {
+			switch (err.response.status) {
 				case 400:
 					error('Thiếu thông tin hoặc access token');
 					break;
@@ -57,13 +58,8 @@ const UserProfileDetails = ({ userInfo, selectedImage }) => {
 					error('Đã có lỗi xảy ra');
 					break;
 			}
-		} finally {
-			setLoading(false);
-			success("Cập nhật thông tin cá nhân thành công");
-			history.go(0);
 		}
-
-	}
+	};
 	return (
 		<Card>
 			<CardHeader
@@ -193,6 +189,6 @@ const UserProfileDetails = ({ userInfo, selectedImage }) => {
 			</Box>
 		</Card>
 	);
-}
+};
 
-export default UserProfileDetails
+export default UserProfileDetails;

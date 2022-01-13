@@ -26,3 +26,9 @@
 		width: 150px;
 	}
 }
+
+@media (max-width: 600px) {
+	.content-header {
+		display: none;
+	}
+}
