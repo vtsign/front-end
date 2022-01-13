@@ -32,7 +32,9 @@ const ChangePassword = () => {
 		handleSubmit,
 		formState: { errors },
 		watch,
-	} = useForm();
+	} = useForm({
+		mode: 'all',
+	});
 	const history = useHistory();
 	const currentPassword = useRef({});
 	currentPassword.current = watch('password', '');
@@ -53,7 +55,7 @@ const ChangePassword = () => {
 			}
 		} catch (err) {
 			setLoading(false);
-			switch (err.status) {
+			switch (err.response.status) {
 				case 400:
 					error('Thiếu thông tin hoặc access token');
 					break;

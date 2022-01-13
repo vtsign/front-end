@@ -72,3 +72,24 @@
 		}
 	}
 }
+
+@media (max-width: 600px) {
+	.home__manage {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		background-color: rgb(240, 229, 180);
+		height: 400px;
+	}
+	.home__manage__action {
+		text-align: center;
+		margin: 7px;
+		// padding-right: 20px;
+		// padding-left: 10px;
+		// min-width: 120px;
+
+		border-bottom: 0.5px solid rgb(95, 95, 95);
+		border-right: none;
+	}
+}

@@ -39,7 +39,7 @@ const UserProfile = () => {
 				if (response.status === 200) setUserInfo(response.data);
 				setLoading(false);
 			} catch (err) {
-				switch (err.status) {
+				switch (err.response.status) {
 					case 400:
 						error('Thiếu thông tin hoặc access token');
 						break;
