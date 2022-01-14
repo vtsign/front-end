@@ -49,7 +49,7 @@ export default function DialogKey({ setUserDocument, setKey }) {
 					error('Không tìm thấy tài liệu hoặc đã bị xóa');
 					break;
 				case 423:
-					error('Tài liệu đã được ký kết');
+					error('Tài liệu đã được ký kết hoặc mã không đúng');
 					break;
 				case 500:
 					error('Máy chủ gặp trục trặc');
@@ -91,9 +91,9 @@ export default function DialogKey({ setUserDocument, setKey }) {
 				<Button onClick={handleSubmit} variant="contained" color="success">
 					Đồng ý
 				</Button>
-				<Button onClick={closeDialogKey} variant="contained" color="error">
+				{/* <Button onClick={closeDialogKey} variant="contained" color="error">
 					Hủy
-				</Button>
+				</Button> */}
 			</DialogActions>
 		</Dialog>
 	);

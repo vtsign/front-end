@@ -18,7 +18,7 @@
 			.item-icon {
 				min-width: 50px;
 			}
-	
+
 			.item-text {
 				span {
 					font-size: 16px;
@@ -26,7 +26,6 @@
 				}
 			}
 		}
-
 	}
 
 	&-item-active {
@@ -56,7 +55,7 @@
 			min-height: 45;
 			line-height: 20px;
 			margin: 0;
-			padding:15px 48px 15px 2.5rem;
+			padding: 15px 48px 15px 2.5rem;
 
 			.item-icon {
 				min-width: 40px;
@@ -64,7 +63,7 @@
 
 			.item-text {
 				span {
-					color: #8C8C8C;
+					color: #8c8c8c;
 				}
 			}
 
@@ -104,8 +103,18 @@
 					}
 				}
 			}
+		}
+	}
+}
+@media (max-width: 768px) {
+	.sidebar {
+		display: flex;
 
-
+		&-button-back {
+			display: none;
+		}
+		.item-icon {
+			display: none;
 		}
 	}
 }

@@ -1,6 +1,6 @@
 import ArrowDropDownOutlinedIcon from '@mui/icons-material/ArrowDropDownOutlined';
 import ArrowDropUpOutlinedIcon from '@mui/icons-material/ArrowDropUpOutlined';
-import { Pagination } from '@mui/material';
+import { Pagination, TableContainer } from '@mui/material';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
@@ -16,7 +16,7 @@ import { getAllContracts } from '../../../redux/actions/manageAction';
 import Loading from '../../../components/Loading/Loading';
 import ActionButton from './button/ActionButton';
 import ContentHeader from './contentHeader';
-import NoData from "./NoData";
+import NoData from './NoData';
 import './style.scss';
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
@@ -35,7 +35,11 @@ const calculateReceiverCompleted = (userContracts) => {
 	let totalReceiverCompleted = 0;
 
 	userContracts.forEach((userContract) => {
-		if (userContract.status === 'SIGNED' || userContract.status === 'COMPLETED' || userContract.status === 'READ') {
+		if (
+			userContract.status === 'SIGNED' ||
+			userContract.status === 'COMPLETED' ||
+			userContract.status === 'READ'
+		) {
 			totalReceiverCompleted++;
 		}
 	});
@@ -60,7 +64,7 @@ const ManageDocument = ({ status, path, cxtHeader }) => {
 	}, [hasOnChange, dispatch, page, sortField, status, sortType]);
 
 	const selectDocumentHandler = () => {
-		setHasOnChange(preState => !preState);
+		setHasOnChange((preState) => !preState);
 	};
 
 	const handleDetail = (id) => {
@@ -69,7 +73,9 @@ const ManageDocument = ({ status, path, cxtHeader }) => {
 	};
 
 	const handleOnPageChange = (event, page) => {
-		history.replace(`${path}?sortField=${sortField}&sortType=${sortType}&status=${status}&page=${page}`)
+		history.replace(
+			`${path}?sortField=${sortField}&sortType=${sortType}&status=${status}&page=${page}`
+		);
 	};
 
 	const handleSort = (field) => {
@@ -77,14 +83,15 @@ const ManageDocument = ({ status, path, cxtHeader }) => {
 		if (sortField === field && sortType === 'asc') {
 			type = 'desc';
 		}
-		history.replace(`${path}?sortField=${field}&sortType=${type}&status=${status}&page=${page}`)
-	}
+		history.replace(
+			`${path}?sortField=${field}&sortType=${type}&status=${status}&page=${page}`
+		);
+	};
 
-	const showIconSort = (sortType === 'desc' ? <ArrowDropUpOutlinedIcon /> : <ArrowDropDownOutlinedIcon />
-	)
+	const showIconSort =
+		sortType === 'desc' ? <ArrowDropUpOutlinedIcon /> : <ArrowDropDownOutlinedIcon />;
 	return (
 		<div className="content">
-
 			<ContentHeader
 				title={cxtHeader.title}
 				description={cxtHeader.description}
@@ -94,104 +101,138 @@ const ManageDocument = ({ status, path, cxtHeader }) => {
 			{contracts && contracts.length <= 0 && !isLoading && <NoData />}
 			{contracts && contracts.length > 0 && (
 				<div>
-					<Table className="table-document">
-						<TableHead>
-							<TableRow>
-								<TableCell style={{ width: '30%', fontSize: 14, fontWeight: 600 }}>
-									<div onClick={() => handleSort("title")} style={{ display: 'inline', cursor: 'pointer' }}>
-										Tên tài liệu
-										{
-											(sortField === null || sortField === "title") && showIconSort
-										}
-									</div>
-								</TableCell>
-								<TableCell style={{ width: '17%', fontSize: 14, fontWeight: 600 }}>
-									Người tạo
-								</TableCell>
-								<TableCell style={{ width: '17%', fontSize: 14, fontWeight: 600 }}>
-									<div onClick={() => handleSort("createdDate")} style={{ display: 'inline', cursor: 'pointer' }}>
-										Ngày tạo
-										{
-											(sortField === "createdDate") && showIconSort
-										}
-									</div>
-								</TableCell>
-								{status !== "COMPLETED" && (<TableCell style={{ width: '17%', fontSize: 14, fontWeight: 600 }}>
-									Trạng thái
-								</TableCell>)}
-								{status === "COMPLETED" && (<TableCell style={{ width: '17%', fontSize: 14, fontWeight: 600 }}>
-									<div onClick={() => handleSort("completeDate")} style={{ display: 'inline', cursor: 'pointer' }}>
-										Ngày hoàn thành
-										{
-											(sortField === "completeDate") && showIconSort
-										}
-									</div>
-								</TableCell>)}
-								<TableCell style={{ width: '19%', fontSize: 14, fontWeight: 600 }}>
-									Thao tác
-								</TableCell>
-							</TableRow>
-						</TableHead>
-						<TableBody className="table-document-body">
-							{contracts != null &&
-								contracts.map((row) => {
-									const totalCompleted = calculateReceiverCompleted(
-										row.user_contracts
-									);
-									const percentCompleted =
-										(totalCompleted / (row.user_contracts.length - 1)) * 100;
-									return (
-										<TableRow
-											key={row.id}
-											onClick={() => handleDetail(row.id)}
+					<TableContainer>
+						<Table className="table-document">
+							<TableHead>
+								<TableRow>
+									<TableCell
+										style={{ width: '30%', fontSize: 14, fontWeight: 600 }}
+									>
+										<div
+											onClick={() => handleSort('title')}
+											style={{ display: 'inline', cursor: 'pointer' }}
 										>
-											<TableCell style={{ color: '#2F80ED', fontSize: 14 }}>
-												{row.title}
-											</TableCell>
-											<TableCell>
-												{
-													row.user_contracts.find((uc) => uc.owner).user
-														.full_name
-												}
-											</TableCell>
-											<TableCell>
-												{moment(row.sent_date).format('DD/MM/YYYY LT')}
-											</TableCell>
-											{status !== "COMPLETED" && (<TableCell>
-												<div>
-													<BorderLinearProgress
-														variant="determinate"
-														value={percentCompleted}
+											Tên tài liệu
+											{(sortField === null || sortField === 'title') &&
+												showIconSort}
+										</div>
+									</TableCell>
+									<TableCell
+										style={{ width: '17%', fontSize: 14, fontWeight: 600 }}
+									>
+										Người tạo
+									</TableCell>
+									<TableCell
+										style={{ width: '17%', fontSize: 14, fontWeight: 600 }}
+									>
+										<div
+											onClick={() => handleSort('createdDate')}
+											style={{ display: 'inline', cursor: 'pointer' }}
+										>
+											Ngày tạo
+											{sortField === 'createdDate' && showIconSort}
+										</div>
+									</TableCell>
+									{status !== 'COMPLETED' && (
+										<TableCell
+											style={{ width: '17%', fontSize: 14, fontWeight: 600 }}
+										>
+											Trạng thái
+										</TableCell>
+									)}
+									{status === 'COMPLETED' && (
+										<TableCell
+											style={{ width: '17%', fontSize: 14, fontWeight: 600 }}
+										>
+											<div
+												onClick={() => handleSort('completeDate')}
+												style={{ display: 'inline', cursor: 'pointer' }}
+											>
+												Ngày hoàn thành
+												{sortField === 'completeDate' && showIconSort}
+											</div>
+										</TableCell>
+									)}
+									<TableCell
+										style={{ width: '19%', fontSize: 14, fontWeight: 600 }}
+									>
+										Thao tác
+									</TableCell>
+								</TableRow>
+							</TableHead>
+							<TableBody className="table-document-body">
+								{contracts != null &&
+									contracts.map((row) => {
+										const totalCompleted = calculateReceiverCompleted(
+											row.user_contracts
+										);
+										const percentCompleted =
+											(totalCompleted / (row.user_contracts.length - 1)) *
+											100;
+										return (
+											<TableRow
+												key={row.id}
+												onClick={() => handleDetail(row.id)}
+											>
+												<TableCell
+													style={{ color: '#2F80ED', fontSize: 14 }}
+												>
+													{row.title}
+												</TableCell>
+												<TableCell>
+													{
+														row.user_contracts.find((uc) => uc.owner)
+															.user.full_name
+													}
+												</TableCell>
+												<TableCell>
+													{moment(row.sent_date).format('DD/MM/YYYY LT')}
+												</TableCell>
+												{status !== 'COMPLETED' && (
+													<TableCell>
+														<div>
+															<BorderLinearProgress
+																variant="determinate"
+																value={percentCompleted}
+															/>
+															<p style={{ textAlign: 'center' }}>
+																{totalCompleted}/
+																{row.user_contracts.length - 1} hoàn
+																thành
+															</p>
+														</div>
+													</TableCell>
+												)}
+												{status === 'COMPLETED' && (
+													<TableCell>
+														{moment(row.complete_date).format(
+															'DD/MM/YYYY LT'
+														)}
+													</TableCell>
+												)}
+												<TableCell onClick={(e) => e.stopPropagation()}>
+													<ActionButton
+														selectDocumentHandler={
+															selectDocumentHandler
+														}
+														contract={row}
+														status={status}
+														path={path}
 													/>
-													<p style={{ textAlign: 'center' }}>
-														{totalCompleted}/
-														{row.user_contracts.length - 1} hoàn thành
-													</p>
-												</div>
-											</TableCell>)}
-											{status === "COMPLETED" && (<TableCell>
-												{moment(row.complete_date).format('DD/MM/YYYY LT')}
-											</TableCell>)}
-											<TableCell onClick={(e) => e.stopPropagation()}>
-												<ActionButton
-													selectDocumentHandler={selectDocumentHandler}
-													contract={row}
-													status={status}
-													path={path}
-												/>
-											</TableCell>
-										</TableRow>
-									);
-								})}
-						</TableBody>
-					</Table>
+												</TableCell>
+											</TableRow>
+										);
+									})}
+							</TableBody>
+						</Table>
+					</TableContainer>
 				</div>
 			)}
 			{contracts && contracts.length > 0 && (
 				<Pagination
 					className="content-pagination"
 					count={total_pages}
-					page={typeof page === "string" ? parseInt(page) : page}
+					page={typeof page === 'string' ? parseInt(page) : page}
 					onChange={handleOnPageChange}
 					color="primary"
 				/>
