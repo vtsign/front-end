@@ -245,10 +245,10 @@ const SignDocument2 = () => {
 			{loading && <Loading />}
 			{userDocument != null && (
 				<Grid container spacing={3}>
-					<Grid item lg={10}>
+					<Grid item xs={12} md={10}>
 						<div className="webviewer" ref={viewer}></div>
 					</Grid>
-					<Grid item lg={2}>
+					<Grid item xs={12} md={2}>
 						<Grid className="document_list">
 							{documents.map((document) => (
 								<Grid

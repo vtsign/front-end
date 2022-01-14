@@ -152,7 +152,7 @@ const UserProfileDetails = ({ userInfo, selectedImage }) => {
 							helperText={errors?.organization?.message}
 						/>
 					</Grid>
-					<Grid item md={12}>
+					<Grid item xs={12}>
 						<InputLabel>
 							Địa chỉ <span style={{ color: 'red' }}>*</span>
 						</InputLabel>
