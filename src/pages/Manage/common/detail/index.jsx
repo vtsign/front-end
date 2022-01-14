@@ -60,7 +60,7 @@ const Detail = ({ status, title, pathReturn }) => {
     const viewer = useRef(null);
     const [openDocument, setOpenDocument] = React.useState(false);
 
-	const { error } = useToast();
+    const { error } = useToast();
 
     const handleClickOpenDocument = () => {
         setOpenDocument(true);
@@ -75,22 +75,22 @@ const Detail = ({ status, title, pathReturn }) => {
     useEffect(() => {
         (async () => {
             const res = await manageDocumentsApi.getContractById(idDoc);
-			if(res.status !== 200) {
-				switch (res.status) {
-					case 400:
-						error('Thiếu thông tin hoặc access token');
-						break;
-					case 404:
-						error('Tài liệu không tồn tại');
-						break;
-					case 500:
-						error('Máy chủ gặp trục trặc');
-						break;
-					default:
-						error('Đã có lỗi xảy ra');
-						break;
-				}
-			}
+            if (res.status !== 200) {
+                switch (res.status) {
+                    case 400:
+                        error('Thiếu thông tin hoặc access token');
+                        break;
+                    case 404:
+                        error('Tài liệu không tồn tại');
+                        break;
+                    case 500:
+                        error('Máy chủ gặp trục trặc');
+                        break;
+                    default:
+                        error('Đã có lỗi xảy ra');
+                        break;
+                }
+            }
             setContract(res.data);
         })();
     }, [dispatch, idDoc]);
@@ -182,7 +182,7 @@ const Detail = ({ status, title, pathReturn }) => {
         const userContract = contract.user_contracts.find((uc) => uc.user.id === r);
         const uc = userContract.id;
         const c = contract.id;
-        const url = `/signDocument?r=${r}&c=${c}&uc=${uc}`;
+        const url = `/sign-document?r=${r}&c=${c}&uc=${uc}`;
         history.push(url);
     };
 

@@ -4,7 +4,7 @@ import axiosClientNoToken from './axiosClientNoToken';
 
 const userApi = {
 	async checkUserExists(email) {
-		const url = `/user/check_exists?email=${email}`;
+		const url = `/user/check-exists?email=${email}`;
 		const response = await axiosClient.get(url);
 		return response;
 	},

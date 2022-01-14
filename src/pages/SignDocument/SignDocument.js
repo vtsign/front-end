@@ -169,8 +169,9 @@ const SignDocument2 = () => {
 			if (data.last_sign) {
 				for (const doc of data.documents) {
 					const listXfdfs = doc.xfdfs.map((x) => x.xfdf);
-					listXfdfs.push(documentXFDFs[doc.id]);
-
+					if (documentXFDFs[doc.id] != null) {
+						listXfdfs.push(documentXFDFs[doc.id]);
+					}
 					const blob = await mergeAnnotations(doc.url, listXfdfs);
 					files.push(new File([blob], doc.id));
 				}
@@ -206,6 +207,7 @@ const SignDocument2 = () => {
 					error('Máy chủ gặp trục trặc');
 					break;
 				default:
+					console.log(err.message);
 					error('Đã có lỗi xảy ra');
 					break;
 			}

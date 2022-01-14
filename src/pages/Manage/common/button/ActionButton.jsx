@@ -90,7 +90,7 @@ export default function ActionButton({ selectDocumentHandler, contract, status, 
 		const userContract = contract.user_contracts.find((uc) => uc.user.id === r);
 		const uc = userContract.id;
 		const c = contract.id;
-		const url = `/signDocument?r=${r}&c=${c}&uc=${uc}`;
+		const url = `/sign-document?r=${r}&c=${c}&uc=${uc}`;
 		history.push(url);
 	};
 

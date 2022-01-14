@@ -85,7 +85,7 @@ const App = ({ location }) => {
 					<PrivateRoute path={'/manage'} component={Manage} />
 					<PrivateRoute path="/payment" component={Payment} />
 					<PrivateRoute path="/profile" component={UserProfile} />
-					<Route path="/signDocument">
+					<Route path="/sign-document">
 						<PdfTronProvider>
 							<SignDocument />
 						</PdfTronProvider>
