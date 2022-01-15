@@ -34,7 +34,7 @@ const App = ({ location }) => {
 		'register',
 		'activation',
 		'NotifySuccess',
-		'signDocument',
+		'sign-document',
 		'check-email',
 		'request-reset-password',
 		'reset-password',
