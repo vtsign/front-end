@@ -334,7 +334,7 @@ const Detail = ({ status, title, pathReturn }) => {
                         </div>
                         <div className="content-other">
                             <div className="content-other-title">Tin nhắn</div>
-                            <p>{receivers[0]?.public_message}</p>
+                            <p>{contract.public_message}</p>
                         </div>
                     </Grid>
                     <Grid item md={3} className="detail-waiting-thumbnail">
