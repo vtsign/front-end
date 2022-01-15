@@ -60,6 +60,9 @@ const userApi = {
 	},
 	resetPassword: (body) => {
 		return axiosClientNoToken.post(`/user/apt/reset-password`, body)
+	},
+	resendVerifyEmail: (email) => {
+		return axiosClientNoToken.get(`/user/apt/re-get-link-activation/${email}`)
 	}
 };
 

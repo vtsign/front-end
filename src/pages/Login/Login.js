@@ -29,6 +29,7 @@ import { REG_EMAIL, REG_PASSWORD } from '../../components/constants/global.js';
 import { loginAction } from '../../redux/actions/userActions.js';
 import './login.scss';
 import { useToast } from '../../components/toast/useToast';
+import userApi from '../../api/userApi';
 
 const Login = () => {
 	const [hiddenPassword, setHiddenPassword] = useState(true);
@@ -37,7 +38,7 @@ const Login = () => {
 
 	const history = useHistory();
 
-	const { error } = useToast();
+	const { error, success } = useToast();
 
 	const userLogin = useSelector((state) => state.userLogin);
 	const { user, loading, error: errorRegister, isLogin } = userLogin;
@@ -95,8 +96,25 @@ const Login = () => {
 			);
 		if (errorRegister.status === 423)
 			return (
+				<>
 				<p style={{ textAlign: 'center', color: 'red', marginBottom: '2rem' }}>
 					Tài khoản chưa được kích hoạt
+				</p>
+				<p style={{ textAlign: 'center', color: 'blue', marginBottom: '2rem' }}>
+					<a href="/" onClick={handleSubmit(doSendActivation)}>Gửi lại liên kết kích hoạt tài khoản</a>
+				</p>
+				</>
+			);
+		if (errorRegister.status === 424)
+			return (
+				<p style={{ textAlign: 'center', color: 'red', marginBottom: '2rem' }}>
+					Tài khoản của bạn đã bị khóa. Vui lòng liên hệ Admin để được hỗ trợ
+				</p>
+			);
+		if (errorRegister.status === 425)
+			return (
+				<p style={{ textAlign: 'center', color: 'red', marginBottom: '2rem' }}>
+					Tài khoản của bạn đã bị xóa vĩnh viễn do vi phạm chính sách của chúng tôi
 				</p>
 			);
 		if (errorRegister.status === 500)
@@ -107,6 +125,15 @@ const Login = () => {
 			);
 		return <></>;
 	};
+
+	const doSendActivation = async (formData) => {
+		const res = await userApi.resendVerifyEmail(formData.email);
+		if(res.data) {
+			success('Gửi liên kết kích hoạt tài khoản thành công. Vui lòng kiểm tra email');
+		} else {
+			error('Tài khoản đã được kích hoạt từ trước');
+		}
+	}
 
 	return (
 		<div className="login">
