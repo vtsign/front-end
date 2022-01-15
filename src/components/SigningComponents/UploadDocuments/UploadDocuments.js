@@ -26,6 +26,7 @@ const UploadDocuments = ({ loading, setLoading }) => {
 	const setThumbnail = async (selectedFile, filesLength) => {
 		const coreControls = window.CoreControls;
 		coreControls.setWorkerPath('/webviewer/core');
+		console.log(selectedFile.data)
 		const doc = await coreControls.createDocument(selectedFile.data, {
 			extension: 'pdf',
 		});

@@ -1,0 +1,21 @@
+.content_history {
+	border-bottom: 0.5px solid #eeeeee;
+	padding-top: 20px;
+	&__title {
+		font-size: 18px;
+		font-weight: 600;
+		margin-bottom: 15px;
+		margin-top: 20px;
+	}
+
+	.item {
+		&__title {
+			margin-bottom: 10px;
+			font-weight: 600;
+		}
+
+		&__content {
+			opacity: 0.8;
+		}
+	}
+}

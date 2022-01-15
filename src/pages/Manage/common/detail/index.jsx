@@ -18,6 +18,7 @@ import { pdfTronContext } from '../../../../redux/constants/contexts/pdfTronCont
 import { convertTime } from '../../../../utils/time';
 import DialogDelete from '../dialog/dialogDelete';
 import DialogRestore from '../dialog/dialogRestore';
+import DialogHitory from '../dialog/dialogContractTransaction';
 import Loading from '../../../../components/Loading/Loading';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import './style.scss';
@@ -53,6 +54,7 @@ const Detail = ({ status, title, pathReturn }) => {
     const [receivers, setReceivers] = useState([]);
     const [showDialogDelete, setShowDialogDelete] = useState(false);
     const [showDialogRestore, setShowDialogRestore] = useState(false);
+    const [showDialogContractTransaction, setShowDialogContractTransaction] = useState(false);
     const [contract, setContract] = useState(null);
     const [documents, setDocuments] = useState([]);
     const [instance, setInstance] = useState();
@@ -175,6 +177,14 @@ const Detail = ({ status, title, pathReturn }) => {
         setShowDialogRestore(false);
     };
 
+    const handleOpenDialogContractTransaction = () => {
+        setShowDialogContractTransaction(true);
+    };
+
+    const handleCloseDialogContractTransaction = () => {
+        setShowDialogContractTransaction(false);
+    };
+
 
     //redirect to sign document
     const handleSignContract = () => {
@@ -270,7 +280,16 @@ const Detail = ({ status, title, pathReturn }) => {
                                 {status !== "DELETED" && <Button variant="outlined" onClick={handleDownloadFile}>
                                     Tải xuống
                                 </Button>}
-
+                                <Button onClick={handleOpenDialogContractTransaction} variant="outlined">
+                                    Lịch sử
+                                </Button>
+                                <DialogHitory
+                                    open={showDialogContractTransaction}
+                                    closeDialog={handleCloseDialogContractTransaction}
+                                    contract={contract}
+                                    owner={sender}
+                                    receivers={receivers}
+                                />
                             </div>
                         </div>
                         <div className="content-receivers">
