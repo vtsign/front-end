@@ -26,38 +26,52 @@ const UploadDocuments = ({ loading, setLoading }) => {
 	const setThumbnail = async (selectedFile, filesLength) => {
 		const coreControls = window.CoreControls;
 		coreControls.setWorkerPath('/webviewer/core');
-		console.log(selectedFile.data)
-		const doc = await coreControls.createDocument(selectedFile.data, {
-			extension: 'pdf',
-		});
+		try {
+			const doc = await coreControls.createDocument(selectedFile.data, {
+				extension: 'pdf',
+			});
+			selectedFile.pageCount = doc.getPageCount();
 
-		selectedFile.pageCount = doc.getPageCount();
-		doc.loadCanvasAsync({
-			pageNumber: 1,
-			drawComplete: (canvas) => {
-				selectedFile.thumbnailData = canvas.toDataURL();
-				docList = [...docList, selectedFile];
-				if (docList.length === filesLength) {
-					dispatch(addDocumentList(docList));
-					docList.length = 0;
-					setLoading(false);
-				}
-			},
-		});
+			doc.loadCanvasAsync({
+				pageNumber: 1,
+				drawComplete: (canvas) => {
+					selectedFile.thumbnailData = canvas.toDataURL();
+					docList = [...docList, selectedFile];
+					if (docList.length === filesLength) {
+						dispatch(addDocumentList(docList));
+						docList.length = 0;
+						setLoading(false);
+					}
+				},
+			});
+		} catch (err) {
+			console.log(err.toString());
+			setLoading(false);
+		}
 	};
 
 	const handleSelectFile = (e) => {
 		setLoading(true);
 		const { files } = e.target;
+
+		if (files.length === 0) {
+			setLoading(false);
+			e.target.value = null;
+			return;
+		}
+
 		for (let file of files) {
 			const reader = new FileReader();
 			const selectedFile = {
 				name: file.name,
 			};
+
 			reader.readAsDataURL(file);
 			reader.onload = (event) => {
 				const data = event.target.result;
+
 				selectedFile.data = data;
+
 				setThumbnail(selectedFile, files.length);
 			};
 		}

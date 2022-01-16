@@ -125,10 +125,10 @@ const Signing = () => {
 				success('Gửi tài liệu thành công');
 				dispatch({ type: RESET_RECEIVERS });
 				dispatch({ type: RESET_DOC_LIST });
-				history.replace('/');
+				window.location.href = '/';
 			}
 		} catch (err) {
-			switch (err.status) {
+			switch (err.response.status) {
 				case 400:
 					error('Thiếu thông tin hoặc access token');
 					break;
